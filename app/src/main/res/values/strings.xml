@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Tron Wallet</string>
+
+    <string name="navigation_drawer_open">open</string>
+    <string name="navigation_drawer_close">close</string>
+    <string name="navigation_header_title">Tron Wallet</string>
+    <string name="navigation_menu_create_account">Create Account</string>
+    <string name="navigation_menu_login">Login</string>
+    <string name="navigation_menu_about_tron">About Tron</string>
+</resources>
