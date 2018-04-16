@@ -7,4 +7,7 @@
     <string name="navigation_menu_create_account">Create Account</string>
     <string name="navigation_menu_login">Login</string>
     <string name="navigation_menu_about_tron">About Tron</string>
+    <string name="address_text">Address</string>
+    <string name="password_text">Password</string>
+    <string name="private_key_text">Private Key</string>
 </resources>
