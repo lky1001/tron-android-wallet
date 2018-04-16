@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.tron.grpc.GrpcClient;
 
 import org.tron.api.GrpcAPI;
 import org.tron.common.utils.ByteArray;
@@ -23,6 +22,7 @@ public class Tron {
     public static final int ERROR_PRIVATE_KEY = -2;
     public static final int ERROR_ACCESS_STORAGE = -3;
     public static final int ERROR_WALLET_DOES_NOT_EXIST = -4;
+    public static final int ERROR_NEED_LOGIN = -5;
 
     public static final int MIN_PASSWORD_LENGTH = 8;
 
@@ -67,7 +67,7 @@ public class Tron {
     }
 
     public int registerWaller(@NonNull String password) {
-        if (!WalletManager.passwordValid(password)) {
+        if (!mWalletManager.passwordValid(password)) {
             return ERROR_INVALID_PASSWORD;
         }
 
@@ -79,9 +79,15 @@ public class Tron {
         if (!WalletManager.passwordValid(password)) {
             return ERROR_INVALID_PASSWORD;
         }
+
         if (mWalletManager == null) {
-            mWalletManager = WalletManager.GetWalletByStorage(password);
-            if (mWalletManager == null) {
+            mWalletManager = new WalletManager();
+
+            int loadWalletResult = mWalletManager.loadWalletByStorage(password);
+
+            if (loadWalletResult == ERROR_WALLET_DOES_NOT_EXIST
+                    || loadWalletResult == ERROR_INVALID_PASSWORD) {
+                mWalletManager = null;
                 return ERROR_WALLET_DOES_NOT_EXIST;
             }
         }

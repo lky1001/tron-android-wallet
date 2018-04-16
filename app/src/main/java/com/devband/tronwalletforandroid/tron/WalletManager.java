@@ -32,6 +32,10 @@ public class WalletManager {
     private ECKey mEcKey = null;
     private boolean mLoginState = false;
 
+    public WalletManager() {
+
+    }
+
     /**
      * Creates a new WalletClient with a random ECKey or no ECKey.
      */
@@ -39,22 +43,6 @@ public class WalletManager {
         if (genEcKey) {
             this.mEcKey = new ECKey(Utils.getRandom());
         }
-    }
-
-    /**
-     * Create Wallet with a pritKey.
-     */
-    public WalletManager(String priKey) {
-        ECKey temKey = null;
-
-        try {
-            BigInteger priK = new BigInteger(priKey, KEY_SIZE);
-            temKey = ECKey.fromPrivate(priK);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        this.mEcKey = temKey;
     }
 
     public int store(@NonNull  String password) {
@@ -94,6 +82,35 @@ public class WalletManager {
         return mLoginState;
     }
 
+    public int loadWalletByStorage(String password) {
+        String priKeyEnced = loadPriKey();
+
+        if (priKeyEnced == null) {
+            return Tron.ERROR_WALLET_DOES_NOT_EXIST;
+        }
+
+        //dec priKey
+        byte[] priKeyAscEnced = priKeyEnced.getBytes();
+        byte[] priKeyHexEnced = Hex.decode(priKeyAscEnced);
+        byte[] aesKey = getEncKey(password);
+        byte[] priKeyHexPlain = SymmEncoder.AES128EcbDec(priKeyHexEnced, aesKey);
+        String priKeyPlain = Hex.toHexString(priKeyHexPlain);
+
+        ECKey temKey = null;
+
+        try {
+            BigInteger priK = new BigInteger(priKeyPlain, KEY_SIZE);
+            temKey = ECKey.fromPrivate(priK);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Tron.ERROR_INVALID_PASSWORD;
+        }
+
+        this.mEcKey = temKey;
+
+        return Tron.SUCCESS;
+    }
+
     public boolean isLoginState() {
         return this.mLoginState;
     }
@@ -102,7 +119,20 @@ public class WalletManager {
         this.mLoginState = false;
     }
 
-    public static boolean checkPassWord(String password) {
+    @Nullable
+    public String getAddress() {
+        if (!mLoginState) {
+            return null;
+        }
+
+        if (mEcKey == null) {
+            return getAddressByStorage();
+        }
+
+        return ByteArray.toHexString(mEcKey.getAddress());
+    }
+
+    public boolean checkPassWord(String password) {
         byte[] pwd = getPassWord(password);
         if (pwd == null) {
             return false;
@@ -113,7 +143,7 @@ public class WalletManager {
     }
 
     @Nullable
-    private static String loadPassword() {
+    private String loadPassword() {
         char[] buf = new char[0x100];
         int len = FileUtil.readData(getWalletStorage(), buf);
         if (len != 226) {
@@ -123,7 +153,7 @@ public class WalletManager {
     }
 
     @Nullable
-    public static byte[] getPassWord(String password) {
+    private byte[] getPassWord(String password) {
         if (!passwordValid(password)) {
             return null;
         }
@@ -135,7 +165,7 @@ public class WalletManager {
     }
 
     @Nullable
-    public static byte[] getEncKey(String password) {
+    private byte[] getEncKey(String password) {
         if (!passwordValid(password)) {
             return null;
         }
@@ -145,7 +175,7 @@ public class WalletManager {
         return encKey;
     }
 
-    private static File getWalletStorage() {
+    private File getWalletStorage() {
         File file = Environment.getExternalStorageDirectory();
         if (!file.mkdirs()) {
             Log.e(LOG_TAG, "Directory not created");
@@ -166,22 +196,32 @@ public class WalletManager {
     }
 
     @Nullable
-    public static WalletManager GetWalletByStorage(@NonNull String password) {
-        String priKeyEnced = loadPriKey();
-        if (priKeyEnced == null) {
+    private String getAddressByStorage() {
+        try {
+            String pubKey = loadPubKey(); //04 PubKey[128]
+            if (pubKey == null || "".equals(pubKey)) {
+                return null;
+            }
+            byte[] pubKeyAsc = pubKey.getBytes();
+            byte[] pubKeyHex = Hex.decode(pubKeyAsc);
+            ECKey eccKey = ECKey.fromPublicOnly(pubKeyHex);
+            return ByteArray.toHexString(eccKey.getAddress());
+        } catch (Exception ex) {
+            ex.printStackTrace();
             return null;
         }
-        //dec priKey
-        byte[] priKeyAscEnced = priKeyEnced.getBytes();
-        byte[] priKeyHexEnced = Hex.decode(priKeyAscEnced);
-        byte[] aesKey = getEncKey(password);
-        byte[] priKeyHexPlain = SymmEncoder.AES128EcbDec(priKeyHexEnced, aesKey);
-        String priKeyPlain = Hex.toHexString(priKeyHexPlain);
-
-        return new WalletManager(priKeyPlain);
     }
 
-    private static String loadPriKey() {
+    private String loadPubKey() {
+        char[] buf = new char[0x100];
+        int len = FileUtil.readData(getWalletStorage(), buf);
+        if (len != 226) {
+            return null;
+        }
+        return String.valueOf(buf, 32, 130);
+    }
+
+    private String loadPriKey() {
         char[] buf = new char[0x100];
         int len = FileUtil.readData(getWalletStorage(), buf);
         if (len != 226) {
