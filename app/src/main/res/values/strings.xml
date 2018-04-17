@@ -10,4 +10,5 @@
     <string name="address_text">Address</string>
     <string name="password_text">Password</string>
     <string name="private_key_text">Private Key</string>
+    <string name="create_account_text">Create Account</string>
 </resources>
