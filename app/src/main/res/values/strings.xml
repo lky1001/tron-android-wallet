@@ -11,4 +11,6 @@
     <string name="password_text">Password</string>
     <string name="private_key_text">Private Key</string>
     <string name="create_account_text">Create Account</string>
+    <string name="save_account_storage">Save to Storage</string>
+    <string name="copy">Copy</string>
 </resources>

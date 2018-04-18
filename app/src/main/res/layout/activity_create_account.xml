@@ -5,6 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary">
+    </android.support.v7.widget.Toolbar>
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="100dp"
@@ -18,30 +25,26 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.111"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_tron" />
 
     <LinearLayout
         android:id="@+id/linearLayout5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.197"
+        tools:layout_editor_absoluteX="0dp">
         <!-- address Label -->
         <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:layout_constraintVertical_bias="0.9">
+            android:layout_weight="1">
 
             <EditText
                 android:id="@+id/input_address"
@@ -56,32 +59,30 @@
             android:id="@+id/btn_copy_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/create_account_text" />
+            android:text="@string/copy" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
         <!-- private key Label -->
         <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="168dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_weight="1">
 
             <EditText
                 android:id="@+id/input_private_key"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/private_key_text"
                 android:enabled="false"
+                android:hint="@string/private_key_text"
                 android:inputType="text" />
         </android.support.design.widget.TextInputLayout>
 
@@ -89,7 +90,7 @@
             android:id="@+id/btn_copy_private_key"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/create_account_text" />
+            android:text="@string/copy" />
     </LinearLayout>
 
     <LinearLayout
@@ -102,22 +103,14 @@
         <!-- password Label -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="168dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password_text"
-                android:inputType="text" />
+                android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
@@ -126,7 +119,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="@string/create_account_text"
+        android:text="@string/save_account_storage"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout" />
 
     <LinearLayout
@@ -137,6 +130,7 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout4">
 
         <CheckBox
+            android:id="@+id/agree_lost_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -154,6 +148,7 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout3">
 
         <CheckBox
+            android:id="@+id/agree_lost_password_recover"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -171,6 +166,7 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_create_account">
 
         <CheckBox
+            android:id="@+id/agree_copy_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

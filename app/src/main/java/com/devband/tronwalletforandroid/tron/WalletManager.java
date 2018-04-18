@@ -45,6 +45,7 @@ public class WalletManager {
         }
     }
 
+
     public int store(@NonNull  String password) {
         if (this.mEcKey == null || this.mEcKey.getPrivKey() == null) {
             return Tron.ERROR_PRIVATE_KEY;
@@ -130,6 +131,19 @@ public class WalletManager {
         }
 
         return ByteArray.toHexString(mEcKey.getAddress());
+    }
+
+    @Nullable
+    public String getPrivateKey() {
+        if (!mLoginState) {
+            return null;
+        }
+
+        if (mEcKey == null) {
+            return loadPriKey();
+        }
+
+        return ByteArray.toHexString(mEcKey.getPrivKeyBytes());
     }
 
     public boolean checkPassWord(String password) {
