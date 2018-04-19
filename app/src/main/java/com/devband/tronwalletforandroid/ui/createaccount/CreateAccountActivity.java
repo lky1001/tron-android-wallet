@@ -1,6 +1,9 @@
 package com.devband.tronwalletforandroid.ui.createaccount;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +22,7 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CreateAccountActivity extends CommonActivity implements CreateAccountView {
 
@@ -36,17 +40,11 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
     @BindView(R.id.input_password)
     EditText mInputPassword;
 
-    @BindView(R.id.btn_copy_address)
-    Button mBtnCopyAddress;
-
-    @BindView(R.id.btn_copy_private_key)
-    Button mBtnCopyPrivateKey;
-
     @BindView(R.id.btn_create_account)
     Button mBtnCreateAddress;
 
-    @BindView(R.id.btn_save_storage)
-    Button mBtnSaveStorage;
+    @BindView(R.id.btn_copy_address)
+    Button mBtnCopyAddress;
 
     @BindView(R.id.agree_lost_password)
     CheckBox mChkLostPassword;
@@ -121,10 +119,35 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
     }
 
     @Override
-    public void displyaAccountInfo(String privKey, String address) {
+    public void displayAccountInfo(String privKey, String address) {
         Log.d(CreateAccountActivity.class.getSimpleName(), "privKey:" + privKey);
         Log.d(CreateAccountActivity.class.getSimpleName(), "address:" + address);
+
+        if (privKey == null || privKey.isEmpty()) {
+            mBtnCopyAddress.setEnabled(false);
+        } else {
+            mBtnCopyAddress.setEnabled(true);
+        }
+
         mInputPrivateKey.setText(privKey);
         mInputAddress.setText(address);
+    }
+
+    @OnClick(R.id.btn_copy_address)
+    public void btnCopyClick() {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        StringBuilder sb = new StringBuilder();
+        sb.append("Private Key : ")
+                .append(mInputPrivateKey.getText().toString())
+                .append("\n")
+                .append("Address : ")
+                .append(mInputAddress.getText().toString());
+
+        ClipData clip = ClipData.newPlainText("", sb.toString());
+        clipboard.setPrimaryClip(clip);
+
+        Toast.makeText(CreateAccountActivity.this, getString(R.string.copy_address_msg),
+                Toast.LENGTH_SHORT)
+                .show();
     }
 }

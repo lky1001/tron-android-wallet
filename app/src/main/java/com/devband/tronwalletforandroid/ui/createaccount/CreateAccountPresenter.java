@@ -66,13 +66,16 @@ public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
             @Override
             public void onSuccess(AccountInfo accountInfo) {
                 if (accountInfo != null) {
-                    mView.displyaAccountInfo(accountInfo.privKey, accountInfo.address);
+                    mView.displayAccountInfo(accountInfo.privKey, accountInfo.address);
+                } else {
+                    mView.displayAccountInfo("", "");
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-
+                e.printStackTrace();
+                mView.displayAccountInfo("", "");
             }
         });
     }

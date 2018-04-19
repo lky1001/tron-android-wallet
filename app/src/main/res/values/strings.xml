@@ -11,6 +11,9 @@
     <string name="password_text">Password</string>
     <string name="private_key_text">Private Key</string>
     <string name="create_account_text">Create Account</string>
-    <string name="save_account_storage">Save to Storage</string>
-    <string name="copy">Copy</string>
+    <string name="save_account_storage">Copy</string>
+    <string name="create_confirm1">I understand that if I forget lose my password I will never be able to access my assets</string>
+    <string name="create_confirm2">I understand that if I forget lose my password no one will be able to help me recover it</string>
+    <string name="create_confirm3">I\'ve written my password on paper</string>
+    <string name="copy_address_msg">Copied address and private key.</string>
 </resources>

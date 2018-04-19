@@ -27,7 +27,7 @@
 
         <activity
             android:name=".ui.createaccount.CreateAccountActivity"
-            android:theme="@style/MainTheme" />
+            android:theme="@style/AccountTheme" />
     </application>
 
 </manifest>
