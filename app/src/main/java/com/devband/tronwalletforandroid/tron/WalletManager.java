@@ -25,7 +25,7 @@ public class WalletManager {
 
     private static final String LOG_TAG = WalletManager.class.getSimpleName();
 
-    private static final String WALLET_FILE_PATH = "tron/tron.dat";
+    private static final String WALLET_FILE_PATH = "tron1/tron.dat";
 
     private static final int KEY_SIZE = 16;
 
@@ -190,11 +190,16 @@ public class WalletManager {
     }
 
     private File getWalletStorage() {
-        File file = Environment.getExternalStorageDirectory();
-        if (!file.mkdirs()) {
-            Log.e(LOG_TAG, "Directory not created");
-            return null;
+        File file = new File(Environment.getExternalStorageDirectory().getPath()
+                + File.separator + WALLET_FILE_PATH);
+
+        if (!file.getParentFile().isDirectory()) {
+            if (!file.getParentFile().mkdirs()) {
+                Log.e(LOG_TAG, "Directory not created");
+                return null;
+            }
         }
+
         return file;
     }
 

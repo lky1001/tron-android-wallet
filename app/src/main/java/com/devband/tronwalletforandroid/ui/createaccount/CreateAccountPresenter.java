@@ -3,6 +3,13 @@ package com.devband.tronwalletforandroid.ui.createaccount;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import lombok.Builder;
+
 public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
 
     public CreateAccountPresenter(CreateAccountView view) {
@@ -11,7 +18,6 @@ public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
 
     @Override
     public void onCreate() {
-        Tron.getInstance(mContext).registerWaller("ㅇㅇㅇㅇㅇㅇㅇㅇ");
     }
 
     @Override
@@ -30,19 +36,50 @@ public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
     }
 
     public void changedPassword(String password) {
-        if (password != null && password.length() >= Tron.MIN_PASSWORD_LENGTH) {
-            if (Tron.getInstance(mContext).registerWaller(password) == Tron.SUCCESS) {
+        Single.fromCallable(() -> {
+            if (password != null && password.length() >= Tron.MIN_PASSWORD_LENGTH) {
                 if (Tron.getInstance(mContext).registerWaller(password) == Tron.SUCCESS) {
-                    String priKey = Tron.getInstance(mContext).getPrivateKey();
-                    String address = Tron.getInstance(mContext).getAddress();
-                } else {
+                    if (Tron.getInstance(mContext).login(password) == Tron.SUCCESS) {
+                        String privKey = Tron.getInstance(mContext).getPrivateKey();
+                        String address = Tron.getInstance(mContext).getAddress();
 
+                        return AccountInfo.builder()
+                                .privKey(privKey)
+                                .address(address)
+                                .build();
+                    }
+                } else {
+                    // ERROR_ACCESS_STORAGE
                 }
-            } else {
+            }
+
+            return null;
+        })
+        .subscribeOn(Schedulers.computation())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new SingleObserver<AccountInfo>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
             }
-        } else {
 
-        }
+            @Override
+            public void onSuccess(AccountInfo accountInfo) {
+                if (accountInfo != null) {
+                    mView.displyaAccountInfo(accountInfo.privKey, accountInfo.address);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        });
+    }
+
+    @Builder
+    private static class AccountInfo {
+        String privKey;
+        String address;
     }
 }
