@@ -24,6 +24,10 @@
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/MainTheme" />
+
+        <activity
+            android:name=".ui.createaccount.CreateAccountActivity"
+            android:theme="@style/AccountTheme" />
     </application>
 
 </manifest>

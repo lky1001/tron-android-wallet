@@ -17,6 +17,7 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.tron.ITronManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.grpc.GrpcClient;
+import com.devband.tronwalletforandroid.ui.createaccount.CreateAccountActivity;
 
 import org.tron.api.GrpcAPI;
 import org.tron.common.utils.ByteArray;
@@ -108,6 +109,11 @@ public class MainActivity extends CommonActivity implements NavigationView.OnNav
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.drawer_item_create_account:
+                startActivity(CreateAccountActivity.class);
+                break;
+        }
         return false;
     }
 }

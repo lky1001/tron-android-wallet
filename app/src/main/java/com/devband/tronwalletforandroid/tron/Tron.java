@@ -2,6 +2,7 @@ package com.devband.tronwalletforandroid.tron;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.devband.tronwalletforandroid.R;
@@ -93,6 +94,32 @@ public class Tron {
         }
 
         return mWalletManager.login(password) ? SUCCESS : ERROR_INVALID_PASSWORD;
+    }
+
+    @Nullable
+    public String getAddress() {
+        if (!checkWalletLogin()) {
+            return null;
+        }
+
+        return mWalletManager.getAddress();
+    }
+
+    @Nullable
+    public String getPrivateKey() {
+        if (!checkWalletLogin()) {
+            return null;
+        }
+
+        return mWalletManager.getPrivateKey();
+    }
+
+    private boolean checkWalletLogin() {
+        if (mWalletManager == null || !mWalletManager.isLoginState()) {
+            return false;
+        }
+
+        return true;
     }
 
     public Single<Protocol.Account> queryAccount(@NonNull String address) {
