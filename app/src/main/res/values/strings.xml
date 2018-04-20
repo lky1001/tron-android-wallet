@@ -16,4 +16,5 @@
     <string name="create_confirm2">I understand that if I forget lose my password no one will be able to help me recover it</string>
     <string name="create_confirm3">I\'ve written my password on paper</string>
     <string name="copy_address_msg">Copied address and private key.</string>
+    <string name="need_all_agree">You must agree to the terms of use.</string>
 </resources>

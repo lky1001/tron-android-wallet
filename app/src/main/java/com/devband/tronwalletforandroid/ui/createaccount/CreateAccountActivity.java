@@ -125,8 +125,10 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
 
         if (privKey == null || privKey.isEmpty()) {
             mBtnCopyAddress.setEnabled(false);
+            mBtnCreateAddress.setEnabled(false);
         } else {
             mBtnCopyAddress.setEnabled(true);
+            mBtnCreateAddress.setEnabled(true);
         }
 
         mInputPrivateKey.setText(privKey);
@@ -134,7 +136,7 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
     }
 
     @OnClick(R.id.btn_copy_address)
-    public void btnCopyClick() {
+    public void onCopyClick() {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         StringBuilder sb = new StringBuilder();
         sb.append("Private Key : ")
@@ -149,5 +151,19 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
         Toast.makeText(CreateAccountActivity.this, getString(R.string.copy_address_msg),
                 Toast.LENGTH_SHORT)
                 .show();
+    }
+
+    @OnClick(R.id.btn_create_account)
+    public void onCreateAccountClick() {
+        if (!mChkLostPassword.isChecked()
+                || !mChkLostPasswordRecover.isChecked()
+                || !mChkCopyAccount.isChecked()) {
+            Toast.makeText(CreateAccountActivity.this, getString(R.string.need_all_agree),
+                    Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+
+        finish();
     }
 }
