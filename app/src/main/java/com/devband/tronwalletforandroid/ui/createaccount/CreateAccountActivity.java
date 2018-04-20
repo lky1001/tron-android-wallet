@@ -126,6 +126,7 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
         if (privKey == null || privKey.isEmpty()) {
             mBtnCopyAddress.setEnabled(false);
             mBtnCreateAddress.setEnabled(false);
+            return;
         } else {
             mBtnCopyAddress.setEnabled(true);
             mBtnCreateAddress.setEnabled(true);

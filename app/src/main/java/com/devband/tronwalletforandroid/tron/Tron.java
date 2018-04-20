@@ -96,6 +96,14 @@ public class Tron {
         return mWalletManager.login(password) ? SUCCESS : ERROR_INVALID_PASSWORD;
     }
 
+    public boolean isLogin() {
+        if (mWalletManager == null) {
+            return false;
+        }
+
+        return mWalletManager.isLoginState();
+    }
+
     @Nullable
     public String getAddress() {
         if (!checkWalletLogin()) {
