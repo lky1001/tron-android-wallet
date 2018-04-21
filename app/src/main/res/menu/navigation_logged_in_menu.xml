@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/drawer_item_send_tron"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="@string/navigation_menu_send_tron" />
+
+    <item android:id="@+id/drawer_item_about_tron"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="@string/navigation_menu_about_tron" />
+</menu>

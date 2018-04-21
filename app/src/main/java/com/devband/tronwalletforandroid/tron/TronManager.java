@@ -14,6 +14,7 @@ class TronManager implements ITronManager {
     TronManager(String host) {
         grpcClient = new GrpcClient(host);
     }
+
     public TronManager(String host, int port) {
         grpcClient = new GrpcClient(host, port);
     }

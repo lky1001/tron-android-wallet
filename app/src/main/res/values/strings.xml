@@ -7,6 +7,7 @@
     <string name="navigation_menu_create_account">Create Account</string>
     <string name="navigation_menu_login">Login</string>
     <string name="navigation_menu_about_tron">About Tron</string>
+    <string name="navigation_menu_send_tron">Send Tron</string>
     <string name="address_text">Address</string>
     <string name="password_text">Password</string>
     <string name="private_key_text">Private Key</string>
@@ -17,4 +18,8 @@
     <string name="create_confirm3">I\'ve written my password on paper</string>
     <string name="copy_address_msg">Copied address and private key.</string>
     <string name="need_all_agree">You must agree to the terms of use.</string>
+    <string name="login_text">Login</string>
+    <string name="invalid_password">Invalid password.</string>
+    <string name="wallet_does_not_exist">Wallet does not exist. Create account or import account.</string>
+    <string name="login_success">success login.</string>
 </resources>

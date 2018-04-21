@@ -1,16 +1,11 @@
 package com.devband.tronwalletforandroid.ui.intro;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.activities.MainActivity;
+import com.devband.tronwalletforandroid.ui.main.MainActivity;
 import com.devband.tronwalletforandroid.common.CommonActivity;
-
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Single;
 
 public class IntroActivity extends CommonActivity implements IntroView {
 

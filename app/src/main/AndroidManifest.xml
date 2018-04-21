@@ -22,11 +22,15 @@
         </activity>
 
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:theme="@style/MainTheme" />
 
         <activity
             android:name=".ui.createaccount.CreateAccountActivity"
+            android:theme="@style/AccountTheme" />
+
+        <activity
+            android:name=".ui.login.LoginActivity"
             android:theme="@style/AccountTheme" />
     </application>
 

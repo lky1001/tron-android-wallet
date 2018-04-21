@@ -3,7 +3,6 @@ package com.devband.tronwalletforandroid.tron;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
 
 import org.spongycastle.util.encoders.Hex;
@@ -25,7 +24,7 @@ public class WalletManager {
 
     private static final String LOG_TAG = WalletManager.class.getSimpleName();
 
-    private static final String WALLET_FILE_PATH = "tron1/tron.dat";
+    private static final String WALLET_FILE_PATH = "tron/tron.dat";
 
     private static final int KEY_SIZE = 16;
 

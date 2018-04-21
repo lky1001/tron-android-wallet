@@ -24,6 +24,7 @@ public class Tron {
     public static final int ERROR_ACCESS_STORAGE = -3;
     public static final int ERROR_WALLET_DOES_NOT_EXIST = -4;
     public static final int ERROR_NEED_LOGIN = -5;
+    public static final int ERROR_LOGIN = -6;
 
     public static final int MIN_PASSWORD_LENGTH = 8;
 

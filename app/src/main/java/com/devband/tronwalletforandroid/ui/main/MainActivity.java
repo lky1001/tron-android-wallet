@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.activities;
+package com.devband.tronwalletforandroid.ui.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,16 +14,12 @@ import android.view.View;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
-import com.devband.tronwalletforandroid.tron.ITronManager;
 import com.devband.tronwalletforandroid.tron.Tron;
-import com.devband.tronwalletforandroid.tron.grpc.GrpcClient;
 import com.devband.tronwalletforandroid.ui.createaccount.CreateAccountActivity;
+import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 
-import org.tron.api.GrpcAPI;
 import org.tron.common.utils.ByteArray;
 import org.tron.protos.Protocol;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +28,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends CommonActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends CommonActivity implements MainView, NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -52,9 +48,13 @@ public class MainActivity extends CommonActivity implements NavigationView.OnNav
         setSupportActionBar(mToolbar);
         setupDrawerLayout();
 
+        mPresenter = new MainPresenter(this);
+        mPresenter.onCreate();
+
+        // test
         Tron tron = Tron.getInstance(this);
 
-        tron.queryAccount("A0B4750E2CD76E19DCA331BF5D089B71C3C2798548")
+        tron.queryAccount("27QzcUZ6qfc1GAa1YQq7ig4tAStW5RUnkJq")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Protocol.Account>() {
@@ -108,12 +108,48 @@ public class MainActivity extends CommonActivity implements NavigationView.OnNav
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        checkLogin();
+    }
+
+    private void checkLogin() {
+        if (((MainPresenter) mPresenter).isLogin()) {
+            if(mSideMenu.getMenu() != null) {
+                mSideMenu.getMenu().clear();
+                mSideMenu.inflateMenu(R.menu.navigation_logged_in_menu);
+            }
+
+            // get account info
+            ((MainPresenter) mPresenter).getMyAccountInfo();
+
+            // show address qrcode, send actionbar item
+
+        } else {
+            if(mSideMenu.getMenu() != null) {
+                mSideMenu.getMenu().clear();
+                mSideMenu.inflateMenu(R.menu.navigation_menu);
+            }
+
+            // hide address qrcode, send actionbar item
+        }
+    }
+
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.drawer_item_create_account:
                 startActivity(CreateAccountActivity.class);
                 break;
+            case R.id.drawer_item_login:
+                startActivity(LoginActivity.class);
+                break;
         }
         return false;
+    }
+
+    @Override
+    public void displayAccountInfo(Protocol.Account account) {
+        Log.i(MainActivity.class.getSimpleName(), String.valueOf(account.getBalance()) + "trx");
     }
 }
