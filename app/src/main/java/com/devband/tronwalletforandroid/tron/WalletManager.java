@@ -9,9 +9,11 @@ import org.spongycastle.util.encoders.Hex;
 import org.tron.common.crypto.ECKey;
 import org.tron.common.crypto.Hash;
 import org.tron.common.crypto.SymmEncoder;
+import org.tron.common.utils.Base58;
 import org.tron.common.utils.ByteArray;
 import org.tron.common.utils.FileUtil;
 import org.tron.common.utils.Utils;
+import org.tron.core.config.Parameter;
 
 import java.io.File;
 import java.math.BigInteger;
@@ -129,7 +131,8 @@ public class WalletManager {
             return getAddressByStorage();
         }
 
-        return ByteArray.toHexString(mEcKey.getAddress());
+        return encode58Check(mEcKey.getAddress());
+//        return ByteArray.toHexString(mEcKey.getAddress());
     }
 
     @Nullable
@@ -246,5 +249,61 @@ public class WalletManager {
             return null;
         }
         return String.valueOf(buf, 162, 64);
+    }
+
+    public static byte[] decodeFromBase58Check(String addressBase58) {
+        if (addressBase58 == null || addressBase58.length() == 0) {
+            return null;
+        }
+        if (addressBase58.length() != Parameter.CommonConstant.BASE58CHECK_ADDRESS_SIZE) {
+            return null;
+        }
+        byte[] address = decode58Check(addressBase58);
+        if (!addressValid(address)) {
+            return null;
+        }
+        return address;
+    }
+
+    private static byte[] decode58Check(String input) {
+        byte[] decodeCheck = Base58.decode(input);
+        if (decodeCheck.length <= 4) {
+            return null;
+        }
+        byte[] decodeData = new byte[decodeCheck.length - 4];
+        System.arraycopy(decodeCheck, 0, decodeData, 0, decodeData.length);
+        byte[] hash0 = Hash.sha256(decodeData);
+        byte[] hash1 = Hash.sha256(hash0);
+        if (hash1[0] == decodeCheck[decodeData.length] &&
+                hash1[1] == decodeCheck[decodeData.length + 1] &&
+                hash1[2] == decodeCheck[decodeData.length + 2] &&
+                hash1[3] == decodeCheck[decodeData.length + 3]) {
+            return decodeData;
+        }
+        return null;
+    }
+
+    private static boolean addressValid(byte[] address) {
+        if (address == null || address.length == 0) {
+            return false;
+        }
+        if (address.length != Parameter.CommonConstant.ADDRESS_SIZE) {
+            return false;
+        }
+        byte preFixbyte = address[0];
+        if (preFixbyte != Parameter.CommonConstant.ADD_PRE_FIX_BYTE) {
+            return false;
+        }
+        //Other rule;
+        return true;
+    }
+
+    public static String encode58Check(byte[] input) {
+        byte[] hash0 = Hash.sha256(input);
+        byte[] hash1 = Hash.sha256(hash0);
+        byte[] inputCheck = new byte[input.length + 4];
+        System.arraycopy(input, 0, inputCheck, 0, input.length);
+        System.arraycopy(hash1, 0, inputCheck, input.length, 4);
+        return Base58.encode(inputCheck);
     }
 }

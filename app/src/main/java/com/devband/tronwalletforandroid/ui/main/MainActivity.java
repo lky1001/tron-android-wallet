@@ -54,7 +54,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         // test
         Tron tron = Tron.getInstance(this);
 
-        tron.queryAccount("27QzcUZ6qfc1GAa1YQq7ig4tAStW5RUnkJq")
+        tron.queryAccount("27fXgQ46DcjEsZ444tjZPKULcxiUfDrDjqj")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Protocol.Account>() {

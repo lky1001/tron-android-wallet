@@ -133,7 +133,11 @@ public class Tron {
 
     public Single<Protocol.Account> queryAccount(@NonNull String address) {
         if (!TextUtils.isEmpty(address)) {
-            byte[] addressBytes = ByteArray.fromHexString(address);
+            byte[] addressBytes = WalletManager.decodeFromBase58Check(address);
+            if (addressBytes == null) {
+                throw new IllegalArgumentException("Invalid address.");
+            }
+
             return mTronManager.queryAccount(addressBytes);
         } else {
             throw new IllegalArgumentException("address is required.");
