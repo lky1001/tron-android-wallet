@@ -137,9 +137,7 @@ public class TransactionUtils {
     ByteString lockSript = ByteString.copyFrom(myKey.getAddress());
     Transaction.Builder transactionBuilderSigned = transaction.toBuilder();
 
-    Transaction.TransactionType type = transaction.getRawData().getType();
-
-    if (type == Transaction.TransactionType.ContractType) {
+    if (transaction.getRawData().getType() == Transaction.TransactionType.ContractType) {
       byte[] hash = sha256(transaction.getRawData().toByteArray());
       List<Contract> listContract = transaction.getRawData().getContractList();
       for (int i = 0; i < listContract.size(); i++) {
