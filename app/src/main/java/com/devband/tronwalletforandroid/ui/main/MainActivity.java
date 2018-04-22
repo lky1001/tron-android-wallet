@@ -17,10 +17,12 @@ import android.widget.TextView;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.createaccount.CreateAccountActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
+import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
 
 import org.tron.common.utils.ByteArray;
 import org.tron.protos.Protocol;
@@ -187,6 +189,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             case R.id.drawer_item_login:
                 startActivity(LoginActivity.class);
                 break;
+            case R.id.drawer_item_send_tron:
+                startActivity(SendCoinActivity.class);
+                break;
         }
         return false;
     }
@@ -208,7 +213,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         }
 
         Log.i(MainActivity.class.getSimpleName(), String.valueOf(account.getBalance()) + "trx");
-        double balance = ((double) account.getBalance()) / 1_000_000f;
+        double balance = ((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT;
         DecimalFormat df = new DecimalFormat("#,##0.00000000");
 
         mBalanceText.setText(df.format(balance));

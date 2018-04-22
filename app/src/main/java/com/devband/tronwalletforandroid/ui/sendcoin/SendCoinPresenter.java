@@ -57,6 +57,7 @@ public class SendCoinPresenter extends BasePresenter<SendCoinView> {
             @Override
             public void onSuccess(Boolean result) {
                 Log.i(SendCoinPresenter.class.getSimpleName(), "send result : " + result);
+                mView.sendCoinResult(result);
             }
 
             @Override

@@ -36,6 +36,10 @@
         <activity
             android:name=".ui.address.AddressActivity"
             android:theme="@style/AccountTheme" />
+
+        <activity
+            android:name=".ui.sendcoin.SendCoinActivity"
+            android:theme="@style/AccountTheme" />
     </application>
 
 </manifest>

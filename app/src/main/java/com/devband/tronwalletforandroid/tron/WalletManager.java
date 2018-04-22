@@ -312,7 +312,7 @@ public class WalletManager {
         return Base58.encode(inputCheck);
     }
 
-    public Contract.TransferContract createTransaction(@NonNull byte[] toAddress, long amount) {
+    public Contract.TransferContract createTransferContract(@NonNull byte[] toAddress, long amount) {
         byte[] ownerAddress = mEcKey.getAddress();
 
         Contract.TransferContract contract = createTransferContract(toAddress, ownerAddress, amount);

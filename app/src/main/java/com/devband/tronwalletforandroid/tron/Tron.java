@@ -184,9 +184,9 @@ public class Tron {
                 throw new InvalidPasswordException();
             }
 
-            Contract.TransferContract transaction = mWalletManager.createTransaction(toAddressBytes, amount);
+            Contract.TransferContract contract = mWalletManager.createTransferContract(toAddressBytes, amount);
 
-            return mTronManager.createTransaction(transaction);
+            return mTronManager.createTransaction(contract);
         })
         .flatMap(transactionSingle -> {
             Protocol.Transaction transaction = transactionSingle.blockingGet();
@@ -196,7 +196,7 @@ public class Tron {
             }
 
             // sign transaction
-            transaction =mWalletManager.signTransaction(transaction);
+            transaction = mWalletManager.signTransaction(transaction);
             return mTronManager.broadcastTransaction(transaction);
         });
     }
@@ -208,7 +208,6 @@ public class Tron {
             e.printStackTrace();
         }
     }
-
 
     public boolean validPassword(String password) {
         if (mWalletManager == null) {

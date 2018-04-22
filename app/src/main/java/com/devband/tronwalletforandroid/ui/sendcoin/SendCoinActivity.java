@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,8 +76,20 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
         String password = mInputPassword.getText().toString();
 
-        long amount = (long) (amountDouble * 1_000_000f);
+        long amount = (long) (amountDouble * Constants.REAL_TRX_AMOUNT);
 
         ((SendCoinPresenter) mPresenter).sendCoin(password, address, amount);
+    }
+
+    @Override
+    public void sendCoinResult(boolean result) {
+        if (result) {
+            Toast.makeText(SendCoinActivity.this, getString(R.string.sending_coin_success),
+                    Toast.LENGTH_SHORT).show();
+            supportFinishAfterTransition();
+        } else {
+            Toast.makeText(SendCoinActivity.this, getString(R.string.sending_coin_failed),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }
