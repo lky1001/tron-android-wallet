@@ -92,4 +92,10 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
                     Toast.LENGTH_SHORT).show();
         }
     }
+
+    @OnClick(R.id.btn_qrcode_scan)
+    public void onQrcodeScanClick() {
+        Toast.makeText(SendCoinActivity.this, "TBD",
+                Toast.LENGTH_SHORT).show();
+    }
 }
