@@ -44,7 +44,6 @@ public class AddressActivity extends CommonActivity implements AddressView {
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
-        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
