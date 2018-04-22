@@ -36,10 +36,10 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
     EditText mInputPassword;
 
     @BindView(R.id.btn_create_account)
-    Button mBtnCreateAddress;
+    Button mBtnCreateAccount;
 
-    @BindView(R.id.btn_copy_address)
-    Button mBtnCopyAddress;
+    @BindView(R.id.btn_copy_account_info)
+    Button mBtnCopyAccount;
 
     @BindView(R.id.agree_lost_password)
     CheckBox mChkLostPassword;
@@ -91,20 +91,20 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
         Log.d(CreateAccountActivity.class.getSimpleName(), "address:" + address);
 
         if (privKey == null || privKey.isEmpty()) {
-            mBtnCopyAddress.setEnabled(false);
-            mBtnCreateAddress.setEnabled(false);
+            mBtnCopyAccount.setEnabled(false);
+            mBtnCreateAccount.setEnabled(false);
             return;
         } else {
-            mBtnCopyAddress.setEnabled(true);
-            mBtnCreateAddress.setEnabled(true);
+            mBtnCopyAccount.setEnabled(true);
+            mBtnCreateAccount.setEnabled(true);
         }
 
         mInputPrivateKey.setText(privKey);
         mInputAddress.setText(address);
     }
 
-    @OnClick(R.id.btn_copy_address)
-    public void onCopyClick() {
+    @OnClick(R.id.btn_copy_account_info)
+    public void onCopyAccountClick() {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         StringBuilder sb = new StringBuilder();
         sb.append("Private Key : ")
@@ -116,7 +116,7 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
         ClipData clip = ClipData.newPlainText("", sb.toString());
         clipboard.setPrimaryClip(clip);
 
-        Toast.makeText(CreateAccountActivity.this, getString(R.string.copy_address_msg),
+        Toast.makeText(CreateAccountActivity.this, getString(R.string.copy_account_msg),
                 Toast.LENGTH_SHORT)
                 .show();
     }

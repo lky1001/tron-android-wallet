@@ -18,6 +18,7 @@
 
 package org.tron.common.crypto;
 
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.spongycastle.asn1.ASN1InputStream;
@@ -73,7 +74,6 @@ import java.security.interfaces.ECPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 
-import javax.annotation.Nullable;
 import javax.crypto.KeyAgreement;
 
 import static org.tron.common.utils.BIUtil.isLessThan;

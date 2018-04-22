@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Tron Wallet</string>
 
+    <string name="title_my_address">My Address</string>
     <string name="navigation_drawer_open">open</string>
     <string name="navigation_drawer_close">close</string>
     <string name="navigation_header_title">Tron Wallet</string>
@@ -12,14 +13,22 @@
     <string name="password_text">Password</string>
     <string name="private_key_text">Private Key</string>
     <string name="create_account_text">Create Account</string>
-    <string name="save_account_storage">Copy</string>
+    <string name="copy_account_info">Copy Account Info</string>
+    <string name="copy_my_address">Copy My Address</string>
     <string name="create_confirm1">I understand that if I forget lose my password I will never be able to access my assets</string>
     <string name="create_confirm2">I understand that if I forget lose my password no one will be able to help me recover it</string>
     <string name="create_confirm3">I\'ve written my password on paper</string>
-    <string name="copy_address_msg">Copied address and private key.</string>
+    <string name="copy_account_msg">Copied address and private key.</string>
+    <string name="copy_address_msg">Copied address.</string>
     <string name="need_all_agree">You must agree to the terms of use.</string>
     <string name="login_text">Login</string>
     <string name="invalid_password">Invalid password.</string>
     <string name="wallet_does_not_exist">Wallet does not exist. Create account or import account.</string>
     <string name="login_success">success login.</string>
+    <string name="menu_address">Address</string>
+    <string name="or_text">OR</string>
+    <string name="balance_text">Balance :</string>
+    <string name="currency_text">trx</string>
+    <string name="choice_share">Shere Address</string>
+    <string name="menu_share">Share</string>
 </resources>

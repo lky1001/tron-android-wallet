@@ -98,12 +98,12 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/btn_copy_address"
+                android:id="@+id/btn_copy_account_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:enabled="false"
-                android:text="@string/save_account_storage"
+                android:text="@string/copy_account_info"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout" />
 
             <LinearLayout

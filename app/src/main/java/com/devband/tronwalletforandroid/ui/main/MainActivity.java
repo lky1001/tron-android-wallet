@@ -9,20 +9,27 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.tron.Tron;
+import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.createaccount.CreateAccountActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 
 import org.tron.common.utils.ByteArray;
 import org.tron.protos.Protocol;
 
+import java.text.DecimalFormat;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -38,6 +45,17 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
+
+    @BindView(R.id.main_before_login_layout)
+    LinearLayout mBeforeLoginLayout;
+
+    @BindView(R.id.main_after_login_layout)
+    LinearLayout mAfterLoginLayout;
+
+    @BindView(R.id.tv_balance)
+    TextView mBalanceText;
+
+    private MenuItem mMenuAddressItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,16 +141,41 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             // get account info
             ((MainPresenter) mPresenter).getMyAccountInfo();
 
-            // show address qrcode, send actionbar item
-
+            // show address ic_qrcode_white_24dp, send actionbar item
+            mBeforeLoginLayout.setVisibility(View.GONE);
+            mAfterLoginLayout.setVisibility(View.VISIBLE);
         } else {
             if(mSideMenu.getMenu() != null) {
                 mSideMenu.getMenu().clear();
                 mSideMenu.inflateMenu(R.menu.navigation_menu);
             }
 
-            // hide address qrcode, send actionbar item
+            // hide address ic_qrcode_white_24dp, send actionbar item
+            mBeforeLoginLayout.setVisibility(View.VISIBLE);
+            mAfterLoginLayout.setVisibility(View.GONE);
+
+            if (mMenuAddressItem != null) {
+                mMenuAddressItem.setVisible(false);
+            }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
+        mMenuAddressItem = menu.findItem(R.id.action_address);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_address:
+                startActivity(AddressActivity.class);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -148,8 +191,26 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         return false;
     }
 
+    @OnClick(R.id.btn_create_account)
+    public void onCreateAccountClick() {
+        startActivity(CreateAccountActivity.class);
+    }
+
+    @OnClick(R.id.btn_login)
+    public void onLoginClick() {
+        startActivity(LoginActivity.class);
+    }
+
     @Override
     public void displayAccountInfo(Protocol.Account account) {
+        if (mMenuAddressItem != null) {
+            mMenuAddressItem.setVisible(true);
+        }
+
         Log.i(MainActivity.class.getSimpleName(), String.valueOf(account.getBalance()) + "trx");
+        double balance = ((double) account.getBalance()) / 1_000_000f;
+        DecimalFormat df = new DecimalFormat("#,##0.00000000");
+
+        mBalanceText.setText(df.format(balance));
     }
 }

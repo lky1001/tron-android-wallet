@@ -123,6 +123,8 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.16.20'
     annotationProcessor 'org.projectlombok:lombok:1.16.20'
 
+    implementation 'com.github.kenglxn.QRGen:android:2.2.0'
+
     // test
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.powermock:powermock-module-junit4:1.6.2'

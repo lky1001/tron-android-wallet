@@ -1,9 +1,9 @@
 package com.devband.tronwalletforandroid.ui.login;
 
+import android.support.annotation.Nullable;
+
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
-
-import javax.annotation.Nullable;
 
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
