@@ -6,9 +6,12 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.tron.exception.InvalidAddressException;
+import com.devband.tronwalletforandroid.tron.exception.InvalidPasswordException;
 
 import org.tron.api.GrpcAPI;
 import org.tron.common.utils.ByteArray;
+import org.tron.protos.Contract;
 import org.tron.protos.Protocol;
 
 import java.util.Arrays;
@@ -169,6 +172,35 @@ public class Tron {
         }
     }
 
+    public Single<Boolean> sendCoin(@NonNull String password, @NonNull String toAddress, long amount) {
+        return Single.fromCallable(() -> {
+            byte[] toAddressBytes = WalletManager.decodeFromBase58Check(toAddress);
+
+            if (toAddressBytes == null) {
+                throw new InvalidAddressException();
+            }
+
+            if (!mWalletManager.checkPassWord(password)) {
+                throw new InvalidPasswordException();
+            }
+
+            Contract.TransferContract contract = mWalletManager.createTransferContract(toAddressBytes, amount);
+
+            return mTronManager.createTransaction(contract);
+        })
+        .flatMap(transactionSingle -> {
+            Protocol.Transaction transaction = transactionSingle.blockingGet();
+
+            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            // sign transaction
+            transaction = mWalletManager.signTransaction(transaction);
+            return mTronManager.broadcastTransaction(transaction);
+        });
+    }
+
     public void shutdown() {
         try {
             mTronManager.shutdown();
@@ -176,4 +208,17 @@ public class Tron {
             e.printStackTrace();
         }
     }
+
+    public boolean validPassword(String password) {
+        if (mWalletManager == null) {
+            return false;
+        }
+
+        if (!WalletManager.passwordValid(password)) {
+            return false;
+        }
+
+        return mWalletManager.checkPassWord(password);
+    }
+
 }

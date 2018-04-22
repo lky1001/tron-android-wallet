@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.google.protobuf.ByteString;
+
 import org.spongycastle.util.encoders.Hex;
 import org.tron.common.crypto.ECKey;
 import org.tron.common.crypto.Hash;
@@ -12,8 +14,11 @@ import org.tron.common.crypto.SymmEncoder;
 import org.tron.common.utils.Base58;
 import org.tron.common.utils.ByteArray;
 import org.tron.common.utils.FileUtil;
+import org.tron.common.utils.TransactionUtils;
 import org.tron.common.utils.Utils;
 import org.tron.core.config.Parameter;
+import org.tron.protos.Contract;
+import org.tron.protos.Protocol;
 
 import java.io.File;
 import java.math.BigInteger;
@@ -306,4 +311,33 @@ public class WalletManager {
         System.arraycopy(hash1, 0, inputCheck, input.length, 4);
         return Base58.encode(inputCheck);
     }
+
+    public Contract.TransferContract createTransferContract(@NonNull byte[] toAddress, long amount) {
+        byte[] ownerAddress = mEcKey.getAddress();
+
+        Contract.TransferContract contract = createTransferContract(toAddress, ownerAddress, amount);
+
+        return contract;
+    }
+
+    private static Contract.TransferContract createTransferContract(byte[] to, byte[] owner,
+            long amount) {
+        Contract.TransferContract.Builder builder = Contract.TransferContract.newBuilder();
+        ByteString bsTo = ByteString.copyFrom(to);
+        ByteString bsOwner = ByteString.copyFrom(owner);
+        builder.setToAddress(bsTo);
+        builder.setOwnerAddress(bsOwner);
+        builder.setAmount(amount);
+
+        return builder.build();
+    }
+
+    public Protocol.Transaction signTransaction(Protocol.Transaction transaction) {
+        if (this.mEcKey == null || this.mEcKey.getPrivKey() == null) {
+            return null;
+        }
+        transaction = TransactionUtils.setTimestamp(transaction);
+        return TransactionUtils.sign(transaction, this.mEcKey);
+    }
 }
+

@@ -31,4 +31,11 @@
     <string name="currency_text">trx</string>
     <string name="choice_share">Shere Address</string>
     <string name="menu_share">Share</string>
+    <string name="amount_text">Amount : </string>
+    <string name="send_amount_text">Input send tron amount</string>
+    <string name="send_trx_text">Send</string>
+    <string name="invalid_address">Invalid Address</string>
+    <string name="invalid_amount">Invalid Amount</string>
+    <string name="sending_coin_failed">Sending coin failed.</string>
+    <string name="sending_coin_success">Sending coin success.</string>
 </resources>
