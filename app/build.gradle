@@ -35,6 +35,7 @@ android {
         disable 'GoogleAppIndexingWarning', 'HardcodedText', 'InvalidPackage'
         textReport true
         textOutput "stdout"
+        abortOnError false
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
