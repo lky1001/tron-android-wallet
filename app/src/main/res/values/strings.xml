@@ -38,4 +38,6 @@
     <string name="invalid_amount">Invalid Amount</string>
     <string name="sending_coin_failed">Sending coin failed.</string>
     <string name="sending_coin_success">Sending coin success.</string>
+    <string name="name">DEVBAND</string>
+    <string name="navigation_menu_import_wallet">Import Wallet</string>
 </resources>

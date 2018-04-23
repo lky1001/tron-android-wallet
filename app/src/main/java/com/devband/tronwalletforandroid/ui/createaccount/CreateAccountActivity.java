@@ -3,12 +3,14 @@ package com.devband.tronwalletforandroid.ui.createaccount;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -58,6 +60,10 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         mPresenter = new CreateAccountPresenter(this);
         mPresenter.onCreate();
 
@@ -83,6 +89,21 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
     protected void onResume() {
         super.onResume();
         checkStoragePermission();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    finishAfterTransition();
+                } else {
+                    finish();
+                }
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

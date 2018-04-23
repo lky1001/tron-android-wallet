@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/drawer_item_create_account"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/ic_create_account"
         android:title="@string/navigation_menu_create_account" />
 
     <item android:id="@+id/drawer_item_login"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/ic_login"
         android:title="@string/navigation_menu_login" />
 
+    <item android:id="@+id/drawer_item_import_wallet"
+        android:icon="@drawable/ic_import_wallet"
+        android:title="@string/navigation_menu_import_wallet" />
+
     <item android:id="@+id/drawer_item_about_tron"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/ic_tron_white"
         android:title="@string/navigation_menu_about_tron" />
 </menu>

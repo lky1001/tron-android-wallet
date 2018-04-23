@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3f51b5</color>
-    <color name="colorPrimaryDark">#303f9f</color>
-    <color name="colorAccent">#ff4081</color>
+    <color name="colorPrimary">#e21222</color>
+    <color name="colorPrimaryDark">#c40b19</color>
+    <color name="colorAccent">#e21222</color>
 
-    <color name="activity_intro_background">#000000</color>
+    <color name="activity_intro_background">#e21222</color>
     <color name="activity_create_account_background">#000000</color>
     <color name="navigation_header_need_signin_color">#ffffff</color>
 </resources>
