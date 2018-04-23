@@ -27,14 +27,14 @@ public class GrpcClient {
 
     public GrpcClient(String host, int port) {
         channel = ManagedChannelBuilder.forAddress(host, port)
-                .usePlaintext(true)
+                .usePlaintext()
                 .build();
         blockingStub = WalletGrpc.newBlockingStub(channel);
     }
 
     public GrpcClient(String host) {
         channel = ManagedChannelBuilder.forTarget(host)
-                .usePlaintext(true)
+                .usePlaintext()
                 .build();
         blockingStub = WalletGrpc.newBlockingStub(channel);
     }
