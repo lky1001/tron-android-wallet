@@ -9,6 +9,8 @@
     <string name="navigation_menu_login">Login</string>
     <string name="navigation_menu_about_tron">About Tron</string>
     <string name="navigation_menu_send_tron">Send Tron</string>
+    <string name="navigation_menu_import_wallet">Import Wallet</string>
+    <string name="navigation_menu_backup_wallet">Backup Wallet</string>
     <string name="address_text">Address</string>
     <string name="password_text">Password</string>
     <string name="private_key_text">Private Key</string>
@@ -39,5 +41,4 @@
     <string name="sending_coin_failed">Sending coin failed.</string>
     <string name="sending_coin_success">Sending coin success.</string>
     <string name="name">DEVBAND</string>
-    <string name="navigation_menu_import_wallet">Import Wallet</string>
 </resources>

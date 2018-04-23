@@ -2,10 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/drawer_item_send_tron"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/ic_send"
         android:title="@string/navigation_menu_send_tron" />
 
+    <item android:id="@+id/drawer_item_backup_wallet"
+        android:icon="@drawable/ic_backup_wallet"
+        android:title="@string/navigation_menu_backup_wallet" />
+
     <item android:id="@+id/drawer_item_about_tron"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/ic_tron_white"
         android:title="@string/navigation_menu_about_tron" />
 </menu>
