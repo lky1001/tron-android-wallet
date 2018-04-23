@@ -32,7 +32,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                app:srcCompat="@drawable/ic_tron" />
+                app:srcCompat="@drawable/ic_tron_red" />
             </LinearLayout>
 
             <LinearLayout
@@ -125,7 +125,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="37dp"
-                    android:textColor="@android:color/white"
                     android:text="@string/create_confirm1" />
             </LinearLayout>
 
@@ -146,7 +145,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="37dp"
-                    android:textColor="@android:color/white"
                     android:text="@string/create_confirm2" />
             </LinearLayout>
 
@@ -165,7 +163,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
                     android:text="@string/create_confirm3" />
             </LinearLayout>
 

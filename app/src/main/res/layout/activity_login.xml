@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintVertical_bias="0.081"
-        app:srcCompat="@drawable/ic_tron" />
+        app:srcCompat="@drawable/ic_tron_red" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"

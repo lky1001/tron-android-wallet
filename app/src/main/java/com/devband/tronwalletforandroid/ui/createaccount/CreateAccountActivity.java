@@ -62,6 +62,7 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.title_create_account);
         }
 
         mPresenter = new CreateAccountPresenter(this);

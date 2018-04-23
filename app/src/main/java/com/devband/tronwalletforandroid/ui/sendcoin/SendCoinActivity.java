@@ -39,6 +39,7 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.title_send_coin);
         }
 
         mPresenter = new SendCoinPresenter(this);

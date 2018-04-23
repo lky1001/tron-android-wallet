@@ -35,6 +35,7 @@ public class LoginActivity extends CommonActivity implements LoginView {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.title_create_account);
         }
 
         mPresenter = new LoginPresenter(this);
