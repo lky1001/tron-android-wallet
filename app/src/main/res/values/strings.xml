@@ -14,7 +14,7 @@
     <string name="navigation_menu_import_wallet">Import Wallet</string>
     <string name="navigation_menu_backup_wallet">Backup Wallet</string>
     <string name="address_text">Address</string>
-    <string name="password_text">Password</string>
+    <string name="password_text">Password (Great than equal to 8)</string>
     <string name="private_key_text">Private Key</string>
     <string name="create_account_text">Create Account</string>
     <string name="copy_account_info">Copy Account Info</string>
@@ -33,7 +33,8 @@
     <string name="or_text">OR</string>
     <string name="balance_text">Balance :</string>
     <string name="currency_text">trx</string>
-    <string name="choice_share">Shere Address</string>
+    <string name="choice_share">Share Address</string>
+    <string name="choice_share_account">Backup Account</string>
     <string name="menu_share">Share</string>
     <string name="amount_text">Amount : </string>
     <string name="send_amount_text">Input send tron amount</string>
@@ -42,6 +43,7 @@
     <string name="invalid_amount">Invalid Amount</string>
     <string name="sending_coin_failed">Sending coin failed.</string>
     <string name="sending_coin_success">Sending coin success.</string>
-    <string name="name">DEVBAND</string>
+    <string name="name">TRON</string>
     <string name="title_send_coin">Send Coin</string>
+    <string name="navigation_menu_logout">Logout</string>
 </resources>

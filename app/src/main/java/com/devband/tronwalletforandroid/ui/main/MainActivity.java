@@ -192,6 +192,10 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             case R.id.drawer_item_send_tron:
                 startActivity(SendCoinActivity.class);
                 break;
+            case R.id.drawer_item_about_tron:
+                break;
+            case R.id.drawer_item_logout:
+                break;
         }
         return false;
     }

@@ -1,8 +1,6 @@
 package com.devband.tronwalletforandroid.ui.createaccount;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -127,7 +125,21 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
 
     @OnClick(R.id.btn_copy_account_info)
     public void onCopyAccountClick() {
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+//        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("Private Key : ")
+//                .append(mInputPrivateKey.getText().toString())
+//                .append("\n")
+//                .append("Address : ")
+//                .append(mInputAddress.getText().toString());
+//
+//        ClipData clip = ClipData.newPlainText("", sb.toString());
+//        clipboard.setPrimaryClip(clip);
+//
+//        Toast.makeText(CreateAccountActivity.this, getString(R.string.copy_account_msg),
+//                Toast.LENGTH_SHORT)
+//                .show();
+
         StringBuilder sb = new StringBuilder();
         sb.append("Private Key : ")
                 .append(mInputPrivateKey.getText().toString())
@@ -135,12 +147,10 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
                 .append("Address : ")
                 .append(mInputAddress.getText().toString());
 
-        ClipData clip = ClipData.newPlainText("", sb.toString());
-        clipboard.setPrimaryClip(clip);
-
-        Toast.makeText(CreateAccountActivity.this, getString(R.string.copy_account_msg),
-                Toast.LENGTH_SHORT)
-                .show();
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, sb.toString());
+        startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.choice_share_account)));
     }
 
     @OnClick(R.id.btn_create_account)
