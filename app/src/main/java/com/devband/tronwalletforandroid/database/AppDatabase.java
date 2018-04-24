@@ -6,18 +6,18 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
-import com.devband.tronwalletforandroid.database.dao.AddressDao;
-import com.devband.tronwalletforandroid.database.model.AddressModel;
+import com.devband.tronwalletforandroid.database.dao.WalletDao;
+import com.devband.tronwalletforandroid.database.model.WalletModel;
 
 @Database(entities = {
-        AddressModel.class
+        WalletModel.class
 }, version = 1)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "tron_wallet_db";
     private static volatile AppDatabase mInstance;
 
-    public abstract AddressDao addressDao();
+    public abstract WalletDao walletDao();
 
     public static AppDatabase getDatabase(Context context) {
         if (mInstance == null) {

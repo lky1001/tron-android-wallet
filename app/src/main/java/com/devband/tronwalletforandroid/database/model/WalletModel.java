@@ -9,7 +9,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class AddressModel {
+public class WalletModel {
 
     private String name;
 

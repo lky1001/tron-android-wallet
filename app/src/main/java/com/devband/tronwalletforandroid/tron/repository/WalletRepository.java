@@ -1,10 +1,10 @@
 package com.devband.tronwalletforandroid.tron.repository;
 
-import com.devband.tronwalletforandroid.database.model.AddressModel;
+import com.devband.tronwalletforandroid.database.model.WalletModel;
 
 public interface WalletRepository {
 
-    boolean storeAddress(AddressModel addressModel);
+    boolean storeAddress(WalletModel addressModel);
 
-    AddressModel loadAddress();
+    WalletModel loadAddress();
 }
