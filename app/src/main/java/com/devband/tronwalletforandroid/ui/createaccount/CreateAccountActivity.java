@@ -94,7 +94,7 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                finishActivity();
                 break;
         }
 
@@ -160,6 +160,6 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
             return;
         }
 
-        finish();
+        finishActivity();
     }
 }

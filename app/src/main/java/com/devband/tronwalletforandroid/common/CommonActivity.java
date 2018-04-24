@@ -49,8 +49,7 @@ public class CommonActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void finish() {
+    public void finishActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             finishAfterTransition();
         } else {

@@ -21,6 +21,6 @@ public class IntroActivity extends CommonActivity implements IntroView {
     @Override
     public void startMainActivity() {
         startActivity(MainActivity.class);
-        finish();
+        finishActivity();
     }
 }

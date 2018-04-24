@@ -70,7 +70,7 @@ public class AddressActivity extends CommonActivity implements AddressView {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                finishActivity();
                 break;
             case R.id.action_share:
                 shareMyAddress();
@@ -85,7 +85,7 @@ public class AddressActivity extends CommonActivity implements AddressView {
         if (addressInfo == null) {
             Toast.makeText(AddressActivity.this, getString(R.string.wallet_does_not_exist),
                     Toast.LENGTH_SHORT).show();
-            finish();
+            finishActivity();
         } else {
             mQrcodeImageView.setImageBitmap(addressInfo.addressBitmap);
             mAddressTextView.setText(addressInfo.address);

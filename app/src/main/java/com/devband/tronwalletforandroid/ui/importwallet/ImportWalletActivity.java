@@ -57,7 +57,7 @@ public class ImportWalletActivity extends CommonActivity implements ImportWallet
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                finishActivity();
                 break;
         }
 
@@ -89,7 +89,7 @@ public class ImportWalletActivity extends CommonActivity implements ImportWallet
         if (result) {
             Toast.makeText(ImportWalletActivity.this, getString(R.string.import_wallet_success),
                     Toast.LENGTH_SHORT).show();
-            finish();
+            finishActivity();
         } else {
             Toast.makeText(ImportWalletActivity.this, getString(R.string.invalid_password_or_private_key),
                     Toast.LENGTH_SHORT).show();

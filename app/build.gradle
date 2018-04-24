@@ -95,7 +95,8 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
 
     // ui
-    'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.github.medyo:android-about-page:1.2.4'
 
     // butterknife
     implementation 'com.jakewharton:butterknife:8.8.1'
@@ -108,7 +109,7 @@ dependencies {
     // local db
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor 'android.arch.persistence.room:compiler:1.0.0'
-    implementation 'android.arch.paging:runtime:1.0.0-beta1'
+    implementation 'android.arch.paging:runtime:1.0.0-rc1'
 
     // http
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'

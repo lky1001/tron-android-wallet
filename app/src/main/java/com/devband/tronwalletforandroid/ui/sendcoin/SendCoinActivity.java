@@ -87,7 +87,7 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
         if (result) {
             Toast.makeText(SendCoinActivity.this, getString(R.string.sending_coin_success),
                     Toast.LENGTH_SHORT).show();
-            finish();
+            finishActivity();
         } else {
             Toast.makeText(SendCoinActivity.this, getString(R.string.sending_coin_failed),
                     Toast.LENGTH_SHORT).show();

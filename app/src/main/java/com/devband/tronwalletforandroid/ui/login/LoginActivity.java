@@ -51,7 +51,7 @@ public class LoginActivity extends CommonActivity implements LoginView {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                finishActivity();
                 break;
         }
 
@@ -77,7 +77,7 @@ public class LoginActivity extends CommonActivity implements LoginView {
             Toast.makeText(LoginActivity.this, getString(R.string.login_success),
                     Toast.LENGTH_SHORT).show();
 
-            finish();
+            finishActivity();
         }
     }
 }
