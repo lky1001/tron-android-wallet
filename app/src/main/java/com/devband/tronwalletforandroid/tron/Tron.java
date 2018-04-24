@@ -87,7 +87,7 @@ public class Tron {
             return ERROR_INVALID_PASSWORD;
         }
 
-        mWalletManager = new WalletManager(true);
+        mWalletManager = new WalletManager(privateKey);
 
         if (mWalletManager.getEcKey() == null) {
             return ERROR;

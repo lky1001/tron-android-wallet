@@ -32,9 +32,6 @@ public class ImportWalletActivity extends CommonActivity implements ImportWallet
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_import_wallet);
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
 
