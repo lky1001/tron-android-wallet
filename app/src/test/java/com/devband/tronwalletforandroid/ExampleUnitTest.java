@@ -73,10 +73,10 @@ public class ExampleUnitTest {
     public void registerWalletTest() {
         Tron tron = Tron.getInstance(context);
 
-        assertEquals(tron.registerWaller(null), Tron.ERROR_INVALID_PASSWORD);
-        assertEquals(tron.registerWaller(""), Tron.ERROR_INVALID_PASSWORD);
-        assertEquals(tron.registerWaller("aaaa"), Tron.ERROR_INVALID_PASSWORD);
-        assertEquals(tron.registerWaller("aaaaaaaaa"), Tron.SUCCESS);
+        assertEquals(tron.registerWallet(null), Tron.ERROR_INVALID_PASSWORD);
+        assertEquals(tron.registerWallet(""), Tron.ERROR_INVALID_PASSWORD);
+        assertEquals(tron.registerWallet("aaaa"), Tron.ERROR_INVALID_PASSWORD);
+        assertEquals(tron.registerWallet("aaaaaaaaa"), Tron.SUCCESS);
     }
 
     @Test

@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.login;
+package com.devband.tronwalletforandroid.ui.importwallet;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends CommonActivity implements LoginView {
+public class ImportWalletActivity extends CommonActivity implements ImportWalletView {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -24,8 +24,14 @@ public class LoginActivity extends CommonActivity implements LoginView {
     @BindView(R.id.input_password)
     EditText mInputPassword;
 
+    @BindView(R.id.input_private_key)
+    EditText mInputPrivateKey;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_import_wallet);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -34,10 +40,10 @@ public class LoginActivity extends CommonActivity implements LoginView {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.title_login);
+            getSupportActionBar().setTitle(R.string.title_import_wallet);
         }
 
-        mPresenter = new LoginPresenter(this);
+        mPresenter = new ImportWalletPresenter(this);
         mPresenter.onCreate();
     }
 
@@ -58,26 +64,35 @@ public class LoginActivity extends CommonActivity implements LoginView {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.btn_login)
-    public void onCreateAccountClick() {
+    @OnClick(R.id.btn_import_wallet)
+    public void onImportWalletClick() {
         String password = mInputPassword.getText().toString();
 
-        ((LoginPresenter) mPresenter).loginWallet(password);
-    }
+        if (password.length() < Tron.MIN_PASSWORD_LENGTH) {
+            Toast.makeText(ImportWalletActivity.this, getString(R.string.invalid_password),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-    @Override
-    public void loginResult(int result) {
-        if (result == Tron.ERROR_INVALID_PASSWORD) {
-            Toast.makeText(LoginActivity.this, getString(R.string.invalid_password),
-                    Toast.LENGTH_SHORT).show();
-        } else if (result == Tron.ERROR_WALLET_DOES_NOT_EXIST) {
-            Toast.makeText(LoginActivity.this, getString(R.string.wallet_does_not_exist),
-                    Toast.LENGTH_SHORT).show();
-        } else if (result == Tron.SUCCESS) {
-            Toast.makeText(LoginActivity.this, getString(R.string.login_success),
-                    Toast.LENGTH_SHORT).show();
+        String privateKey = mInputPrivateKey.getText().toString();
 
+        if (privateKey.length() != Tron.PRIVATE_KEY_SIZE) {
+            Toast.makeText(ImportWalletActivity.this, getString(R.string.invalid_private_key),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // todo - warning msg. remove exist wallet.
+
+        boolean result = ((ImportWalletPresenter) mPresenter).importWallet(password, privateKey);
+
+        if (result) {
+            Toast.makeText(ImportWalletActivity.this, getString(R.string.import_wallet_success),
+                    Toast.LENGTH_SHORT).show();
             finish();
+        } else {
+            Toast.makeText(ImportWalletActivity.this, getString(R.string.invalid_password_or_private_key),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -37,6 +37,7 @@ public class WalletManager {
 
     private ECKey mEcKey = null;
     private boolean mLoginState = false;
+    private boolean ecKey;
 
     public WalletManager() {
 
@@ -49,6 +50,17 @@ public class WalletManager {
         if (genEcKey) {
             this.mEcKey = new ECKey(Utils.getRandom());
         }
+    }
+
+    public WalletManager(String privateKey) {
+        ECKey temKey = null;
+        try {
+            BigInteger priK = new BigInteger(privateKey, 16);
+            temKey = ECKey.fromPrivate(priK);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        this.mEcKey = temKey;
     }
 
 
@@ -338,6 +350,10 @@ public class WalletManager {
         }
         transaction = TransactionUtils.setTimestamp(transaction);
         return TransactionUtils.sign(transaction, this.mEcKey);
+    }
+
+    public ECKey getEcKey() {
+        return mEcKey;
     }
 }
 

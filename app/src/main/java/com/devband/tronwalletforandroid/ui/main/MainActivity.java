@@ -21,6 +21,7 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.createaccount.CreateAccountActivity;
+import com.devband.tronwalletforandroid.ui.importwallet.ImportWalletActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
 
@@ -130,10 +131,10 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     protected void onResume() {
         super.onResume();
-        checkLogin();
+        checkLoginState();
     }
 
-    private void checkLogin() {
+    private void checkLoginState() {
         if (((MainPresenter) mPresenter).isLogin()) {
             if(mSideMenu.getMenu() != null) {
                 mSideMenu.getMenu().clear();
@@ -192,12 +193,21 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             case R.id.drawer_item_send_tron:
                 startActivity(SendCoinActivity.class);
                 break;
+            case R.id.drawer_item_import_wallet:
+                startActivity(ImportWalletActivity.class);
+                break;
             case R.id.drawer_item_about_tron:
                 break;
             case R.id.drawer_item_logout:
+                logout();
                 break;
         }
         return false;
+    }
+
+    public void logout() {
+        ((MainPresenter) mPresenter).logout();
+        checkLoginState();
     }
 
     @OnClick(R.id.btn_create_account)

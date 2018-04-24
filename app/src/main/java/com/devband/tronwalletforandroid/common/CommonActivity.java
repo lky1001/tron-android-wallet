@@ -48,4 +48,13 @@ public class CommonActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    @Override
+    public void finish() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            finishAfterTransition();
+        } else {
+            finish();
+        }
+    }
 }

@@ -40,6 +40,10 @@
         <activity
             android:name=".ui.sendcoin.SendCoinActivity"
             android:theme="@style/AccountTheme" />
+
+        <activity
+            android:name=".ui.importwallet.ImportWalletActivity"
+            android:theme="@style/AccountTheme" />
     </application>
 
 </manifest>

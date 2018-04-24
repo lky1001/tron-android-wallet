@@ -94,11 +94,7 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    finishAfterTransition();
-                } else {
-                    finish();
-                }
+                finish();
                 break;
         }
 

@@ -38,7 +38,7 @@ public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
     public void changedPassword(String password) {
         Single.fromCallable(() -> {
             if (password != null && password.length() >= Tron.MIN_PASSWORD_LENGTH) {
-                if (Tron.getInstance(mContext).registerWaller(password) == Tron.SUCCESS) {
+                if (Tron.getInstance(mContext).registerWallet(password) == Tron.SUCCESS) {
                     if (Tron.getInstance(mContext).login(password) == Tron.SUCCESS) {
                         String privKey = Tron.getInstance(mContext).getPrivateKey();
                         String address = Tron.getInstance(mContext).getAddress();

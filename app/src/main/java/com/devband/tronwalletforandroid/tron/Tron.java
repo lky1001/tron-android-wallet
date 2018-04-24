@@ -28,8 +28,10 @@ public class Tron {
     public static final int ERROR_WALLET_DOES_NOT_EXIST = -4;
     public static final int ERROR_NEED_LOGIN = -5;
     public static final int ERROR_LOGIN = -6;
+    public static final int ERROR = -9999;
 
     public static final int MIN_PASSWORD_LENGTH = 8;
+    public static final int PRIVATE_KEY_SIZE = 64;
 
     private static Tron instance;
 
@@ -71,12 +73,26 @@ public class Tron {
         }
     }
 
-    public int registerWaller(@NonNull String password) {
+    public int registerWallet(@NonNull String password) {
         if (!mWalletManager.passwordValid(password)) {
             return ERROR_INVALID_PASSWORD;
         }
 
         mWalletManager = new WalletManager(true);
+        return mWalletManager.store(password);
+    }
+
+    public int importWallet(@NonNull String password, @NonNull String privateKey) {
+        if (!mWalletManager.passwordValid(password)) {
+            return ERROR_INVALID_PASSWORD;
+        }
+
+        mWalletManager = new WalletManager(true);
+
+        if (mWalletManager.getEcKey() == null) {
+            return ERROR;
+        }
+
         return mWalletManager.store(password);
     }
 
@@ -221,4 +237,8 @@ public class Tron {
         return mWalletManager.checkPassWord(password);
     }
 
+    public void logout() {
+        mWalletManager.logout();
+        mWalletManager = null;
+    }
 }

@@ -68,4 +68,10 @@ public class MainPresenter extends BasePresenter<MainView> {
             }
         });
     }
+
+    public boolean logout() {
+        Tron.getInstance(mContext).logout();
+
+        return true;
+    }
 }
