@@ -78,7 +78,7 @@ public class Tron {
             return ERROR_INVALID_PASSWORD;
         }
 
-        mWalletManager = new WalletManager(true);
+        mWalletManager = new WalletManager(true, mContext);
         return mWalletManager.store(password);
     }
 
@@ -87,7 +87,7 @@ public class Tron {
             return ERROR_INVALID_PASSWORD;
         }
 
-        mWalletManager = new WalletManager(privateKey);
+        mWalletManager = new WalletManager(privateKey, mContext);
 
         if (mWalletManager.getEcKey() == null) {
             return ERROR;

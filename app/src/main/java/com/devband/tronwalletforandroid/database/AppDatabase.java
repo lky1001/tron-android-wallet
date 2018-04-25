@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.devband.tronwalletforandroid.database.dao.WalletDao;
 import com.devband.tronwalletforandroid.database.model.WalletModel;
@@ -19,7 +20,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract WalletDao walletDao();
 
-    public static AppDatabase getDatabase(Context context) {
+    public static AppDatabase getDatabase(@NonNull Context context) {
         if (mInstance == null) {
             synchronized (AppDatabase.class) {
                 if (mInstance == null) {

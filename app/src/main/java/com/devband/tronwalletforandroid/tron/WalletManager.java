@@ -1,10 +1,15 @@
 package com.devband.tronwalletforandroid.tron;
 
+import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.devband.tronwalletforandroid.database.model.WalletModel;
+import com.devband.tronwalletforandroid.tron.repository.FileRepository;
+import com.devband.tronwalletforandroid.tron.repository.LocalDbRepository;
+import com.devband.tronwalletforandroid.tron.repository.WalletRepository;
 import com.google.protobuf.ByteString;
 
 import org.spongycastle.util.encoders.Hex;
@@ -30,6 +35,8 @@ import java.util.Arrays;
 public class WalletManager {
 
     private static final String LOG_TAG = WalletManager.class.getSimpleName();
+    private static final int WALLET_LOCAL_DB = 1;
+    private static final int WALLET_FILE = 2;
 
     private static final String WALLET_FILE_PATH = "tron/tron.dat";
 
@@ -37,7 +44,8 @@ public class WalletManager {
 
     private ECKey mEcKey = null;
     private boolean mLoginState = false;
-    private boolean ecKey;
+
+    private WalletRepository mWalletRepository;
 
     public WalletManager() {
 
@@ -46,25 +54,63 @@ public class WalletManager {
     /**
      * Creates a new WalletClient with a random ECKey or no ECKey.
      */
-    public WalletManager(boolean genEcKey) {
+    public WalletManager(boolean genEcKey, int walletType, Context context) {
         if (genEcKey) {
             this.mEcKey = new ECKey(Utils.getRandom());
         }
+
+        if (walletType == WALLET_LOCAL_DB) {
+            mWalletRepository = new LocalDbRepository(context);
+        } else if (walletType == WALLET_FILE) {
+            mWalletRepository = new FileRepository();
+        }
     }
 
-    public WalletManager(String privateKey) {
+    public WalletManager(String privateKey, int walletType, Context context) {
         ECKey temKey = null;
         try {
-            BigInteger priK = new BigInteger(privateKey, 16);
+            BigInteger priK = new BigInteger(privateKey, KEY_SIZE);
             temKey = ECKey.fromPrivate(priK);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         this.mEcKey = temKey;
+
+        if (walletType == WALLET_LOCAL_DB) {
+            mWalletRepository = new LocalDbRepository(context);
+        } else if (walletType == WALLET_FILE) {
+            mWalletRepository = new FileRepository();
+        }
     }
 
+    public int store(@NonNull String walletName, @NonNull String password) {
+        if (this.mEcKey == null || this.mEcKey.getPrivKey() == null) {
+            return Tron.ERROR_PRIVATE_KEY;
+        }
 
-    public int store(@NonNull  String password) {
+        byte[] pwd = getPassWord(password);
+        String pwdAsc = ByteArray.toHexString(pwd);
+        byte[] privKeyPlain = this.mEcKey.getPrivKeyBytes();
+        //encrypted by password
+        byte[] aseKey = getEncKey(password);
+        byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, aseKey);
+        String privKeyStr = ByteArray.toHexString(privKeyEnced);
+        byte[] pubKeyBytes = this.mEcKey.getPubKey();
+        String pubKeyStr = ByteArray.toHexString(pubKeyBytes);
+
+        boolean result = mWalletRepository.storeAddress(WalletModel.builder()
+                .name(walletName)
+                .wallet(pwdAsc + pubKeyStr + privKeyStr)
+                .build());
+
+        if (result) {
+            return Tron.SUCCESS;
+        } else {
+            return Tron.ERROR;
+        }
+    }
+
+    public int store(@NonNull String password) {
         if (this.mEcKey == null || this.mEcKey.getPrivKey() == null) {
             return Tron.ERROR_PRIVATE_KEY;
         }
@@ -94,6 +140,10 @@ public class WalletManager {
         FileUtil.saveData(file, privKeyStr, true);
 
         return Tron.SUCCESS;
+    }
+
+    public boolean backUpWalletToStorage(String password) {
+        return true;
     }
 
     public boolean login(String password) {
