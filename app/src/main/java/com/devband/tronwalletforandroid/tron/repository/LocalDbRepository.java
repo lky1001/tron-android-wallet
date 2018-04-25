@@ -10,6 +10,7 @@ import com.devband.tronwalletforandroid.database.model.WalletModel;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class LocalDbRepository implements WalletRepository {
 
@@ -20,7 +21,7 @@ public class LocalDbRepository implements WalletRepository {
     }
 
     @Override
-    public boolean storeAddress(@NonNull WalletModel walletModel) {
+    public boolean storeWallet(@NonNull WalletModel walletModel) {
         Date now = Calendar.getInstance().getTime();
         walletModel.setCreated(now);
 
@@ -31,7 +32,13 @@ public class LocalDbRepository implements WalletRepository {
 
     @Nullable
     @Override
-    public WalletModel loadAddress() {
+    public WalletModel loadWallet(int index) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public List<WalletModel> loadAllWallets() {
         return null;
     }
 }

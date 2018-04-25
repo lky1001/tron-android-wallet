@@ -5,16 +5,24 @@ import android.support.annotation.Nullable;
 
 import com.devband.tronwalletforandroid.database.model.WalletModel;
 
+import java.util.List;
+
 public class FileRepository implements WalletRepository {
 
     @Override
-    public boolean storeAddress(@NonNull WalletModel walletModel) {
+    public boolean storeWallet(@NonNull WalletModel walletModel) {
         return false;
     }
 
     @Nullable
     @Override
-    public WalletModel loadAddress() {
+    public WalletModel loadWallet(int index) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public List<WalletModel> loadAllWallets() {
         return null;
     }
 }

@@ -5,10 +5,15 @@ import android.support.annotation.Nullable;
 
 import com.devband.tronwalletforandroid.database.model.WalletModel;
 
+import java.util.List;
+
 public interface WalletRepository {
 
-    boolean storeAddress(@NonNull WalletModel walletModel);
+    boolean storeWallet(@NonNull WalletModel walletModel);
 
     @Nullable
-    WalletModel loadAddress();
+    WalletModel loadWallet(int index);
+
+    @Nullable
+    List<WalletModel> loadAllWallets();
 }

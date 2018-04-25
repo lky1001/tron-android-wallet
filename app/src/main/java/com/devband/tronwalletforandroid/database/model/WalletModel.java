@@ -16,7 +16,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity(tableName = "wallet")
 public class WalletModel {
 
     @PrimaryKey
