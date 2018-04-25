@@ -35,8 +35,9 @@ import java.util.Arrays;
 public class WalletManager {
 
     private static final String LOG_TAG = WalletManager.class.getSimpleName();
-    private static final int WALLET_LOCAL_DB = 1;
-    private static final int WALLET_FILE = 2;
+
+    public static final int WALLET_LOCAL_DB = 1;
+    public static final int WALLET_FILE = 2;
 
     private static final String WALLET_FILE_PATH = "tron/tron.dat";
 
@@ -51,6 +52,9 @@ public class WalletManager {
 
     }
 
+    public WalletManager(boolean genEcKey, Context context) {
+        this(genEcKey, WALLET_LOCAL_DB, context);
+    }
     /**
      * Creates a new WalletClient with a random ECKey or no ECKey.
      */
@@ -64,6 +68,10 @@ public class WalletManager {
         } else if (walletType == WALLET_FILE) {
             mWalletRepository = new FileRepository();
         }
+    }
+
+    public WalletManager(String privateKey, Context context) {
+        this(privateKey, WALLET_LOCAL_DB, context);
     }
 
     public WalletManager(String privateKey, int walletType, Context context) {
