@@ -11,7 +11,7 @@ import com.devband.tronwalletforandroid.database.model.WalletModel;
 
 @Database(entities = {
         WalletModel.class
-}, version = 1)
+}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "tron_wallet_db";
