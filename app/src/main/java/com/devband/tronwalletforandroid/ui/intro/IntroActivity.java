@@ -4,8 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.ui.main.MainActivity;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.ui.createaccount.CreateAccountActivity;
+import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 
 public class IntroActivity extends CommonActivity implements IntroView {
 
@@ -19,8 +20,14 @@ public class IntroActivity extends CommonActivity implements IntroView {
     }
 
     @Override
-    public void startMainActivity() {
-        startActivity(MainActivity.class);
+    public void startCreateWalletActivity() {
+        startActivity(CreateAccountActivity.class);
+        finishActivity();
+    }
+
+    @Override
+    public void startLoginActivity() {
+        startActivity(LoginActivity.class);
         finishActivity();
     }
 }

@@ -1,8 +1,8 @@
 package com.devband.tronwalletforandroid.ui.createaccount;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.ui.main.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,14 +27,17 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
+    @BindView(R.id.input_account_nickname)
+    EditText mInputAccountNickname;
+
+    @BindView(R.id.input_password)
+    EditText mInputPassword;
+
     @BindView(R.id.input_address)
     EditText mInputAddress;
 
     @BindView(R.id.input_private_key)
     EditText mInputPrivateKey;
-
-    @BindView(R.id.input_password)
-    EditText mInputPassword;
 
     @BindView(R.id.btn_create_account)
     Button mBtnCreateAccount;
@@ -74,7 +78,8 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                ((CreateAccountPresenter) mPresenter).changedPassword(s.toString());
+                String nickname = mInputAccountNickname.getText().toString();
+                ((CreateAccountPresenter) mPresenter).changedPassword(nickname, s.toString());
             }
 
             @Override
@@ -119,6 +124,28 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
         mInputAddress.setText(address);
     }
 
+    @Override
+    public void showProgressDialog(@Nullable String title, @NonNull String msg) {
+        super.showProgressDialog(title, msg);
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        hideDialog();
+    }
+
+    @Override
+    public void createdWallet() {
+        startActivity(MainActivity.class);
+        finishActivity();
+    }
+
+    @Override
+    public void errorCreatedWallet() {
+        Toast.makeText(CreateAccountActivity.this, getString(R.string.error_create_wallet_msg),
+                Toast.LENGTH_SHORT).show();
+    }
+
     @OnClick(R.id.btn_copy_account_info)
     public void onCopyAccountClick() {
 //        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -160,6 +187,6 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
             return;
         }
 
-        finishActivity();
+        ((CreateAccountPresenter) mPresenter).storeWallet();
     }
 }

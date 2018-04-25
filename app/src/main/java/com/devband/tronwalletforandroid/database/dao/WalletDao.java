@@ -28,4 +28,7 @@ public interface WalletDao {
 
     @Delete
     void delete(WalletModel walletModel);
+
+    @Query("SELECT COUNT(*) from wallet")
+    int countWallets();
 }

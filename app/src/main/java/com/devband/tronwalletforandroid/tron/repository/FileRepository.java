@@ -25,4 +25,9 @@ public class FileRepository implements WalletRepository {
     public List<WalletModel> loadAllWallets() {
         return null;
     }
+
+    @Override
+    public int countWallets() {
+        return 0;
+    }
 }

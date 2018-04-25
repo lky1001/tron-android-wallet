@@ -51,4 +51,7 @@
     <string name="invalid_private_key">Invalid Private Key.</string>
     <string name="invalid_password_or_private_key">Invalid password or private key</string>
     <string name="import_wallet_success">Import wallet success. Please login wallet.</string>
+    <string name="account_name_text">Account Nickname</string>
+    <string name="loading_msg">Please wait..</string>
+    <string name="error_create_wallet_msg">Error create wallet. Please retry.</string>
 </resources>

@@ -48,8 +48,14 @@ public class WalletManager {
 
     private WalletRepository mWalletRepository;
 
+    private WalletModel mWalletModel;
+
     public WalletManager() {
 
+    }
+
+    public WalletManager(int walletType, Context context) {
+        this(true, walletType, context);
     }
 
     public WalletManager(boolean genEcKey, Context context) {
@@ -91,7 +97,7 @@ public class WalletManager {
         }
     }
 
-    public int store(@NonNull String walletName, @NonNull String password) {
+    public int genWallet(@NonNull String walletName, String password) {
         if (this.mEcKey == null || this.mEcKey.getPrivKey() == null) {
             return Tron.ERROR_PRIVATE_KEY;
         }
@@ -106,10 +112,21 @@ public class WalletManager {
         byte[] pubKeyBytes = this.mEcKey.getPubKey();
         String pubKeyStr = ByteArray.toHexString(pubKeyBytes);
 
-        boolean result = mWalletRepository.storeAddress(WalletModel.builder()
+        mWalletModel = WalletModel.builder()
                 .name(walletName)
                 .wallet(pwdAsc + pubKeyStr + privKeyStr)
-                .build());
+                .build();
+
+        return Tron.SUCCESS;
+    }
+
+    public int storeWallet() {
+        if (mWalletModel == null) {
+            return Tron.ERROR;
+        }
+
+        // todo - check duplication wallet info
+        boolean result = mWalletRepository.storeWallet(mWalletModel);
 
         if (result) {
             return Tron.SUCCESS;
@@ -235,12 +252,8 @@ public class WalletManager {
 
     @Nullable
     private String loadPassword() {
-        char[] buf = new char[0x100];
-        int len = FileUtil.readData(getWalletStorage(), buf);
-        if (len != 226) {
-            return null;
-        }
-        return String.valueOf(buf, 0, 32);
+        // todo - load from db
+        return mWalletModel.getWallet().substring(0, 32);
     }
 
     @Nullable
@@ -412,6 +425,10 @@ public class WalletManager {
 
     public ECKey getEcKey() {
         return mEcKey;
+    }
+
+    public int getWalletCount() {
+        return mWalletRepository.countWallets();
     }
 }
 

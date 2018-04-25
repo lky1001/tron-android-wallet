@@ -16,4 +16,6 @@ public interface WalletRepository {
 
     @Nullable
     List<WalletModel> loadAllWallets();
+
+    int countWallets();
 }

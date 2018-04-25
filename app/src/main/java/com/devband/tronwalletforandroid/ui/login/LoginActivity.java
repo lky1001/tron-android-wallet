@@ -1,6 +1,5 @@
 package com.devband.tronwalletforandroid.ui.login;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -59,7 +58,7 @@ public class LoginActivity extends CommonActivity implements LoginView {
     }
 
     @OnClick(R.id.btn_login)
-    public void onCreateAccountClick() {
+    public void onLoginClick() {
         String password = mInputPassword.getText().toString();
 
         ((LoginPresenter) mPresenter).loginWallet(password);

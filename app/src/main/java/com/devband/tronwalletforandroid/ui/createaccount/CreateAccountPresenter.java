@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.createaccount;
 
+import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
@@ -35,10 +36,11 @@ public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
 
     }
 
-    public void changedPassword(String password) {
+    public void changedPassword(String nickname, String password) {
         Single.fromCallable(() -> {
-            if (password != null && password.length() >= Tron.MIN_PASSWORD_LENGTH) {
-                if (Tron.getInstance(mContext).registerWallet(password) == Tron.SUCCESS) {
+            if (nickname != null && !nickname.isEmpty()
+                    && password != null && password.length() >= Tron.MIN_PASSWORD_LENGTH) {
+                if (Tron.getInstance(mContext).registerWallet(nickname, password) == Tron.SUCCESS) {
                     if (Tron.getInstance(mContext).login(password) == Tron.SUCCESS) {
                         String privKey = Tron.getInstance(mContext).getPrivateKey();
                         String address = Tron.getInstance(mContext).getAddress();
@@ -48,8 +50,6 @@ public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
                                 .address(address)
                                 .build();
                     }
-                } else {
-                    // ERROR_ACCESS_STORAGE
                 }
             }
 
@@ -76,6 +76,37 @@ public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
             public void onError(Throwable e) {
                 e.printStackTrace();
                 mView.displayAccountInfo("", "");
+            }
+        });
+    }
+
+    public void storeWallet() {
+        mView.showProgressDialog(null, mContext.getString(R.string.loading_msg));
+
+        Single.fromCallable(() -> Tron.getInstance(mContext).storeWallet())
+        .subscribeOn(Schedulers.computation())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new SingleObserver<Integer>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(Integer result) {
+                mView.hideProgressDialog();
+
+                if (result == Tron.SUCCESS) {
+                    mView.createdWallet();
+                } else if (result == Tron.ERROR) {
+                    mView.errorCreatedWallet();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+
             }
         });
     }

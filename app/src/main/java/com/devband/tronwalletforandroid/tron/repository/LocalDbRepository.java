@@ -27,7 +27,7 @@ public class LocalDbRepository implements WalletRepository {
 
         mWalletDao.insert(walletModel);
 
-        return walletModel.getId() > 0;
+        return true;
     }
 
     @Nullable
@@ -40,5 +40,10 @@ public class LocalDbRepository implements WalletRepository {
     @Override
     public List<WalletModel> loadAllWallets() {
         return null;
+    }
+
+    @Override
+    public int countWallets() {
+        return mWalletDao.countWallets();
     }
 }
