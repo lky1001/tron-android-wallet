@@ -42,8 +42,8 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
     @BindView(R.id.btn_create_account)
     Button mBtnCreateAccount;
 
-    @BindView(R.id.btn_copy_account_info)
-    Button mBtnCopyAccount;
+    @BindView(R.id.btn_copy_wallet_info)
+    Button mBtnCopyWalletInfo;
 
     @BindView(R.id.agree_lost_password)
     CheckBox mChkLostPassword;
@@ -112,11 +112,11 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
         Log.d(CreateWalletActivity.class.getSimpleName(), "address:" + address);
 
         if (privKey == null || privKey.isEmpty()) {
-            mBtnCopyAccount.setEnabled(false);
+            mBtnCopyWalletInfo.setEnabled(false);
             mBtnCreateAccount.setEnabled(false);
             return;
         } else {
-            mBtnCopyAccount.setEnabled(true);
+            mBtnCopyWalletInfo.setEnabled(true);
             mBtnCreateAccount.setEnabled(true);
         }
 
@@ -146,7 +146,7 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
                 Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick(R.id.btn_copy_account_info)
+    @OnClick(R.id.btn_copy_wallet_info)
     public void onCopyAccountClick() {
 //        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 //        StringBuilder sb = new StringBuilder();

@@ -2,6 +2,7 @@ package com.devband.tronwalletforandroid.ui.intro;
 
 import android.annotation.SuppressLint;
 
+import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
@@ -18,19 +19,16 @@ public class IntroPresenter extends BasePresenter<IntroView> {
     @SuppressLint("CheckResult")
     @Override
     public void onCreate() {
-        Single.fromCallable(() -> Tron.getInstance(mContext).hasWallet())
+        Single.fromCallable(() -> AccountManager.getInstance(mContext).hasAccount())
         .delay(2, TimeUnit.SECONDS)
         .subscribe(result -> {
             if (result) {
-                // todo - create wallet activity
                 mView.startLoginActivity();
             } else {
-                mView.startCreateWalletActivity();
-                // todo - login wallet activity
+                mView.startCreateAccountActivity();
             }
         }, e -> {
-            mView.startCreateWalletActivity();
-            // todo - failed app init
+            mView.startCreateAccountActivity();
         });
     }
 

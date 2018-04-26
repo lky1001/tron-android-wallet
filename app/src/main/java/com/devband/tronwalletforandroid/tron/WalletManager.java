@@ -117,6 +117,8 @@ public class WalletManager {
                 .wallet(pwdAsc + pubKeyStr + privKeyStr)
                 .build();
 
+        mWalletRepository.storeWallet(mLoginWalletModel);
+
         return Tron.SUCCESS;
     }
 

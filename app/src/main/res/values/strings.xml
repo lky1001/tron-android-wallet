@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Tron Wallet</string>
 
-    <string name="name">TRON</string>
+    <string name="name">TRON WALLET</string>
     <string name="title_create_account">Create Account</string>
     <string name="title_login">Login</string>
     <string name="title_my_address">My Address</string>
@@ -18,14 +18,13 @@
     <string name="navigation_menu_backup_wallet">Backup Wallet</string>
     <string name="navigation_menu_logout">Logout</string>
     <string name="address_text">Address</string>
-    <string name="password_text">Password (Great than equal to 8)</string>
+    <string name="password_text">Password (must be at least 8)</string>
     <string name="private_key_text">Private Key</string>
     <string name="create_account_text">Create Account</string>
-    <string name="copy_account_info">Copy Account Info</string>
     <string name="copy_my_address">Copy My Address</string>
-    <string name="create_confirm1">I understand that if I forget lose my password I will never be able to access my assets</string>
-    <string name="create_confirm2">I understand that if I forget lose my password no one will be able to help me recover it</string>
-    <string name="create_confirm3">I\'ve written my password on paper</string>
+    <string name="create_confirm1">I understand that if I forget lose my password I will never be able to access my assets.</string>
+    <string name="create_confirm2">I understand that if I forget lose my password no one will be able to help me recover it.</string>
+    <string name="create_confirm3">I\'ve written my password on paper.</string>
     <string name="copy_account_msg">Copied address and private key.</string>
     <string name="copy_address_msg">Copied address.</string>
     <string name="need_all_agree">You must agree to the terms of use.</string>
@@ -54,4 +53,11 @@
     <string name="account_name_text">Account Nickname</string>
     <string name="loading_msg">Please wait..</string>
     <string name="error_create_wallet_msg">Error create wallet. Please retry.</string>
+    <string name="next_text">Next</string>
+    <string name="password_error">Password must be at least 8.</string>
+    <string name="backup_title">Warning</string>
+    <string name="backup_msg">If you lose your private key, you will never be able to access your assets.(ex. uninstall tron wallet app) Are you sure?</string>
+    <string name="cancen_text">Cancel</string>
+    <string name="register_wallet_error">Can not register wallet. Please try again.</string>
+    <string name="copy_wallet_info">Copy Wallet Info</string>
 </resources>

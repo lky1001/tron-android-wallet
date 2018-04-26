@@ -14,8 +14,8 @@ public class AccountManager {
 
     public static final int MIN_PASSWORD_LENGTH = 8;
 
-    private static final int SUCCESS = 1;
-    private static final int ERROR = -1;
+    public static final int SUCCESS = 1;
+    public static final int ERROR = -1;
 
     private static AccountManager instance;
 

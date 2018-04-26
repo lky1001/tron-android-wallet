@@ -26,6 +26,14 @@
             android:theme="@style/MainTheme" />
 
         <activity
+            android:name=".ui.createaccount.CreateAccountActivity"
+            android:theme="@style/AccountTheme" />
+
+        <activity
+            android:name=".ui.backupwallet.BackupWalletActivity"
+            android:theme="@style/AccountTheme" />
+
+        <activity
             android:name=".ui.createwallet.CreateWalletActivity"
             android:theme="@style/AccountTheme" />
 

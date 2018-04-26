@@ -5,6 +5,7 @@
     <color name="colorAccent">#cf312e</color>
 
     <color name="activity_intro_background">#cf312e</color>
+    <color name="activity_create_account_background">#ffffff</color>
     <color name="activity_create_wallet_background">#ffffff</color>
     <color name="navigation_header_need_signin_color">#ffffff</color>
 </resources>
