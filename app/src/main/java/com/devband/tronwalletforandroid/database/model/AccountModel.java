@@ -16,17 +16,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(tableName = "wallet")
-public class WalletModel {
+@Entity(tableName = "account")
+public class AccountModel {
 
     @PrimaryKey
     private int id;
 
-    private String name;
-
-    private String wallet;
-
-    private boolean imported;
+    private String password;
 
     private Date created;
 

@@ -48,7 +48,7 @@ public class WalletManager {
 
     private WalletRepository mWalletRepository;
 
-    private WalletModel mWalletModel;
+    private WalletModel mLoginWalletModel;
 
     public WalletManager() {
 
@@ -112,7 +112,7 @@ public class WalletManager {
         byte[] pubKeyBytes = this.mEcKey.getPubKey();
         String pubKeyStr = ByteArray.toHexString(pubKeyBytes);
 
-        mWalletModel = WalletModel.builder()
+        mLoginWalletModel = WalletModel.builder()
                 .name(walletName)
                 .wallet(pwdAsc + pubKeyStr + privKeyStr)
                 .build();
@@ -121,12 +121,12 @@ public class WalletManager {
     }
 
     public int storeWallet() {
-        if (mWalletModel == null) {
+        if (mLoginWalletModel == null) {
             return Tron.ERROR;
         }
 
         // todo - check duplication wallet info
-        boolean result = mWalletRepository.storeWallet(mWalletModel);
+        boolean result = mWalletRepository.storeWallet(mLoginWalletModel);
 
         if (result) {
             return Tron.SUCCESS;
@@ -176,7 +176,7 @@ public class WalletManager {
         return mLoginState;
     }
 
-    public int loadWalletByStorage(String password) {
+    public int loadWalletByRepository(String password) {
         String priKeyEnced = loadPriKey();
 
         if (priKeyEnced == null) {
@@ -253,7 +253,7 @@ public class WalletManager {
     @Nullable
     private String loadPassword() {
         // todo - load from db
-        return mWalletModel.getWallet().substring(0, 32);
+        return mLoginWalletModel.getWallet().substring(0, 32);
     }
 
     @Nullable
@@ -331,6 +331,9 @@ public class WalletManager {
     }
 
     private String loadPriKey() {
+        if (mLoginWalletModel == null) {
+            mLoginWalletModel = mWalletRepository.loadWallet(1);
+        }
         char[] buf = new char[0x100];
         int len = FileUtil.readData(getWalletStorage(), buf);
         if (len != 226) {

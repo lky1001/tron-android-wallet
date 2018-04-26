@@ -1,8 +1,8 @@
-package com.devband.tronwalletforandroid.ui.createaccount;
+package com.devband.tronwalletforandroid.ui.createwallet;
 
 import com.devband.tronwalletforandroid.ui.mvp.IView;
 
-public interface CreateAccountView extends IView {
+public interface CreateWalletView extends IView {
 
     void displayAccountInfo(String privKey, String address);
 

@@ -21,7 +21,7 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.about.AboutActivity;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
-import com.devband.tronwalletforandroid.ui.createaccount.CreateAccountActivity;
+import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
 import com.devband.tronwalletforandroid.ui.importwallet.ImportWalletActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
@@ -186,7 +186,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.drawer_item_create_account:
-                startActivity(CreateAccountActivity.class);
+                startActivity(CreateWalletActivity.class);
                 break;
             case R.id.drawer_item_login:
                 startActivity(LoginActivity.class);
@@ -214,7 +214,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     @OnClick(R.id.btn_create_account)
     public void onCreateAccountClick() {
-        startActivity(CreateAccountActivity.class);
+        startActivity(CreateWalletActivity.class);
     }
 
     @OnClick(R.id.btn_login)

@@ -43,7 +43,7 @@ public class Tron {
 
     private WalletManager mWalletManager;
 
-    public static Tron getInstance(@NonNull Context context) {
+    public static synchronized Tron getInstance(@NonNull Context context) {
         if (instance == null) {
             synchronized (Tron.class) {
                 if (instance == null) {
@@ -113,7 +113,7 @@ public class Tron {
         if (mWalletManager == null) {
             mWalletManager = new WalletManager();
 
-            int loadWalletResult = mWalletManager.loadWalletByStorage(password);
+            int loadWalletResult = mWalletManager.loadWalletByRepository(password);
 
             if (loadWalletResult == ERROR_WALLET_DOES_NOT_EXIST
                     || loadWalletResult == ERROR_INVALID_PASSWORD) {

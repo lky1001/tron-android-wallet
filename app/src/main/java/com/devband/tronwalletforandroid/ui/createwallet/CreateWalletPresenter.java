@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.createaccount;
+package com.devband.tronwalletforandroid.ui.createwallet;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.tron.Tron;
@@ -11,9 +11,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Builder;
 
-public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
+public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
 
-    public CreateAccountPresenter(CreateAccountView view) {
+    public CreateWalletPresenter(CreateWalletView view) {
         super(view);
     }
 

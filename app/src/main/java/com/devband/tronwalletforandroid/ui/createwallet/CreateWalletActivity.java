@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.createaccount;
+package com.devband.tronwalletforandroid.ui.createwallet;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CreateAccountActivity extends CommonActivity implements CreateAccountView {
+public class CreateWalletActivity extends CommonActivity implements CreateWalletView {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -57,7 +57,7 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_account);
+        setContentView(R.layout.activity_create_wallet);
 
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
@@ -67,7 +67,7 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
             getSupportActionBar().setTitle(R.string.title_create_account);
         }
 
-        mPresenter = new CreateAccountPresenter(this);
+        mPresenter = new CreateWalletPresenter(this);
         mPresenter.onCreate();
 
         mInputPassword.addTextChangedListener(new TextWatcher() {
@@ -79,7 +79,7 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String nickname = mInputAccountNickname.getText().toString();
-                ((CreateAccountPresenter) mPresenter).changedPassword(nickname, s.toString());
+                ((CreateWalletPresenter) mPresenter).changedPassword(nickname, s.toString());
             }
 
             @Override
@@ -108,8 +108,8 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
 
     @Override
     public void displayAccountInfo(String privKey, String address) {
-        Log.d(CreateAccountActivity.class.getSimpleName(), "privKey:" + privKey);
-        Log.d(CreateAccountActivity.class.getSimpleName(), "address:" + address);
+        Log.d(CreateWalletActivity.class.getSimpleName(), "privKey:" + privKey);
+        Log.d(CreateWalletActivity.class.getSimpleName(), "address:" + address);
 
         if (privKey == null || privKey.isEmpty()) {
             mBtnCopyAccount.setEnabled(false);
@@ -142,7 +142,7 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
 
     @Override
     public void errorCreatedWallet() {
-        Toast.makeText(CreateAccountActivity.this, getString(R.string.error_create_wallet_msg),
+        Toast.makeText(CreateWalletActivity.this, getString(R.string.error_create_wallet_msg),
                 Toast.LENGTH_SHORT).show();
     }
 
@@ -159,7 +159,7 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
 //        ClipData clip = ClipData.newPlainText("", sb.toString());
 //        clipboard.setPrimaryClip(clip);
 //
-//        Toast.makeText(CreateAccountActivity.this, getString(R.string.copy_account_msg),
+//        Toast.makeText(CreateWalletActivity.this, getString(R.string.copy_account_msg),
 //                Toast.LENGTH_SHORT)
 //                .show();
 
@@ -181,12 +181,12 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
         if (!mChkLostPassword.isChecked()
                 || !mChkLostPasswordRecover.isChecked()
                 || !mChkCopyAccount.isChecked()) {
-            Toast.makeText(CreateAccountActivity.this, getString(R.string.need_all_agree),
+            Toast.makeText(CreateWalletActivity.this, getString(R.string.need_all_agree),
                     Toast.LENGTH_SHORT)
                     .show();
             return;
         }
 
-        ((CreateAccountPresenter) mPresenter).storeWallet();
+        ((CreateWalletPresenter) mPresenter).storeWallet();
     }
 }

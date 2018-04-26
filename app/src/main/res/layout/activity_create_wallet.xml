@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/activity_create_account_background">
+    android:background="@color/activity_create_wallet_background">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

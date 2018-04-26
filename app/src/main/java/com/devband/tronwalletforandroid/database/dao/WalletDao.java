@@ -21,7 +21,7 @@ public interface WalletDao {
     List<WalletModel> loadAllWallets();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(WalletModel walletModels);
+    void insert(WalletModel walletModel);
 
     @Update
     void update(WalletModel walletModel);
