@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.database.model.WalletModel;
 import com.devband.tronwalletforandroid.tron.exception.InvalidAddressException;
 import com.devband.tronwalletforandroid.tron.exception.InvalidPasswordException;
 
@@ -111,15 +112,15 @@ public class Tron {
         }
 
         if (mWalletManager == null) {
-            mWalletManager = new WalletManager();
+            mWalletManager = new WalletManager(WalletManager.WALLET_LOCAL_DB, mContext);
+        }
 
-            int loadWalletResult = mWalletManager.loadWalletByRepository(password);
+        int loadWalletResult = mWalletManager.loadWalletByRepository(password);
 
-            if (loadWalletResult == ERROR_WALLET_DOES_NOT_EXIST
-                    || loadWalletResult == ERROR_INVALID_PASSWORD) {
-                mWalletManager = null;
-                return ERROR_WALLET_DOES_NOT_EXIST;
-            }
+        if (loadWalletResult == ERROR_WALLET_DOES_NOT_EXIST
+                || loadWalletResult == ERROR_INVALID_PASSWORD) {
+            mWalletManager = null;
+            return ERROR_WALLET_DOES_NOT_EXIST;
         }
 
         return mWalletManager.login(password) ? SUCCESS : ERROR_INVALID_PASSWORD;

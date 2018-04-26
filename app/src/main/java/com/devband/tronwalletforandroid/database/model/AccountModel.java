@@ -19,7 +19,7 @@ import lombok.Setter;
 @Entity(tableName = "account")
 public class AccountModel {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     private String password;

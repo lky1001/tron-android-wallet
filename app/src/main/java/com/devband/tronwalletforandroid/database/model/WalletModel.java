@@ -19,7 +19,7 @@ import lombok.Setter;
 @Entity(tableName = "wallet")
 public class WalletModel {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     private String name;

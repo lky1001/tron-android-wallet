@@ -33,7 +33,7 @@ public class LocalDbRepository implements WalletRepository {
     @Nullable
     @Override
     public WalletModel loadWallet(int index) {
-        return null;
+        return mWalletDao.loadWalletById(index);
     }
 
     @Nullable

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -17,6 +19,9 @@ import butterknife.OnClick;
 
 public class BackupWalletActivity extends CommonActivity implements BackupWalletView {
 
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
     @BindView(R.id.input_address)
     EditText mInputAddress;
 
@@ -29,6 +34,11 @@ public class BackupWalletActivity extends CommonActivity implements BackupWallet
         setContentView(R.layout.activity_backup_wallet);
 
         ButterKnife.bind(this);
+        setSupportActionBar(mToolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(R.string.title_backup_wallet);
+        }
 
         mPresenter = new BackupWalletPresenter(this);
         mPresenter.onCreate();
@@ -65,6 +75,8 @@ public class BackupWalletActivity extends CommonActivity implements BackupWallet
 
     @Override
     public void displayWalletInfo(@NonNull String address, @NonNull String privateKey) {
+        Log.d(BackupWalletActivity.class.getSimpleName(), "address : " + address);
+        Log.d(BackupWalletActivity.class.getSimpleName(), "privateKey : " + privateKey);
         mInputAddress.setText(address);
         mInputPrivateKey.setText(privateKey);
     }

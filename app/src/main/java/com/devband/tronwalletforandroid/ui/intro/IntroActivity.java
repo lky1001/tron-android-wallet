@@ -11,6 +11,8 @@ import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 
 public class IntroActivity extends CommonActivity implements IntroView {
 
+    private boolean mIsBackClick = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,13 +24,24 @@ public class IntroActivity extends CommonActivity implements IntroView {
 
     @Override
     public void startCreateAccountActivity() {
-        startActivity(CreateAccountActivity.class);
+        if (!mIsBackClick) {
+            startActivity(CreateAccountActivity.class);
+        }
         finishActivity();
     }
 
     @Override
     public void startLoginActivity() {
-        startActivity(LoginActivity.class);
+        if (!mIsBackClick) {
+            startActivity(LoginActivity.class);
+        }
         finishActivity();
+    }
+
+    @Override
+    public void onBackPressed() {
+        mIsBackClick = true;
+
+        super.onBackPressed();
     }
 }

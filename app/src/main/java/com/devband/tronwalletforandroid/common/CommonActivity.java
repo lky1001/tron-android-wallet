@@ -12,6 +12,10 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.devband.tronwalletforandroid.tron.AccountManager;
+import com.devband.tronwalletforandroid.tron.WalletManager;
+import com.devband.tronwalletforandroid.ui.intro.IntroActivity;
+import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 public class CommonActivity extends AppCompatActivity {
@@ -52,6 +56,13 @@ public class CommonActivity extends AppCompatActivity {
                     // todo - permission denied msg
                 }
                 break;
+        }
+    }
+
+    protected void checkLogin() {
+        if (!AccountManager.getInstance(CommonActivity.this).isLogin()) {
+            startActivity(IntroActivity.class);
+            finishActivity();
         }
     }
 

@@ -76,9 +76,14 @@ public class AccountManager {
         AccountModel account = mAccountDao.loadAccount();
 
         if (PasswordUtil.matches(password, account.getPassword())) {
+            mIsLogin = true;
             return SUCCESS;
         }
 
         return ERROR;
+    }
+
+    public void logout() {
+        mIsLogin = false;
     }
 }

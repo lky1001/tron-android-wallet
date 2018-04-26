@@ -3,6 +3,7 @@
 
     <string name="name">TRON WALLET</string>
     <string name="title_create_account">Create Account</string>
+    <string name="title_backup_wallet">Backup Wallet</string>
     <string name="title_login">Login</string>
     <string name="title_my_address">My Address</string>
     <string name="title_send_coin">Send Coin</string>
@@ -31,7 +32,7 @@
     <string name="login_text">Login</string>
     <string name="invalid_password">Invalid password.</string>
     <string name="wallet_does_not_exist">Wallet does not exist. Create account or import account.</string>
-    <string name="login_success">success login.</string>
+    <string name="login_success">Success login.</string>
     <string name="menu_address">Address</string>
     <string name="or_text">OR</string>
     <string name="balance_text">Balance :</string>
@@ -56,7 +57,7 @@
     <string name="next_text">Next</string>
     <string name="password_error">Password must be at least 8.</string>
     <string name="backup_title">Warning</string>
-    <string name="backup_msg">If you lose your private key, you will never be able to access your assets.(ex. uninstall tron wallet app) Are you sure?</string>
+    <string name="backup_msg">If you lose your private key, you will never be able to access your assets.\n(ex. uninstall tron wallet app or remove app data)\nAre you sure?</string>
     <string name="cancen_text">Cancel</string>
     <string name="register_wallet_error">Can not register wallet. Please try again.</string>
     <string name="copy_wallet_info">Copy Wallet Info</string>

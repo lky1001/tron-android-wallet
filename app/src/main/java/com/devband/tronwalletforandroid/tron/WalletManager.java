@@ -39,6 +39,8 @@ public class WalletManager {
     public static final int WALLET_LOCAL_DB = 1;
     public static final int WALLET_FILE = 2;
 
+    public static final int DEFAULT_WALLET_INDEX = 1;
+
     private static final String WALLET_FILE_PATH = "tron/tron.dat";
 
     private static final int KEY_SIZE = 16;
@@ -179,7 +181,9 @@ public class WalletManager {
     }
 
     public int loadWalletByRepository(String password) {
-        String priKeyEnced = loadPriKey();
+        WalletModel walletModel = mWalletRepository.loadWallet(DEFAULT_WALLET_INDEX);
+
+        String priKeyEnced = walletModel.getWallet().substring(162, 226);
 
         if (priKeyEnced == null) {
             return Tron.ERROR_WALLET_DOES_NOT_EXIST;
@@ -203,6 +207,7 @@ public class WalletManager {
         }
 
         this.mEcKey = temKey;
+        this.mLoginWalletModel = walletModel;
 
         return Tron.SUCCESS;
     }
@@ -333,15 +338,13 @@ public class WalletManager {
     }
 
     private String loadPriKey() {
-        if (mLoginWalletModel == null) {
-            mLoginWalletModel = mWalletRepository.loadWallet(1);
-        }
-        char[] buf = new char[0x100];
-        int len = FileUtil.readData(getWalletStorage(), buf);
-        if (len != 226) {
-            return null;
-        }
-        return String.valueOf(buf, 162, 64);
+        return mLoginWalletModel.getWallet().substring(162, 226);
+//        char[] buf = new char[0x100];
+//        int len = FileUtil.readData(getWalletStorage(), buf);
+//        if (len != 226) {
+//            return null;
+//        }
+//        return String.valueOf(buf, 162, 64);
     }
 
     public static byte[] decodeFromBase58Check(String addressBase58) {

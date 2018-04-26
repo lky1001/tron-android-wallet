@@ -2,6 +2,7 @@ package com.devband.tronwalletforandroid.ui.createaccount;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
@@ -21,6 +22,9 @@ import butterknife.OnClick;
 
 public class CreateAccountActivity extends CommonActivity implements CreateAccountView {
 
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
     @BindView(R.id.input_password)
     EditText mInputPassword;
 
@@ -39,6 +43,11 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
         setContentView(R.layout.activity_create_account);
 
         ButterKnife.bind(this);
+        setSupportActionBar(mToolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(R.string.title_create_account);
+        }
 
         mPresenter = new CreateAccountPresenter(this);
         mPresenter.onCreate();
@@ -79,6 +88,7 @@ public class CreateAccountActivity extends CommonActivity implements CreateAccou
     @Override
     public void createdAccount() {
         startActivity(BackupWalletActivity.class);
+        finishActivity();
     }
 
     @Override
