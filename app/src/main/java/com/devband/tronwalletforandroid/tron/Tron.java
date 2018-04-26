@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.database.model.WalletModel;
 import com.devband.tronwalletforandroid.tron.exception.InvalidAddressException;
 import com.devband.tronwalletforandroid.tron.exception.InvalidPasswordException;
 
@@ -43,7 +44,7 @@ public class Tron {
 
     private WalletManager mWalletManager;
 
-    public static Tron getInstance(@NonNull Context context) {
+    public static synchronized Tron getInstance(@NonNull Context context) {
         if (instance == null) {
             synchronized (Tron.class) {
                 if (instance == null) {
@@ -71,15 +72,24 @@ public class Tron {
         } else {
             // exception
         }
+
+        mWalletManager = new WalletManager(WalletManager.WALLET_LOCAL_DB, mContext);
     }
 
-    public int registerWallet(@NonNull String password) {
-        if (!mWalletManager.passwordValid(password)) {
+    public int registerWallet(@NonNull String nickname, @NonNull String password) {
+        if (!WalletManager.passwordValid(password)) {
             return ERROR_INVALID_PASSWORD;
         }
 
-        mWalletManager = new WalletManager(true);
-        return mWalletManager.store(password);
+        if (mWalletManager == null) {
+            mWalletManager = new WalletManager(true, mContext);
+        }
+
+        return mWalletManager.genWallet(nickname, password);
+    }
+
+    public int storeWallet() {
+        return mWalletManager.storeWallet();
     }
 
     public int importWallet(@NonNull String password, @NonNull String privateKey) {
@@ -87,7 +97,7 @@ public class Tron {
             return ERROR_INVALID_PASSWORD;
         }
 
-        mWalletManager = new WalletManager(privateKey);
+        mWalletManager = new WalletManager(privateKey, mContext);
 
         if (mWalletManager.getEcKey() == null) {
             return ERROR;
@@ -102,15 +112,15 @@ public class Tron {
         }
 
         if (mWalletManager == null) {
-            mWalletManager = new WalletManager();
+            mWalletManager = new WalletManager(WalletManager.WALLET_LOCAL_DB, mContext);
+        }
 
-            int loadWalletResult = mWalletManager.loadWalletByStorage(password);
+        int loadWalletResult = mWalletManager.loadWalletByRepository(password);
 
-            if (loadWalletResult == ERROR_WALLET_DOES_NOT_EXIST
-                    || loadWalletResult == ERROR_INVALID_PASSWORD) {
-                mWalletManager = null;
-                return ERROR_WALLET_DOES_NOT_EXIST;
-            }
+        if (loadWalletResult == ERROR_WALLET_DOES_NOT_EXIST
+                || loadWalletResult == ERROR_INVALID_PASSWORD) {
+            mWalletManager = null;
+            return ERROR_WALLET_DOES_NOT_EXIST;
         }
 
         return mWalletManager.login(password) ? SUCCESS : ERROR_INVALID_PASSWORD;
@@ -240,5 +250,9 @@ public class Tron {
     public void logout() {
         mWalletManager.logout();
         mWalletManager = null;
+    }
+
+    public boolean hasWallet() {
+        return mWalletManager.getWalletCount() > 0;
     }
 }

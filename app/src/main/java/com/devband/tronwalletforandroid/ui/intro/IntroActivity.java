@@ -4,10 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.ui.main.MainActivity;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.ui.createaccount.CreateAccountActivity;
+import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
+import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 
 public class IntroActivity extends CommonActivity implements IntroView {
+
+    private boolean mIsBackClick = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -19,8 +23,25 @@ public class IntroActivity extends CommonActivity implements IntroView {
     }
 
     @Override
-    public void startMainActivity() {
-        startActivity(MainActivity.class);
+    public void startCreateAccountActivity() {
+        if (!mIsBackClick) {
+            startActivity(CreateAccountActivity.class);
+        }
         finishActivity();
+    }
+
+    @Override
+    public void startLoginActivity() {
+        if (!mIsBackClick) {
+            startActivity(LoginActivity.class);
+        }
+        finishActivity();
+    }
+
+    @Override
+    public void onBackPressed() {
+        mIsBackClick = true;
+
+        super.onBackPressed();
     }
 }

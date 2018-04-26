@@ -1,14 +1,8 @@
 package com.devband.tronwalletforandroid.ui.createaccount;
 
+import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
-
-import io.reactivex.Single;
-import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import lombok.Builder;
 
 public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
 
@@ -35,54 +29,25 @@ public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
 
     }
 
-    public void changedPassword(String password) {
-        Single.fromCallable(() -> {
-            if (password != null && password.length() >= Tron.MIN_PASSWORD_LENGTH) {
-                if (Tron.getInstance(mContext).registerWallet(password) == Tron.SUCCESS) {
-                    if (Tron.getInstance(mContext).login(password) == Tron.SUCCESS) {
-                        String privKey = Tron.getInstance(mContext).getPrivateKey();
-                        String address = Tron.getInstance(mContext).getAddress();
+    public void createAccount(String password) {
+        int result = AccountManager.getInstance(mContext).createAccount(password);
 
-                        return AccountInfo.builder()
-                                .privKey(privKey)
-                                .address(address)
-                                .build();
-                    }
-                } else {
-                    // ERROR_ACCESS_STORAGE
-                }
+        if (result == AccountManager.SUCCESS) {
+            result = Tron.getInstance(mContext).registerWallet("ACCOUNT1", password);
+            if (result != Tron.SUCCESS) {
+                mView.registerWalletError();
+                return;
             }
 
-            return null;
-        })
-        .subscribeOn(Schedulers.computation())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new SingleObserver<AccountInfo>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
+            result = Tron.getInstance(mContext).login(password);
+            if (result != Tron.SUCCESS) {
+                mView.passwordError();
+                return;
             }
 
-            @Override
-            public void onSuccess(AccountInfo accountInfo) {
-                if (accountInfo != null) {
-                    mView.displayAccountInfo(accountInfo.privKey, accountInfo.address);
-                } else {
-                    mView.displayAccountInfo("", "");
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                e.printStackTrace();
-                mView.displayAccountInfo("", "");
-            }
-        });
-    }
-
-    @Builder
-    private static class AccountInfo {
-        String privKey;
-        String address;
+            mView.createdAccount();
+        } else if (result == AccountManager.ERROR) {
+            mView.passwordError();
+        }
     }
 }

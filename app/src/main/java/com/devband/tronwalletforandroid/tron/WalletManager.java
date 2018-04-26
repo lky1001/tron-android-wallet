@@ -1,10 +1,15 @@
 package com.devband.tronwalletforandroid.tron;
 
+import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.devband.tronwalletforandroid.database.model.WalletModel;
+import com.devband.tronwalletforandroid.tron.repository.FileRepository;
+import com.devband.tronwalletforandroid.tron.repository.LocalDbRepository;
+import com.devband.tronwalletforandroid.tron.repository.WalletRepository;
 import com.google.protobuf.ByteString;
 
 import org.spongycastle.util.encoders.Hex;
@@ -31,40 +36,110 @@ public class WalletManager {
 
     private static final String LOG_TAG = WalletManager.class.getSimpleName();
 
+    public static final int WALLET_LOCAL_DB = 1;
+    public static final int WALLET_FILE = 2;
+
+    public static final int DEFAULT_WALLET_INDEX = 1;
+
     private static final String WALLET_FILE_PATH = "tron/tron.dat";
 
     private static final int KEY_SIZE = 16;
 
     private ECKey mEcKey = null;
     private boolean mLoginState = false;
-    private boolean ecKey;
+
+    private WalletRepository mWalletRepository;
+
+    private WalletModel mLoginWalletModel;
 
     public WalletManager() {
 
     }
 
+    public WalletManager(int walletType, Context context) {
+        this(true, walletType, context);
+    }
+
+    public WalletManager(boolean genEcKey, Context context) {
+        this(genEcKey, WALLET_LOCAL_DB, context);
+    }
     /**
      * Creates a new WalletClient with a random ECKey or no ECKey.
      */
-    public WalletManager(boolean genEcKey) {
+    public WalletManager(boolean genEcKey, int walletType, Context context) {
         if (genEcKey) {
             this.mEcKey = new ECKey(Utils.getRandom());
         }
+
+        if (walletType == WALLET_LOCAL_DB) {
+            mWalletRepository = new LocalDbRepository(context);
+        } else if (walletType == WALLET_FILE) {
+            mWalletRepository = new FileRepository();
+        }
     }
 
-    public WalletManager(String privateKey) {
+    public WalletManager(String privateKey, Context context) {
+        this(privateKey, WALLET_LOCAL_DB, context);
+    }
+
+    public WalletManager(String privateKey, int walletType, Context context) {
         ECKey temKey = null;
         try {
-            BigInteger priK = new BigInteger(privateKey, 16);
+            BigInteger priK = new BigInteger(privateKey, KEY_SIZE);
             temKey = ECKey.fromPrivate(priK);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         this.mEcKey = temKey;
+
+        if (walletType == WALLET_LOCAL_DB) {
+            mWalletRepository = new LocalDbRepository(context);
+        } else if (walletType == WALLET_FILE) {
+            mWalletRepository = new FileRepository();
+        }
     }
 
+    public int genWallet(@NonNull String walletName, String password) {
+        if (this.mEcKey == null || this.mEcKey.getPrivKey() == null) {
+            return Tron.ERROR_PRIVATE_KEY;
+        }
 
-    public int store(@NonNull  String password) {
+        byte[] pwd = getPassWord(password);
+        String pwdAsc = ByteArray.toHexString(pwd);
+        byte[] privKeyPlain = this.mEcKey.getPrivKeyBytes();
+        //encrypted by password
+        byte[] aseKey = getEncKey(password);
+        byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, aseKey);
+        String privKeyStr = ByteArray.toHexString(privKeyEnced);
+        byte[] pubKeyBytes = this.mEcKey.getPubKey();
+        String pubKeyStr = ByteArray.toHexString(pubKeyBytes);
+
+        mLoginWalletModel = WalletModel.builder()
+                .name(walletName)
+                .wallet(pwdAsc + pubKeyStr + privKeyStr)
+                .build();
+
+        mWalletRepository.storeWallet(mLoginWalletModel);
+
+        return Tron.SUCCESS;
+    }
+
+    public int storeWallet() {
+        if (mLoginWalletModel == null) {
+            return Tron.ERROR;
+        }
+
+        // todo - check duplication wallet info
+        boolean result = mWalletRepository.storeWallet(mLoginWalletModel);
+
+        if (result) {
+            return Tron.SUCCESS;
+        } else {
+            return Tron.ERROR;
+        }
+    }
+
+    public int store(@NonNull String password) {
         if (this.mEcKey == null || this.mEcKey.getPrivKey() == null) {
             return Tron.ERROR_PRIVATE_KEY;
         }
@@ -96,13 +171,19 @@ public class WalletManager {
         return Tron.SUCCESS;
     }
 
+    public boolean backUpWalletToStorage(String password) {
+        return true;
+    }
+
     public boolean login(String password) {
         this.mLoginState = checkPassWord(password);
         return mLoginState;
     }
 
-    public int loadWalletByStorage(String password) {
-        String priKeyEnced = loadPriKey();
+    public int loadWalletByRepository(String password) {
+        WalletModel walletModel = mWalletRepository.loadWallet(DEFAULT_WALLET_INDEX);
+
+        String priKeyEnced = walletModel.getWallet().substring(162, 226);
 
         if (priKeyEnced == null) {
             return Tron.ERROR_WALLET_DOES_NOT_EXIST;
@@ -126,6 +207,7 @@ public class WalletManager {
         }
 
         this.mEcKey = temKey;
+        this.mLoginWalletModel = walletModel;
 
         return Tron.SUCCESS;
     }
@@ -177,12 +259,8 @@ public class WalletManager {
 
     @Nullable
     private String loadPassword() {
-        char[] buf = new char[0x100];
-        int len = FileUtil.readData(getWalletStorage(), buf);
-        if (len != 226) {
-            return null;
-        }
-        return String.valueOf(buf, 0, 32);
+        // todo - load from db
+        return mLoginWalletModel.getWallet().substring(0, 32);
     }
 
     @Nullable
@@ -260,12 +338,13 @@ public class WalletManager {
     }
 
     private String loadPriKey() {
-        char[] buf = new char[0x100];
-        int len = FileUtil.readData(getWalletStorage(), buf);
-        if (len != 226) {
-            return null;
-        }
-        return String.valueOf(buf, 162, 64);
+        return mLoginWalletModel.getWallet().substring(162, 226);
+//        char[] buf = new char[0x100];
+//        int len = FileUtil.readData(getWalletStorage(), buf);
+//        if (len != 226) {
+//            return null;
+//        }
+//        return String.valueOf(buf, 162, 64);
     }
 
     public static byte[] decodeFromBase58Check(String addressBase58) {
@@ -354,6 +433,10 @@ public class WalletManager {
 
     public ECKey getEcKey() {
         return mEcKey;
+    }
+
+    public int getWalletCount() {
+        return mWalletRepository.countWallets();
     }
 }
 

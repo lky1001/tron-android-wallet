@@ -2,6 +2,8 @@ package com.devband.tronwalletforandroid.ui.intro;
 
 import android.annotation.SuppressLint;
 
+import com.devband.tronwalletforandroid.tron.AccountManager;
+import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import java.util.concurrent.TimeUnit;
@@ -17,19 +19,17 @@ public class IntroPresenter extends BasePresenter<IntroView> {
     @SuppressLint("CheckResult")
     @Override
     public void onCreate() {
-        // todo - app init
-
-        Single.fromCallable(() -> true)
-                .delay(3, TimeUnit.SECONDS)
-                .subscribe(result -> {
-                    if (result) {
-                        mView.startMainActivity();
-                    } else {
-                        // todo - failed app init
-                    }
-                }, e -> {
-                    // todo - failed app init
-                });
+        Single.fromCallable(() -> AccountManager.getInstance(mContext).hasAccount())
+        .delay(2, TimeUnit.SECONDS)
+        .subscribe(result -> {
+            if (result) {
+                mView.startLoginActivity();
+            } else {
+                mView.startCreateAccountActivity();
+            }
+        }, e -> {
+            mView.startCreateAccountActivity();
+        });
     }
 
     @Override

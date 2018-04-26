@@ -1,6 +1,5 @@
 package com.devband.tronwalletforandroid.ui.login;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -10,7 +9,9 @@ import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.tron.Tron;
+import com.devband.tronwalletforandroid.ui.main.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +34,6 @@ public class LoginActivity extends CommonActivity implements LoginView {
         setSupportActionBar(mToolbar);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.title_login);
         }
 
@@ -44,22 +44,11 @@ public class LoginActivity extends CommonActivity implements LoginView {
     @Override
     protected void onResume() {
         super.onResume();
-        checkStoragePermission();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finishActivity();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
+//        checkStoragePermission();
     }
 
     @OnClick(R.id.btn_login)
-    public void onCreateAccountClick() {
+    public void onLoginClick() {
         String password = mInputPassword.getText().toString();
 
         ((LoginPresenter) mPresenter).loginWallet(password);
@@ -67,16 +56,14 @@ public class LoginActivity extends CommonActivity implements LoginView {
 
     @Override
     public void loginResult(int result) {
-        if (result == Tron.ERROR_INVALID_PASSWORD) {
+        if (result == AccountManager.ERROR) {
             Toast.makeText(LoginActivity.this, getString(R.string.invalid_password),
-                    Toast.LENGTH_SHORT).show();
-        } else if (result == Tron.ERROR_WALLET_DOES_NOT_EXIST) {
-            Toast.makeText(LoginActivity.this, getString(R.string.wallet_does_not_exist),
                     Toast.LENGTH_SHORT).show();
         } else if (result == Tron.SUCCESS) {
             Toast.makeText(LoginActivity.this, getString(R.string.login_success),
                     Toast.LENGTH_SHORT).show();
 
+            startActivity(MainActivity.class);
             finishActivity();
         }
     }

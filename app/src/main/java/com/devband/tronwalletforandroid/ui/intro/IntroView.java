@@ -4,5 +4,7 @@ import com.devband.tronwalletforandroid.ui.mvp.IView;
 
 interface IntroView extends IView {
 
-    void startMainActivity();
+    void startCreateAccountActivity();
+
+    void startLoginActivity();
 }
