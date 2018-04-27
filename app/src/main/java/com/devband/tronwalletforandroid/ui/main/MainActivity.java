@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +22,7 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.about.AboutActivity;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
+import com.devband.tronwalletforandroid.ui.backupwallet.BackupWalletActivity;
 import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
 import com.devband.tronwalletforandroid.ui.importwallet.ImportWalletActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
@@ -149,18 +151,20 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             mBeforeLoginLayout.setVisibility(View.GONE);
             mAfterLoginLayout.setVisibility(View.VISIBLE);
         } else {
-            if(mSideMenu.getMenu() != null) {
-                mSideMenu.getMenu().clear();
-                mSideMenu.inflateMenu(R.menu.navigation_menu);
-            }
-
-            // hide address ic_qrcode_white_24dp, send actionbar item
-            mBeforeLoginLayout.setVisibility(View.VISIBLE);
-            mAfterLoginLayout.setVisibility(View.GONE);
-
-            if (mMenuAddressItem != null) {
-                mMenuAddressItem.setVisible(false);
-            }
+            finishActivity();
+            startActivity(LoginActivity.class);
+//            if(mSideMenu.getMenu() != null) {
+//                mSideMenu.getMenu().clear();
+//                mSideMenu.inflateMenu(R.menu.navigation_menu);
+//            }
+//
+//            // hide address ic_qrcode_white_24dp, send actionbar item
+//            mBeforeLoginLayout.setVisibility(View.VISIBLE);
+//            mAfterLoginLayout.setVisibility(View.GONE);
+//
+//            if (mMenuAddressItem != null) {
+//                mMenuAddressItem.setVisible(false);
+//            }
         }
     }
 
@@ -197,6 +201,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             case R.id.drawer_item_import_wallet:
                 startActivity(ImportWalletActivity.class);
                 break;
+            case R.id.drawer_item_export_private_key:
+                sharePrivateKey();
+                break;
             case R.id.drawer_item_about_tron:
                 startActivity(AboutActivity.class);
                 break;
@@ -223,15 +230,25 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     }
 
     @Override
-    public void displayAccountInfo(Protocol.Account account) {
+    public void displayAccountInfo(@NonNull Protocol.Account account) {
         if (mMenuAddressItem != null) {
             mMenuAddressItem.setVisible(true);
         }
 
-        Log.i(MainActivity.class.getSimpleName(), String.valueOf(account.getBalance()) + "trx");
+        Log.i(MainActivity.class.getSimpleName(), "address : " + account.getAddress().toStringUtf8());
+        Log.i(MainActivity.class.getSimpleName(), "balance : " + account.getBalance() + "trx");
         double balance = ((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT;
         DecimalFormat df = new DecimalFormat("#,##0.00000000");
 
         mBalanceText.setText(df.format(balance));
+    }
+
+    private void sharePrivateKey() {
+        String privateKey = Tron.getInstance(MainActivity.this).getPrivateKey();
+
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, privateKey);
+        startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.choice_share_private_key)));
     }
 }

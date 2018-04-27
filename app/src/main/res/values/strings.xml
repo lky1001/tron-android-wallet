@@ -16,7 +16,7 @@
     <string name="navigation_menu_about_tron">About Tron</string>
     <string name="navigation_menu_send_tron">Send Tron</string>
     <string name="navigation_menu_import_wallet">Import Wallet</string>
-    <string name="navigation_menu_backup_wallet">Backup Wallet</string>
+    <string name="navigation_menu_export_private_key">Export Private Key</string>
     <string name="navigation_menu_logout">Logout</string>
     <string name="address_text">Address</string>
     <string name="password_text">Password (must be at least 8)</string>
@@ -31,7 +31,7 @@
     <string name="need_all_agree">You must agree to the terms of use.</string>
     <string name="login_text">Login</string>
     <string name="invalid_password">Invalid password.</string>
-    <string name="wallet_does_not_exist">Wallet does not exist. Create account or import account.</string>
+    <string name="wallet_does_not_exist">Wallet does not exist. Create or import account.</string>
     <string name="login_success">Success login.</string>
     <string name="menu_address">Address</string>
     <string name="or_text">OR</string>
@@ -39,6 +39,7 @@
     <string name="currency_text">trx</string>
     <string name="choice_share">Share Address</string>
     <string name="choice_share_account">Backup Account</string>
+    <string name="choice_share_private_key">Export Private Key</string>
     <string name="menu_share">Share</string>
     <string name="amount_text">Amount : </string>
     <string name="send_amount_text">Input send tron amount</string>
