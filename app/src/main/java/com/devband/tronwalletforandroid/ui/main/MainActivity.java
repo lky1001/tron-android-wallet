@@ -13,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.devband.tronwalletforandroid.R;
@@ -55,6 +57,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @BindView(R.id.tv_balance)
     TextView mBalanceText;
 
+    Spinner mWalletSpinner;
+
     TextView mNavHeaderText;
 
     private MenuItem mMenuAddressItem;
@@ -79,6 +83,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         View header = LayoutInflater.from(this).inflate(R.layout.navigation_header, mSideMenu);
 
         mNavHeaderText = (TextView) header.findViewById(R.id.headerTitleText);
+        mWalletSpinner = header.findViewById(R.id.wallet_spinner);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -126,6 +131,15 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 mNavHeaderText.setText(R.string.navigation_header_title);
             } else {
                 mNavHeaderText.setText(loginWalletName);
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item,
+                        new String[] {
+                        loginWalletName,
+                        "Create Wallet",
+                        "Import Wallet"
+                });
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                mWalletSpinner.setAdapter(adapter);
             }
         } else {
             finishActivity();

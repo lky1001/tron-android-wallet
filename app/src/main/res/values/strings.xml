@@ -17,6 +17,8 @@
     <string name="navigation_menu_send_tron">Send Tron</string>
     <string name="navigation_menu_import_wallet">Import Wallet</string>
     <string name="navigation_menu_export_private_key">Export Private Key</string>
+    <string name="navigation_menu_tron_pay">Tron Pay</string>
+    <string name="navigation_menu_settings">Settings</string>
     <string name="navigation_menu_logout">Logout</string>
     <string name="address_text">Address</string>
     <string name="password_text">Password (must be at least 8)</string>
@@ -62,4 +64,6 @@
     <string name="cancen_text">Cancel</string>
     <string name="register_wallet_error">Can not register wallet. Please try again.</string>
     <string name="copy_wallet_info">Copy Wallet Info</string>
+    <string name="menu_torn_pay">Tron Pay</string>
+    <string name="navigation_menu_my_address">My Address</string>
 </resources>

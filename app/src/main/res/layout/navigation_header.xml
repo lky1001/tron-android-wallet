@@ -23,6 +23,19 @@
         app:layout_constraintVertical_bias="0.34"
         app:srcCompat="@drawable/ic_tron_white" />
 
+    <Spinner
+        android:id="@+id/wallet_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:dropDownSelector="@android:color/white"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.619"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerImage" />
+
     <TextView
         android:id="@+id/headerTitleText"
         android:layout_width="wrap_content"
@@ -34,6 +47,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/navigation_header_title"
+        android:visibility="gone"
         android:textColor="@color/navigation_header_need_signin_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
