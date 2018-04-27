@@ -254,4 +254,9 @@ public class Tron {
     public boolean hasWallet() {
         return mWalletManager.getWalletCount() > 0;
     }
+
+    @Nullable
+    public String getLoginWalletName() {
+        return mWalletManager.getLoginWalletName();
+    }
 }

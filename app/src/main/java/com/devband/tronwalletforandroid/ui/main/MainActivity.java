@@ -22,13 +22,11 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.about.AboutActivity;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
-import com.devband.tronwalletforandroid.ui.backupwallet.BackupWalletActivity;
 import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
 import com.devband.tronwalletforandroid.ui.importwallet.ImportWalletActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
 
-import org.tron.common.utils.ByteArray;
 import org.tron.protos.Protocol;
 
 import java.text.DecimalFormat;
@@ -36,10 +34,6 @@ import java.text.DecimalFormat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends CommonActivity implements MainView, NavigationView.OnNavigationItemSelectedListener {
 
@@ -61,6 +55,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @BindView(R.id.tv_balance)
     TextView mBalanceText;
 
+    TextView mNavHeaderText;
+
     private MenuItem mMenuAddressItem;
 
     @Override
@@ -74,34 +70,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
         mPresenter = new MainPresenter(this);
         mPresenter.onCreate();
-
-        // test
-        Tron tron = Tron.getInstance(this);
-
-        tron.queryAccount("27fXgQ46DcjEsZ444tjZPKULcxiUfDrDjqj")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Protocol.Account>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(Protocol.Account account) {
-                        if (account == null) {
-                            Log.i(MainActivity.class.getSimpleName(), "Get Account failed !!!!");
-                        } else {
-                            Log.i(MainActivity.class.getSimpleName(), "Address::" + ByteArray.toHexString(account.getAddress().toByteArray()));
-                            Log.i(MainActivity.class.getSimpleName(), "Account[" + account + "]");
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-                });
     }
 
     private void setupDrawerLayout() {
@@ -109,6 +77,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         mSideMenu.inflateMenu(R.menu.navigation_menu);
 
         View header = LayoutInflater.from(this).inflate(R.layout.navigation_header, mSideMenu);
+
+        mNavHeaderText = (TextView) header.findViewById(R.id.headerTitleText);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -128,7 +98,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         toggle.syncState();
 
         mSideMenu.setNavigationItemSelectedListener(this);
-
     }
 
     @Override
@@ -150,6 +119,14 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             // show address ic_qrcode_white_24dp, send actionbar item
             mBeforeLoginLayout.setVisibility(View.GONE);
             mAfterLoginLayout.setVisibility(View.VISIBLE);
+
+            String loginWalletName = ((MainPresenter) mPresenter).getLoginWalletName();
+
+            if (loginWalletName == null) {
+                mNavHeaderText.setText(R.string.navigation_header_title);
+            } else {
+                mNavHeaderText.setText(loginWalletName);
+            }
         } else {
             finishActivity();
             startActivity(LoginActivity.class);
