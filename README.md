@@ -3,7 +3,7 @@
 A Tron wallet for android.
 
 ## Screenshots
-![Screenshot](https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-04-27-215149.png)
+![Screenshot](https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-04-27-215149.png=300x)
 
 ## Refrence
 - https://github.com/tronprotocol/wallet-cli
