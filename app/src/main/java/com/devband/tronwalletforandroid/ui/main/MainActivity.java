@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,7 +27,6 @@ import com.devband.tronwalletforandroid.ui.importwallet.ImportWalletActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
 
-import org.tron.common.utils.ByteArray;
 import org.tron.protos.Protocol;
 
 import java.text.DecimalFormat;
@@ -34,10 +34,6 @@ import java.text.DecimalFormat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends CommonActivity implements MainView, NavigationView.OnNavigationItemSelectedListener {
 
@@ -59,6 +55,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @BindView(R.id.tv_balance)
     TextView mBalanceText;
 
+    TextView mNavHeaderText;
+
     private MenuItem mMenuAddressItem;
 
     @Override
@@ -72,34 +70,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
         mPresenter = new MainPresenter(this);
         mPresenter.onCreate();
-
-        // test
-        Tron tron = Tron.getInstance(this);
-
-        tron.queryAccount("27fXgQ46DcjEsZ444tjZPKULcxiUfDrDjqj")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Protocol.Account>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(Protocol.Account account) {
-                        if (account == null) {
-                            Log.i(MainActivity.class.getSimpleName(), "Get Account failed !!!!");
-                        } else {
-                            Log.i(MainActivity.class.getSimpleName(), "Address::" + ByteArray.toHexString(account.getAddress().toByteArray()));
-                            Log.i(MainActivity.class.getSimpleName(), "Account[" + account + "]");
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-                });
     }
 
     private void setupDrawerLayout() {
@@ -107,6 +77,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         mSideMenu.inflateMenu(R.menu.navigation_menu);
 
         View header = LayoutInflater.from(this).inflate(R.layout.navigation_header, mSideMenu);
+
+        mNavHeaderText = (TextView) header.findViewById(R.id.headerTitleText);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -126,7 +98,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         toggle.syncState();
 
         mSideMenu.setNavigationItemSelectedListener(this);
-
     }
 
     @Override
@@ -148,19 +119,29 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             // show address ic_qrcode_white_24dp, send actionbar item
             mBeforeLoginLayout.setVisibility(View.GONE);
             mAfterLoginLayout.setVisibility(View.VISIBLE);
+
+            String loginWalletName = ((MainPresenter) mPresenter).getLoginWalletName();
+
+            if (loginWalletName == null) {
+                mNavHeaderText.setText(R.string.navigation_header_title);
+            } else {
+                mNavHeaderText.setText(loginWalletName);
+            }
         } else {
-            if(mSideMenu.getMenu() != null) {
-                mSideMenu.getMenu().clear();
-                mSideMenu.inflateMenu(R.menu.navigation_menu);
-            }
-
-            // hide address ic_qrcode_white_24dp, send actionbar item
-            mBeforeLoginLayout.setVisibility(View.VISIBLE);
-            mAfterLoginLayout.setVisibility(View.GONE);
-
-            if (mMenuAddressItem != null) {
-                mMenuAddressItem.setVisible(false);
-            }
+            finishActivity();
+            startActivity(LoginActivity.class);
+//            if(mSideMenu.getMenu() != null) {
+//                mSideMenu.getMenu().clear();
+//                mSideMenu.inflateMenu(R.menu.navigation_menu);
+//            }
+//
+//            // hide address ic_qrcode_white_24dp, send actionbar item
+//            mBeforeLoginLayout.setVisibility(View.VISIBLE);
+//            mAfterLoginLayout.setVisibility(View.GONE);
+//
+//            if (mMenuAddressItem != null) {
+//                mMenuAddressItem.setVisible(false);
+//            }
         }
     }
 
@@ -197,6 +178,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             case R.id.drawer_item_import_wallet:
                 startActivity(ImportWalletActivity.class);
                 break;
+            case R.id.drawer_item_export_private_key:
+                sharePrivateKey();
+                break;
             case R.id.drawer_item_about_tron:
                 startActivity(AboutActivity.class);
                 break;
@@ -223,15 +207,25 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     }
 
     @Override
-    public void displayAccountInfo(Protocol.Account account) {
+    public void displayAccountInfo(@NonNull Protocol.Account account) {
         if (mMenuAddressItem != null) {
             mMenuAddressItem.setVisible(true);
         }
 
-        Log.i(MainActivity.class.getSimpleName(), String.valueOf(account.getBalance()) + "trx");
+        Log.i(MainActivity.class.getSimpleName(), "address : " + account.getAddress().toStringUtf8());
+        Log.i(MainActivity.class.getSimpleName(), "balance : " + account.getBalance() + "trx");
         double balance = ((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT;
         DecimalFormat df = new DecimalFormat("#,##0.00000000");
 
         mBalanceText.setText(df.format(balance));
+    }
+
+    private void sharePrivateKey() {
+        String privateKey = Tron.getInstance(MainActivity.this).getPrivateKey();
+
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, privateKey);
+        startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.choice_share_private_key)));
     }
 }

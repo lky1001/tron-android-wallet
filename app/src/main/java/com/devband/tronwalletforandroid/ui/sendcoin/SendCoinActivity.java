@@ -1,20 +1,25 @@
 package com.devband.tronwalletforandroid.ui.sendcoin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SendCoinActivity extends CommonActivity implements SendCoinView {
+
+    public static final int QR_SCAN_ADDRESS = 3321;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -44,6 +49,17 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
         mPresenter = new SendCoinPresenter(this);
         mPresenter.onCreate();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finishActivity();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.btn_send_trx)
@@ -96,7 +112,17 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
     @OnClick(R.id.btn_qrcode_scan)
     public void onQrcodeScanClick() {
-        Toast.makeText(SendCoinActivity.this, "TBD",
-                Toast.LENGTH_SHORT).show();
+        Intent qrScanIntent = new Intent(SendCoinActivity.this, QrScanActivity.class);
+        startActivityForResult(qrScanIntent, QR_SCAN_ADDRESS);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == QR_SCAN_ADDRESS) {
+            if (resultCode == RESULT_OK) {
+                String result = data.getStringExtra(QrScanActivity.EXTRA_QR_CODE_RESULT);
+                mInputAddress.setText(result);
+            }
+        }
     }
 }

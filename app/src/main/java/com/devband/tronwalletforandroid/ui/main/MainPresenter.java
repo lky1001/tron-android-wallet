@@ -1,5 +1,7 @@
 package com.devband.tronwalletforandroid.ui.main;
 
+import android.support.annotation.Nullable;
+
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
@@ -73,5 +75,10 @@ public class MainPresenter extends BasePresenter<MainView> {
         Tron.getInstance(mContext).logout();
 
         return true;
+    }
+
+    @Nullable
+    public String getLoginWalletName() {
+        return Tron.getInstance(mContext).getLoginWalletName();
     }
 }

@@ -13,12 +13,17 @@ A Tron wallet for android.
 ./gradlew build
 ```
 
+## Feature
+- Create Wallet
+- Send Coin
+- Receive Coin
+- QR Code
+
 ## TODO list
-- grpc in background thread (with rxjava)
 - Tron price
-- create account
-- login
-- send
-- received
-- transaction history
-- backup wallet
+- Transaction history
+- Node list
+- Witness list
+- Vote
+- Buy Contract coin
+- Tron Pay

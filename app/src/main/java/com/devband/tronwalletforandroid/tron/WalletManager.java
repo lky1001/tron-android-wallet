@@ -438,5 +438,14 @@ public class WalletManager {
     public int getWalletCount() {
         return mWalletRepository.countWallets();
     }
+
+    @Nullable
+    public String getLoginWalletName() {
+        if (mLoginWalletModel != null) {
+            return mLoginWalletModel.getName();
+        }
+
+        return null;
+    }
 }
 

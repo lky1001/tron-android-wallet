@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.database.model.WalletModel;
 import com.devband.tronwalletforandroid.tron.exception.InvalidAddressException;
 import com.devband.tronwalletforandroid.tron.exception.InvalidPasswordException;
 
@@ -254,5 +253,10 @@ public class Tron {
 
     public boolean hasWallet() {
         return mWalletManager.getWalletCount() > 0;
+    }
+
+    @Nullable
+    public String getLoginWalletName() {
+        return mWalletManager.getLoginWalletName();
     }
 }
