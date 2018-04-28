@@ -132,6 +132,10 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             } else {
                 mNavHeaderText.setText(loginWalletName);
 
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle(loginWalletName);
+                }
+
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item,
                         new String[] {
                         loginWalletName,
