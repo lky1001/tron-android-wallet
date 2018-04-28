@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -39,6 +40,9 @@ import butterknife.OnClick;
 
 public class MainActivity extends CommonActivity implements MainView, NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String CREATE_WALLET = "";
+    private static final String IMPORT_WALLET = "";
+
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
@@ -62,6 +66,10 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     TextView mNavHeaderText;
 
     private MenuItem mMenuAddressItem;
+
+    private MenuItem mMenuTronPayItem;
+
+    private ArrayAdapter<String> mWalletAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -136,14 +144,16 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                     getSupportActionBar().setTitle(loginWalletName);
                 }
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item,
+                mWalletAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item,
                         new String[] {
                         loginWalletName,
-                        "Create Wallet",
-                        "Import Wallet"
+                        CREATE_WALLET,
+                        IMPORT_WALLET
                 });
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                mWalletSpinner.setAdapter(adapter);
+
+                mWalletAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                mWalletSpinner.setAdapter(mWalletAdapter);
+                mWalletSpinner.setOnItemSelectedListener(mAccountItemSelectedListener);
             }
         } else {
             finishActivity();
@@ -167,6 +177,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_activity_menu, menu);
         mMenuAddressItem = menu.findItem(R.id.action_address);
+        mMenuTronPayItem = menu.findItem(R.id.action_tron_pay);
         return true;
     }
 
@@ -246,4 +257,25 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, privateKey);
         startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.choice_share_private_key)));
     }
+
+    private AdapterView.OnItemSelectedListener mAccountItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+            String selectedAccount = mWalletAdapter.getItem(pos);
+
+            if (CREATE_WALLET.equals(selectedAccount)) {
+                // todo - create new wallet
+            } else if (IMPORT_WALLET.equals(selectedAccount)) {
+                // todo - import wallet
+            } else {
+
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
 }
