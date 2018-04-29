@@ -17,9 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
@@ -34,9 +37,13 @@ import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
 import org.tron.protos.Protocol;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends CommonActivity implements MainView, NavigationView.OnNavigationItemSelectedListener {
 
@@ -58,17 +65,27 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
 
-    @BindView(R.id.tv_balance)
-    TextView mBalanceText;
-
     @BindView(R.id.login_wallet_name_text)
     TextView mMainTitleText;
+
+    @BindView(R.id.login_wallet_balance_text)
+    TextView mLoginWalletBalanceText;
+
+    @BindView(R.id.login_wallet_price_text)
+    TextView mLoginWalletPriceText;
+
+    @BindView(R.id.price_help_image)
+    ImageView mPriceHelpImage;
 
     Spinner mWalletSpinner;
 
     TextView mNavHeaderText;
 
     String mLoginWalletName;
+
+    private Protocol.Account mLoginTronAccount;
+
+    private CoinMarketCap mCoinMarketCapPriceInfo;
 
     private MenuItem mMenuAddressItem;
 
@@ -107,10 +124,14 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 if (scrollRange + verticalOffset == 0) {
                     mToolbarLayout.setTitle(mLoginWalletName);
                     mMainTitleText.setVisibility(View.GONE);
+                    mLoginWalletBalanceText.setVisibility(View.GONE);
+                    mLoginWalletPriceText.setVisibility(View.GONE);
                     isShow = true;
                 } else if(isShow) {
                     mToolbarLayout.setTitle("");
                     mMainTitleText.setVisibility(View.VISIBLE);
+                    mLoginWalletBalanceText.setVisibility(View.VISIBLE);
+                    mLoginWalletPriceText.setVisibility(View.VISIBLE);
                     isShow = false;
                 }
             }
@@ -224,6 +245,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             case R.id.drawer_item_login:
                 startActivity(LoginActivity.class);
                 break;
+            case R.id.drawer_item_my_address:
+                startActivity(AddressActivity.class);
+                break;
             case R.id.drawer_item_send_tron:
                 startActivity(SendCoinActivity.class);
                 break;
@@ -254,12 +278,56 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             mMenuAddressItem.setVisible(true);
         }
 
+        mLoginTronAccount = account;
+
         Log.i(MainActivity.class.getSimpleName(), "address : " + account.getAddress().toStringUtf8());
         Log.i(MainActivity.class.getSimpleName(), "balance : " + account.getBalance() + "trx");
         double balance = ((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT;
         DecimalFormat df = new DecimalFormat("#,##0.00000000");
 
-        mBalanceText.setText(df.format(balance));
+        mLoginWalletBalanceText.setText(df.format(balance) + " " + getString(R.string.currency_text));
+
+        ((MainPresenter) mPresenter).getTronMarketInfo();
+    }
+
+    @Override
+    public void setTronMarketInfo(CoinMarketCap coinMarketCap) {
+        if (mLoginTronAccount != null) {
+            double balance = ((double) mLoginTronAccount.getBalance()) / Constants.REAL_TRX_AMOUNT;
+            DecimalFormat df = new DecimalFormat("#,##0.000");
+
+            mLoginWalletPriceText.setText(df.format(balance * Double.parseDouble(coinMarketCap.getPriceUsd()))
+                    + " " + getString(R.string.price_text));
+
+            mCoinMarketCapPriceInfo = coinMarketCap;
+
+            mPriceHelpImage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @OnClick(R.id.price_help_image)
+    public void onPriceHelpImageClick() {
+        StringBuilder sb = new StringBuilder();
+
+        Date updated = new Date(Long.parseLong(mCoinMarketCapPriceInfo.getLastUpdated()) * 1_000);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.US);
+
+        sb.append("Price : ")
+                .append(mCoinMarketCapPriceInfo.getPriceUsd())
+                .append(" USD\n")
+                .append("Last updated : ")
+                .append(sdf.format(updated))
+                .append("\nFrom CoinMarketCap");
+
+        hideDialog();
+
+        new MaterialDialog.Builder(MainActivity.this)
+                .title(getString(R.string.tron_price_title))
+                .content(sb.toString())
+                .autoDismiss(true)
+                .build()
+                .show();;
     }
 
     private void sharePrivateKey() {

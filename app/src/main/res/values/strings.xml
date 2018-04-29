@@ -37,8 +37,8 @@
     <string name="login_success">Success login.</string>
     <string name="menu_address">Address</string>
     <string name="or_text">OR</string>
-    <string name="balance_text">Balance :</string>
-    <string name="currency_text">trx</string>
+    <string name="currency_text">TRX</string>
+    <string name="price_text">USD</string>
     <string name="choice_share">Share Address</string>
     <string name="choice_share_account">Backup Account</string>
     <string name="choice_share_private_key">Export Private Key</string>
@@ -66,4 +66,5 @@
     <string name="copy_wallet_info">Copy Wallet Info</string>
     <string name="menu_torn_pay">Tron Pay</string>
     <string name="navigation_menu_my_address">My Address</string>
+    <string name="tron_price_title">Tron Price</string>
 </resources>

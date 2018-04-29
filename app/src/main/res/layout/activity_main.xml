@@ -55,27 +55,39 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal"
+                        android:orientation="vertical"
                         android:gravity="center">
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:text="@string/balance_text" />
-                        <TextView
-                            android:id="@+id/tv_balance"
+                            android:id="@+id/login_wallet_balance_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="2dp"
                             android:layout_marginRight="5dp"
+                            android:textSize="18sp"
                             android:textColor="@android:color/white"
-                            tools:text="10000.000000" />
-                        <TextView
-                            android:id="@+id/tv_balance_currency"
+                            tools:text="10000.000000 TRX" />
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:text="@string/currency_text" />
+                            android:layout_marginTop="5dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/login_wallet_price_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:textColor="@android:color/white"
+                                tools:text="10000.000 USD" />
+
+                            <ImageView
+                                android:id="@+id/price_help_image"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginLeft="5dp"
+                                android:visibility="gone"
+                                app:srcCompat="@drawable/ic_help_circle" />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </android.support.design.widget.CollapsingToolbarLayout>

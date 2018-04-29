@@ -2,12 +2,17 @@ package com.devband.tronwalletforandroid.ui.main;
 
 import android.support.annotation.Nullable;
 
+import com.devband.tronlib.Hosts;
+import com.devband.tronlib.ServiceBuilder;
+import com.devband.tronlib.dto.CoinMarketCap;
+import com.devband.tronlib.services.CoinMarketCapService;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import org.tron.protos.Protocol;
 
 import java.net.ConnectException;
+import java.util.List;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -16,14 +21,15 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenter extends BasePresenter<MainView> {
 
+    private CoinMarketCapService mCoinMarketCapService;
+
     public MainPresenter(MainView view) {
         super(view);
     }
 
     @Override
     public void onCreate() {
-        // todo - get tron price observer
-        // https://api.coinmarketcap.com/v1/ticker/tronix/
+        mCoinMarketCapService = ServiceBuilder.createService(CoinMarketCapService.class, Hosts.COINMARKETCAP_API);
     }
 
     @Override
@@ -69,6 +75,30 @@ public class MainPresenter extends BasePresenter<MainView> {
                 }
             }
         });
+    }
+
+    public void getTronMarketInfo() {
+        mCoinMarketCapService.getPrice("tronix")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<List<CoinMarketCap>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(List<CoinMarketCap> coinMarketCaps) {
+                        if (coinMarketCaps.size() > 0) {
+                            mView.setTronMarketInfo(coinMarketCaps.get(0));
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
     public boolean logout() {
