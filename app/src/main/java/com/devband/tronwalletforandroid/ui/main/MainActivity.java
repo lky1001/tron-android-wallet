@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.devband.tronwalletforandroid.R;
@@ -33,24 +34,23 @@ import java.text.DecimalFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends CommonActivity implements MainView, NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
+    @BindView(R.id.appbar_layout)
+    public AppBarLayout mAppBarLayout;
+
+    @BindView(R.id.toolbar_layout)
+    public CollapsingToolbarLayout mToolbarLayout;
+
     @BindView(R.id.nav_view)
     NavigationView mSideMenu;
 
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
-
-    @BindView(R.id.main_before_login_layout)
-    LinearLayout mBeforeLoginLayout;
-
-    @BindView(R.id.main_after_login_layout)
-    LinearLayout mAfterLoginLayout;
 
     @BindView(R.id.tv_balance)
     TextView mBalanceText;
@@ -68,8 +68,32 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         setSupportActionBar(mToolbar);
         setupDrawerLayout();
 
+        mToolbarLayout.setTitle("");
+        mToolbar.setTitle("");
+
+        getSupportActionBar().setTitle("");
+
         mPresenter = new MainPresenter(this);
         mPresenter.onCreate();
+
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    mToolbarLayout.setTitle("Tron Wallet");
+                    isShow = true;
+                } else if(isShow) {
+                    mToolbarLayout.setTitle("");
+                    isShow = false;
+                }
+            }
+        });
     }
 
     private void setupDrawerLayout() {
@@ -115,10 +139,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
             // get account info
             ((MainPresenter) mPresenter).getMyAccountInfo();
-
-            // show address ic_qrcode_white_24dp, send actionbar item
-            mBeforeLoginLayout.setVisibility(View.GONE);
-            mAfterLoginLayout.setVisibility(View.VISIBLE);
 
             String loginWalletName = ((MainPresenter) mPresenter).getLoginWalletName();
 
@@ -194,16 +214,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     public void logout() {
         ((MainPresenter) mPresenter).logout();
         checkLoginState();
-    }
-
-    @OnClick(R.id.btn_create_account)
-    public void onCreateAccountClick() {
-        startActivity(CreateWalletActivity.class);
-    }
-
-    @OnClick(R.id.btn_login)
-    public void onLoginClick() {
-        startActivity(LoginActivity.class);
     }
 
     @Override
