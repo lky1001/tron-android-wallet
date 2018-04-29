@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="fullnode.ip.list">
-        <item>34.214.241.188:50051</item>
+        <item>47.91.246.252:50051</item>
     </array>
 
     <array name="witness.ip.list">

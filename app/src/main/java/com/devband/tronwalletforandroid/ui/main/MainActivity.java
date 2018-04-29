@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -36,15 +37,20 @@ import java.text.DecimalFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends CommonActivity implements MainView, NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String CREATE_WALLET = "";
-    private static final String IMPORT_WALLET = "";
+    private static final String CREATE_WALLET = "Create Wallet";
+    private static final String IMPORT_WALLET = "Import Wallet";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+
+    @BindView(R.id.appbar_layout)
+    public AppBarLayout mAppBarLayout;
+
+    @BindView(R.id.toolbar_layout)
+    public CollapsingToolbarLayout mToolbarLayout;
 
     @BindView(R.id.nav_view)
     NavigationView mSideMenu;
@@ -52,18 +58,17 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
 
-    @BindView(R.id.main_before_login_layout)
-    LinearLayout mBeforeLoginLayout;
-
-    @BindView(R.id.main_after_login_layout)
-    LinearLayout mAfterLoginLayout;
-
     @BindView(R.id.tv_balance)
     TextView mBalanceText;
+
+    @BindView(R.id.login_wallet_name_text)
+    TextView mMainTitleText;
 
     Spinner mWalletSpinner;
 
     TextView mNavHeaderText;
+
+    String mLoginWalletName;
 
     private MenuItem mMenuAddressItem;
 
@@ -80,12 +85,39 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         setSupportActionBar(mToolbar);
         setupDrawerLayout();
 
+        mToolbarLayout.setTitle("");
+        mToolbar.setTitle("");
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("");
+        }
+
         mPresenter = new MainPresenter(this);
         mPresenter.onCreate();
+
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    mToolbarLayout.setTitle(mLoginWalletName);
+                    mMainTitleText.setVisibility(View.GONE);
+                    isShow = true;
+                } else if(isShow) {
+                    mToolbarLayout.setTitle("");
+                    mMainTitleText.setVisibility(View.VISIBLE);
+                    isShow = false;
+                }
+            }
+        });
     }
 
     private void setupDrawerLayout() {
-        //좌측 메뉴 초기 메뉴 리스트 정의
         mSideMenu.inflateMenu(R.menu.navigation_menu);
 
         View header = LayoutInflater.from(this).inflate(R.layout.navigation_header, mSideMenu);
@@ -95,12 +127,10 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-            /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
             }
 
-            /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
             }
@@ -129,23 +159,17 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             // get account info
             ((MainPresenter) mPresenter).getMyAccountInfo();
 
-            // show address ic_qrcode_white_24dp, send actionbar item
-            mBeforeLoginLayout.setVisibility(View.GONE);
-            mAfterLoginLayout.setVisibility(View.VISIBLE);
-
             String loginWalletName = ((MainPresenter) mPresenter).getLoginWalletName();
 
             if (loginWalletName == null) {
                 mNavHeaderText.setText(R.string.navigation_header_title);
             } else {
-                mNavHeaderText.setText(loginWalletName);
-
-                if (getSupportActionBar() != null) {
-                    getSupportActionBar().setTitle(loginWalletName);
-                }
+                mLoginWalletName = loginWalletName;
+                mNavHeaderText.setText(mLoginWalletName);
+                mMainTitleText.setText(mLoginWalletName);
 
                 mWalletAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item,
-                        new String[] {
+                    new String[] {
                         loginWalletName,
                         CREATE_WALLET,
                         IMPORT_WALLET
@@ -177,7 +201,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_activity_menu, menu);
         mMenuAddressItem = menu.findItem(R.id.action_address);
-        mMenuTronPayItem = menu.findItem(R.id.action_tron_pay);
         return true;
     }
 
@@ -223,16 +246,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     public void logout() {
         ((MainPresenter) mPresenter).logout();
         checkLoginState();
-    }
-
-    @OnClick(R.id.btn_create_account)
-    public void onCreateAccountClick() {
-        startActivity(CreateWalletActivity.class);
-    }
-
-    @OnClick(R.id.btn_login)
-    public void onLoginClick() {
-        startActivity(LoginActivity.class);
     }
 
     @Override
