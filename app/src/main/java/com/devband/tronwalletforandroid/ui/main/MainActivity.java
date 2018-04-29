@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.main;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,10 +30,9 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.about.AboutActivity;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
-import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
-import com.devband.tronwalletforandroid.ui.importwallet.ImportWalletActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
+import com.devband.tronwalletforandroid.ui.setting.SettingActivity;
 
 import org.tron.protos.Protocol;
 
@@ -76,6 +76,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     @BindView(R.id.price_help_image)
     ImageView mPriceHelpImage;
+
+    @BindView(R.id.edit_wallet_name_image)
+    ImageView mEditWalletNameImage;
 
     Spinner mWalletSpinner;
 
@@ -126,12 +129,16 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                     mMainTitleText.setVisibility(View.GONE);
                     mLoginWalletBalanceText.setVisibility(View.GONE);
                     mLoginWalletPriceText.setVisibility(View.GONE);
+                    mPriceHelpImage.setVisibility(View.GONE);
+                    mEditWalletNameImage.setVisibility(View.GONE);
                     isShow = true;
                 } else if(isShow) {
                     mToolbarLayout.setTitle("");
                     mMainTitleText.setVisibility(View.VISIBLE);
                     mLoginWalletBalanceText.setVisibility(View.VISIBLE);
                     mLoginWalletPriceText.setVisibility(View.VISIBLE);
+                    mPriceHelpImage.setVisibility(View.VISIBLE);
+                    mEditWalletNameImage.setVisibility(View.VISIBLE);
                     isShow = false;
                 }
             }
@@ -239,23 +246,20 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.drawer_item_create_account:
-                startActivity(CreateWalletActivity.class);
-                break;
-            case R.id.drawer_item_login:
-                startActivity(LoginActivity.class);
-                break;
             case R.id.drawer_item_my_address:
                 startActivity(AddressActivity.class);
                 break;
             case R.id.drawer_item_send_tron:
                 startActivity(SendCoinActivity.class);
                 break;
-            case R.id.drawer_item_import_wallet:
-                startActivity(ImportWalletActivity.class);
-                break;
             case R.id.drawer_item_export_private_key:
                 sharePrivateKey();
+                break;
+            case R.id.drawer_item_settings:
+                startActivity(SettingActivity.class);
+                break;
+            case R.id.drawer_item_donations:
+                // todo - tron donations
                 break;
             case R.id.drawer_item_about_tron:
                 startActivity(AboutActivity.class);
@@ -290,6 +294,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         ((MainPresenter) mPresenter).getTronMarketInfo();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void setTronMarketInfo(CoinMarketCap coinMarketCap) {
         if (mLoginTronAccount != null) {
@@ -305,7 +310,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         }
     }
 
-    @OnClick(R.id.price_help_image)
+    @OnClick({ R.id.login_wallet_price_layout })
     public void onPriceHelpImageClick() {
         StringBuilder sb = new StringBuilder();
 
@@ -315,8 +320,12 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
         sb.append("Price : ")
                 .append(mCoinMarketCapPriceInfo.getPriceUsd())
-                .append(" USD\n")
-                .append("Last updated : ")
+                .append(" USD (")
+                .append("-".equals(mCoinMarketCapPriceInfo.getPercentChange24h().substring(0, 1)) ?
+                        mCoinMarketCapPriceInfo.getPercentChange24h() :
+                        "+" + mCoinMarketCapPriceInfo.getPercentChange24h()
+                )
+                .append("%)\nLast updated : ")
                 .append(sdf.format(updated))
                 .append("\nFrom CoinMarketCap");
 
@@ -328,6 +337,11 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 .autoDismiss(true)
                 .build()
                 .show();;
+    }
+
+    @OnClick(R.id.edit_wallet_name_image)
+    public void onEditWalletNameImageClick() {
+        // todo - edit wallet name
     }
 
     private void sharePrivateKey() {

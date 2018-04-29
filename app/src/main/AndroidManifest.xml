@@ -61,6 +61,10 @@
         <activity
             android:name=".ui.about.AboutActivity"
             android:theme="@style/AccountTheme" />
+
+        <activity
+            android:name=".ui.setting.SettingActivity"
+            android:theme="@style/AccountTheme" />
     </application>
 
 </manifest>
