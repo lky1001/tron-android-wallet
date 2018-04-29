@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_tron_pay"
+        android:icon="@drawable/ic_pay"
+        android:orderInCategory="100"
+        android:title="@string/menu_torn_pay"
+        android:visible="true"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_address"
         android:icon="@drawable/ic_qrcode_white"
         android:orderInCategory="100"

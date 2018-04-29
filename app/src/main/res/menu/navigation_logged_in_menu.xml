@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:id="@+id/drawer_item_tron_pay"
+        android:icon="@drawable/ic_pay"
+        android:title="@string/navigation_menu_tron_pay" />
+
+    <item android:id="@+id/drawer_item_my_address"
+        android:icon="@drawable/ic_qrcode_white"
+        android:iconTint="@color/colorPrimary"
+        android:title="@string/navigation_menu_my_address" />
+
     <item android:id="@+id/drawer_item_send_tron"
         android:icon="@drawable/ic_send"
         android:title="@string/navigation_menu_send_tron" />
@@ -8,6 +17,11 @@
     <item android:id="@+id/drawer_item_export_private_key"
         android:icon="@drawable/ic_backup_wallet"
         android:title="@string/navigation_menu_export_private_key" />
+
+
+    <item android:id="@+id/drawer_item_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/navigation_menu_settings" />
 
     <item android:id="@+id/drawer_item_logout"
         android:icon="@drawable/ic_logout"

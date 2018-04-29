@@ -33,7 +33,7 @@ public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
         int result = AccountManager.getInstance(mContext).createAccount(password);
 
         if (result == AccountManager.SUCCESS) {
-            result = Tron.getInstance(mContext).registerWallet("ACCOUNT1", password);
+            result = Tron.getInstance(mContext).registerWallet("Wallet1", password);
             if (result != Tron.SUCCESS) {
                 mView.registerWalletError();
                 return;
