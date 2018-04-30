@@ -63,7 +63,7 @@
             android:theme="@style/AccountTheme" />
 
         <activity
-            android:name=".ui.setting.SettingActivity"
+            android:name=".ui.more.MoreActivity"
             android:theme="@style/AccountTheme" />
     </application>
 

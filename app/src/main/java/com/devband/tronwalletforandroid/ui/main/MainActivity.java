@@ -31,8 +31,8 @@ import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.about.AboutActivity;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
+import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
-import com.devband.tronwalletforandroid.ui.setting.SettingActivity;
 
 import org.tron.protos.Protocol;
 
@@ -255,17 +255,14 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             case R.id.drawer_item_export_private_key:
                 sharePrivateKey();
                 break;
-            case R.id.drawer_item_settings:
-                startActivity(SettingActivity.class);
-                break;
             case R.id.drawer_item_donations:
                 // todo - tron donations
                 break;
             case R.id.drawer_item_about_tron:
                 startActivity(AboutActivity.class);
                 break;
-            case R.id.drawer_item_logout:
-                logout();
+            case R.id.drawer_item_more:
+                 startActivity(MoreActivity.class);
                 break;
         }
         return false;
@@ -336,7 +333,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 .content(sb.toString())
                 .autoDismiss(true)
                 .build()
-                .show();;
+                .show();
     }
 
     @OnClick(R.id.edit_wallet_name_image)

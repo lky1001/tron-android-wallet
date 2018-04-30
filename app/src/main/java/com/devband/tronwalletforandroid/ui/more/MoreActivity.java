@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.setting;
+package com.devband.tronwalletforandroid.ui.more;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +11,7 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SettingActivity extends CommonActivity implements SettingView {
+public class MoreActivity extends CommonActivity implements MoreView {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -27,10 +27,10 @@ public class SettingActivity extends CommonActivity implements SettingView {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.title_settings);
+            getSupportActionBar().setTitle(R.string.title_more);
         }
 
-        mPresenter = new SettingPresenter(this);
+        mPresenter = new MorePresenter(this);
         mPresenter.onCreate();
     }
 

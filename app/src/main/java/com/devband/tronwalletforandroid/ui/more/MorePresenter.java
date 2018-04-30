@@ -1,10 +1,10 @@
-package com.devband.tronwalletforandroid.ui.setting;
+package com.devband.tronwalletforandroid.ui.more;
 
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
-public class SettingPresenter extends BasePresenter<SettingView> {
+public class MorePresenter extends BasePresenter<MoreView> {
 
-    public SettingPresenter(SettingView view) {
+    public MorePresenter(MoreView view) {
         super(view);
     }
 
