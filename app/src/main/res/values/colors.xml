@@ -9,4 +9,7 @@
     <color name="activity_create_wallet_background">#ffffff</color>
     <color name="activity_address_background">#ffffff</color>
     <color name="navigation_header_need_signin_color">#ffffff</color>
+    <color name="more_background_color">#f3f3f3</color>
+    <color name="more_border_color">#e5e5e5</color>
+    <color name="more_text_color">#8b8b8b</color>
 </resources>
