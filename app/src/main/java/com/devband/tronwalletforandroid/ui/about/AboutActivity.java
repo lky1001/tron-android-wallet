@@ -11,7 +11,11 @@ import com.devband.tronlib.services.CoinMarketCapService;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -39,8 +43,22 @@ public class AboutActivity extends CommonActivity {
                     @Override
                     public void onSuccess(List<CoinMarketCap> coinMarketCaps) {
                         if (coinMarketCaps != null && !coinMarketCaps.isEmpty()) {
-                            Element price = new Element()
-                                    .setTitle("Price : " + coinMarketCaps.get(0).getPriceUsd());
+                            CoinMarketCap coinMarketCap = coinMarketCaps.get(0);
+                            DecimalFormat df = new DecimalFormat("#,##0.000");
+                            DecimalFormat df2 = new DecimalFormat("#,##0");
+
+                            Date updated = new Date(Long.parseLong(coinMarketCap.getLastUpdated()) * 1_000);
+
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.US);
+
+                            StringBuilder sb = new StringBuilder();
+                            sb.append("Market Price : ")
+                                    .append(df.format(Double.parseDouble(coinMarketCap.getPriceUsd())))
+                                    .append(" USD (")
+                                    .append("-".equals(coinMarketCap.getPercentChange24h().substring(0, 1)) ?
+                                            coinMarketCap.getPercentChange24h() :
+                                            "+" + coinMarketCap.getPercentChange24h()
+                                    ).append(")");
 
                             View aboutPage = new AboutPage(AboutActivity.this)
                                     .isRTL(false)
@@ -48,8 +66,15 @@ public class AboutActivity extends CommonActivity {
                                             "\n" +
                                             "TRON Protocol and the TVM allow anyone to develop DAPPs for themselves or their communities, with smart contracts making decentralized crowdfunding and token issuance easier than ever. Tron DAPP projects already include Peiwo, Obike, Uplive, game.com, Kitty live and Mico, with 100M+ active users from more than 100 countries and regions around the world.")
                                     .setImage(R.drawable.ic_tron_red)
-                                    .addGroup("Tron info")
-                                    .addItem(price)
+                                    .addGroup("Tron info (" + sdf.format(updated) + ")")
+                                    .addItem(new Element().setTitle("Name : TRON"))
+                                    .addItem(new Element().setTitle("Symbol : TRX"))
+                                    .addItem(new Element().setTitle("Total Supply : " + df2.format(Double.parseDouble(coinMarketCap.getTotalSupply())) + " TRX"))
+                                    .addItem(new Element().setTitle("Supply : " + df2.format(Double.parseDouble(coinMarketCap.getAvailableSupply())) + " TRX"))
+                                    .addItem(new Element().setTitle(sb.toString()))
+                                    .addItem(new Element().setTitle("Market Rank : " + coinMarketCap.getRank()))
+                                    .addItem(new Element().setTitle("Market Cap : " + df.format(Double.parseDouble(coinMarketCap.getMarketCapUsd())) + " USD"))
+                                    .addItem(new Element().setTitle("24H Volume : " + df.format(Double.parseDouble(coinMarketCap.get_24hVolumeUsd())) + " USD"))
                                     .addGroup("Connect with tron team")
                                     .addWebsite("https://tron.network")
                                     .addFacebook("tronfoundation")
