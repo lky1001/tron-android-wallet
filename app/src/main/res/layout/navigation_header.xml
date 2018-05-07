@@ -25,16 +25,18 @@
 
     <Spinner
         android:id="@+id/wallet_spinner"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
         android:dropDownSelector="@android:color/white"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.619"
+        app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerImage" />
+        app:layout_constraintTop_toBottomOf="@+id/headerImage"
+        app:layout_constraintVertical_bias="0.652" />
 
     <TextView
         android:id="@+id/headerTitleText"
