@@ -68,4 +68,10 @@
     <string name="tron_price_title">Tron Price</string>
     <string name="navigation_menu_donations">Donations</string>
     <string name="navigation_menu_more">More</string>
+    <string name="menu_tron_pay">Tron Pay</string>
+    <string name="menu_request_coin">Request Coin</string>
+    <string name="menu_send_coin">Send Coin</string>
+    <string name="request_coin_text">Amount</string>
+    <string name="gen_qrcode_text">Generate QR CODE</string>
+    <string name="title_request_coin">Request Tron Coin</string>
 </resources>

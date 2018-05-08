@@ -32,7 +32,10 @@ import com.devband.tronwalletforandroid.ui.about.AboutActivity;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
+import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
 import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import org.tron.protos.Protocol;
 
@@ -80,6 +83,13 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @BindView(R.id.edit_wallet_name_image)
     ImageView mEditWalletNameImage;
 
+    @BindView(R.id.fab_menu)
+    FloatingActionMenu mFloatingActionMenu;
+
+    FloatingActionButton mFloatingActionMenuRequestCoin;
+
+    FloatingActionButton mFloatingActionMenuSendCoin;
+
     Spinner mWalletSpinner;
 
     TextView mNavHeaderText;
@@ -111,6 +121,23 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("");
         }
+
+        mFloatingActionMenuRequestCoin = (FloatingActionButton) mFloatingActionMenu.findViewById(R.id.fab_menu_request_coin);
+        mFloatingActionMenuSendCoin = (FloatingActionButton) mFloatingActionMenu.findViewById(R.id.fab_menu_send_coin);
+
+        mFloatingActionMenuRequestCoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(RequestCoinActivity.class);
+            }
+        });
+
+        mFloatingActionMenuSendCoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         mPresenter = new MainPresenter(this);
         mPresenter.onCreate();
