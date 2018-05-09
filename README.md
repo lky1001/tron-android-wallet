@@ -21,9 +21,11 @@ A Tron wallet for android.
 - Send Coin
 - Receive Coin
 - QR Code
+- Tron Price
+- Tron Balance
+- My Tokens
 
 ## TODO list
-- Tron price
 - Transaction history
 - Node list
 - Witness list
