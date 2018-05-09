@@ -113,7 +113,7 @@ public class RequestCoinActivity extends CommonActivity {
         });
     }
 
-    public class PayInfo {
+    public static class PayInfo {
         public String address;
         public double amount;
     }

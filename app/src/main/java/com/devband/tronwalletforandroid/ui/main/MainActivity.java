@@ -37,6 +37,7 @@ import com.devband.tronwalletforandroid.ui.main.adapter.AdapterView;
 import com.devband.tronwalletforandroid.ui.main.adapter.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.main.adapter.MyTokenListAdapter;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
+import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
 import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
 import com.github.clans.fab.FloatingActionButton;
@@ -150,7 +151,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         mFloatingActionMenuSendCoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, QrScanActivity.class);
+                intent.putExtra(QrScanActivity.EXTRA_FROM_TRON_PAY_MENU, true);
+                startActivity(intent);
             }
         });
 

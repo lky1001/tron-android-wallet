@@ -42,7 +42,14 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
         setSupportActionBar(mToolbar);
 
-        mInputAddress.setText("27diGPR8i8sv168sGsZm2FFVUm3bVELuZN4");
+        Intent intent = getIntent();
+
+        if (intent.getBooleanExtra(QrScanActivity.EXTRA_FROM_TRON_PAY_MENU, false)) {
+            String result = intent.getStringExtra(QrScanActivity.EXTRA_QR_CODE_ADDRESS);
+            String amount = intent.getStringExtra(QrScanActivity.EXTRA_QR_CODE_AMOUNT);
+            mInputAddress.setText(result);
+            mInputAmount.setText(amount);
+        }
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -122,8 +129,10 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == QR_SCAN_ADDRESS) {
             if (resultCode == RESULT_OK) {
-                String result = data.getStringExtra(QrScanActivity.EXTRA_QR_CODE_RESULT);
+                String result = data.getStringExtra(QrScanActivity.EXTRA_QR_CODE_ADDRESS);
+                String amount = data.getStringExtra(QrScanActivity.EXTRA_QR_CODE_AMOUNT);
                 mInputAddress.setText(result);
+                mInputAmount.setText(amount);
             }
         }
     }
