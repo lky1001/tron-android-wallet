@@ -74,4 +74,10 @@
     <string name="request_coin_text">Amount</string>
     <string name="gen_qrcode_text">Generate QR CODE</string>
     <string name="title_request_coin">Request Tron Coin</string>
+    <string name="node_list">Node List</string>
+    <string name="witness_list">Witness List</string>
+    <string name="rich_account_list">Rich Account List</string>
+    <string name="open_source_text">Open Source</string>
+    <string name="info_text">This is Tron</string>
+    <string name="feedback_text">Question &amp; Feedback</string>
 </resources>

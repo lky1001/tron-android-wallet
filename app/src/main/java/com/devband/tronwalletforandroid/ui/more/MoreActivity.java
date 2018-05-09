@@ -10,6 +10,7 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MoreActivity extends CommonActivity implements MoreView {
 
@@ -43,5 +44,25 @@ public class MoreActivity extends CommonActivity implements MoreView {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.more_node_list_button)
+    public void onNodeListClick() {
+
+    }
+
+    @OnClick(R.id.more_witness_list_button)
+    public void onWitnessListClick() {
+
+    }
+
+    @OnClick(R.id.more_account_list_button)
+    public void onAccountListClick() {
+
+    }
+
+    @OnClick(R.id.more_feedback_button)
+    public void onFeedbackClick() {
+
     }
 }
