@@ -12,4 +12,6 @@
     <color name="more_background_color">#f3f3f3</color>
     <color name="more_border_color">#e5e5e5</color>
     <color name="more_text_color">#8b8b8b</color>
+    <color name="main_border_color">#e5e5e5</color>
+    <color name="main_my_token_color">#7c7b81</color>
 </resources>

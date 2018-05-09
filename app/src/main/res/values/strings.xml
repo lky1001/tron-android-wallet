@@ -80,4 +80,7 @@
     <string name="open_source_text">Open Source</string>
     <string name="info_text">This is Tron</string>
     <string name="feedback_text">Question &amp; Feedback</string>
+    <string name="my_tokens">My Tokens</string>
+    <string name="no_tokens">No Tokens</string>
+    <string name="but_token_text">Buy Token</string>
 </resources>

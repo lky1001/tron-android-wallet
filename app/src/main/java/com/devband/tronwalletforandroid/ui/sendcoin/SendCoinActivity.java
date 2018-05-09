@@ -42,6 +42,8 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
         setSupportActionBar(mToolbar);
 
+        mInputAddress.setText("27diGPR8i8sv168sGsZm2FFVUm3bVELuZN4");
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.title_send_coin);

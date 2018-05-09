@@ -10,15 +10,17 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -31,6 +33,9 @@ import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.about.AboutActivity;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
+import com.devband.tronwalletforandroid.ui.main.adapter.AdapterView;
+import com.devband.tronwalletforandroid.ui.main.adapter.DividerItemDecoration;
+import com.devband.tronwalletforandroid.ui.main.adapter.MyTokenListAdapter;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
 import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
@@ -86,6 +91,12 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @BindView(R.id.fab_menu)
     FloatingActionMenu mFloatingActionMenu;
 
+    @BindView(R.id.no_token_layout)
+    LinearLayout mNoTokenLayout;
+
+    @BindView(R.id.my_token_listview)
+    RecyclerView mMyTokenListView;
+
     FloatingActionButton mFloatingActionMenuRequestCoin;
 
     FloatingActionButton mFloatingActionMenuSendCoin;
@@ -105,6 +116,10 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     private MenuItem mMenuTronPayItem;
 
     private ArrayAdapter<String> mWalletAdapter;
+
+    private LinearLayoutManager mLayoutManager;
+    private AdapterView mAdapterView;
+    private MyTokenListAdapter mMyTokenListAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -139,7 +154,18 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             }
         });
 
+        mLayoutManager = new LinearLayoutManager(MainActivity.this);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mMyTokenListView.setLayoutManager(mLayoutManager);
+        mMyTokenListView.addItemDecoration(new DividerItemDecoration(0));
+        mMyTokenListView.setNestedScrollingEnabled(false);
+
+        mMyTokenListAdapter = new MyTokenListAdapter(MainActivity.this);
+        mMyTokenListView.setAdapter(mMyTokenListAdapter);
+        mAdapterView = mMyTokenListAdapter;
+
         mPresenter = new MainPresenter(this);
+        ((MainPresenter) mPresenter).setAdapterDataModel(mMyTokenListAdapter);
         mPresenter.onCreate();
 
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -308,6 +334,14 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
         mLoginTronAccount = account;
 
+        if (mLoginTronAccount.getAssetMap().isEmpty()) {
+            mNoTokenLayout.setVisibility(View.VISIBLE);
+            mMyTokenListView.setVisibility(View.GONE);
+        } else {
+            mNoTokenLayout.setVisibility(View.GONE);
+            mMyTokenListView.setVisibility(View.VISIBLE);
+        }
+
         Log.i(MainActivity.class.getSimpleName(), "address : " + account.getAddress().toStringUtf8());
         Log.i(MainActivity.class.getSimpleName(), "balance : " + account.getBalance() + "trx");
         double balance = ((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT;
@@ -371,16 +405,17 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     private void sharePrivateKey() {
         String privateKey = Tron.getInstance(MainActivity.this).getPrivateKey();
 
+        Log.d(MainActivity.class.getSimpleName(), privateKey);
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, privateKey);
         startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.choice_share_private_key)));
     }
 
-    private AdapterView.OnItemSelectedListener mAccountItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+    private android.widget.AdapterView.OnItemSelectedListener mAccountItemSelectedListener = new android.widget.AdapterView.OnItemSelectedListener() {
 
         @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+        public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int pos, long id) {
             String selectedAccount = mWalletAdapter.getItem(pos);
 
             if (CREATE_WALLET.equals(selectedAccount)) {
@@ -393,7 +428,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         }
 
         @Override
-        public void onNothingSelected(AdapterView<?> adapterView) {
+        public void onNothingSelected(android.widget.AdapterView<?> adapterView) {
 
         }
     };

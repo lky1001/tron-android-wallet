@@ -7,12 +7,15 @@ import com.devband.tronlib.ServiceBuilder;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.services.CoinMarketCapService;
 import com.devband.tronwalletforandroid.tron.Tron;
+import com.devband.tronwalletforandroid.ui.main.adapter.AdapterDataModel;
+import com.devband.tronwalletforandroid.ui.main.to.Asset;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import org.tron.protos.Protocol;
 
 import java.net.ConnectException;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -23,8 +26,14 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     private CoinMarketCapService mCoinMarketCapService;
 
+    private AdapterDataModel<Asset> mAdapterDataModel;
+
     public MainPresenter(MainView view) {
         super(view);
+    }
+
+    public void setAdapterDataModel(AdapterDataModel<Asset> adapterDataModel) {
+        this.mAdapterDataModel = adapterDataModel;
     }
 
     @Override
@@ -63,7 +72,15 @@ public class MainPresenter extends BasePresenter<MainView> {
 
             @Override
             public void onSuccess(Protocol.Account account) {
+                mAdapterDataModel.clear();
                 mView.displayAccountInfo(account);
+
+                for (String key : account.getAssetMap().keySet()) {
+                    mAdapterDataModel.add(Asset.builder()
+                            .name(key)
+                            .balance(account.getAssetMap().get(key))
+                            .build());
+                }
             }
 
             @Override
