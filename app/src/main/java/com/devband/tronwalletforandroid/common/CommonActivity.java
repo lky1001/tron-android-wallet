@@ -122,6 +122,7 @@ public class CommonActivity extends AppCompatActivity {
         mMaterialDialog = builder
                 .content(msg)
                 .progress(true,0)
+                .canceledOnTouchOutside(false)
                 .show();
     }
 }
