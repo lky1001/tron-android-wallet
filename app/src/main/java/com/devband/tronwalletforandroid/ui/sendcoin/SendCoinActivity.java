@@ -7,7 +7,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -44,9 +46,17 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
     @BindView(R.id.token_spinner)
     public Spinner mTokenSpinner;
 
+    @BindView(R.id.btn_send_trx)
+    public Button mSendTrxBtn;
+
+    @BindView(R.id.btn_qrcode_scan)
+    public ImageButton mQrCodeScanBtn;
+
     private ArrayAdapter<String> mTokenAdapter;
 
     private double mAvailableAmount;
+
+    private boolean mFromDonations;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,16 +69,28 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
         Intent intent = getIntent();
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.title_send_coin);
+        }
+
+        mFromDonations = intent.getBooleanExtra(MainActivity.EXTRA_FROM_DONATIONS, false);
+
         if (intent.getBooleanExtra(QrScanActivity.EXTRA_FROM_TRON_PAY_MENU, false)) {
             String result = intent.getStringExtra(QrScanActivity.EXTRA_QR_CODE_ADDRESS);
             String amount = intent.getStringExtra(QrScanActivity.EXTRA_QR_CODE_AMOUNT);
             mInputAddress.setText(result);
             mInputAmount.setText(amount);
-        }
+        } else if (mFromDonations) {
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(R.string.title_donations);
+            }
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.title_send_coin);
+            // todo - developer tron address
+            //mInputAddress.setText(result);
+            mInputAddress.setEnabled(false);
+            mSendTrxBtn.setText(R.string.title_donations);
+            mQrCodeScanBtn.setVisibility(View.GONE);
         }
 
         mPresenter = new SendCoinPresenter(this);
@@ -135,9 +157,13 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
         hideDialog();
 
         if (result) {
-            Toast.makeText(SendCoinActivity.this, getString(R.string.sending_coin_success),
-                    Toast.LENGTH_SHORT).show();
-            finishActivity();
+            if (mFromDonations) {
+                // todo - thanks donations message
+            } else {
+                Toast.makeText(SendCoinActivity.this, getString(R.string.sending_coin_success),
+                        Toast.LENGTH_SHORT).show();
+                finishActivity();
+            }
         } else {
             Toast.makeText(SendCoinActivity.this, getString(R.string.sending_coin_failed),
                     Toast.LENGTH_SHORT).show();

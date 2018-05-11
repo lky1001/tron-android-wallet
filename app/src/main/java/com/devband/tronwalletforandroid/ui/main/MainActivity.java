@@ -56,6 +56,8 @@ import butterknife.OnClick;
 
 public class MainActivity extends CommonActivity implements MainView, NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String EXTRA_FROM_DONATIONS = "from_donations";
+
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
@@ -300,7 +302,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 sharePrivateKey();
                 break;
             case R.id.drawer_item_donations:
-                // todo - tron donations
+                Intent intent = new Intent(MainActivity.this, SendCoinActivity.class);
+                intent.putExtra(EXTRA_FROM_DONATIONS, true);
+                startActivity(intent);
                 break;
             case R.id.drawer_item_more:
                  startActivity(MoreActivity.class);
