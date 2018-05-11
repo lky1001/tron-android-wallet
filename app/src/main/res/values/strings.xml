@@ -84,4 +84,8 @@
     <string name="no_tokens">No Tokens</string>
     <string name="but_token_text">Buy Token</string>
     <string name="title_about_tron">About Tron</string>
+    <string name="title_rename_wallet">Rename Wallet</string>
+    <string name="menu_create_wallet">Create Wallet</string>
+    <string name="menu_import_wallet">Import Wallet</string>
+    <string name="rename_wallet_hint">Input wallet name</string>
 </resources>

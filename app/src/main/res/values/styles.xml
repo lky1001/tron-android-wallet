@@ -9,8 +9,23 @@
     </style>
 
     <style name="MainTheme" parent="AppTheme">
+        <item name="android:actionMenuTextColor">@color/colorPrimary</item>
+        <item name="actionMenuTextColor">@color/colorPrimary</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/MenuTextStyle</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/MenuTextStyle</item>
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
+    </style>
+
+    <style name="MenuTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:actionMenuTextColor">@color/colorPrimary</item>
+        <item name="actionMenuTextColor">@color/colorPrimary</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/MenuTextStyle</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/MenuTextStyle</item>
     </style>
 
     <style name="AccountTheme" parent="AppTheme">

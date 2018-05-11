@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.main;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.devband.tronlib.Hosts;
@@ -15,7 +16,6 @@ import org.tron.protos.Protocol;
 
 import java.net.ConnectException;
 import java.util.List;
-import java.util.Set;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -127,5 +127,9 @@ public class MainPresenter extends BasePresenter<MainView> {
     @Nullable
     public String getLoginWalletName() {
         return Tron.getInstance(mContext).getLoginWalletName();
+    }
+
+    public boolean renameWallet(@NonNull String walletName) {
+        return Tron.getInstance(mContext).renameWallet(walletName);
     }
 }
