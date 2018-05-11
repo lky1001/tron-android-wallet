@@ -14,7 +14,6 @@
     <string name="navigation_header_title">Tron Wallet</string>
     <string name="navigation_menu_create_account">Create Account</string>
     <string name="navigation_menu_login">Login</string>
-    <string name="navigation_menu_about_tron">About Tron</string>
     <string name="navigation_menu_send_tron">Send Tron</string>
     <string name="navigation_menu_import_wallet">Import Wallet</string>
     <string name="navigation_menu_export_private_key">Export Private Key</string>
@@ -88,4 +87,6 @@
     <string name="menu_create_wallet">Create Wallet</string>
     <string name="menu_import_wallet">Import Wallet</string>
     <string name="rename_wallet_hint">Input wallet name</string>
+    <string name="about_tron">About Tron</string>
+    <string name="title_open_source">Open Source</string>
 </resources>

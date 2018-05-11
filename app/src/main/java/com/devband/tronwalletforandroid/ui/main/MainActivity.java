@@ -31,7 +31,6 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.tron.Tron;
-import com.devband.tronwalletforandroid.ui.about.AboutActivity;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 import com.devband.tronwalletforandroid.ui.main.adapter.AdapterView;
@@ -302,9 +301,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 break;
             case R.id.drawer_item_donations:
                 // todo - tron donations
-                break;
-            case R.id.drawer_item_about_tron:
-                startActivity(AboutActivity.class);
                 break;
             case R.id.drawer_item_more:
                  startActivity(MoreActivity.class);

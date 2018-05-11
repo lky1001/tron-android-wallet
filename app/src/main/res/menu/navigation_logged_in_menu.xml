@@ -14,10 +14,6 @@
         android:icon="@drawable/ic_backup_wallet"
         android:title="@string/navigation_menu_export_private_key" />
 
-    <item android:id="@+id/drawer_item_about_tron"
-        android:icon="@drawable/ic_tron_red"
-        android:title="@string/navigation_menu_about_tron" />
-
     <item android:id="@+id/drawer_item_donations"
         android:icon="@drawable/ic_donation"
         android:title="@string/navigation_menu_donations" />

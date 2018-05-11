@@ -7,6 +7,8 @@ import android.view.MenuItem;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.ui.about.AboutActivity;
+import com.devband.tronwalletforandroid.ui.opensource.OpenSourceActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +48,11 @@ public class MoreActivity extends CommonActivity implements MoreView {
         return super.onOptionsItemSelected(item);
     }
 
+    @OnClick(R.id.more_about_tron_button)
+    public void onAboutTronClick() {
+        startActivity(AboutActivity.class);
+    }
+
     @OnClick(R.id.more_node_list_button)
     public void onNodeListClick() {
 
@@ -59,6 +66,11 @@ public class MoreActivity extends CommonActivity implements MoreView {
     @OnClick(R.id.more_account_list_button)
     public void onAccountListClick() {
 
+    }
+
+    @OnClick(R.id.more_open_source_button)
+    public void onOpenSourceClick() {
+        startActivity(OpenSourceActivity.class);
     }
 
     @OnClick(R.id.more_feedback_button)

@@ -28,23 +28,23 @@
 
         <activity
             android:name=".ui.createaccount.CreateAccountActivity"
-            android:theme="@style/AccountTheme" />
+            android:theme="@style/WalletTheme" />
 
         <activity
             android:name=".ui.backupwallet.BackupWalletActivity"
-            android:theme="@style/AccountTheme" />
+            android:theme="@style/WalletTheme" />
 
         <activity
             android:name=".ui.createwallet.CreateWalletActivity"
-            android:theme="@style/AccountTheme" />
+            android:theme="@style/WalletTheme" />
 
         <activity
             android:name=".ui.login.LoginActivity"
-            android:theme="@style/AccountTheme" />
+            android:theme="@style/WalletTheme" />
 
         <activity
             android:name=".ui.address.AddressActivity"
-            android:theme="@style/AccountTheme" />
+            android:theme="@style/WalletTheme" />
 
         <activity
             android:name=".ui.qrscan.QrScanActivity"
@@ -52,23 +52,27 @@
 
         <activity
             android:name=".ui.sendcoin.SendCoinActivity"
-            android:theme="@style/AccountTheme" />
+            android:theme="@style/WalletTheme" />
 
         <activity
             android:name=".ui.importwallet.ImportWalletActivity"
-            android:theme="@style/AccountTheme" />
+            android:theme="@style/WalletTheme" />
 
         <activity
             android:name=".ui.about.AboutActivity"
-            android:theme="@style/AccountTheme" />
+            android:theme="@style/WalletTheme" />
 
         <activity
             android:name=".ui.more.MoreActivity"
-            android:theme="@style/AccountTheme" />
+            android:theme="@style/WalletTheme" />
 
         <activity
             android:name=".ui.requestcoin.RequestCoinActivity"
-            android:theme="@style/AccountTheme" />
+            android:theme="@style/WalletTheme" />
+
+        <activity
+            android:name=".ui.opensource.OpenSourceActivity"
+            android:theme="@style/WalletTheme" />
     </application>
 
 </manifest>
