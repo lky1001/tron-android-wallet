@@ -6,6 +6,7 @@ import "core/Contract.proto";
 
 option java_package = "org.tron.api"; //Specify the name of the package that generated the Java file
 option java_outer_classname = "GrpcAPI"; //Specify the class name of the generated Java file
+option go_package = "github.com/tronprotocol/grpc-gateway/api";
 
 service Wallet {
 
@@ -83,10 +84,46 @@ service Wallet {
 
   }
 };
+
 // the api of tron's db
 service Database {
+  // for tapos
+  rpc getBlockReference (EmptyMessage) returns (BlockReference) {
 
+  }
+  rpc GetDynamicProperties (EmptyMessage) returns (DynamicProperties) {
+
+  }
+  rpc GetNowBlock (EmptyMessage) returns (Block) {
+
+  }
+  rpc GetBlockByNum (NumberMessage) returns (Block) {
+
+  }
 };
+
+message Return {
+  enum response_code {
+    SUCCESS = 0;
+    SIGERROR = 1; // error in signature
+    CONTRACT_VALIDATE_ERROR = 2;
+    CONTRACT_EXE_ERROR = 3;
+    BANDWITH_ERROR = 4;
+    DUP_TRANSACTION_ERROR = 5;
+    TAPOS_ERROR = 6;
+    TOO_BIG_TRANSACTION_ERROR = 7;
+    OTHER_ERROR = 20;
+  }
+
+  bool result = 1;
+  response_code code = 2;
+  bytes message = 3;
+}
+
+message BlockReference {
+  int64 block_num = 1;
+  bytes block_hash = 2;
+}
 
 // the api of tron's network such as node list.
 service Network {
@@ -94,9 +131,6 @@ service Network {
 };
 
 
-message Return {
-  bool result = 1;
-}
 
 message AccountList {
   repeated Account accounts = 1;
@@ -108,6 +142,12 @@ message WitnessList {
 
 message AssetIssueList {
   repeated AssetIssueContract assetIssue = 1;
+}
+message BlockList {
+  repeated Block block = 1;
+}
+message TransactionList {
+  repeated Transaction transaction = 1;
 }
 
 // Gossip node list
@@ -133,4 +173,16 @@ message NumberMessage {
 }
 message BytesMessage {
   bytes value = 1;
+}
+message TimeMessage {
+  int64 beginInMilliseconds = 1;
+  int64 endInMilliseconds = 2;
+}
+message BlockLimit {
+  int64 startNum = 1;
+  int64 endNum = 2;
+}
+message TransactionLimit {
+  bytes transactionId = 1;
+  int64 limitNum = 2;
 }

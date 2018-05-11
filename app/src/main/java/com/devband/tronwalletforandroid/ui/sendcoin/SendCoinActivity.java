@@ -42,6 +42,8 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
         setSupportActionBar(mToolbar);
 
+        mInputAddress.setText("27g7bUKnpYVxB8UHdJB8QzA9qSKKhwX5eqs");
+
         Intent intent = getIntent();
 
         if (intent.getBooleanExtra(QrScanActivity.EXTRA_FROM_TRON_PAY_MENU, false)) {
@@ -104,11 +106,14 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
         long amount = (long) (amountDouble * Constants.REAL_TRX_AMOUNT);
 
+        showProgressDialog(null, getString(R.string.loading_msg));
         ((SendCoinPresenter) mPresenter).sendCoin(password, address, amount);
     }
 
     @Override
     public void sendCoinResult(boolean result) {
+        hideDialog();
+
         if (result) {
             Toast.makeText(SendCoinActivity.this, getString(R.string.sending_coin_success),
                     Toast.LENGTH_SHORT).show();
@@ -117,6 +122,14 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
             Toast.makeText(SendCoinActivity.this, getString(R.string.sending_coin_failed),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void invalidPassword() {
+        hideDialog();
+
+        Toast.makeText(SendCoinActivity.this, getString(R.string.invalid_password),
+                Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.btn_qrcode_scan)

@@ -36,12 +36,9 @@ public class SendCoinPresenter extends BasePresenter<SendCoinView> {
     }
 
     public void sendCoin(String password, String toAddress, long amount) {
-        if (!Tron.getInstance(mContext).isLogin()) {
-            // todo - login error
-        }
-
-        if (!Tron.getInstance(mContext).validPassword(password)) {
-            // todo - invalid password
+        if (!Tron.getInstance(mContext).isLogin() || !Tron.getInstance(mContext).validPassword(password)) {
+            mView.invalidPassword();
+            return;
         }
 
         Tron.getInstance(mContext).sendCoin(password, toAddress, amount)

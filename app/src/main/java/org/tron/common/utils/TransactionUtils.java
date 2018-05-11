@@ -106,45 +106,42 @@ public class TransactionUtils {
    * 4. check balance
    */
   public static boolean validTransaction(Transaction signedTransaction) {
-    if (signedTransaction.getRawData().getType() == Transaction.TransactionType.ContractType) {
-      assert (signedTransaction.getSignatureCount() ==
-          signedTransaction.getRawData().getContractCount());
-      List<Contract> listContract = signedTransaction.getRawData().getContractList();
-      byte[] hash = sha256(signedTransaction.getRawData().toByteArray());
-      int count = signedTransaction.getSignatureCount();
-      if ( count == 0 ){
-        return false;
-      }
-      for (int i = 0; i < count; ++i) {
-        try {
-          Contract contract = listContract.get(i);
-          byte[] owner = getOwner(contract);
-          byte[] address = ECKey.signatureToAddress(hash, getBase64FromByteString(signedTransaction.getSignature(i)));
-          if (!Arrays.equals(owner, address)) {
-            return false;
-          }
-        } catch (SignatureException e) {
-          e.printStackTrace();
+    assert (signedTransaction.getSignatureCount() ==
+            signedTransaction.getRawData().getContractCount());
+    List<Transaction.Contract> listContract = signedTransaction.getRawData().getContractList();
+    byte[] hash = sha256(signedTransaction.getRawData().toByteArray());
+    int count = signedTransaction.getSignatureCount();
+    if (count == 0) {
+      return false;
+    }
+    for (int i = 0; i < count; ++i) {
+      try {
+        Transaction.Contract contract = listContract.get(i);
+        byte[] owner = getOwner(contract);
+        byte[] address = ECKey
+                .signatureToAddress(hash, getBase64FromByteString(signedTransaction.getSignature(i)));
+        if (!Arrays.equals(owner, address)) {
           return false;
         }
+      } catch (SignatureException e) {
+        e.printStackTrace();
+        return false;
       }
-      return true;
     }
-    return false;
+    return true;
   }
 
   public static Transaction sign(Transaction transaction, ECKey myKey) {
     ByteString lockSript = ByteString.copyFrom(myKey.getAddress());
     Transaction.Builder transactionBuilderSigned = transaction.toBuilder();
 
-    if (transaction.getRawData().getType() == Transaction.TransactionType.ContractType) {
-      byte[] hash = sha256(transaction.getRawData().toByteArray());
-      List<Contract> listContract = transaction.getRawData().getContractList();
-      for (int i = 0; i < listContract.size(); i++) {
-        ECDSASignature signature = myKey.sign(hash);
-        ByteString bsSign = ByteString.copyFrom(signature.toByteArray());
-        transactionBuilderSigned.addSignature(bsSign);//Each contract may be signed with a different private key in the future.
-      }
+    byte[] hash = sha256(transaction.getRawData().toByteArray());
+    List<Contract> listContract = transaction.getRawData().getContractList();
+    for (int i = 0; i < listContract.size(); i++) {
+      ECDSASignature signature = myKey.sign(hash);
+      ByteString bsSign = ByteString.copyFrom(signature.toByteArray());
+      transactionBuilderSigned.addSignature(
+              bsSign);//Each contract may be signed with a different private key in the future.
     }
 
     transaction = transactionBuilderSigned.build();
