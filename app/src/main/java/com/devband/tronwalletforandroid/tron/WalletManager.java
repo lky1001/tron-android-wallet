@@ -447,5 +447,11 @@ public class WalletManager {
 
         return null;
     }
+
+    public boolean renameLoginWallet(@NonNull String walletName) {
+        mLoginWalletModel.setName(walletName);
+
+        return mWalletRepository.updateWallet(mLoginWalletModel);
+    }
 }
 

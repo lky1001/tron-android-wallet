@@ -14,6 +14,11 @@ public class FileRepository implements WalletRepository {
         return false;
     }
 
+    @Override
+    public boolean updateWallet(@NonNull WalletModel walletModel) {
+        return false;
+    }
+
     @Nullable
     @Override
     public WalletModel loadWallet(int index) {

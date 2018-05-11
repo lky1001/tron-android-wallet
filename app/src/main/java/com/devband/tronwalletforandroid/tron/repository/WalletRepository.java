@@ -11,6 +11,8 @@ public interface WalletRepository {
 
     boolean storeWallet(@NonNull WalletModel walletModel);
 
+    boolean updateWallet(@NonNull WalletModel walletModel);
+
     @Nullable
     WalletModel loadWallet(int index);
 

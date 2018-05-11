@@ -259,4 +259,9 @@ public class Tron {
     public String getLoginWalletName() {
         return mWalletManager.getLoginWalletName();
     }
+
+    public boolean renameWallet(@NonNull String walletName) {
+        mWalletManager.renameLoginWallet(walletName);
+        return true;
+    }
 }

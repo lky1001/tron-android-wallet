@@ -9,4 +9,16 @@
         android:title="@string/menu_address"
         android:visible="false"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_create_wallet"
+        android:orderInCategory="100"
+        android:title="@string/menu_create_wallet"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_import_wallet"
+        android:orderInCategory="100"
+        android:title="@string/menu_import_wallet"
+        app:showAsAction="never" />
 </menu>

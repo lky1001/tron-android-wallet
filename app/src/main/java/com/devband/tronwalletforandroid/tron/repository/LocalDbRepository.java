@@ -30,6 +30,16 @@ public class LocalDbRepository implements WalletRepository {
         return true;
     }
 
+    @Override
+    public boolean updateWallet(@NonNull WalletModel walletModel) {
+        Date now = Calendar.getInstance().getTime();
+        walletModel.setUpdated(now);
+
+        mWalletDao.update(walletModel);
+
+        return true;
+    }
+
     @Nullable
     @Override
     public WalletModel loadWallet(int index) {

@@ -57,8 +57,6 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
         setSupportActionBar(mToolbar);
 
-        mInputAddress.setText("27g7bUKnpYVxB8UHdJB8QzA9qSKKhwX5eqs");
-
         Intent intent = getIntent();
 
         if (intent.getBooleanExtra(QrScanActivity.EXTRA_FROM_TRON_PAY_MENU, false)) {
