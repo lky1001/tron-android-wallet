@@ -283,8 +283,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
-        mMenuAddressItem = menu.findItem(R.id.action_address);
+//        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
+//        mMenuAddressItem = menu.findItem(R.id.action_address);
         return true;
     }
 
@@ -332,7 +332,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     public void displayAccountInfo(@NonNull Protocol.Account account) {
         if (mMenuAddressItem != null) {
-            mMenuAddressItem.setVisible(true);
+//            mMenuAddressItem.setVisible(true);
         }
 
         mLoginTronAccount = account;
@@ -388,7 +388,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 )
                 .append("%)\nLast updated : ")
                 .append(sdf.format(updated))
-                .append("\nFrom CoinMarketCap");
+                .append("(UTC)\nFrom CoinMarketCap");
 
         hideDialog();
 

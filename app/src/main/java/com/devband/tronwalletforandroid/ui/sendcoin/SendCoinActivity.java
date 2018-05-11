@@ -5,13 +5,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.ui.main.MainActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
+
+import org.tron.protos.Protocol;
+
+import java.text.DecimalFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +40,13 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
     @BindView(R.id.input_password)
     public EditText mInputPassword;
+
+    @BindView(R.id.token_spinner)
+    public Spinner mTokenSpinner;
+
+    private ArrayAdapter<String> mTokenAdapter;
+
+    private double mAvailableAmount;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +75,13 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
         mPresenter = new SendCoinPresenter(this);
         mPresenter.onCreate();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showProgressDialog(null, getString(R.string.loading_msg));
+        mPresenter.onResume();
     }
 
     @Override
@@ -96,7 +118,7 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
             return;
         }
 
-        if (amountDouble <= 0) {
+        if (amountDouble <= 0 || amountDouble > mAvailableAmount) {
             Toast.makeText(SendCoinActivity.this, getString(R.string.invalid_amount),
                     Toast.LENGTH_SHORT).show();
             return;
@@ -132,6 +154,26 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
                 Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void displayAccountInfo(Protocol.Account account) {
+        DecimalFormat df = new DecimalFormat("#,##0.00000000");
+
+        mAvailableAmount = ((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT;
+
+        String tronAmount = "TRX (" + df.format(mAvailableAmount) + ")";
+
+        mTokenAdapter = new ArrayAdapter<>(SendCoinActivity.this, android.R.layout.simple_spinner_item,
+                new String[] {
+                        tronAmount
+                });
+
+        mTokenAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mTokenSpinner.setAdapter(mTokenAdapter);
+        mTokenSpinner.setOnItemSelectedListener(mTokenItemSelectedListener);
+
+        hideDialog();
+    }
+
     @OnClick(R.id.btn_qrcode_scan)
     public void onQrcodeScanClick() {
         Intent qrScanIntent = new Intent(SendCoinActivity.this, QrScanActivity.class);
@@ -149,4 +191,17 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
             }
         }
     }
+
+    private android.widget.AdapterView.OnItemSelectedListener mTokenItemSelectedListener = new android.widget.AdapterView.OnItemSelectedListener() {
+
+        @Override
+        public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int pos, long id) {
+
+        }
+
+        @Override
+        public void onNothingSelected(android.widget.AdapterView<?> adapterView) {
+
+        }
+    };
 }
