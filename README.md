@@ -30,5 +30,5 @@ A Tron wallet for android.
 - Node list
 - Witness list
 - Vote
-- Buy Contract coin
+- Buy Contract token
 - Tron Pay
