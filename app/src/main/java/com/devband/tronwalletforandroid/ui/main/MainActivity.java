@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -328,6 +329,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 .titleColorRes(R.color.colorAccent)
                 .contentColorRes(R.color.colorAccent)
                 .backgroundColorRes(android.R.color.white)
+                .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
                 .input(getString(R.string.import_wallet_hint), "29C7E8C344445B33572D09E593F947C548A627A9B3247DEA11BADAFCBEBD04A4", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
@@ -473,16 +475,24 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 .titleColorRes(R.color.colorAccent)
                 .contentColorRes(R.color.colorAccent)
                 .backgroundColorRes(android.R.color.white)
-                .input(getString(R.string.password_text), mLoginWalletName, new MaterialDialog.InputCallback() {
+                .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                .input(getString(R.string.input_password_text), "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         dialog.dismiss();
-                        String walletName = input.toString();
+                        String password = input.toString();
 
-                        if (!TextUtils.isEmpty(walletName)) {
-                            if (((MainPresenter) mPresenter).renameWallet(walletName)) {
-                                checkLoginState();
-                            }
+                        if (!TextUtils.isEmpty(password) && ((MainPresenter) mPresenter).matchPassword(password)) {
+                            String privateKey = ((MainPresenter) mPresenter).getLoginPrivateKey();
+
+                            Log.d(MainActivity.class.getSimpleName(), privateKey);
+                            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                            sharingIntent.setType("text/plain");
+                            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, privateKey);
+                            startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.choice_share_private_key)));
+                        } else {
+                            Toast.makeText(MainActivity.this, getString(R.string.invalid_password),
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).show();
