@@ -146,4 +146,16 @@ public class MainPresenter extends BasePresenter<MainView> {
     public void changeLoginWallet(@NonNull WalletModel walletModel) {
         Tron.getInstance(mContext).changeLoginWallet(walletModel);
     }
+
+    public void importWallet(@NonNull String nickname, @NonNull String privateKey) {
+        int result = Tron.getInstance(mContext).importWallet(nickname, privateKey);
+
+        if (result == Tron.SUCCESS) {
+            mView.successImportWallet();
+        } else if (result == Tron.ERROR_EXIST_WALLET) {
+            mView.duplicatedWallet();
+        } else if (result == Tron.ERROR_PRIVATE_KEY) {
+            mView.failCreateWallet();
+        }
+    }
 }

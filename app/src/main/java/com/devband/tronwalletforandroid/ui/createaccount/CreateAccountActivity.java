@@ -14,7 +14,6 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.ui.backupwallet.BackupWalletActivity;
-import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

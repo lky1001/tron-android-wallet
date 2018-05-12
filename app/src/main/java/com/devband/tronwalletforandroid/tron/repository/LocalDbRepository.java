@@ -56,4 +56,10 @@ public class LocalDbRepository implements WalletRepository {
     public int countWallets() {
         return mWalletDao.countWallets();
     }
+
+    @Nullable
+    @Override
+    public WalletModel loadByWalletKey(String walletKey) {
+        return mWalletDao.loadByWalletKey(walletKey);
+    }
 }

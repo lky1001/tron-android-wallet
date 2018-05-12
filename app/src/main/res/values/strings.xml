@@ -98,5 +98,8 @@
     <string name="send_coin_amount_text">Amount : </string>
     <string name="menu_refresh_wallet">refresh_wallet</string>
     <string name="title_create_wallet">New Wallet</string>
-    <string name="create_wallet_password_hint">Login Password</string>
+    <string name="navigation_menu_logout">Logout</string>
+    <string name="import_wallet_hint">Your private key string here</string>
+    <string name="already_exist_wallet">Wallet is already exist.</string>
+    <string name="title_export_private_key">Export Private Key</string>
 </resources>

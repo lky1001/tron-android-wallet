@@ -35,10 +35,6 @@
             android:theme="@style/WalletTheme" />
 
         <activity
-            android:name=".ui.createwallet.CreateWalletActivity"
-            android:theme="@style/WalletTheme" />
-
-        <activity
             android:name=".ui.login.LoginActivity"
             android:theme="@style/WalletTheme" />
 
@@ -52,10 +48,6 @@
 
         <activity
             android:name=".ui.sendcoin.SendCoinActivity"
-            android:theme="@style/WalletTheme" />
-
-        <activity
-            android:name=".ui.importwallet.ImportWalletActivity"
             android:theme="@style/WalletTheme" />
 
         <activity

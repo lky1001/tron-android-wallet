@@ -34,6 +34,10 @@ public class WalletModel {
 
     @Override
     public String toString() {
+        if (imported) {
+            return "[I] " + name;
+        }
+
         return name;
     }
 }

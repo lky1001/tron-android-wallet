@@ -35,4 +35,10 @@ public class FileRepository implements WalletRepository {
     public int countWallets() {
         return 0;
     }
+
+    @Nullable
+    @Override
+    public WalletModel loadByWalletKey(String walletKey) {
+        return null;
+    }
 }

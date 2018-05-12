@@ -112,10 +112,10 @@ public class WalletManager {
         //encrypted by password
         byte[] aseKey = getEncKey(password);
 
-        return createAddress(walletName, pwdAsc, aseKey);
+        return createAddress(walletName, pwdAsc, aseKey, false);
     }
 
-    private int createAddress(@NonNull String walletName, @NonNull String pwdAsc, @NonNull byte[] aseKey) {
+    private int createAddress(@NonNull String walletName, @NonNull String pwdAsc, @NonNull byte[] aseKey, boolean imported) {
         byte[] privKeyPlain = this.mEcKey.getPrivKeyBytes();
         byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, aseKey);
 
@@ -123,9 +123,18 @@ public class WalletManager {
         byte[] pubKeyBytes = this.mEcKey.getPubKey();
         String pubKeyStr = ByteArray.toHexString(pubKeyBytes);
 
+        if (imported) {
+            WalletModel walletModel = mWalletRepository.loadByWalletKey(pwdAsc + pubKeyStr + privKeyStr);
+
+            if (walletModel != null) {
+                return Tron.ERROR_EXIST_WALLET;
+            }
+        }
+
         mLoginWalletModel = WalletModel.builder()
                 .name(walletName)
                 .wallet(pwdAsc + pubKeyStr + privKeyStr)
+                .imported(imported)
                 .build();
 
         mWalletRepository.storeWallet(mLoginWalletModel);
@@ -464,7 +473,7 @@ public class WalletManager {
     public void createWallet(@NonNull String nickname) {
         this.mEcKey = new ECKey(Utils.getRandom());
 
-        createAddress(nickname, loadPassword(), mAesKey);
+        createAddress(nickname, loadPassword(), mAesKey, false);
     }
 
     public List<WalletModel> getWalletList() {
@@ -473,6 +482,20 @@ public class WalletManager {
 
     public void changeLoginWallet(WalletModel loginWallet) {
         loadWalletByRepository(loginWallet);
+    }
+
+    public int importWallet(@NonNull String nickname, @NonNull String privateKey) {
+        ECKey temKey = null;
+        try {
+            BigInteger priK = new BigInteger(privateKey, KEY_SIZE);
+            temKey = ECKey.fromPrivate(priK);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Tron.ERROR_PRIVATE_KEY;
+        }
+        this.mEcKey = temKey;
+
+        return createAddress(nickname, loadPassword(), mAesKey, true);
     }
 }
 
