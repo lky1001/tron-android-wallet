@@ -7,6 +7,7 @@ import com.devband.tronlib.Hosts;
 import com.devband.tronlib.ServiceBuilder;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.services.CoinMarketCapService;
+import com.devband.tronwalletforandroid.database.model.WalletModel;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.main.adapter.AdapterDataModel;
 import com.devband.tronwalletforandroid.ui.main.to.Asset;
@@ -125,11 +126,24 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     @Nullable
-    public String getLoginWalletName() {
-        return Tron.getInstance(mContext).getLoginWalletName();
+    public WalletModel getLoginWallet() {
+        return Tron.getInstance(mContext).getLoginWallet();
     }
 
     public boolean renameWallet(@NonNull String walletName) {
         return Tron.getInstance(mContext).renameWallet(walletName);
+    }
+
+    public void createWallet(@NonNull String nickname) {
+        Tron.getInstance(mContext).createWallet(nickname);
+        mView.successCreateWallet();
+    }
+
+    public List<WalletModel> getWalletList() {
+        return Tron.getInstance(mContext).getWalletList();
+    }
+
+    public void changeLoginWallet(@NonNull WalletModel walletModel) {
+        Tron.getInstance(mContext).changeLoginWallet(walletModel);
     }
 }

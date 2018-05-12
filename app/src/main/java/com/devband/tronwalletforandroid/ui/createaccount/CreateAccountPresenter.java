@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.createaccount;
 
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
@@ -33,7 +34,7 @@ public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
         int result = AccountManager.getInstance(mContext).createAccount(password);
 
         if (result == AccountManager.SUCCESS) {
-            result = Tron.getInstance(mContext).registerWallet("Wallet1", password);
+            result = Tron.getInstance(mContext).registerWallet(Constants.PREFIX_WALLET_NAME, password);
             if (result != Tron.SUCCESS) {
                 mView.registerWalletError();
                 return;

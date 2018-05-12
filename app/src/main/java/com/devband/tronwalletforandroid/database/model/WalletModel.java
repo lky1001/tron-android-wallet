@@ -31,4 +31,9 @@ public class WalletModel {
     private Date created;
 
     private Date updated;
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

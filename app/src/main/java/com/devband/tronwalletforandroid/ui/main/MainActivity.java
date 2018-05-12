@@ -24,12 +24,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.database.model.WalletModel;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
@@ -48,6 +50,7 @@ import org.tron.protos.Protocol;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -111,7 +114,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     private CoinMarketCap mCoinMarketCapPriceInfo;
 
-    private ArrayAdapter<String> mWalletAdapter;
+    private ArrayAdapter<WalletModel> mWalletAdapter;
 
     private LinearLayoutManager mLayoutManager;
     private AdapterView mAdapterView;
@@ -194,11 +197,11 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 }
             }
         });
+
+        initWalletList();
     }
 
     private void setupDrawerLayout() {
-        mSideMenu.inflateMenu(R.menu.navigation_menu);
-
         View header = LayoutInflater.from(this).inflate(R.layout.navigation_header, mSideMenu);
 
         mNavHeaderText = (TextView) header.findViewById(R.id.headerTitleText);
@@ -220,6 +223,18 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         toggle.syncState();
 
         mSideMenu.setNavigationItemSelectedListener(this);
+        mSideMenu.inflateMenu(R.menu.navigation_logged_in_menu);
+    }
+
+    private void initWalletList() {
+        List<WalletModel> walletModelList = ((MainPresenter) mPresenter).getWalletList();
+
+        mWalletAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item,
+                walletModelList);
+
+        mWalletAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mWalletSpinner.setAdapter(mWalletAdapter);
+        mWalletSpinner.setOnItemSelectedListener(mAccountItemSelectedListener);
     }
 
     @Override
@@ -230,44 +245,21 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     private void checkLoginState() {
         if (((MainPresenter) mPresenter).isLogin()) {
-            if(mSideMenu.getMenu() != null) {
-                mSideMenu.getMenu().clear();
-                mSideMenu.inflateMenu(R.menu.navigation_logged_in_menu);
-            }
-
             // get account info
             ((MainPresenter) mPresenter).getMyAccountInfo();
 
-            String loginWalletName = ((MainPresenter) mPresenter).getLoginWalletName();
+            WalletModel loginWallet = ((MainPresenter) mPresenter).getLoginWallet();
 
-            if (loginWalletName == null) {
+            if (loginWallet == null) {
                 mNavHeaderText.setText(R.string.navigation_header_title);
             } else {
-                mLoginWalletName = loginWalletName;
+                mLoginWalletName = loginWallet.getName();
                 mNavHeaderText.setText(mLoginWalletName);
                 mMainTitleText.setText(mLoginWalletName);
-
-                mWalletAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item,
-                    new String[] {
-                        loginWalletName
-                });
-
-                mWalletAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                mWalletSpinner.setAdapter(mWalletAdapter);
-                mWalletSpinner.setOnItemSelectedListener(mAccountItemSelectedListener);
             }
         } else {
             finishActivity();
             startActivity(LoginActivity.class);
-//            if(mSideMenu.getMenu() != null) {
-//                mSideMenu.getMenu().clear();
-//                mSideMenu.inflateMenu(R.menu.navigation_menu);
-//            }
-//
-//            // hide address ic_qrcode_white_24dp, send actionbar item
-//            mBeforeLoginLayout.setVisibility(View.VISIBLE);
-//            mAfterLoginLayout.setVisibility(View.GONE);
-//
         }
     }
 
@@ -281,6 +273,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create_wallet:
+                showProgressDialog(null, getString(R.string.loading_msg));
+                ((MainPresenter) mPresenter).createWallet(Constants.PREFIX_WALLET_NAME);
                 break;
             case R.id.action_import_wallet:
                 break;
@@ -359,6 +353,20 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         }
     }
 
+    @Override
+    public void showInvalidPasswordMsg() {
+        hideDialog();
+        Toast.makeText(MainActivity.this, getString(R.string.invalid_password),
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void successCreateWallet() {
+        hideDialog();
+        initWalletList();
+        mWalletSpinner.setSelection(mWalletAdapter.getCount() - 1);
+    }
+
     @OnClick({ R.id.login_wallet_price_layout })
     public void onPriceHelpImageClick() {
         StringBuilder sb = new StringBuilder();
@@ -402,6 +410,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 .input(getString(R.string.rename_wallet_hint), mLoginWalletName, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
+                        dialog.dismiss();
                         String walletName = input.toString();
 
                         if (!TextUtils.isEmpty(walletName)) {
@@ -427,7 +436,10 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
         @Override
         public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int pos, long id) {
-            String selectedAccount = mWalletAdapter.getItem(pos);
+            WalletModel walletModel = mWalletAdapter.getItem(pos);
+            ((MainPresenter) mPresenter).changeLoginWallet(walletModel);
+            mDrawer.closeDrawers();
+            checkLoginState();
         }
 
         @Override

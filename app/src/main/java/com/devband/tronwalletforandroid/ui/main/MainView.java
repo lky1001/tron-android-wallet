@@ -12,4 +12,8 @@ public interface MainView extends IView {
     void displayAccountInfo(@NonNull Protocol.Account account);
 
     void setTronMarketInfo(CoinMarketCap coinMarketCap);
+
+    void showInvalidPasswordMsg();
+
+    void successCreateWallet();
 }
