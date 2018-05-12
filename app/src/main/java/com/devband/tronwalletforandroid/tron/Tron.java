@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.database.model.WalletModel;
 import com.devband.tronwalletforandroid.tron.exception.InvalidAddressException;
 import com.devband.tronwalletforandroid.tron.exception.InvalidPasswordException;
 
@@ -84,7 +85,7 @@ public class Tron {
             mWalletManager = new WalletManager(true, mContext);
         }
 
-        return mWalletManager.genWallet(nickname, password);
+        return mWalletManager.genWallet(generateDefaultWalletName(nickname), password);
     }
 
     public int storeWallet() {
@@ -114,15 +115,11 @@ public class Tron {
             mWalletManager = new WalletManager(WalletManager.WALLET_LOCAL_DB, mContext);
         }
 
-        int loadWalletResult = mWalletManager.loadWalletByRepository(password);
-
-        if (loadWalletResult == ERROR_WALLET_DOES_NOT_EXIST
-                || loadWalletResult == ERROR_INVALID_PASSWORD) {
-            mWalletManager = null;
-            return ERROR_WALLET_DOES_NOT_EXIST;
+        if (!mWalletManager.login(password)) {
+            return ERROR_INVALID_PASSWORD;
         }
 
-        return mWalletManager.login(password) ? SUCCESS : ERROR_INVALID_PASSWORD;
+        return SUCCESS;
     }
 
     public boolean isLogin() {
@@ -256,12 +253,29 @@ public class Tron {
     }
 
     @Nullable
-    public String getLoginWalletName() {
-        return mWalletManager.getLoginWalletName();
+    public WalletModel getLoginWallet() {
+        return mWalletManager.getLoginWallet();
     }
 
     public boolean renameWallet(@NonNull String walletName) {
         mWalletManager.renameLoginWallet(walletName);
         return true;
+    }
+
+    public void createWallet(@NonNull String nickname) {
+        mWalletManager.createWallet(generateDefaultWalletName(nickname));
+    }
+
+    public List<WalletModel> getWalletList() {
+        return mWalletManager.getWalletList();
+    }
+
+    public void changeLoginWallet(@NonNull WalletModel walletModel) {
+        mWalletManager.changeLoginWallet(walletModel);
+    }
+
+    private String generateDefaultWalletName(String prefix) {
+        int cnt = mWalletManager.getWalletCount();
+        return prefix + (++cnt);
     }
 }

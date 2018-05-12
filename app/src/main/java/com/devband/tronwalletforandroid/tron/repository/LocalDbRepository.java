@@ -49,7 +49,7 @@ public class LocalDbRepository implements WalletRepository {
     @Nullable
     @Override
     public List<WalletModel> loadAllWallets() {
-        return null;
+        return mWalletDao.loadAllWallets();
     }
 
     @Override

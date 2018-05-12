@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
@@ -67,6 +68,7 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
         setSupportActionBar(mToolbar);
 
+        mInputAddress.setText("27YnUtoNbnEQfKfFcxTL2Ak9ETovjtSJ2sF");
         Intent intent = getIntent();
 
         if (getSupportActionBar() != null) {
@@ -144,12 +146,37 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
             return;
         }
 
-        String password = mInputPassword.getText().toString();
+        double finalAmountDouble = amountDouble;
 
-        long amount = (long) (amountDouble * Constants.REAL_TRX_AMOUNT);
+        StringBuilder sb = new StringBuilder();
 
-        showProgressDialog(null, getString(R.string.loading_msg));
-        ((SendCoinPresenter) mPresenter).sendCoin(password, address, amount);
+        sb.append(getString(R.string.send_coin_warning_msg))
+                .append("\n\n")
+                .append(getString(R.string.send_coin_address_text))
+                .append(address)
+                .append("\n")
+                .append(getString(R.string.send_coin_token_text))
+                .append("TRX")
+                .append("\n")
+                .append(getString(R.string.send_coin_amount_text))
+                .append(amountText)
+                ;
+
+
+        new MaterialDialog.Builder(SendCoinActivity.this)
+                .title(R.string.send_coin_title)
+                .content(sb.toString())
+                .positiveText(R.string.confirm_text)
+                .negativeText(R.string.cancen_text)
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+                    String password = mInputPassword.getText().toString();
+
+                    long amount = (long) (finalAmountDouble * Constants.REAL_TRX_AMOUNT);
+
+                    showProgressDialog(null, getString(R.string.loading_msg));
+                    ((SendCoinPresenter) mPresenter).sendCoin(password, address, amount);
+                }).show();
     }
 
     @Override

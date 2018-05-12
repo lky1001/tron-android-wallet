@@ -28,6 +28,7 @@ import org.tron.protos.Protocol;
 import java.io.File;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * https://github.com/tronprotocol/wallet-cli/blob/master/src/main/java/org/tron/walletserver/WalletClient.java
@@ -47,6 +48,7 @@ public class WalletManager {
 
     private ECKey mEcKey = null;
     private boolean mLoginState = false;
+    private byte[] mAesKey;
 
     private WalletRepository mWalletRepository;
 
@@ -99,17 +101,24 @@ public class WalletManager {
         }
     }
 
-    public int genWallet(@NonNull String walletName, String password) {
+    public int genWallet(@NonNull String walletName, @NonNull String password) {
         if (this.mEcKey == null || this.mEcKey.getPrivKey() == null) {
             return Tron.ERROR_PRIVATE_KEY;
         }
 
         byte[] pwd = getPassWord(password);
         String pwdAsc = ByteArray.toHexString(pwd);
-        byte[] privKeyPlain = this.mEcKey.getPrivKeyBytes();
+
         //encrypted by password
         byte[] aseKey = getEncKey(password);
+
+        return createAddress(walletName, pwdAsc, aseKey);
+    }
+
+    private int createAddress(@NonNull String walletName, @NonNull String pwdAsc, @NonNull byte[] aseKey) {
+        byte[] privKeyPlain = this.mEcKey.getPrivKeyBytes();
         byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, aseKey);
+
         String privKeyStr = ByteArray.toHexString(privKeyEnced);
         byte[] pubKeyBytes = this.mEcKey.getPubKey();
         String pubKeyStr = ByteArray.toHexString(pubKeyBytes);
@@ -176,12 +185,16 @@ public class WalletManager {
     }
 
     public boolean login(String password) {
+        this.mAesKey = getEncKey(password);
+        loadWalletByRepository(null);
         this.mLoginState = checkPassWord(password);
         return mLoginState;
     }
 
-    public int loadWalletByRepository(String password) {
-        WalletModel walletModel = mWalletRepository.loadWallet(DEFAULT_WALLET_INDEX);
+    private int loadWalletByRepository(@Nullable WalletModel walletModel) {
+        if (walletModel == null) {
+            walletModel = mWalletRepository.loadWallet(DEFAULT_WALLET_INDEX);
+        }
 
         String priKeyEnced = walletModel.getWallet().substring(162, 226);
 
@@ -192,8 +205,7 @@ public class WalletManager {
         //dec priKey
         byte[] priKeyAscEnced = priKeyEnced.getBytes();
         byte[] priKeyHexEnced = Hex.decode(priKeyAscEnced);
-        byte[] aesKey = getEncKey(password);
-        byte[] priKeyHexPlain = SymmEncoder.AES128EcbDec(priKeyHexEnced, aesKey);
+        byte[] priKeyHexPlain = SymmEncoder.AES128EcbDec(priKeyHexEnced, mAesKey);
         String priKeyPlain = Hex.toHexString(priKeyHexPlain);
 
         ECKey temKey = null;
@@ -259,7 +271,6 @@ public class WalletManager {
 
     @Nullable
     private String loadPassword() {
-        // todo - load from db
         return mLoginWalletModel.getWallet().substring(0, 32);
     }
 
@@ -440,18 +451,28 @@ public class WalletManager {
     }
 
     @Nullable
-    public String getLoginWalletName() {
-        if (mLoginWalletModel != null) {
-            return mLoginWalletModel.getName();
-        }
-
-        return null;
+    public WalletModel getLoginWallet() {
+        return mLoginWalletModel;
     }
 
     public boolean renameLoginWallet(@NonNull String walletName) {
         mLoginWalletModel.setName(walletName);
 
         return mWalletRepository.updateWallet(mLoginWalletModel);
+    }
+
+    public void createWallet(@NonNull String nickname) {
+        this.mEcKey = new ECKey(Utils.getRandom());
+
+        createAddress(nickname, loadPassword(), mAesKey);
+    }
+
+    public List<WalletModel> getWalletList() {
+        return mWalletRepository.loadAllWallets();
+    }
+
+    public void changeLoginWallet(WalletModel loginWallet) {
+        loadWalletByRepository(loginWallet);
     }
 }
 
