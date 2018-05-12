@@ -32,7 +32,6 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.WalletModel;
-import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 import com.devband.tronwalletforandroid.ui.main.adapter.AdapterView;
@@ -273,10 +272,10 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create_wallet:
-                showProgressDialog(null, getString(R.string.loading_msg));
-                ((MainPresenter) mPresenter).createWallet(Constants.PREFIX_WALLET_NAME);
+                createWallet();
                 break;
             case R.id.action_import_wallet:
+                importWallet();
                 break;
             case R.id.action_refresh_wallet:
                 checkLoginState();
@@ -306,6 +305,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             case R.id.drawer_item_more:
                  startActivity(MoreActivity.class);
                 break;
+            case R.id.drawer_item_logout:
+                logout();
+                break;
         }
         return false;
     }
@@ -313,6 +315,30 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     public void logout() {
         ((MainPresenter) mPresenter).logout();
         checkLoginState();
+    }
+
+    private void createWallet() {
+        showProgressDialog(null, getString(R.string.loading_msg));
+        ((MainPresenter) mPresenter).createWallet(Constants.PREFIX_WALLET_NAME);
+    }
+
+    private void importWallet() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.title_import_wallet)
+                .titleColorRes(R.color.colorAccent)
+                .contentColorRes(R.color.colorAccent)
+                .backgroundColorRes(android.R.color.white)
+                .input(getString(R.string.import_wallet_hint), "29C7E8C344445B33572D09E593F947C548A627A9B3247DEA11BADAFCBEBD04A4", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        dialog.dismiss();
+                        String privateKey = input.toString();
+
+                        if (!TextUtils.isEmpty(privateKey)) {
+                            ((MainPresenter) mPresenter).importWallet(Constants.PREFIX_WALLET_NAME, privateKey);
+                        }
+                    }
+                }).show();
     }
 
     @Override
@@ -365,6 +391,25 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         hideDialog();
         initWalletList();
         mWalletSpinner.setSelection(mWalletAdapter.getCount() - 1);
+    }
+
+    @Override
+    public void successImportWallet() {
+        successCreateWallet();
+    }
+
+    @Override
+    public void failCreateWallet() {
+        hideDialog();
+        Toast.makeText(MainActivity.this, getString(R.string.invalid_private_key),
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void duplicatedWallet() {
+        hideDialog();
+        Toast.makeText(MainActivity.this, getString(R.string.already_exist_wallet),
+                Toast.LENGTH_SHORT).show();
     }
 
     @OnClick({ R.id.login_wallet_price_layout })
@@ -423,13 +468,24 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     }
 
     private void sharePrivateKey() {
-        String privateKey = Tron.getInstance(MainActivity.this).getPrivateKey();
+        new MaterialDialog.Builder(this)
+                .title(R.string.title_export_private_key)
+                .titleColorRes(R.color.colorAccent)
+                .contentColorRes(R.color.colorAccent)
+                .backgroundColorRes(android.R.color.white)
+                .input(getString(R.string.password_text), mLoginWalletName, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        dialog.dismiss();
+                        String walletName = input.toString();
 
-        Log.d(MainActivity.class.getSimpleName(), privateKey);
-        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-        sharingIntent.setType("text/plain");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, privateKey);
-        startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.choice_share_private_key)));
+                        if (!TextUtils.isEmpty(walletName)) {
+                            if (((MainPresenter) mPresenter).renameWallet(walletName)) {
+                                checkLoginState();
+                            }
+                        }
+                    }
+                }).show();
     }
 
     private android.widget.AdapterView.OnItemSelectedListener mAccountItemSelectedListener = new android.widget.AdapterView.OnItemSelectedListener() {

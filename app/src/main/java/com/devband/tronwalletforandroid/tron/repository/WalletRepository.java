@@ -20,4 +20,7 @@ public interface WalletRepository {
     List<WalletModel> loadAllWallets();
 
     int countWallets();
+
+    @Nullable
+    WalletModel loadByWalletKey(String walletKey);
 }

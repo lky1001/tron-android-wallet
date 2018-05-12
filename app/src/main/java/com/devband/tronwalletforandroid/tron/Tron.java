@@ -29,6 +29,7 @@ public class Tron {
     public static final int ERROR_WALLET_DOES_NOT_EXIST = -4;
     public static final int ERROR_NEED_LOGIN = -5;
     public static final int ERROR_LOGIN = -6;
+    public static final int ERROR_EXIST_WALLET = -7;
     public static final int ERROR = -9999;
 
     public static final int MIN_PASSWORD_LENGTH = 8;
@@ -92,18 +93,8 @@ public class Tron {
         return mWalletManager.storeWallet();
     }
 
-    public int importWallet(@NonNull String password, @NonNull String privateKey) {
-        if (!mWalletManager.passwordValid(password)) {
-            return ERROR_INVALID_PASSWORD;
-        }
-
-        mWalletManager = new WalletManager(privateKey, mContext);
-
-        if (mWalletManager.getEcKey() == null) {
-            return ERROR;
-        }
-
-        return mWalletManager.store(password);
+    public int importWallet(@NonNull String nickname, @NonNull String privateKey) {
+        return mWalletManager.importWallet(generateDefaultWalletName(nickname), privateKey);
     }
 
     public int login(String password) {

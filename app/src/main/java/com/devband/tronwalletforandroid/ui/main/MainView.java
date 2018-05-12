@@ -16,4 +16,10 @@ public interface MainView extends IView {
     void showInvalidPasswordMsg();
 
     void successCreateWallet();
+
+    void successImportWallet();
+
+    void failCreateWallet();
+
+    void duplicatedWallet();
 }

@@ -31,4 +31,7 @@ public interface WalletDao {
 
     @Query("SELECT COUNT(*) from wallet")
     int countWallets();
+
+    @Query("SELECT * from wallet where wallet = :walletKey LIMIT 1")
+    WalletModel loadByWalletKey(String walletKey);
 }
