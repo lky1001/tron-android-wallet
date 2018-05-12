@@ -6,7 +6,7 @@
     <string name="title_backup_wallet">Backup Wallet</string>
     <string name="title_login">Login</string>
     <string name="title_my_address">My Address</string>
-    <string name="title_send_coin">Send Coin</string>
+    <string name="title_send_coin">Send</string>
     <string name="title_import_wallet">Import Wallet</string>
     <string name="title_more">More</string>
     <string name="navigation_drawer_open">open</string>
@@ -14,7 +14,7 @@
     <string name="navigation_header_title">Tron Wallet</string>
     <string name="navigation_menu_create_account">Create Account</string>
     <string name="navigation_menu_login">Login</string>
-    <string name="navigation_menu_send_tron">Send Tron</string>
+    <string name="navigation_menu_send">Send</string>
     <string name="navigation_menu_import_wallet">Import Wallet</string>
     <string name="navigation_menu_export_private_key">Export Private Key</string>
     <string name="navigation_menu_tron_pay">Tron Pay</string>
