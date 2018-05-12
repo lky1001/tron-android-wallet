@@ -284,6 +284,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 break;
             case R.id.action_import_wallet:
                 break;
+            case R.id.action_refresh_wallet:
+                checkLoginState();
+                break;
         }
 
         return super.onOptionsItemSelected(item);

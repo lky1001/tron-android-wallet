@@ -96,4 +96,5 @@
     <string name="send_coin_address_text">Address : </string>
     <string name="send_coin_token_text">Token : </string>
     <string name="send_coin_amount_text">Amount : </string>
+    <string name="menu_refresh_wallet">refresh_wallet</string>
 </resources>
