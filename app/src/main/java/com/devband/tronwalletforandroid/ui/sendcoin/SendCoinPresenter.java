@@ -3,7 +3,6 @@ package com.devband.tronwalletforandroid.ui.sendcoin;
 import android.util.Log;
 
 import com.devband.tronwalletforandroid.tron.Tron;
-import com.devband.tronwalletforandroid.ui.main.to.Asset;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import org.tron.protos.Protocol;
@@ -87,6 +86,7 @@ public class SendCoinPresenter extends BasePresenter<SendCoinView> {
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
+                mView.invalidAddress();
             }
         });
     }

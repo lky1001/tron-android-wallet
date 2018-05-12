@@ -11,4 +11,6 @@ public interface SendCoinView extends IView {
     void invalidPassword();
 
     void displayAccountInfo(Protocol.Account account);
+
+    void invalidAddress();
 }

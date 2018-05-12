@@ -1,5 +1,7 @@
 package com.devband.tronwalletforandroid.ui.main.to;
 
+import java.text.DecimalFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +15,14 @@ import lombok.Setter;
 @Builder
 public class Asset {
 
+    private static DecimalFormat df = new DecimalFormat("#,##0.00000000");
+
     private String name;
 
     private double balance;
+
+    @Override
+    public String toString() {
+        return name + " (" + df.format(balance) + ")";
+    }
 }

@@ -356,7 +356,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         }
 
         Log.i(MainActivity.class.getSimpleName(), "address : " + account.getAddress().toStringUtf8());
-        Log.i(MainActivity.class.getSimpleName(), "balance : " + account.getBalance() + "trx");
+        Log.i(MainActivity.class.getSimpleName(), "balance : " + account.getBalance() + Constants.TRON_SYMBOL);
         double balance = ((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT;
         DecimalFormat df = new DecimalFormat("#,##0.00000000");
 
