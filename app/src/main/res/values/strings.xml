@@ -90,4 +90,10 @@
     <string name="about_tron">About Tron</string>
     <string name="title_open_source">Open Source</string>
     <string name="title_donations">Donations</string>
+    <string name="confirm_text">Confirm</string>
+    <string name="send_coin_title">Send</string>
+    <string name="send_coin_warning_msg">Only enter valid TRON wallet address. Incorrect addresses can lead to TRX loss.</string>
+    <string name="send_coin_address_text">Address : </string>
+    <string name="send_coin_token_text">Token : </string>
+    <string name="send_coin_amount_text">Amount : </string>
 </resources>
