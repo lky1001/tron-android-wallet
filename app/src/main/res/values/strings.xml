@@ -102,4 +102,7 @@
     <string name="title_export_private_key">Export Private Key</string>
     <string name="input_password_text">Password</string>
     <string name="connection_error_msg">Could not connect tron network. Pleast try again.</string>
+    <string name="title_witness_list">Witness List</string>
+    <string name="title_node_list">Node list</string>
+    <string name="title_account_list">Tron Account List</string>
 </resources>
