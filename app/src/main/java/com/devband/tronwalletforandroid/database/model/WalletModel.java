@@ -22,22 +22,11 @@ public class WalletModel {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private String name;
+    private String password;
 
-    private String wallet;
-
-    private boolean imported;
+    private boolean agree;
 
     private Date created;
 
     private Date updated;
-
-    @Override
-    public String toString() {
-        if (imported) {
-            return "[I] " + name;
-        }
-
-        return name;
-    }
 }

@@ -33,7 +33,7 @@ public class AddressPresenter extends BasePresenter<AddressView> {
     @Override
     public void onResume() {
         Single.fromCallable(() -> {
-            String address = Tron.getInstance(mContext).getAddress();
+            String address = Tron.getInstance(mContext).getLoginAddress();
 
             if (address == null || address.isEmpty()) {
                 return null;

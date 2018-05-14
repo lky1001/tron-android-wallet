@@ -2,7 +2,7 @@ package com.devband.tronwalletforandroid.ui.login;
 
 import android.support.annotation.Nullable;
 
-import com.devband.tronwalletforandroid.tron.AccountManager;
+import com.devband.tronwalletforandroid.common.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
@@ -40,12 +40,12 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
     public void loginWallet(@Nullable String password) {
         Single.fromCallable(() -> {
-            int result = AccountManager.getInstance(mContext).login(password);
+            int result = WalletAppManager.getInstance(mContext).login(password);
 
-            if (result == AccountManager.SUCCESS) {
+            if (result == WalletAppManager.SUCCESS) {
                 int res = Tron.getInstance(mContext).login(password);
                 if (res != Tron.SUCCESS) {
-                    return AccountManager.ERROR;
+                    return WalletAppManager.ERROR;
                 }
             }
 

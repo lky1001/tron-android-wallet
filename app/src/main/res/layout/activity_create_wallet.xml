@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/activity_create_account_background">
+    android:background="@color/activity_create_wallet_background">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -122,7 +122,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_create_account"
+        android:id="@+id/btn_create_wallet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -132,7 +132,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:enabled="false"
-        android:text="@string/create_account_text"
+        android:text="@string/create_wallet_text"
         android:background="@color/colorAccent"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"

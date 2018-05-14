@@ -7,18 +7,11 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.database.model.WalletModel;
-
-import java.util.List;
 
 @Dao
 public interface WalletDao {
-
-    @Query("SELECT * from wallet where id = :id LIMIT 1")
-    WalletModel loadWalletById(int id);
-
-    @Query("SELECT * from wallet")
-    List<WalletModel> loadAllWallets();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(WalletModel walletModel);
@@ -32,6 +25,6 @@ public interface WalletDao {
     @Query("SELECT COUNT(*) from wallet")
     int countWallets();
 
-    @Query("SELECT * from wallet where wallet = :walletKey LIMIT 1")
-    WalletModel loadByWalletKey(String walletKey);
+    @Query("SELECT * from wallet LIMIT 1")
+    WalletModel loadWallet();
 }

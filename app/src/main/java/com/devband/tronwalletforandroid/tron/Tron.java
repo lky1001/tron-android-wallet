@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.database.model.WalletModel;
+import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.exception.InvalidAddressException;
 import com.devband.tronwalletforandroid.tron.exception.InvalidPasswordException;
 
@@ -26,10 +26,10 @@ public class Tron {
     public static final int ERROR_INVALID_PASSWORD = -1;
     public static final int ERROR_PRIVATE_KEY = -2;
     public static final int ERROR_ACCESS_STORAGE = -3;
-    public static final int ERROR_WALLET_DOES_NOT_EXIST = -4;
+    public static final int ERROR_ACCOUNT_DOES_NOT_EXIST = -4;
     public static final int ERROR_NEED_LOGIN = -5;
     public static final int ERROR_LOGIN = -6;
-    public static final int ERROR_EXIST_WALLET = -7;
+    public static final int ERROR_EXIST_ACCOUNT = -7;
     public static final int ERROR = -9999;
 
     public static final int MIN_PASSWORD_LENGTH = 8;
@@ -43,7 +43,7 @@ public class Tron {
 
     private ITronManager mTronManager;
 
-    private WalletManager mWalletManager;
+    private AccountManager mAccountManager;
 
     public static synchronized Tron getInstance(@NonNull Context context) {
         if (instance == null) {
@@ -74,39 +74,35 @@ public class Tron {
             // exception
         }
 
-        mWalletManager = new WalletManager(WalletManager.WALLET_LOCAL_DB, mContext);
+        mAccountManager = new AccountManager(AccountManager.ACCOUNT_LOCAL_DB, mContext);
     }
 
-    public int registerWallet(@NonNull String nickname, @NonNull String password) {
-        if (!WalletManager.passwordValid(password)) {
+    public int registerAccount(@NonNull String nickname, @NonNull String password) {
+        if (!AccountManager.passwordValid(password)) {
             return ERROR_INVALID_PASSWORD;
         }
 
-        if (mWalletManager == null) {
-            mWalletManager = new WalletManager(true, mContext);
+        if (mAccountManager == null) {
+            mAccountManager = new AccountManager(true, mContext);
         }
 
-        return mWalletManager.genWallet(generateDefaultWalletName(nickname), password);
+        return mAccountManager.genAccount(generateDefaultAccountName(nickname), password);
     }
 
-    public int storeWallet() {
-        return mWalletManager.storeWallet();
-    }
-
-    public int importWallet(@NonNull String nickname, @NonNull String privateKey) {
-        return mWalletManager.importWallet(generateDefaultWalletName(nickname), privateKey);
+    public int importAccount(@NonNull String nickname, @NonNull String privateKey) {
+        return mAccountManager.importAccount(generateDefaultAccountName(nickname), privateKey);
     }
 
     public int login(String password) {
-        if (!WalletManager.passwordValid(password)) {
+        if (!AccountManager.passwordValid(password)) {
             return ERROR_INVALID_PASSWORD;
         }
 
-        if (mWalletManager == null) {
-            mWalletManager = new WalletManager(WalletManager.WALLET_LOCAL_DB, mContext);
+        if (mAccountManager == null) {
+            mAccountManager = new AccountManager(AccountManager.ACCOUNT_LOCAL_DB, mContext);
         }
 
-        if (!mWalletManager.login(password)) {
+        if (!mAccountManager.login(password)) {
             return ERROR_INVALID_PASSWORD;
         }
 
@@ -114,33 +110,33 @@ public class Tron {
     }
 
     public boolean isLogin() {
-        if (mWalletManager == null) {
+        if (mAccountManager == null) {
             return false;
         }
 
-        return mWalletManager.isLoginState();
+        return mAccountManager.isLoginState();
     }
 
     @Nullable
-    public String getAddress() {
-        if (!checkWalletLogin()) {
+    public String getLoginAddress() {
+        if (!checkAccountLogin()) {
             return null;
         }
 
-        return mWalletManager.getAddress();
+        return mAccountManager.getLoginAddress();
     }
 
     @Nullable
-    public String getPrivateKey() {
-        if (!checkWalletLogin()) {
+    public String getLoginPrivateKey() {
+        if (!checkAccountLogin()) {
             return null;
         }
 
-        return mWalletManager.getPrivateKey();
+        return mAccountManager.getLoginPrivateKey();
     }
 
-    private boolean checkWalletLogin() {
-        if (mWalletManager == null || !mWalletManager.isLoginState()) {
+    private boolean checkAccountLogin() {
+        if (mAccountManager == null || !mAccountManager.isLoginState()) {
             return false;
         }
 
@@ -149,7 +145,7 @@ public class Tron {
 
     public Single<Protocol.Account> queryAccount(@NonNull String address) {
         if (!TextUtils.isEmpty(address)) {
-            byte[] addressBytes = WalletManager.decodeFromBase58Check(address);
+            byte[] addressBytes = AccountManager.decodeFromBase58Check(address);
             if (addressBytes == null) {
                 throw new IllegalArgumentException("Invalid address.");
             }
@@ -187,17 +183,17 @@ public class Tron {
 
     public Single<Boolean> sendCoin(@NonNull String password, @NonNull String toAddress, long amount) {
         return Single.fromCallable(() -> {
-            byte[] toAddressBytes = WalletManager.decodeFromBase58Check(toAddress);
+            byte[] toAddressBytes = AccountManager.decodeFromBase58Check(toAddress);
 
             if (toAddressBytes == null) {
                 throw new InvalidAddressException();
             }
 
-            if (!mWalletManager.checkPassWord(password)) {
+            if (!mAccountManager.checkPassWord(password)) {
                 throw new InvalidPasswordException();
             }
 
-            Contract.TransferContract contract = mWalletManager.createTransferContract(toAddressBytes, amount);
+            Contract.TransferContract contract = mAccountManager.createTransferContract(toAddressBytes, amount);
 
             return mTronManager.createTransaction(contract);
         })
@@ -209,24 +205,24 @@ public class Tron {
             }
 
             // sign transaction
-            transaction = mWalletManager.signTransaction(transaction);
+            transaction = mAccountManager.signTransaction(transaction);
             return mTronManager.broadcastTransaction(transaction);
         });
     }
 
     public Single<Boolean> transferAsset(String password, String toAddress, String assetName, long amount) {
         return Single.fromCallable(() -> {
-            byte[] toAddressBytes = WalletManager.decodeFromBase58Check(toAddress);
+            byte[] toAddressBytes = AccountManager.decodeFromBase58Check(toAddress);
 
             if (toAddressBytes == null) {
                 throw new InvalidAddressException();
             }
 
-            if (!mWalletManager.checkPassWord(password)) {
+            if (!mAccountManager.checkPassWord(password)) {
                 throw new InvalidPasswordException();
             }
 
-            Contract.TransferAssetContract contract = mWalletManager.createTransferAssetTransaction(toAddressBytes, assetName.getBytes(), amount);
+            Contract.TransferAssetContract contract = mAccountManager.createTransferAssetTransaction(toAddressBytes, assetName.getBytes(), amount);
 
             return mTronManager.createTransferAssetTransaction(contract);
         })
@@ -238,7 +234,7 @@ public class Tron {
             }
 
             // sign transaction
-            transaction = mWalletManager.signTransaction(transaction);
+            transaction = mAccountManager.signTransaction(transaction);
             return mTronManager.broadcastTransaction(transaction);
         });
     }
@@ -252,50 +248,50 @@ public class Tron {
     }
 
     public boolean validPassword(String password) {
-        if (mWalletManager == null) {
+        if (mAccountManager == null) {
             return false;
         }
 
-        if (!WalletManager.passwordValid(password)) {
+        if (!AccountManager.passwordValid(password)) {
             return false;
         }
 
-        return mWalletManager.checkPassWord(password);
+        return mAccountManager.checkPassWord(password);
     }
 
     public void logout() {
-        mWalletManager.logout();
-        mWalletManager = null;
+        mAccountManager.logout();
+        mAccountManager = null;
     }
 
-    public boolean hasWallet() {
-        return mWalletManager.getWalletCount() > 0;
+    public boolean hasAccount() {
+        return mAccountManager.getAccountCount() > 0;
     }
 
     @Nullable
-    public WalletModel getLoginWallet() {
-        return mWalletManager.getLoginWallet();
+    public AccountModel getLoginAccount() {
+        return mAccountManager.getLoginAccount();
     }
 
-    public boolean renameWallet(@NonNull String walletName) {
-        mWalletManager.renameLoginWallet(walletName);
+    public boolean changeLoginAccountName(@NonNull String accountName) {
+        mAccountManager.changeLoginAccountName(accountName);
         return true;
     }
 
-    public void createWallet(@NonNull String nickname) {
-        mWalletManager.createWallet(generateDefaultWalletName(nickname));
+    public void createAccount(@NonNull String nickname) {
+        mAccountManager.createAccount(generateDefaultAccountName(nickname));
     }
 
-    public List<WalletModel> getWalletList() {
-        return mWalletManager.getWalletList();
+    public List<AccountModel> getWalletList() {
+        return mAccountManager.getAccountList();
     }
 
-    public void changeLoginWallet(@NonNull WalletModel walletModel) {
-        mWalletManager.changeLoginWallet(walletModel);
+    public void changeLoginAccount(@NonNull AccountModel accountModel) {
+        mAccountManager.changeLoginAccount(accountModel);
     }
 
-    private String generateDefaultWalletName(String prefix) {
-        int cnt = mWalletManager.getWalletCount();
+    private String generateDefaultAccountName(String prefix) {
+        int cnt = mAccountManager.getAccountCount();
         return prefix + (++cnt);
     }
 }

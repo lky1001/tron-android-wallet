@@ -31,7 +31,7 @@ public class SendCoinPresenter extends BasePresenter<SendCoinView> {
 
     @Override
     public void onResume() {
-        Tron.getInstance(mContext).queryAccount(Tron.getInstance(mContext).getAddress())
+        Tron.getInstance(mContext).queryAccount(Tron.getInstance(mContext).getLoginAddress())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Protocol.Account>() {

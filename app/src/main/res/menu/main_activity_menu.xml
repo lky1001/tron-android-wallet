@@ -11,21 +11,21 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_create_wallet"
+        android:id="@+id/action_create_account"
         android:orderInCategory="100"
-        android:title="@string/menu_create_wallet"
+        android:title="@string/menu_create_account"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_import_wallet"
+        android:id="@+id/action_import_account"
         android:orderInCategory="100"
-        android:title="@string/menu_import_wallet"
+        android:title="@string/menu_import_account"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_refresh_wallet"
+        android:id="@+id/action_refresh_account"
         android:orderInCategory="100"
-        android:title="@string/menu_refresh_wallet"
+        android:title="@string/menu_refresh_account"
         android:icon="@drawable/ic_refresh"
         app:showAsAction="always" />
 </menu>

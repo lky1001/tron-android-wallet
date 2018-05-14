@@ -1,13 +1,13 @@
-package com.devband.tronwalletforandroid.ui.createaccount;
+package com.devband.tronwalletforandroid.ui.createwallet;
 
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.tron.AccountManager;
+import com.devband.tronwalletforandroid.common.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
-public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
+public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
 
-    public CreateAccountPresenter(CreateAccountView view) {
+    public CreateWalletPresenter(CreateWalletView view) {
         super(view);
     }
 
@@ -30,11 +30,11 @@ public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
 
     }
 
-    public void createAccount(String password) {
-        int result = AccountManager.getInstance(mContext).createAccount(password);
+    public void createWallet(String password) {
+        int result = WalletAppManager.getInstance(mContext).createWallet(password);
 
-        if (result == AccountManager.SUCCESS) {
-            result = Tron.getInstance(mContext).registerWallet(Constants.PREFIX_WALLET_NAME, password);
+        if (result == WalletAppManager.SUCCESS) {
+            result = Tron.getInstance(mContext).registerAccount(Constants.PREFIX_ACCOUNT_NAME, password);
             if (result != Tron.SUCCESS) {
                 mView.registerWalletError();
                 return;
@@ -46,8 +46,8 @@ public class CreateAccountPresenter extends BasePresenter<CreateAccountView> {
                 return;
             }
 
-            mView.createdAccount();
-        } else if (result == AccountManager.ERROR) {
+            mView.createdWallet();
+        } else if (result == WalletAppManager.ERROR) {
             mView.passwordError();
         }
     }

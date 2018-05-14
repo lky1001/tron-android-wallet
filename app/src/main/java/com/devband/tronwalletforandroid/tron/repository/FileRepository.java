@@ -3,42 +3,42 @@ package com.devband.tronwalletforandroid.tron.repository;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.devband.tronwalletforandroid.database.model.WalletModel;
+import com.devband.tronwalletforandroid.database.model.AccountModel;
 
 import java.util.List;
 
-public class FileRepository implements WalletRepository {
+public class FileRepository implements AccountRepository {
 
     @Override
-    public boolean storeWallet(@NonNull WalletModel walletModel) {
+    public boolean storeAccount(@NonNull AccountModel accountModel) {
         return false;
     }
 
     @Override
-    public boolean updateWallet(@NonNull WalletModel walletModel) {
+    public boolean updateAccount(@NonNull AccountModel accountModel) {
         return false;
     }
 
     @Nullable
     @Override
-    public WalletModel loadWallet(int index) {
+    public AccountModel loadAccount(int index) {
         return null;
     }
 
     @Nullable
     @Override
-    public List<WalletModel> loadAllWallets() {
+    public List<AccountModel> loadAllAccounts() {
         return null;
     }
 
     @Override
-    public int countWallets() {
+    public int countAccount() {
         return 0;
     }
 
     @Nullable
     @Override
-    public WalletModel loadByWalletKey(String walletKey) {
+    public AccountModel loadByAccountKey(String accountKey) {
         return null;
     }
 }

@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.backupwallet;
+package com.devband.tronwalletforandroid.ui.backupaccount;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,18 +6,22 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.WalletAppManager;
+import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
 import com.devband.tronwalletforandroid.ui.main.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class BackupWalletActivity extends CommonActivity implements BackupWalletView {
+public class BackupAccountActivity extends CommonActivity implements BackupAccountView {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -28,6 +32,9 @@ public class BackupWalletActivity extends CommonActivity implements BackupWallet
     @BindView(R.id.input_private_key)
     EditText mInputPrivateKey;
 
+    @BindView(R.id.agree_lost_private_key_recover)
+    CheckBox mAgreeCheckBox;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,10 +44,10 @@ public class BackupWalletActivity extends CommonActivity implements BackupWallet
         setSupportActionBar(mToolbar);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(R.string.title_backup_wallet);
+            getSupportActionBar().setTitle(R.string.title_backup_account);
         }
 
-        mPresenter = new BackupWalletPresenter(this);
+        mPresenter = new BackupAccountPresenter(this);
         mPresenter.onCreate();
     }
 
@@ -61,12 +68,19 @@ public class BackupWalletActivity extends CommonActivity implements BackupWallet
 
     @OnClick(R.id.btn_next)
     public void onNextClick() {
-        new MaterialDialog.Builder(BackupWalletActivity.this)
+        if (!mAgreeCheckBox.isChecked()) {
+            Toast.makeText(BackupAccountActivity.this, getString(R.string.need_all_agree),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new MaterialDialog.Builder(BackupAccountActivity.this)
                 .title(R.string.backup_title)
                 .content(R.string.backup_msg)
                 .positiveText(R.string.next_text)
                 .negativeText(R.string.cancen_text)
                 .onPositive((dialog, which) -> {
+                    WalletAppManager.getInstance(BackupAccountActivity.this).agreeTerms(true);
                     dialog.dismiss();
                     startActivity(MainActivity.class);
                     finishActivity();
@@ -74,9 +88,9 @@ public class BackupWalletActivity extends CommonActivity implements BackupWallet
     }
 
     @Override
-    public void displayWalletInfo(@NonNull String address, @NonNull String privateKey) {
-        Log.d(BackupWalletActivity.class.getSimpleName(), "address : " + address);
-        Log.d(BackupWalletActivity.class.getSimpleName(), "privateKey : " + privateKey);
+    public void displayAccountInfo(@NonNull String address, @NonNull String privateKey) {
+        Log.d(BackupAccountActivity.class.getSimpleName(), "address : " + address);
+        Log.d(BackupAccountActivity.class.getSimpleName(), "privateKey : " + privateKey);
         mInputAddress.setText(address);
         mInputPrivateKey.setText(privateKey);
     }

@@ -5,61 +5,61 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.devband.tronwalletforandroid.database.AppDatabase;
-import com.devband.tronwalletforandroid.database.dao.WalletDao;
-import com.devband.tronwalletforandroid.database.model.WalletModel;
+import com.devband.tronwalletforandroid.database.dao.AccountDao;
+import com.devband.tronwalletforandroid.database.model.AccountModel;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class LocalDbRepository implements WalletRepository {
+public class LocalDbRepository implements AccountRepository {
 
-    private WalletDao mWalletDao;
+    private AccountDao mAccountDao;
 
     public LocalDbRepository(@NonNull Context context) {
-        mWalletDao = AppDatabase.getDatabase(context).walletDao();
+        mAccountDao = AppDatabase.getDatabase(context).accountDao();
     }
 
     @Override
-    public boolean storeWallet(@NonNull WalletModel walletModel) {
+    public boolean storeAccount(@NonNull AccountModel accountModel) {
         Date now = Calendar.getInstance().getTime();
-        walletModel.setCreated(now);
+        accountModel.setCreated(now);
 
-        mWalletDao.insert(walletModel);
+        mAccountDao.insert(accountModel);
 
         return true;
     }
 
     @Override
-    public boolean updateWallet(@NonNull WalletModel walletModel) {
+    public boolean updateAccount(@NonNull AccountModel accountModel) {
         Date now = Calendar.getInstance().getTime();
-        walletModel.setUpdated(now);
+        accountModel.setUpdated(now);
 
-        mWalletDao.update(walletModel);
+        mAccountDao.update(accountModel);
 
         return true;
     }
 
     @Nullable
     @Override
-    public WalletModel loadWallet(int index) {
-        return mWalletDao.loadWalletById(index);
+    public AccountModel loadAccount(int index) {
+        return mAccountDao.loadAccountById(index);
     }
 
     @Nullable
     @Override
-    public List<WalletModel> loadAllWallets() {
-        return mWalletDao.loadAllWallets();
+    public List<AccountModel> loadAllAccounts() {
+        return mAccountDao.loadAllAccounts();
     }
 
     @Override
-    public int countWallets() {
-        return mWalletDao.countWallets();
+    public int countAccount() {
+        return mAccountDao.countAccounts();
     }
 
     @Nullable
     @Override
-    public WalletModel loadByWalletKey(String walletKey) {
-        return mWalletDao.loadByWalletKey(walletKey);
+    public AccountModel loadByAccountKey(String accountKey) {
+        return mAccountDao.loadByAccountKey(accountKey);
     }
 }

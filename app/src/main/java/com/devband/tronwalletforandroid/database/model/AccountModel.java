@@ -22,9 +22,22 @@ public class AccountModel {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private String password;
+    private String name;
+
+    private String account;
+
+    private boolean imported;
 
     private Date created;
 
     private Date updated;
+
+    @Override
+    public String toString() {
+        if (imported) {
+            return "[I] " + name;
+        }
+
+        return name;
+    }
 }

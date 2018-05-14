@@ -13,16 +13,16 @@ import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.database.model.WalletModel;
 
 @Database(entities = {
-        AccountModel.class,
-        WalletModel.class
+        WalletModel.class,
+        AccountModel.class
 }, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "tron_wallet_db";
     private static volatile AppDatabase mInstance;
 
-    public abstract WalletDao walletDao();
     public abstract AccountDao accountDao();
+    public abstract WalletDao walletDao();
 
     public static AppDatabase getDatabase(@NonNull Context context) {
         if (mInstance == null) {

@@ -7,8 +7,8 @@ import com.devband.tronlib.Hosts;
 import com.devband.tronlib.ServiceBuilder;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.services.CoinMarketCapService;
-import com.devband.tronwalletforandroid.database.model.WalletModel;
-import com.devband.tronwalletforandroid.tron.AccountManager;
+import com.devband.tronwalletforandroid.common.WalletAppManager;
+import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.main.adapter.AdapterDataModel;
 import com.devband.tronwalletforandroid.ui.main.to.Asset;
@@ -63,7 +63,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void getMyAccountInfo() {
-        Tron.getInstance(mContext).queryAccount(Tron.getInstance(mContext).getAddress())
+        Tron.getInstance(mContext).queryAccount(Tron.getInstance(mContext).getLoginAddress())
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new SingleObserver<Protocol.Account>() {
@@ -127,44 +127,44 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     @Nullable
-    public WalletModel getLoginWallet() {
-        return Tron.getInstance(mContext).getLoginWallet();
+    public AccountModel getLoginWallet() {
+        return Tron.getInstance(mContext).getLoginAccount();
     }
 
     public boolean renameWallet(@NonNull String walletName) {
-        return Tron.getInstance(mContext).renameWallet(walletName);
+        return Tron.getInstance(mContext).changeLoginAccountName(walletName);
     }
 
     public void createWallet(@NonNull String nickname) {
-        Tron.getInstance(mContext).createWallet(nickname);
-        mView.successCreateWallet();
+        Tron.getInstance(mContext).createAccount(nickname);
+        mView.successCreateAccount();
     }
 
-    public List<WalletModel> getWalletList() {
+    public List<AccountModel> getWalletList() {
         return Tron.getInstance(mContext).getWalletList();
     }
 
-    public void changeLoginWallet(@NonNull WalletModel walletModel) {
-        Tron.getInstance(mContext).changeLoginWallet(walletModel);
+    public void changeLoginAccount(@NonNull AccountModel accountModel) {
+        Tron.getInstance(mContext).changeLoginAccount(accountModel);
     }
 
-    public void importWallet(@NonNull String nickname, @NonNull String privateKey) {
-        int result = Tron.getInstance(mContext).importWallet(nickname, privateKey);
+    public void importAccount(@NonNull String nickname, @NonNull String privateKey) {
+        int result = Tron.getInstance(mContext).importAccount(nickname, privateKey);
 
         if (result == Tron.SUCCESS) {
-            mView.successImportWallet();
-        } else if (result == Tron.ERROR_EXIST_WALLET) {
-            mView.duplicatedWallet();
+            mView.successImportAccount();
+        } else if (result == Tron.ERROR_EXIST_ACCOUNT) {
+            mView.duplicatedAccount();
         } else if (result == Tron.ERROR_PRIVATE_KEY) {
-            mView.failCreateWallet();
+            mView.failCreateAccount();
         }
     }
 
     public boolean matchPassword(@NonNull String password) {
-        return AccountManager.getInstance(mContext).login(password) == AccountManager.SUCCESS;
+        return WalletAppManager.getInstance(mContext).login(password) == WalletAppManager.SUCCESS;
     }
 
     public String getLoginPrivateKey() {
-        return Tron.getInstance(mContext).getPrivateKey();
+        return Tron.getInstance(mContext).getLoginPrivateKey();
     }
 }

@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.devband.tronwalletforandroid.BuildConfig;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.ui.about.AboutActivity;
@@ -19,6 +21,9 @@ public class MoreActivity extends CommonActivity implements MoreView {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
+    @BindView(R.id.tron_app_info_text)
+    TextView mTronAppInfoText;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +37,8 @@ public class MoreActivity extends CommonActivity implements MoreView {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.title_more);
         }
+
+        mTronAppInfoText.setText("Tron Android Wallet\nApp Version : v" + BuildConfig.VERSION_NAME);
 
         mPresenter = new MorePresenter(this);
         mPresenter.onCreate();

@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
-import com.devband.tronwalletforandroid.tron.AccountManager;
+import com.devband.tronwalletforandroid.common.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.main.MainActivity;
 
@@ -58,7 +58,7 @@ public class LoginActivity extends CommonActivity implements LoginView {
     public void loginResult(int result) {
         hideDialog();
 
-        if (result == AccountManager.ERROR) {
+        if (result == WalletAppManager.ERROR) {
             Toast.makeText(LoginActivity.this, getString(R.string.invalid_password),
                     Toast.LENGTH_SHORT).show();
         } else if (result == Tron.SUCCESS) {

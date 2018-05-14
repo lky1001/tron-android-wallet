@@ -27,11 +27,11 @@
             android:theme="@style/MainTheme" />
 
         <activity
-            android:name=".ui.createaccount.CreateAccountActivity"
+            android:name=".ui.createwallet.CreateWalletActivity"
             android:theme="@style/WalletTheme" />
 
         <activity
-            android:name=".ui.backupwallet.BackupWalletActivity"
+            android:name=".ui.backupaccount.BackupAccountActivity"
             android:theme="@style/WalletTheme" />
 
         <activity

@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -84,7 +83,7 @@ public class AddressActivity extends CommonActivity implements AddressView {
     @Override
     public void addressResult(@Nullable AddressPresenter.AddressInfo addressInfo) {
         if (addressInfo == null) {
-            Toast.makeText(AddressActivity.this, getString(R.string.wallet_does_not_exist),
+            Toast.makeText(AddressActivity.this, getString(R.string.account_does_not_exist),
                     Toast.LENGTH_SHORT).show();
             finishActivity();
         } else {
@@ -108,7 +107,7 @@ public class AddressActivity extends CommonActivity implements AddressView {
     }
 
     private void shareMyAddress() {
-        String address = Tron.getInstance(AddressActivity.this).getAddress();
+        String address = Tron.getInstance(AddressActivity.this).getLoginAddress();
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, address);

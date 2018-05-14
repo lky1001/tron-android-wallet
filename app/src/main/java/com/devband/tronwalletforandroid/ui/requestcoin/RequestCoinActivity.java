@@ -84,7 +84,7 @@ public class RequestCoinActivity extends CommonActivity {
             double cnt = Double.parseDouble(amount);
 
             PayInfo payInfo = new PayInfo();
-            payInfo.address = Tron.getInstance(RequestCoinActivity.this).getAddress();
+            payInfo.address = Tron.getInstance(RequestCoinActivity.this).getLoginAddress();
             payInfo.amount = cnt;
 
             ObjectMapper objectMapper = new ObjectMapper();
