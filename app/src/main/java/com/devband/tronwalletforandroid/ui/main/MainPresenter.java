@@ -92,6 +92,8 @@ public class MainPresenter extends BasePresenter<MainView> {
                 if (e instanceof ConnectException) {
                     // internet error
                 }
+
+                mView.connectionError();
             }
         });
     }
@@ -127,21 +129,21 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     @Nullable
-    public AccountModel getLoginWallet() {
+    public AccountModel getLoginAccount() {
         return Tron.getInstance(mContext).getLoginAccount();
     }
 
-    public boolean renameWallet(@NonNull String walletName) {
-        return Tron.getInstance(mContext).changeLoginAccountName(walletName);
+    public boolean changeLoginAccountName(@NonNull String accountName) {
+        return Tron.getInstance(mContext).changeLoginAccountName(accountName);
     }
 
-    public void createWallet(@NonNull String nickname) {
+    public void createAccount(@NonNull String nickname) {
         Tron.getInstance(mContext).createAccount(nickname);
         mView.successCreateAccount();
     }
 
-    public List<AccountModel> getWalletList() {
-        return Tron.getInstance(mContext).getWalletList();
+    public List<AccountModel> getAccountList() {
+        return Tron.getInstance(mContext).getAccountList();
     }
 
     public void changeLoginAccount(@NonNull AccountModel accountModel) {

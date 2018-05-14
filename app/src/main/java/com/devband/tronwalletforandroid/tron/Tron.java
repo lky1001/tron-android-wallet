@@ -282,7 +282,7 @@ public class Tron {
         mAccountManager.createAccount(generateDefaultAccountName(nickname));
     }
 
-    public List<AccountModel> getWalletList() {
+    public List<AccountModel> getAccountList() {
         return mAccountManager.getAccountList();
     }
 

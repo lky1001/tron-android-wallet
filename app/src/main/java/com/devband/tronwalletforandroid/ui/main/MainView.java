@@ -22,4 +22,6 @@ public interface MainView extends IView {
     void failCreateAccount();
 
     void duplicatedAccount();
+
+    void connectionError();
 }

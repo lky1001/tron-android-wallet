@@ -51,7 +51,7 @@
                         android:orientation="horizontal"
                         android:gravity="center">
                         <TextView
-                            android:id="@+id/login_wallet_name_text"
+                            android:id="@+id/login_account_name_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@android:color/white"
@@ -59,7 +59,7 @@
                             tools:text="ACCOUNT1" />
 
                         <ImageView
-                            android:id="@+id/edit_wallet_name_image"
+                            android:id="@+id/edit_account_name_image"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
@@ -72,7 +72,7 @@
                         android:orientation="vertical"
                         android:gravity="center">
                         <TextView
-                            android:id="@+id/login_wallet_balance_text"
+                            android:id="@+id/login_account_balance_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="2dp"
@@ -81,14 +81,14 @@
                             android:textColor="@android:color/white"
                             tools:text="10000.000000 TRX" />
                         <LinearLayout
-                            android:id="@+id/login_wallet_price_layout"
+                            android:id="@+id/login_account_price_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
                             android:gravity="center"
                             android:orientation="horizontal">
                             <TextView
-                                android:id="@+id/login_wallet_price_text"
+                                android:id="@+id/login_account_price_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="14sp"

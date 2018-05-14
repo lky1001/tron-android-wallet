@@ -24,7 +24,7 @@
         app:srcCompat="@drawable/ic_tron_white" />
 
     <Spinner
-        android:id="@+id/wallet_spinner"
+        android:id="@+id/account_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"

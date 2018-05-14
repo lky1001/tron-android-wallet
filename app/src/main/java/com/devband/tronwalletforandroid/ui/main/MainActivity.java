@@ -76,20 +76,20 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
 
-    @BindView(R.id.login_wallet_name_text)
+    @BindView(R.id.login_account_name_text)
     TextView mMainTitleText;
 
-    @BindView(R.id.login_wallet_balance_text)
-    TextView mLoginWalletBalanceText;
+    @BindView(R.id.login_account_balance_text)
+    TextView mLoginAccountBalanceText;
 
-    @BindView(R.id.login_wallet_price_text)
-    TextView mLoginWalletPriceText;
+    @BindView(R.id.login_account_price_text)
+    TextView mLoginAccountPriceText;
 
     @BindView(R.id.price_help_image)
     ImageView mPriceHelpImage;
 
-    @BindView(R.id.edit_wallet_name_image)
-    ImageView mEditWalletNameImage;
+    @BindView(R.id.edit_account_name_image)
+    ImageView mEditAccountNameImage;
 
     @BindView(R.id.fab_menu)
     FloatingActionMenu mFloatingActionMenu;
@@ -104,11 +104,11 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     FloatingActionButton mFloatingActionMenuSendCoin;
 
-    Spinner mWalletSpinner;
+    Spinner mAccountSpinner;
 
     TextView mNavHeaderText;
 
-    String mLoginWalletName;
+    String mLoginAccountName;
 
     private Protocol.Account mLoginTronAccount;
 
@@ -179,33 +179,33 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    mToolbarLayout.setTitle(mLoginWalletName);
+                    mToolbarLayout.setTitle(mLoginAccountName);
                     mMainTitleText.setVisibility(View.GONE);
-                    mLoginWalletBalanceText.setVisibility(View.GONE);
-                    mLoginWalletPriceText.setVisibility(View.GONE);
+                    mLoginAccountBalanceText.setVisibility(View.GONE);
+                    mLoginAccountPriceText.setVisibility(View.GONE);
                     mPriceHelpImage.setVisibility(View.GONE);
-                    mEditWalletNameImage.setVisibility(View.GONE);
+                    mEditAccountNameImage.setVisibility(View.GONE);
                     isShow = true;
                 } else if(isShow) {
                     mToolbarLayout.setTitle("");
                     mMainTitleText.setVisibility(View.VISIBLE);
-                    mLoginWalletBalanceText.setVisibility(View.VISIBLE);
-                    mLoginWalletPriceText.setVisibility(View.VISIBLE);
+                    mLoginAccountBalanceText.setVisibility(View.VISIBLE);
+                    mLoginAccountPriceText.setVisibility(View.VISIBLE);
                     mPriceHelpImage.setVisibility(View.VISIBLE);
-                    mEditWalletNameImage.setVisibility(View.VISIBLE);
+                    mEditAccountNameImage.setVisibility(View.VISIBLE);
                     isShow = false;
                 }
             }
         });
 
-        initWalletList();
+        initAccountList();
     }
 
     private void setupDrawerLayout() {
         View header = LayoutInflater.from(this).inflate(R.layout.navigation_header, mSideMenu);
 
         mNavHeaderText = (TextView) header.findViewById(R.id.headerTitleText);
-        mWalletSpinner = header.findViewById(R.id.wallet_spinner);
+        mAccountSpinner = header.findViewById(R.id.account_spinner);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -226,15 +226,15 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         mSideMenu.inflateMenu(R.menu.navigation_logged_in_menu);
     }
 
-    private void initWalletList() {
-        List<AccountModel> walletModelList = ((MainPresenter) mPresenter).getWalletList();
+    private void initAccountList() {
+        List<AccountModel> accountModelList = ((MainPresenter) mPresenter).getAccountList();
 
         mAccountAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item,
-                walletModelList);
+                accountModelList);
 
         mAccountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mWalletSpinner.setAdapter(mAccountAdapter);
-        mWalletSpinner.setOnItemSelectedListener(mAccountItemSelectedListener);
+        mAccountSpinner.setAdapter(mAccountAdapter);
+        mAccountSpinner.setOnItemSelectedListener(mAccountItemSelectedListener);
     }
 
     @Override
@@ -248,14 +248,14 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             // get account info
             ((MainPresenter) mPresenter).getMyAccountInfo();
 
-            AccountModel loginWallet = ((MainPresenter) mPresenter).getLoginWallet();
+            AccountModel loginAccount = ((MainPresenter) mPresenter).getLoginAccount();
 
-            if (loginWallet == null) {
+            if (loginAccount == null) {
                 mNavHeaderText.setText(R.string.navigation_header_title);
             } else {
-                mLoginWalletName = loginWallet.getName();
-                mNavHeaderText.setText(mLoginWalletName);
-                mMainTitleText.setText(mLoginWalletName);
+                mLoginAccountName = loginAccount.getName();
+                mNavHeaderText.setText(mLoginAccountName);
+                mMainTitleText.setText(mLoginAccountName);
             }
         } else {
             finishActivity();
@@ -320,7 +320,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     private void createAccount() {
         showProgressDialog(null, getString(R.string.loading_msg));
-        ((MainPresenter) mPresenter).createWallet(Constants.PREFIX_ACCOUNT_NAME);
+        ((MainPresenter) mPresenter).createAccount(Constants.PREFIX_ACCOUNT_NAME);
     }
 
     private void importAccount() {
@@ -360,7 +360,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         double balance = ((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT;
         DecimalFormat df = new DecimalFormat("#,##0.00000000");
 
-        mLoginWalletBalanceText.setText(df.format(balance) + " " + getString(R.string.currency_text));
+        mLoginAccountBalanceText.setText(df.format(balance) + " " + getString(R.string.currency_text));
 
         ((MainPresenter) mPresenter).getTronMarketInfo();
     }
@@ -372,7 +372,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             double balance = ((double) mLoginTronAccount.getBalance()) / Constants.REAL_TRX_AMOUNT;
             DecimalFormat df = new DecimalFormat("#,##0.000");
 
-            mLoginWalletPriceText.setText(df.format(balance * Double.parseDouble(coinMarketCap.getPriceUsd()))
+            mLoginAccountPriceText.setText(df.format(balance * Double.parseDouble(coinMarketCap.getPriceUsd()))
                     + " " + getString(R.string.price_text));
 
             mCoinMarketCapPriceInfo = coinMarketCap;
@@ -391,8 +391,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     public void successCreateAccount() {
         hideDialog();
-        initWalletList();
-        mWalletSpinner.setSelection(mAccountAdapter.getCount() - 1);
+        initAccountList();
+        mAccountSpinner.setSelection(mAccountAdapter.getCount() - 1);
     }
 
     @Override
@@ -414,7 +414,13 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick({ R.id.login_wallet_price_layout })
+    @Override
+    public void connectionError() {
+        Toast.makeText(MainActivity.this, getString(R.string.connection_error_msg),
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick({ R.id.login_account_price_layout })
     public void onPriceHelpImageClick() {
         StringBuilder sb = new StringBuilder();
 
@@ -446,22 +452,22 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 .show();
     }
 
-    @OnClick(R.id.edit_wallet_name_image)
-    public void onEditWalletNameImageClick() {
+    @OnClick(R.id.edit_account_name_image)
+    public void onEditAccountNameImageClick() {
         new MaterialDialog.Builder(this)
                 .title(R.string.title_rename_account)
                 .titleColorRes(R.color.colorAccent)
                 .contentColorRes(R.color.colorAccent)
                 .backgroundColorRes(android.R.color.white)
                 .inputRangeRes(2, 20, android.R.color.white)
-                .input(getString(R.string.rename_account_hint), mLoginWalletName, new MaterialDialog.InputCallback() {
+                .input(getString(R.string.rename_account_hint), mLoginAccountName, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         dialog.dismiss();
-                        String walletName = input.toString();
+                        String accountName = input.toString();
 
-                        if (!TextUtils.isEmpty(walletName)) {
-                            if (((MainPresenter) mPresenter).renameWallet(walletName)) {
+                        if (!TextUtils.isEmpty(accountName)) {
+                            if (((MainPresenter) mPresenter).changeLoginAccountName(accountName)) {
                                 checkLoginState();
                             }
                         }
