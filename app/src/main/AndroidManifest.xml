@@ -60,7 +60,7 @@
 
         <activity
             android:name=".ui.witness.WitnessActivity"
-            android:theme="@style/WalletTheme" />
+            android:theme="@style/MainTheme" />
 
         <activity
             android:name=".ui.node.NodeActivity"

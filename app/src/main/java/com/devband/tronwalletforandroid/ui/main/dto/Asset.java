@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.main.to;
+package com.devband.tronwalletforandroid.ui.main.dto;
 
 import java.text.DecimalFormat;
 

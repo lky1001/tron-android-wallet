@@ -105,4 +105,11 @@
     <string name="title_witness_list">Witness List</string>
     <string name="title_node_list">Node list</string>
     <string name="title_account_list">Tron Account List</string>
+    <string name="vote_text">Vote</string>
+    <string name="latest_block_text">Latest Block</string>
+    <string name="produced_block_text">Produced Blocks</string>
+    <string name="missed_block_text">Missed Blocks</string>
+    <string name="votes_text">Votes :</string>
+    <string name="witnesses_count_text">Witnesses :</string>
+    <string name="highest_votes_text">Highest Votes :</string>
 </resources>

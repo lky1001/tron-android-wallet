@@ -11,7 +11,7 @@ import com.devband.tronwalletforandroid.common.WalletAppManager;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.main.adapter.AdapterDataModel;
-import com.devband.tronwalletforandroid.ui.main.to.Asset;
+import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import org.tron.protos.Protocol;

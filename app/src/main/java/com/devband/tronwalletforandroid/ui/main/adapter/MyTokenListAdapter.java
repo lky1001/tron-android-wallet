@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.ui.main.to.Asset;
+import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
