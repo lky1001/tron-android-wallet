@@ -81,23 +81,28 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
                     Toast.LENGTH_SHORT).show();
             return;
         }
+
+        showProgressDialog(null, getString(R.string.loading_msg));
         ((CreateWalletPresenter) mPresenter).createWallet(mInputPassword.getText().toString());
     }
 
     @Override
     public void createdWallet() {
+        hideDialog();
         startActivity(BackupAccountActivity.class);
         finishActivity();
     }
 
     @Override
     public void passwordError() {
+        hideDialog();
         Toast.makeText(CreateWalletActivity.this, getString(R.string.password_error),
                 Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void registerWalletError() {
+        hideDialog();
         Toast.makeText(CreateWalletActivity.this, getString(R.string.register_wallet_error),
                 Toast.LENGTH_SHORT).show();
     }

@@ -32,4 +32,9 @@ public class WitnessActivity extends CommonActivity implements WitnessView {
         mPresenter = new WitnessPresenter(this);
         mPresenter.onCreate();
     }
+
+    @Override
+    public void showLoadingDialog() {
+        showProgressDialog(null, getString(R.string.loading_msg));
+    }
 }
