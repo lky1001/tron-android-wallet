@@ -10,7 +10,10 @@ import com.devband.tronwalletforandroid.BuildConfig;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.ui.about.AboutActivity;
+import com.devband.tronwalletforandroid.ui.node.NodeActivity;
 import com.devband.tronwalletforandroid.ui.opensource.OpenSourceActivity;
+import com.devband.tronwalletforandroid.ui.tronaccount.TronAccountActivity;
+import com.devband.tronwalletforandroid.ui.witness.WitnessActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,17 +65,17 @@ public class MoreActivity extends CommonActivity implements MoreView {
 
     @OnClick(R.id.more_node_list_button)
     public void onNodeListClick() {
-
+        startActivity(NodeActivity.class);
     }
 
     @OnClick(R.id.more_witness_list_button)
     public void onWitnessListClick() {
-
+        startActivity(WitnessActivity.class);
     }
 
     @OnClick(R.id.more_account_list_button)
     public void onAccountListClick() {
-
+        startActivity(TronAccountActivity.class);
     }
 
     @OnClick(R.id.more_open_source_button)

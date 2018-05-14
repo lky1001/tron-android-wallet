@@ -80,10 +80,9 @@ public class BackupAccountActivity extends CommonActivity implements BackupAccou
                 .positiveText(R.string.next_text)
                 .negativeText(R.string.cancen_text)
                 .onPositive((dialog, which) -> {
-                    WalletAppManager.getInstance(BackupAccountActivity.this).agreeTerms(true);
                     dialog.dismiss();
-                    startActivity(MainActivity.class);
-                    finishActivity();
+                    showProgressDialog(null, getString(R.string.loading_msg));
+                    ((BackupAccountPresenter) mPresenter).agreeTerms(true);
                 }).show();
     }
 
@@ -93,5 +92,11 @@ public class BackupAccountActivity extends CommonActivity implements BackupAccou
         Log.d(BackupAccountActivity.class.getSimpleName(), "privateKey : " + privateKey);
         mInputAddress.setText(address);
         mInputPrivateKey.setText(privateKey);
+    }
+
+    @Override
+    public void startMainActivity() {
+        startActivity(MainActivity.class);
+        finishActivity();
     }
 }

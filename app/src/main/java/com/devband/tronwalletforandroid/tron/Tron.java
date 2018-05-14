@@ -44,6 +44,7 @@ public class Tron {
     private ITronManager mTronManager;
 
     private AccountManager mAccountManager;
+    private Object witnessList;
 
     public static synchronized Tron getInstance(@NonNull Context context) {
         if (instance == null) {
@@ -293,5 +294,17 @@ public class Tron {
     private String generateDefaultAccountName(String prefix) {
         int cnt = mAccountManager.getAccountCount();
         return prefix + (++cnt);
+    }
+
+    public Single<GrpcAPI.WitnessList> getWitnessList() {
+        return mTronManager.listWitnesses();
+    }
+
+    public Single<GrpcAPI.NodeList> getNodeList() {
+        return mTronManager.listNodes();
+    }
+
+    public Single<GrpcAPI.AccountList> getTronAccountList() {
+        return mTronManager.listAccounts();
     }
 }
