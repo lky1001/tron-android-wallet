@@ -3,46 +3,78 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:paddingTop="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:layout_marginBottom="15dp"
         android:orientation="horizontal">
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_weight="1">
             <TextView
+                android:id="@+id/witness_no_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:lines="1"
-                android:ellipsize="end"
-                tools:text="1. http://Earth.osdfsdfdsfsrg"/>
+                tools:text="1."/>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                tools:text="(99,803,000,222 TRX)"/>
+                android:layout_marginLeft="5dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/witness_url_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:autoLink="all"
+                    android:textColorLink="@color/colorPrimary"
+                    tools:text="http://Earth.osdfsdfdsfsrg"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/votes_text" />
+                    <TextView
+                        android:id="@+id/witness_votes_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        tools:text="99,803,000,222 TRX"/>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
 
         <Button
+            android:id="@+id/witness_vote_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:background="@color/colorAccent"
-            android:text="투표"/>
+            android:enabled="false"
+            android:text="@string/vote_text" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="15dp"
         android:orientation="horizontal">
         <LinearLayout
             android:layout_width="0dp"
@@ -53,9 +85,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="마지막 블록" />
+                android:text="@string/latest_block_text" />
 
             <TextView
+                android:id="@+id/latest_block_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="133,469" />
@@ -70,9 +103,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="생성된 블록" />
+                android:text="@string/produced_block_text" />
 
             <TextView
+                android:id="@+id/produced_block_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="6,522" />
@@ -87,12 +121,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="유실된 블록" />
+                android:text="@string/missed_block_text" />
 
             <TextView
+                android:id="@+id/missed_block_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="1,512" />
         </LinearLayout>
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_border_color" />
 </LinearLayout>

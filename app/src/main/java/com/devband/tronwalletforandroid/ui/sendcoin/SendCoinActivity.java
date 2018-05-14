@@ -18,7 +18,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.main.MainActivity;
-import com.devband.tronwalletforandroid.ui.main.to.Asset;
+import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 
 import org.tron.protos.Protocol;
