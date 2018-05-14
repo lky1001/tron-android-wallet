@@ -18,11 +18,13 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.main.MainActivity;
+import com.devband.tronwalletforandroid.ui.main.to.Asset;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 
 import org.tron.protos.Protocol;
 
-import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,9 +55,9 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
     @BindView(R.id.btn_qrcode_scan)
     public ImageButton mQrCodeScanBtn;
 
-    private ArrayAdapter<String> mTokenAdapter;
+    private ArrayAdapter<Asset> mTokenAdapter;
 
-    private double mAvailableAmount;
+    private Asset mSelectedAsset;
 
     private boolean mFromDonations;
 
@@ -140,7 +142,7 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
             return;
         }
 
-        if (amountDouble <= 0 || amountDouble > mAvailableAmount) {
+        if (amountDouble <= 0 || amountDouble > mSelectedAsset.getBalance()) {
             Toast.makeText(SendCoinActivity.this, getString(R.string.invalid_amount),
                     Toast.LENGTH_SHORT).show();
             return;
@@ -156,12 +158,10 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
                 .append(address)
                 .append("\n")
                 .append(getString(R.string.send_coin_token_text))
-                .append("TRX")
+                .append(mSelectedAsset.getName())
                 .append("\n")
                 .append(getString(R.string.send_coin_amount_text))
-                .append(amountText)
-                ;
-
+                .append(amountText);
 
         new MaterialDialog.Builder(SendCoinActivity.this)
                 .title(R.string.send_coin_title)
@@ -172,10 +172,16 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
                     dialog.dismiss();
                     String password = mInputPassword.getText().toString();
 
-                    long amount = (long) (finalAmountDouble * Constants.REAL_TRX_AMOUNT);
+                    if (Constants.TRON_SYMBOL.equals(mSelectedAsset.getName())) {
+                        long amount = (long) (finalAmountDouble * Constants.REAL_TRX_AMOUNT);
 
-                    showProgressDialog(null, getString(R.string.loading_msg));
-                    ((SendCoinPresenter) mPresenter).sendCoin(password, address, amount);
+                        showProgressDialog(null, getString(R.string.loading_msg));
+                        ((SendCoinPresenter) mPresenter).sendCoin(password, address, amount);
+                    } else {
+//                        showProgressDialog(null, getString(R.string.loading_msg));
+//                        ((SendCoinPresenter) mPresenter).transferAsset(password, address, mSelectedAsset.getName(), (long) finalAmountDouble);
+                        Toast.makeText(SendCoinActivity.this, "Comming soon.", Toast.LENGTH_SHORT).show();
+                    }
                 }).show();
     }
 
@@ -207,22 +213,36 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
     @Override
     public void displayAccountInfo(Protocol.Account account) {
-        DecimalFormat df = new DecimalFormat("#,##0.00000000");
+        List<Asset> assetModelList = new ArrayList<>();
 
-        mAvailableAmount = ((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT;
+        assetModelList.add(Asset.builder()
+                .name(Constants.TRON_SYMBOL)
+                .balance(((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT)
+                .build());
 
-        String tronAmount = "TRX (" + df.format(mAvailableAmount) + ")";
+        for (String key : account.getAssetMap().keySet()) {
+            assetModelList.add(Asset.builder()
+                    .name(key)
+                    .balance(account.getAssetMap().get(key))
+                    .build());
+        }
 
         mTokenAdapter = new ArrayAdapter<>(SendCoinActivity.this, android.R.layout.simple_spinner_item,
-                new String[] {
-                        tronAmount
-                });
+                assetModelList);
 
         mTokenAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mTokenSpinner.setAdapter(mTokenAdapter);
         mTokenSpinner.setOnItemSelectedListener(mTokenItemSelectedListener);
 
         hideDialog();
+    }
+
+    @Override
+    public void invalidAddress() {
+        hideDialog();
+
+        Toast.makeText(SendCoinActivity.this, getString(R.string.invalid_address),
+                Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.btn_qrcode_scan)
@@ -247,7 +267,7 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
         @Override
         public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int pos, long id) {
-
+            mSelectedAsset = mTokenAdapter.getItem(pos);
         }
 
         @Override

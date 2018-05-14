@@ -426,21 +426,33 @@ public class WalletManager {
     public Contract.TransferContract createTransferContract(@NonNull byte[] toAddress, long amount) {
         byte[] ownerAddress = mEcKey.getAddress();
 
-        Contract.TransferContract contract = createTransferContract(toAddress, ownerAddress, amount);
-
-        return contract;
-    }
-
-    private static Contract.TransferContract createTransferContract(byte[] to, byte[] owner,
-            long amount) {
         Contract.TransferContract.Builder builder = Contract.TransferContract.newBuilder();
-        ByteString bsTo = ByteString.copyFrom(to);
-        ByteString bsOwner = ByteString.copyFrom(owner);
+        ByteString bsTo = ByteString.copyFrom(toAddress);
+        ByteString bsOwner = ByteString.copyFrom(ownerAddress);
         builder.setToAddress(bsTo);
         builder.setOwnerAddress(bsOwner);
         builder.setAmount(amount);
 
-        return builder.build();
+        Contract.TransferContract contract = builder.build();;
+
+        return contract;
+    }
+
+    public Contract.TransferAssetContract createTransferAssetTransaction(@NonNull byte[] toAddress, @NonNull byte[] assetName, long amount) {
+        byte[] ownerAddress = mEcKey.getAddress();
+
+        Contract.TransferAssetContract.Builder builder = Contract.TransferAssetContract.newBuilder();
+        ByteString bsTo = ByteString.copyFrom(toAddress);
+        ByteString bsName = ByteString.copyFrom(assetName);
+        ByteString bsOwner = ByteString.copyFrom(ownerAddress);
+        builder.setToAddress(bsTo);
+        builder.setAssetName(bsName);
+        builder.setOwnerAddress(bsOwner);
+        builder.setAmount(amount);
+
+        Contract.TransferAssetContract contract = builder.build();
+
+        return contract;
     }
 
     public Protocol.Transaction signTransaction(Protocol.Transaction transaction) {

@@ -3,7 +3,6 @@ package com.devband.tronwalletforandroid.ui.sendcoin;
 import android.util.Log;
 
 import com.devband.tronwalletforandroid.tron.Tron;
-import com.devband.tronwalletforandroid.ui.main.to.Asset;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import org.tron.protos.Protocol;
@@ -87,7 +86,38 @@ public class SendCoinPresenter extends BasePresenter<SendCoinView> {
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
+                mView.invalidAddress();
             }
         });
+    }
+
+    public void transferAsset(String password, String toAddress, String assetName, long amount) {
+        if (!Tron.getInstance(mContext).isLogin() || !Tron.getInstance(mContext).validPassword(password)) {
+            mView.invalidPassword();
+            return;
+        }
+
+        Tron.getInstance(mContext).transferAsset(password, toAddress, assetName, amount)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Boolean>() {
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        Log.i(SendCoinPresenter.class.getSimpleName(), "send result : " + result);
+                        mView.sendCoinResult(result);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        mView.invalidAddress();
+                    }
+                });
     }
 }
