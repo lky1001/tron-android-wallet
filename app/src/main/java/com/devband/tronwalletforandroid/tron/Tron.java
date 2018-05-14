@@ -214,6 +214,35 @@ public class Tron {
         });
     }
 
+    public Single<Boolean> transferAsset(String password, String toAddress, String assetName, long amount) {
+        return Single.fromCallable(() -> {
+            byte[] toAddressBytes = WalletManager.decodeFromBase58Check(toAddress);
+
+            if (toAddressBytes == null) {
+                throw new InvalidAddressException();
+            }
+
+            if (!mWalletManager.checkPassWord(password)) {
+                throw new InvalidPasswordException();
+            }
+
+            Contract.TransferAssetContract contract = mWalletManager.createTransferAssetTransaction(toAddressBytes, assetName.getBytes(), amount);
+
+            return mTronManager.createTransferAssetTransaction(contract);
+        })
+        .flatMap(transactionSingle -> {
+            Protocol.Transaction transaction = transactionSingle.blockingGet();
+
+            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            // sign transaction
+            transaction = mWalletManager.signTransaction(transaction);
+            return mTronManager.broadcastTransaction(transaction);
+        });
+    }
+
     public void shutdown() {
         try {
             mTronManager.shutdown();

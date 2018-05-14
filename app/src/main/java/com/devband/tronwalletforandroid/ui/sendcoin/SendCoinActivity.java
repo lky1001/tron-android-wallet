@@ -178,7 +178,9 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
                         showProgressDialog(null, getString(R.string.loading_msg));
                         ((SendCoinPresenter) mPresenter).sendCoin(password, address, amount);
                     } else {
-                        Toast.makeText(SendCoinActivity.this, "tbd", Toast.LENGTH_SHORT).show();
+//                        showProgressDialog(null, getString(R.string.loading_msg));
+//                        ((SendCoinPresenter) mPresenter).transferAsset(password, address, mSelectedAsset.getName(), (long) finalAmountDouble);
+                        Toast.makeText(SendCoinActivity.this, "Comming soon.", Toast.LENGTH_SHORT).show();
                     }
                 }).show();
     }
