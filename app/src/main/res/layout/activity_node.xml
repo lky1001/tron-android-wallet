@@ -8,6 +8,7 @@
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="192dp"
+        app:layout_constraintBottom_toTopOf="@+id/nested_scroll_view"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -43,14 +44,21 @@
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_marginTop="192dp"
+        app:layout_constrainedHeight="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar_layout">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/listview"
+                android:id="@+id/tronnode_listview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone" />
