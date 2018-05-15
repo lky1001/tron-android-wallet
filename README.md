@@ -24,11 +24,11 @@ A Tron wallet for android.
 - Tron Price
 - Tron Balance
 - My Tokens
+- Node list
+- Witness list
 
 ## TODO list
 - Transaction history
-- Node list
-- Witness list
 - Vote
 - Buy Contract token
 - Tron Pay
