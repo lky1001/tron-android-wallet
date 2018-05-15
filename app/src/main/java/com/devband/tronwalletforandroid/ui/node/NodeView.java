@@ -4,7 +4,7 @@ import com.devband.tronwalletforandroid.ui.mvp.IView;
 
 public interface NodeView extends IView {
 
-    void displayNodeList();
+    void displayNodeList(int count);
     void errorNodeList();
 
 }

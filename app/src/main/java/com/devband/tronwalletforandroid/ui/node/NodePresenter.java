@@ -57,7 +57,7 @@ public class NodePresenter extends BasePresenter<NodeView> {
                     @Override
                     public void onSuccess(GrpcAPI.NodeList nodeList) {
                         adapterDataModel.setModelList(nodeList);
-                        mView.displayNodeList();
+                        mView.displayNodeList(nodeList.getNodesCount());
                     }
 
                     @Override
