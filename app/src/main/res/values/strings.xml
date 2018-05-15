@@ -101,10 +101,10 @@
     <string name="already_exist_account">Account is already exist.</string>
     <string name="title_export_private_key">Export Private Key</string>
     <string name="input_password_text">Password</string>
-    <string name="connection_error_msg">Could not connect tron network. Pleast try again.</string>
-    <string name="title_witness_list">Witness List</string>
+    <string name="connection_error_msg">Could not connect tron network. Please try again.</string>
+    <string name="title_witness_list">Witness Nodes</string>
     <string name="title_node_list">Node list</string>
-    <string name="title_account_list">Tron Account List</string>
+    <string name="title_tron_account_list">Tron Accounts</string>
     <string name="vote_text">Vote</string>
     <string name="latest_block_text">Latest Block</string>
     <string name="produced_block_text">Produced Blocks</string>
@@ -112,4 +112,7 @@
     <string name="votes_text">Votes :</string>
     <string name="witnesses_count_text">Witnesses :</string>
     <string name="highest_votes_text">Highest Votes :</string>
+    <string name="account_count_text">Account :</string>
+    <string name="highest_trx_text">Highest :</string>
+    <string name="balance_text">Balance</string>
 </resources>

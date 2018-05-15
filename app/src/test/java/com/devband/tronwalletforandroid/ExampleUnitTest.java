@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Environment;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
@@ -56,5 +59,10 @@ public class ExampleUnitTest {
                     System.out.println(invocation.getArgumentAt(1, String.class));
                     return true;
                 });
+    }
+
+    @Test
+    public void test() {
+        Assert.assertEquals(1, 1);
     }
 }

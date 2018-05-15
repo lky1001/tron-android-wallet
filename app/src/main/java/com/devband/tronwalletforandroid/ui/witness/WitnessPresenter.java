@@ -57,7 +57,7 @@ public class WitnessPresenter extends BasePresenter<WitnessView> {
         .map(witnessList -> {
             List<Witness> witnesses = new ArrayList<>();
 
-            int cnt = witnessList.getWitnessesList().size();
+            int cnt = witnessList.getWitnessesCount();
 
             long highestVotes = 0;
 
@@ -102,7 +102,7 @@ public class WitnessPresenter extends BasePresenter<WitnessView> {
 
             @Override
             public void onError(Throwable e) {
-
+                mView.showServerError();
             }
         });
     }
@@ -113,6 +113,5 @@ public class WitnessPresenter extends BasePresenter<WitnessView> {
         public int compare(Witness o1, Witness o2) {
             return o2.getVoteCount().compareTo(o1.getVoteCount());
         }
-
     }
 }

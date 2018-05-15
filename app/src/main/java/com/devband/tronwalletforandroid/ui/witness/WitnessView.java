@@ -7,4 +7,6 @@ public interface WitnessView extends IView {
     void showLoadingDialog();
 
     void displayWitnessInfo(int witnessCount, long highestVotes);
+
+    void showServerError();
 }

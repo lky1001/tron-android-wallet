@@ -37,6 +37,9 @@ public class WitnessActivity extends CommonActivity implements WitnessView {
     @BindView(R.id.listview)
     RecyclerView mWitnessListView;
 
+    @BindView(R.id.witness_title_text)
+    TextView mWitnessTitleText;
+
     @BindView(R.id.witness_count_title_text)
     TextView mWitnessCountTitleText;
 
@@ -93,6 +96,7 @@ public class WitnessActivity extends CommonActivity implements WitnessView {
                 }
                 if (scrollRange + verticalOffset == 0) {
                     mToolbarLayout.setTitle(getString(R.string.title_witness_list));
+                    mWitnessTitleText.setVisibility(View.GONE);
                     mWitnessCountTitleText.setVisibility(View.GONE);
                     mHighestVotesTitleText.setVisibility(View.GONE);
                     mWitnessCountText.setVisibility(View.GONE);
@@ -100,6 +104,7 @@ public class WitnessActivity extends CommonActivity implements WitnessView {
                     isShow = true;
                 } else if(isShow) {
                     mToolbarLayout.setTitle("");
+                    mWitnessTitleText.setVisibility(View.VISIBLE);
                     mWitnessCountTitleText.setVisibility(View.VISIBLE);
                     mHighestVotesTitleText.setVisibility(View.VISIBLE);
                     mWitnessCountText.setVisibility(View.VISIBLE);
@@ -134,6 +139,17 @@ public class WitnessActivity extends CommonActivity implements WitnessView {
     public void displayWitnessInfo(int witnessCount, long highestVotes) {
         hideDialog();
         mWitnessCountText.setText(df.format(witnessCount));
-        mHighestVotesText.setText(df.format(highestVotes) + Constants.TRON_SYMBOL);
+        mHighestVotesText.setText(df.format(highestVotes) + " " + Constants.TRON_SYMBOL);
+
+        mWitnessCountTitleText.setVisibility(View.VISIBLE);
+        mHighestVotesTitleText.setVisibility(View.VISIBLE);
+        mWitnessCountText.setVisibility(View.VISIBLE);
+        mHighestVotesText.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showServerError() {
+        hideDialog();
+        showProgressDialog(null, getString(R.string.connection_error_msg));
     }
 }

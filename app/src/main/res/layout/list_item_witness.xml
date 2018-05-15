@@ -34,7 +34,7 @@
                     android:id="@+id/witness_url_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:lines="1"
+                    android:maxLines="1"
                     android:ellipsize="end"
                     android:autoLink="all"
                     android:textColorLink="@color/colorPrimary"
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:background="@color/colorAccent"
-            android:enabled="false"
+            android:visibility="gone"
             android:text="@string/vote_text" />
 
     </LinearLayout>
