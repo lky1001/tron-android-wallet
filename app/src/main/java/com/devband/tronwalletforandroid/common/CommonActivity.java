@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.ui.intro.IntroActivity;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
@@ -116,6 +117,9 @@ public class CommonActivity extends AppCompatActivity {
         }
 
         mMaterialDialog = builder
+                .titleColorRes(R.color.colorAccent)
+                .contentColorRes(R.color.colorAccent)
+                .backgroundColorRes(android.R.color.white)
                 .content(msg)
                 .progress(true,0)
                 .canceledOnTouchOutside(false)

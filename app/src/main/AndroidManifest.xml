@@ -68,7 +68,7 @@
 
         <activity
             android:name=".ui.tronaccount.TronAccountActivity"
-            android:theme="@style/WalletTheme" />
+            android:theme="@style/MainTheme" />
 
         <activity
             android:name=".ui.requestcoin.RequestCoinActivity"
