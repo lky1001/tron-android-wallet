@@ -33,6 +33,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
+import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 import com.devband.tronwalletforandroid.ui.main.adapter.AdapterView;
@@ -281,6 +282,10 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             case R.id.action_refresh_account:
                 checkLoginState();
                 break;
+            case R.id.action_transaction_history:
+                Toast.makeText(MainActivity.this, "Transaction history coming soon",
+                        Toast.LENGTH_SHORT).show();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -355,7 +360,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             mMyTokenListView.setVisibility(View.VISIBLE);
         }
 
-        Log.i(MainActivity.class.getSimpleName(), "address : " + account.getAddress().toStringUtf8());
+        Log.i(MainActivity.class.getSimpleName(), "address : " + AccountManager.encode58Check(account.getAddress().toByteArray()));
         Log.i(MainActivity.class.getSimpleName(), "balance : " + account.getBalance() + Constants.TRON_SYMBOL);
         double balance = ((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT;
         DecimalFormat df = new DecimalFormat("#,##0.00000000");
@@ -418,6 +423,11 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     public void connectionError() {
         Toast.makeText(MainActivity.this, getString(R.string.connection_error_msg),
                 Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.fab_refresh)
+    public void onHistoryClick() {
+        checkLoginState();
     }
 
     @OnClick({ R.id.login_account_price_layout })
@@ -491,7 +501,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                         if (!TextUtils.isEmpty(password) && ((MainPresenter) mPresenter).matchPassword(password)) {
                             String privateKey = ((MainPresenter) mPresenter).getLoginPrivateKey();
 
-                            Log.d(MainActivity.class.getSimpleName(), privateKey);
                             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                             sharingIntent.setType("text/plain");
                             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, privateKey);

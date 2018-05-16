@@ -87,7 +87,6 @@ public class AddressActivity extends CommonActivity implements AddressView {
                     Toast.LENGTH_SHORT).show();
             finishActivity();
         } else {
-            Log.d(AddressActivity.class.getSimpleName(), "address : " + addressInfo.address);
             mQrcodeImageView.setImageBitmap(addressInfo.addressBitmap);
             mAddressTextView.setText(addressInfo.address);
             mBtnCopyAddress.setEnabled(true);

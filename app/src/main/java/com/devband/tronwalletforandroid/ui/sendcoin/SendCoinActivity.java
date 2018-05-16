@@ -70,7 +70,6 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
         setSupportActionBar(mToolbar);
 
-        mInputAddress.setText("27YnUtoNbnEQfKfFcxTL2Ak9ETovjtSJ2sF");
         Intent intent = getIntent();
 
         if (getSupportActionBar() != null) {
@@ -180,7 +179,7 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
                     } else {
 //                        showProgressDialog(null, getString(R.string.loading_msg));
 //                        ((SendCoinPresenter) mPresenter).transferAsset(password, address, mSelectedAsset.getName(), (long) finalAmountDouble);
-                        Toast.makeText(SendCoinActivity.this, "Comming soon.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SendCoinActivity.this, "Coming soon.", Toast.LENGTH_SHORT).show();
                     }
                 }).show();
     }

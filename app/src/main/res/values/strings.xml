@@ -83,7 +83,7 @@
     <string name="title_rename_account">Rename Account</string>
     <string name="menu_create_account">Create Account</string>
     <string name="menu_import_account">Import Account</string>
-    <string name="menu_refresh_account">Account</string>
+    <string name="menu_refresh_account">Refresh</string>
     <string name="rename_account_hint">Input account name</string>
     <string name="about_tron">About Tron</string>
     <string name="title_open_source">Open Source</string>
@@ -115,4 +115,5 @@
     <string name="account_count_text">Account :</string>
     <string name="highest_trx_text">Highest :</string>
     <string name="balance_text">Balance</string>
+    <string name="menu_transaction_history">Transaction History</string>
 </resources>

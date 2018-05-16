@@ -47,8 +47,6 @@ public class QrScanActivity extends CommonActivity {
         mQrEader = new QREader.Builder(this, mSurfaceView, new QRDataListener() {
             @Override
             public void onDetected(final String data) {
-                Log.d("QREader", "Value : " + data);
-
                 Intent intent;
 
                 if (mFromTronPayMenu) {

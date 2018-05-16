@@ -88,8 +88,6 @@ public class BackupAccountActivity extends CommonActivity implements BackupAccou
 
     @Override
     public void displayAccountInfo(@NonNull String address, @NonNull String privateKey) {
-        Log.d(BackupAccountActivity.class.getSimpleName(), "address : " + address);
-        Log.d(BackupAccountActivity.class.getSimpleName(), "privateKey : " + privateKey);
         mInputAddress.setText(address);
         mInputPrivateKey.setText(privateKey);
     }

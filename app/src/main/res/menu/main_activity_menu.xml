@@ -27,5 +27,13 @@
         android:orderInCategory="100"
         android:title="@string/menu_refresh_account"
         android:icon="@drawable/ic_refresh"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_transaction_history"
+        android:orderInCategory="100"
+        android:title="@string/menu_transaction_history"
+        android:icon="@drawable/ic_history"
         app:showAsAction="always" />
 </menu>
