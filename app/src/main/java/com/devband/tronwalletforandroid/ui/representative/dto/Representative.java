@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.witness.dto;
+package com.devband.tronwalletforandroid.ui.representative.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Witness {
+public class Representative {
+
+    private String address;
 
     private String url;
 

@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.witness.dto;
+package com.devband.tronwalletforandroid.ui.representative.dto;
 
 import java.util.List;
 
@@ -13,11 +13,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class WitnessList {
+public class RepresentativeList {
 
-    private int witnessCount;
+    private int representativeCount;
 
     private long highestVotes;
 
-    private List<Witness> witnessList;
+    private List<Representative> representativeList;
 }

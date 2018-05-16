@@ -1,8 +1,8 @@
-package com.devband.tronwalletforandroid.ui.witness;
+package com.devband.tronwalletforandroid.ui.representative;
 
 import com.devband.tronwalletforandroid.ui.mvp.IView;
 
-public interface WitnessView extends IView {
+public interface RepresentativeView extends IView {
 
     void showLoadingDialog();
 

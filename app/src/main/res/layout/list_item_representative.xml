@@ -20,7 +20,7 @@
             android:orientation="horizontal"
             android:layout_weight="1">
             <TextView
-                android:id="@+id/witness_no_text"
+                android:id="@+id/representative_no_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="1."/>
@@ -31,7 +31,7 @@
                 android:layout_marginLeft="5dp"
                 android:orientation="vertical">
                 <TextView
-                    android:id="@+id/witness_url_text"
+                    android:id="@+id/representative_url_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
@@ -49,7 +49,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/votes_text" />
                     <TextView
-                        android:id="@+id/witness_votes_text"
+                        android:id="@+id/representative_votes_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
@@ -59,13 +59,13 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/witness_vote_button"
+            android:id="@+id/representative_vote_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:background="@color/colorAccent"
-            android:visibility="gone"
-            android:text="@string/vote_text" />
+            android:text="@string/vote_text"
+            android:visibility="gone" />
 
     </LinearLayout>
 

@@ -43,6 +43,7 @@ import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
 import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
+import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -303,6 +304,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             case R.id.drawer_item_export_private_key:
                 sharePrivateKey();
                 break;
+            case R.id.drawer_item_vote:
+                startActivity(RepresentativeActivity.class);
+                break;
             case R.id.drawer_item_donations:
                 Intent intent = new Intent(MainActivity.this, SendCoinActivity.class);
                 intent.putExtra(EXTRA_FROM_DONATIONS, true);
@@ -335,7 +339,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 .contentColorRes(R.color.colorAccent)
                 .backgroundColorRes(android.R.color.white)
                 .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
-                .input(getString(R.string.import_account_hint), "29C7E8C344445B33572D09E593F947C548A627A9B3247DEA11BADAFCBEBD04A4", new MaterialDialog.InputCallback() {
+                .input(getString(R.string.import_account_hint), "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         dialog.dismiss();

@@ -58,7 +58,7 @@
             android:theme="@style/WalletTheme" />
 
         <activity
-            android:name=".ui.witness.WitnessActivity"
+            android:name=".ui.representative.RepresentativeActivity"
             android:theme="@style/MainTheme" />
 
         <activity

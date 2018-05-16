@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.witness.adapter;
+package com.devband.tronwalletforandroid.ui.representative.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -13,7 +13,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.main.adapter.AdapterDataModel;
 import com.devband.tronwalletforandroid.ui.main.adapter.AdapterView;
-import com.devband.tronwalletforandroid.ui.witness.dto.Witness;
+import com.devband.tronwalletforandroid.ui.representative.dto.Representative;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -22,35 +22,39 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class WitnessListAdapter extends RecyclerView.Adapter<WitnessListAdapter.WitnessViewHolder> implements AdapterDataModel<Witness>, AdapterView {
+public class RepresentativeListAdapter extends RecyclerView.Adapter<RepresentativeListAdapter.RepresentativeViewHolder> implements AdapterDataModel<Representative>, AdapterView {
 
-    private List<Witness> mList;
+    private List<Representative> mList;
 
     private Context mContext;
 
+    private View.OnClickListener mOnClickListener;
+
     private DecimalFormat df = new DecimalFormat("#,##0");
 
-    public WitnessListAdapter(Context mContext) {
+    public RepresentativeListAdapter(Context mContext, View.OnClickListener onClickListener) {
         this.mList = new ArrayList<>();
         this.mContext = mContext;
+        this.mOnClickListener = onClickListener;
     }
 
     @NonNull
     @Override
-    public WitnessViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_witness, null);
+    public RepresentativeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_representative, null);
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                 RecyclerView.LayoutParams.WRAP_CONTENT));
-        return new WitnessViewHolder(v);
+//        v.setOnClickListener(mOnClickListener);
+        return new RepresentativeViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WitnessViewHolder holder, int position) {
-        Witness item = mList.get(position);
+    public void onBindViewHolder(@NonNull RepresentativeViewHolder holder, int position) {
+        Representative item = mList.get(position);
 
-        holder.witnessNoText.setText((position + 1) + ".");
-        holder.witnessUrlText.setText(item.getUrl());
-        holder.witnessVotesText.setText(df.format(item.getVoteCount()) + Constants.TRON_SYMBOL);
+        holder.representativeNoText.setText((position + 1) + ".");
+        holder.representativeUrlText.setText(item.getUrl());
+        holder.representativeVotesText.setText(df.format(item.getVoteCount()) + Constants.TRON_SYMBOL);
         holder.latestBlockText.setText(df.format(item.getLatestBlockNum()));
         holder.producedBlockText.setText(df.format(item.getTotalProduced()));
         holder.missedBlockText.setText(df.format(item.getTotalMissed()));
@@ -62,13 +66,13 @@ public class WitnessListAdapter extends RecyclerView.Adapter<WitnessListAdapter.
     }
 
     @Override
-    public void add(Witness model) {
+    public void add(Representative model) {
         mList.add(model);
         notifyItemInserted(getItemCount() - 1);
     }
 
     @Override
-    public void addAll(List<Witness> list) {
+    public void addAll(List<Representative> list) {
         mList.addAll(list);
         notifyItemInserted(getItemCount() - 1);
     }
@@ -80,7 +84,7 @@ public class WitnessListAdapter extends RecyclerView.Adapter<WitnessListAdapter.
     }
 
     @Override
-    public Witness getModel(int position) {
+    public Representative getModel(int position) {
         return mList.get(position);
     }
 
@@ -100,19 +104,16 @@ public class WitnessListAdapter extends RecyclerView.Adapter<WitnessListAdapter.
         notifyDataSetChanged();
     }
 
-    public class WitnessViewHolder extends RecyclerView.ViewHolder {
+    public class RepresentativeViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.witness_vote_button)
-        Button witnessVoteButton;
+        @BindView(R.id.representative_no_text)
+        TextView representativeNoText;
 
-        @BindView(R.id.witness_no_text)
-        TextView witnessNoText;
+        @BindView(R.id.representative_url_text)
+        TextView representativeUrlText;
 
-        @BindView(R.id.witness_url_text)
-        TextView witnessUrlText;
-
-        @BindView(R.id.witness_votes_text)
-        TextView witnessVotesText;
+        @BindView(R.id.representative_votes_text)
+        TextView representativeVotesText;
 
         @BindView(R.id.latest_block_text)
         TextView latestBlockText;
@@ -123,7 +124,7 @@ public class WitnessListAdapter extends RecyclerView.Adapter<WitnessListAdapter.
         @BindView(R.id.missed_block_text)
         TextView missedBlockText;
 
-        public WitnessViewHolder(View itemView) {
+        public RepresentativeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
