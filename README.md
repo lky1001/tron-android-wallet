@@ -32,3 +32,4 @@ A Tron wallet for android.
 - Vote
 - Buy Contract token
 - Tron Pay
+- bip 32, 39, 44
