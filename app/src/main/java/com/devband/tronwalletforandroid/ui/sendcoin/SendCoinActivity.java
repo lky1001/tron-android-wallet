@@ -1,7 +1,12 @@
 package com.devband.tronwalletforandroid.ui.sendcoin;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -32,6 +37,7 @@ import butterknife.OnClick;
 
 public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
+    private static final int CAMERA_PERMISSION_REQ = 9929;
     public static final int QR_SCAN_ADDRESS = 3321;
 
     @BindView(R.id.toolbar)
@@ -244,10 +250,44 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
                 Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick(R.id.btn_qrcode_scan)
-    public void onQrcodeScanClick() {
+    private void startQrScan() {
         Intent qrScanIntent = new Intent(SendCoinActivity.this, QrScanActivity.class);
         startActivityForResult(qrScanIntent, QR_SCAN_ADDRESS);
+    }
+
+    @OnClick(R.id.btn_qrcode_scan)
+    public void onQrcodeScanClick() {
+        checkCameraPermission();
+    }
+
+    private void checkCameraPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+                    Toast.makeText(SendCoinActivity.this, getString(R.string.camera_error_msg),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    requestPermissions(new String[] { Manifest.permission.CAMERA },
+                            CAMERA_PERMISSION_REQ);
+                }
+            } else {
+                startQrScan();
+            }
+        } else {
+            startQrScan();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (checkAllPermissionGranted(grantResults)) {
+            if (requestCode == CAMERA_PERMISSION_REQ) {
+                startQrScan();
+            }
+        } else {
+            Toast.makeText(SendCoinActivity.this, getString(R.string.camera_error_msg),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

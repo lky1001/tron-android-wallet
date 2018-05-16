@@ -17,9 +17,6 @@ import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 public class CommonActivity extends AppCompatActivity {
 
-    private static final int EXTERNAL_STORAGE_PERMISSION_REQ = 9293;
-    private static final int CAMERA_PERMISSION_REQ = 9929;
-
     protected BasePresenter mPresenter;
 
     protected MaterialDialog mMaterialDialog;
@@ -29,48 +26,7 @@ public class CommonActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    protected void checkCameraPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-                } else {
-                    requestPermissions(new String[] { Manifest.permission.CAMERA },
-                            CAMERA_PERMISSION_REQ);
-                }
-            }
-        }
-    }
-
-    protected void checkStoragePermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                    || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-                if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                } else {
-                    requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
-                            EXTERNAL_STORAGE_PERMISSION_REQ);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (checkAllPermissionGranted(grantResults)) {
-            if (requestCode == EXTERNAL_STORAGE_PERMISSION_REQ) {
-
-            } else if (requestCode == CAMERA_PERMISSION_REQ) {
-
-            }
-        } else {
-            Intent returnIntent = new Intent();
-            setResult(Activity.RESULT_CANCELED, returnIntent);
-            finishActivity();
-        }
-    }
-
-    private boolean checkAllPermissionGranted(@NonNull int[] grantResults) {
+    protected boolean checkAllPermissionGranted(@NonNull int[] grantResults) {
         for (int grantResult : grantResults) {
             if (grantResult != PackageManager.PERMISSION_GRANTED) {
                 return false;

@@ -1,8 +1,12 @@
 package com.devband.tronwalletforandroid.ui.qrscan;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -29,9 +33,9 @@ public class QrScanActivity extends CommonActivity {
     @BindView(R.id.camera_view)
     SurfaceView mSurfaceView;
 
-    QREader mQrEader;
+    private QREader mQrEader;
 
-    boolean mFromTronPayMenu;
+    private boolean mFromTronPayMenu;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,8 +46,10 @@ public class QrScanActivity extends CommonActivity {
 
         mFromTronPayMenu = getIntent().getBooleanExtra(EXTRA_FROM_TRON_PAY_MENU, false);
 
-        checkCameraPermission();
+        initQrEader();
+    }
 
+    private void initQrEader() {
         mQrEader = new QREader.Builder(this, mSurfaceView, new QRDataListener() {
             @Override
             public void onDetected(final String data) {
@@ -84,12 +90,16 @@ public class QrScanActivity extends CommonActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mQrEader.initAndStart(mSurfaceView);
+        if (mQrEader != null) {
+            mQrEader.initAndStart(mSurfaceView);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mQrEader.releaseAndCleanup();
+        if (mQrEader != null) {
+            mQrEader.releaseAndCleanup();
+        }
     }
 }
