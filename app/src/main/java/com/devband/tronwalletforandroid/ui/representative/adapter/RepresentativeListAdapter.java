@@ -31,6 +31,7 @@ public class RepresentativeListAdapter extends RecyclerView.Adapter<Representati
     private View.OnClickListener mOnClickListener;
 
     private DecimalFormat df = new DecimalFormat("#,##0");
+    private DecimalFormat percentDf = new DecimalFormat("#,##0.00");
 
     public RepresentativeListAdapter(Context mContext, View.OnClickListener onClickListener) {
         this.mList = new ArrayList<>();
@@ -58,6 +59,7 @@ public class RepresentativeListAdapter extends RecyclerView.Adapter<Representati
         holder.latestBlockText.setText(df.format(item.getLatestBlockNum()));
         holder.producedBlockText.setText(df.format(item.getTotalProduced()));
         holder.missedBlockText.setText(df.format(item.getTotalMissed()));
+        holder.productivityText.setText(percentDf.format(item.getProductivity() * 100) + "%");
     }
 
     @Override
@@ -123,6 +125,9 @@ public class RepresentativeListAdapter extends RecyclerView.Adapter<Representati
 
         @BindView(R.id.missed_block_text)
         TextView missedBlockText;
+
+        @BindView(R.id.productivity_text)
+        TextView productivityText;
 
         public RepresentativeViewHolder(View itemView) {
             super(itemView);

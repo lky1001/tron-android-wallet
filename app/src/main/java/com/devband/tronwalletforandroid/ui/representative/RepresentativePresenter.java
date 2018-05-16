@@ -59,7 +59,7 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
     public void getRepresentativeList() {
         Single.fromCallable(() -> Tron.getInstance(mContext).getWitnessList().blockingGet())
         .map(witnessList -> {
-            List<Representative> witnesses = new ArrayList<>();
+            List<Representative> Representatives = new ArrayList<>();
 
             int cnt = witnessList.getWitnessesCount();
 
@@ -68,13 +68,14 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
             for (int i = 0; i < cnt; i++) {
                 Protocol.Witness witness = witnessList.getWitnesses(i);
 
-                witnesses.add(Representative.builder()
+                Representatives.add(Representative.builder()
                         .address(AccountManager.encode58Check(witness.getAddress().toByteArray()))
                         .url(witness.getUrl())
+                        .voteCount(witness.getVoteCount())
                         .latestBlockNum(witness.getLatestBlockNum())
                         .totalProduced(witness.getTotalProduced())
                         .totalMissed(witness.getTotalMissed())
-                        .voteCount(witness.getVoteCount())
+                        .productivity(((double) witness.getTotalProduced()) / (witness.getTotalProduced() + witness.getTotalMissed()))
                         .build());
 
                 if (witness.getVoteCount() > highestVotes) {
@@ -83,10 +84,10 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
             }
 
             Descending descending = new Descending();
-            Collections.sort(witnesses, descending);
+            Collections.sort(Representatives, descending);
 
             return RepresentativeList.builder()
-                    .representativeList(witnesses)
+                    .representativeList(Representatives)
                     .representativeCount(cnt)
                     .highestVotes(highestVotes)
                     .build();
@@ -102,7 +103,7 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
             @Override
             public void onSuccess(RepresentativeList representativeList) {
                 mAdapterDataModel.addAll(representativeList.getRepresentativeList());
-                mView.displayWitnessInfo(representativeList.getRepresentativeCount(), representativeList.getHighestVotes());
+                mView.displayRepresentativeInfo(representativeList.getRepresentativeCount(), representativeList.getHighestVotes());
             }
 
             @Override

@@ -223,7 +223,7 @@ public class RepresentativeActivity extends CommonActivity implements Representa
     }
 
     @Override
-    public void displayWitnessInfo(int witnessCount, long highestVotes) {
+    public void displayRepresentativeInfo(int witnessCount, long highestVotes) {
         mRepresentativeCountText.setText(df.format(witnessCount));
         mHighestVotesText.setText(df.format(highestVotes) + " " + Constants.TRON_SYMBOL);
 

@@ -6,7 +6,7 @@ public interface RepresentativeView extends IView {
 
     void showLoadingDialog();
 
-    void displayWitnessInfo(int witnessCount, long highestVotes);
+    void displayRepresentativeInfo(int witnessCount, long highestVotes);
 
     void showServerError();
 }

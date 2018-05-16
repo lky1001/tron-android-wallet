@@ -24,4 +24,6 @@ public class Representative {
     private long totalMissed;
 
     private long totalProduced;
+
+    private double productivity;
 }

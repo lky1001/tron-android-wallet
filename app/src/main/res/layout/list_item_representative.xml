@@ -26,8 +26,9 @@
                 tools:text="1."/>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginLeft="5dp"
                 android:orientation="vertical">
                 <TextView
@@ -55,6 +56,30 @@
                         android:layout_marginLeft="5dp"
                         tools:text="99,803,000,222 TRX"/>
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="all"
+                    android:textColorLink="@color/colorPrimary"
+                    android:text="@string/productivity_text"/>
+
+                <TextView
+                    android:id="@+id/productivity_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    tools:text="99.95%"/>
+
             </LinearLayout>
         </LinearLayout>
 

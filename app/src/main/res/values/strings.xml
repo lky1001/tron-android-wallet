@@ -122,4 +122,5 @@
     <string name="vote_representative_warning_msg">Are you sure vote representative?</string>
     <string name="vote_representative_name_text">Name : </string>
     <string name="vote_representative_amount_text">Amount : </string>
+    <string name="productivity_text">Productivity</string>
 </resources>
