@@ -305,8 +305,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.drawer_item_my_account:
-                break;
             case R.id.drawer_item_my_address:
                 startActivity(AddressActivity.class);
                 break;

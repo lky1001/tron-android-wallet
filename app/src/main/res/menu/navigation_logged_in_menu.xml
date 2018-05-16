@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/drawer_item_my_account"
-        android:icon="@drawable/ic_account"
-        android:iconTint="@color/colorPrimary"
-        android:title="@string/navigation_menu_my_account" />
-
     <item android:id="@+id/drawer_item_my_address"
         android:icon="@drawable/ic_qrcode_white"
         android:iconTint="@color/colorPrimary"
