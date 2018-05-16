@@ -17,9 +17,6 @@
  */
 package org.tron.common.utils;
 
-import android.annotation.SuppressLint;
-import android.os.Build;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,49 +24,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FileUtil {
-
-  @SuppressLint("NewApi")
-  public static List<String> recursiveList(String path) throws IOException {
-
-    final List<String> files = new ArrayList<>();
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      Files.walkFileTree(Paths.get(path), new FileVisitor<Path>() {
-        @Override
-        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
-          return FileVisitResult.CONTINUE;
-        }
-
-        @Override
-        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-          files.add(file.toString());
-          return FileVisitResult.CONTINUE;
-        }
-
-        @Override
-        public FileVisitResult visitFileFailed(Path file, IOException exc) {
-          return FileVisitResult.CONTINUE;
-        }
-
-        @Override
-        public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
-          return FileVisitResult.CONTINUE;
-        }
-      });
-    }
-
-    return files;
-  }
 
   public static boolean recursiveDelete(String fileName) {
     File file = new File(fileName);
