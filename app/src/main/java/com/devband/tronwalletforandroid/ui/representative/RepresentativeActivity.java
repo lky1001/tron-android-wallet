@@ -16,10 +16,10 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.ui.main.adapter.AdapterView;
-import com.devband.tronwalletforandroid.ui.main.adapter.DividerItemDecoration;
+import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.representative.adapter.RepresentativeListAdapter;
 import com.devband.tronwalletforandroid.ui.representative.dto.Representative;
 
@@ -237,6 +237,6 @@ public class RepresentativeActivity extends CommonActivity implements Representa
     @Override
     public void showServerError() {
         hideDialog();
-        showProgressDialog(null, getString(R.string.connection_error_msg));
+        Toast.makeText(RepresentativeActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
     }
 }

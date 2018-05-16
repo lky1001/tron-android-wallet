@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.main.adapter;
+package com.devband.tronwalletforandroid.common;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;

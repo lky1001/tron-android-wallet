@@ -36,8 +36,8 @@ import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
-import com.devband.tronwalletforandroid.ui.main.adapter.AdapterView;
-import com.devband.tronwalletforandroid.ui.main.adapter.DividerItemDecoration;
+import com.devband.tronwalletforandroid.common.AdapterView;
+import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.main.adapter.MyTokenListAdapter;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
@@ -86,6 +86,12 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     @BindView(R.id.login_account_price_text)
     TextView mLoginAccountPriceText;
+
+    @BindView(R.id.login_frozen_balance_text)
+    TextView mLoginFrozenBalanceText;
+
+    @BindView(R.id.login_bandwidth_text)
+    TextView mLoginBandwidthText;
 
     @BindView(R.id.price_help_image)
     ImageView mPriceHelpImage;
@@ -187,6 +193,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                     mLoginAccountPriceText.setVisibility(View.GONE);
                     mPriceHelpImage.setVisibility(View.GONE);
                     mEditAccountNameImage.setVisibility(View.GONE);
+                    mLoginFrozenBalanceText.setVisibility(View.GONE);
+                    mLoginBandwidthText.setVisibility(View.GONE);
                     isShow = true;
                 } else if(isShow) {
                     mToolbarLayout.setTitle("");
@@ -195,6 +203,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                     mLoginAccountPriceText.setVisibility(View.VISIBLE);
                     mPriceHelpImage.setVisibility(View.VISIBLE);
                     mEditAccountNameImage.setVisibility(View.VISIBLE);
+                    mLoginFrozenBalanceText.setVisibility(View.VISIBLE);
+                    mLoginBandwidthText.setVisibility(View.VISIBLE);
                     isShow = false;
                 }
             }
@@ -295,6 +305,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.drawer_item_my_account:
+                break;
             case R.id.drawer_item_my_address:
                 startActivity(AddressActivity.class);
                 break;
@@ -339,7 +351,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 .contentColorRes(R.color.colorAccent)
                 .backgroundColorRes(android.R.color.white)
                 .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
-                .input(getString(R.string.import_account_hint), "", new MaterialDialog.InputCallback() {
+                .input(getString(R.string.import_account_hint), "bc82841406e33d12374fb2933ddfafab3769157e999fd92981ab006ce49bcddf", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         dialog.dismiss();
@@ -367,9 +379,21 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         Log.i(MainActivity.class.getSimpleName(), "address : " + AccountManager.encode58Check(account.getAddress().toByteArray()));
         Log.i(MainActivity.class.getSimpleName(), "balance : " + account.getBalance() + Constants.TRON_SYMBOL);
         double balance = ((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT;
-        DecimalFormat df = new DecimalFormat("#,##0.00000000");
+        long frozenBalance = 0;
+
+        for (int i = 0; i < account.getFrozenList().size(); i++) {
+            Protocol.Account.Frozen frozen = account.getFrozen(i);
+
+            frozenBalance += frozen.getFrozenBalance();
+        }
+
+        double fz = frozenBalance / Constants.REAL_TRX_AMOUNT;
+
+        DecimalFormat df = new DecimalFormat("#,##0");
 
         mLoginAccountBalanceText.setText(df.format(balance) + " " + getString(R.string.currency_text));
+        mLoginFrozenBalanceText.setText(df.format(fz) + " " + getString(R.string.frozen_trx));
+        mLoginBandwidthText.setText(df.format(account.getBandwidth() / Constants.REAL_TRX_AMOUNT) + " " + getString(R.string.bandwidth_text));
 
         ((MainPresenter) mPresenter).getTronMarketInfo();
     }
@@ -377,16 +401,17 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @SuppressLint("SetTextI18n")
     @Override
     public void setTronMarketInfo(CoinMarketCap coinMarketCap) {
-        if (mLoginTronAccount != null) {
+        if (mLoginTronAccount != null && mLoginTronAccount.getBalance() > 0) {
             double balance = ((double) mLoginTronAccount.getBalance()) / Constants.REAL_TRX_AMOUNT;
             DecimalFormat df = new DecimalFormat("#,##0.000");
 
-            mLoginAccountPriceText.setText(df.format(balance * Double.parseDouble(coinMarketCap.getPriceUsd()))
-                    + " " + getString(R.string.price_text));
+            mLoginAccountPriceText.setText("(" + df.format(balance * Double.parseDouble(coinMarketCap.getPriceUsd()))
+                    + " " + getString(R.string.price_text) + ")");
 
             mCoinMarketCapPriceInfo = coinMarketCap;
 
             mPriceHelpImage.setVisibility(View.VISIBLE);
+            mLoginAccountPriceText.setVisibility(View.VISIBLE);
         }
     }
 

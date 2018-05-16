@@ -61,6 +61,7 @@
     <string name="register_wallet_error">Can not register wallet. Please try again.</string>
     <string name="copy_wallet_info">Copy Wallet Info</string>
     <string name="menu_torn_pay">Tron Pay</string>
+    <string name="navigation_menu_my_account">My Account</string>
     <string name="navigation_menu_my_address">My Address</string>
     <string name="tron_price_title">Tron Price</string>
     <string name="navigation_menu_donations">Donations</string>
@@ -123,4 +124,6 @@
     <string name="vote_representative_name_text">Name : </string>
     <string name="vote_representative_amount_text">Amount : </string>
     <string name="productivity_text">Productivity</string>
+    <string name="frozen_trx">FROZEN TRX</string>
+    <string name="bandwidth_text">BANDWIDTH</string>
 </resources>

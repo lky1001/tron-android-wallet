@@ -1,11 +1,11 @@
-package com.devband.tronwalletforandroid.ui.representative;
+package com.devband.tronwalletforandroid.ui.vote;
 
 import android.support.annotation.NonNull;
 
+import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.tron.Tron;
-import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 import com.devband.tronwalletforandroid.ui.representative.dto.Representative;
 import com.devband.tronwalletforandroid.ui.representative.dto.RepresentativeList;
@@ -23,11 +23,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
+public class VotePresenter extends BasePresenter<VoteView> {
 
     private AdapterDataModel<Representative> mAdapterDataModel;
 
-    public RepresentativePresenter(RepresentativeView view) {
+    public VotePresenter(VoteView view) {
         super(view);
     }
 
@@ -103,7 +103,6 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
             @Override
             public void onSuccess(RepresentativeList representativeList) {
                 mAdapterDataModel.addAll(representativeList.getRepresentativeList());
-                mView.displayRepresentativeInfo(representativeList.getRepresentativeCount(), representativeList.getHighestVotes());
             }
 
             @Override

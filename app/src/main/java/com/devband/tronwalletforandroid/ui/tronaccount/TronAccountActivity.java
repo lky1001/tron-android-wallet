@@ -14,8 +14,8 @@ import android.widget.TextView;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.ui.main.adapter.AdapterView;
-import com.devband.tronwalletforandroid.ui.main.adapter.DividerItemDecoration;
+import com.devband.tronwalletforandroid.common.AdapterView;
+import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.tronaccount.adapter.TronAccountListAdapter;
 
 import java.text.DecimalFormat;

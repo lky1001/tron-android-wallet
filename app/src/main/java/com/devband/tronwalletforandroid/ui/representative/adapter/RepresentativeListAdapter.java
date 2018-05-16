@@ -6,13 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.ui.main.adapter.AdapterDataModel;
-import com.devband.tronwalletforandroid.ui.main.adapter.AdapterView;
+import com.devband.tronwalletforandroid.common.AdapterDataModel;
+import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.ui.representative.dto.Representative;
 
 import java.text.DecimalFormat;
