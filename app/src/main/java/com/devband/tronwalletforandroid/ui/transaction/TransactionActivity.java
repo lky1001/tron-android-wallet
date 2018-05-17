@@ -2,54 +2,57 @@ package com.devband.tronwalletforandroid.ui.transaction;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
-import com.devband.tronlib.Hosts;
-import com.devband.tronlib.ServiceBuilder;
-import com.devband.tronlib.dto.Transaction;
-import com.devband.tronlib.dto.Transactions;
-import com.devband.tronlib.services.TronScanService;
+import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.ui.transaction.adapter.TransactionAdapter;
+import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
 
 import java.util.List;
 
-import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by user on 2018. 5. 17..
  */
 
-public class TransactionActivity extends CommonActivity {
+public class TransactionActivity extends CommonActivity implements TransactionView {
 
-    private static final String TEST_ADDRESS = "27g7bUKnpYVxB8UHdJB8QzA9qSKKhwX5eqs";
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
+
+    private TransactionAdapter mAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_transaction);
 
-        TronScanService tronScanService = ServiceBuilder.createService(TronScanService.class, Hosts.TRONSCAM_API);
+        ButterKnife.bind(this);
 
-        tronScanService.getTransactions(TEST_ADDRESS, "TRX")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Transactions>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        initUi();
 
-                    }
+        mPresenter = new TransactionPresenter(this);
+        mPresenter.onCreate();
+    }
 
-                    @Override
-                    public void onSuccess(Transactions transactions) {
-                        Log.d("hanseon--", "onSuccess");
-                    }
+    private void initUi() {
+        mAdapter = new TransactionAdapter();
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(mAdapter);
+    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("hanseon--", "onError : " + e.getMessage());
-                    }
-                });
+    @Override
+    public void transactionDataLoadSuccess(List<TransactionInfo> transactionInfos) {
+        if (mAdapter != null) {
+            mAdapter.refresh(transactionInfos);
+        }
     }
 }
