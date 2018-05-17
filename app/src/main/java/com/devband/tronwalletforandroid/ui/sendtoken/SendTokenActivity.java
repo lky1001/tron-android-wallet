@@ -69,7 +69,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_send_coin);
+        setContentView(R.layout.activity_send_token);
 
         ButterKnife.bind(this);
 
@@ -183,7 +183,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                         ((SendTokenPresenter) mPresenter).sendTron(password, address, amount);
                     } else {
 //                        showProgressDialog(null, getString(R.string.loading_msg));
-//                        ((SendTokenPresenter) mPresenter).transferAsset(password, address, mSelectedAsset.getName(), (long) finalAmountDouble);
+//                        ((MyAccountPresenter) mPresenter).transferAsset(password, address, mSelectedAsset.getName(), (long) finalAmountDouble);
                         Toast.makeText(SendTokenActivity.this, "Coming soon.", Toast.LENGTH_SHORT).show();
                     }
                 }).show();
