@@ -43,6 +43,7 @@ import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
 import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
+import com.devband.tronwalletforandroid.ui.transaction.TransactionActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -283,8 +284,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 checkLoginState();
                 break;
             case R.id.action_transaction_history:
-                Toast.makeText(MainActivity.this, "Transaction history coming soon",
-                        Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, TransactionActivity.class));
                 break;
         }
 
