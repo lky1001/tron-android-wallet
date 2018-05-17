@@ -1,12 +1,12 @@
-package com.devband.tronwalletforandroid.ui.sendcoin;
+package com.devband.tronwalletforandroid.ui.sendtoken;
 
 import com.devband.tronwalletforandroid.ui.mvp.IView;
 
 import org.tron.protos.Protocol;
 
-public interface SendCoinView extends IView {
+public interface SendTokenView extends IView {
 
-    void sendCoinResult(boolean result);
+    void sendTokenResult(boolean result);
 
     void invalidPassword();
 

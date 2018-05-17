@@ -240,7 +240,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_usd"
-                fab:fab_label="@string/menu_request_coin"
+                fab:fab_label="@string/menu_request_token"
                 fab:fab_size="mini" />
 
             <com.github.clans.fab.FloatingActionButton
@@ -248,7 +248,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_qrcode_white"
-                fab:fab_label="@string/menu_send_coin"
+                fab:fab_label="@string/menu_send_token"
                 fab:fab_size="mini" />
         </com.github.clans.fab.FloatingActionMenu>
     </android.support.design.widget.CoordinatorLayout>

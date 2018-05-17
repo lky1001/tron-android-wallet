@@ -51,7 +51,7 @@
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".ui.sendcoin.SendCoinActivity"
+            android:name=".ui.sendtoken.SendTokenActivity"
             android:theme="@style/WalletTheme" />
 
         <activity

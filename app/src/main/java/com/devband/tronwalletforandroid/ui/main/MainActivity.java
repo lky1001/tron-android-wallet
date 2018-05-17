@@ -43,7 +43,7 @@ import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.myaccount.MyAccountActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
-import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
+import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -313,7 +313,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 startActivity(AddressActivity.class);
                 break;
             case R.id.drawer_item_send_tron:
-                startActivity(SendCoinActivity.class);
+                startActivity(SendTokenActivity.class);
                 break;
             case R.id.drawer_item_export_private_key:
                 sharePrivateKey();
@@ -322,7 +322,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 startActivity(RepresentativeActivity.class);
                 break;
             case R.id.drawer_item_donations:
-                Intent intent = new Intent(MainActivity.this, SendCoinActivity.class);
+                Intent intent = new Intent(MainActivity.this, SendTokenActivity.class);
                 intent.putExtra(EXTRA_FROM_DONATIONS, true);
                 startActivity(intent);
                 break;

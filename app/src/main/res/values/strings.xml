@@ -6,7 +6,7 @@
     <string name="title_backup_account">Backup Account</string>
     <string name="title_login">Login</string>
     <string name="title_my_address">My Address</string>
-    <string name="title_send_coin">Send</string>
+    <string name="title_send_token">Send Token</string>
     <string name="title_import_account">Import Account</string>
     <string name="title_vote_representative">Vote Representative</string>
     <string name="title_more">More</string>
@@ -15,7 +15,7 @@
     <string name="navigation_header_title">Tron Wallet</string>
     <string name="navigation_menu_create_account">Create Account</string>
     <string name="navigation_menu_login">Login</string>
-    <string name="navigation_menu_send">Send</string>
+    <string name="navigation_menu_send">Send Token</string>
     <string name="navigation_menu_export_private_key">Export Private Key</string>
     <string name="navigation_menu_tron_pay">Tron Pay</string>
     <string name="address_text">Address</string>
@@ -47,8 +47,8 @@
     <string name="send_trx_text">Send</string>
     <string name="invalid_address">Invalid Address</string>
     <string name="invalid_amount">Invalid Amount</string>
-    <string name="sending_coin_failed">Sending coin failed.</string>
-    <string name="sending_coin_success">Sending coin success.</string>
+    <string name="sending_token_failed">Sending token failed.</string>
+    <string name="sending_token_success">Sending token success.</string>
     <string name="invalid_private_key">Invalid Private Key.</string>
     <string name="invalid_password_or_private_key">Invalid password or private key</string>
     <string name="account_name_text">Account Nickname</string>
@@ -66,11 +66,11 @@
     <string name="navigation_menu_donations">Donations</string>
     <string name="navigation_menu_more">More</string>
     <string name="menu_tron_pay">Tron Pay</string>
-    <string name="menu_request_coin">Request Coin</string>
-    <string name="menu_send_coin">Send Coin</string>
-    <string name="request_coin_text">Amount</string>
+    <string name="menu_request_token">Request Token</string>
+    <string name="menu_send_token">Send Token</string>
+    <string name="request_token_text">Amount</string>
     <string name="gen_qrcode_text">Generate QR CODE</string>
-    <string name="title_request_coin">Request Tron Coin</string>
+    <string name="title_request_token">Request Token</string>
     <string name="node_list">Node List</string>
     <string name="representative_list">Representatives</string>
     <string name="rich_account_list">Rich Account List</string>
@@ -90,11 +90,11 @@
     <string name="title_open_source">Open Source</string>
     <string name="title_donations">Donations</string>
     <string name="confirm_text">Confirm</string>
-    <string name="send_coin_title">Send</string>
-    <string name="send_coin_warning_msg">Only enter valid TRON wallet address. Incorrect addresses can lead to TRX loss.</string>
-    <string name="send_coin_address_text">Address : </string>
-    <string name="send_coin_token_text">Token : </string>
-    <string name="send_coin_amount_text">Amount : </string>
+    <string name="send_token_title">Send Token</string>
+    <string name="send_token_warning_msg">Only enter valid TRON wallet address. Incorrect addresses can lead to TRX loss.</string>
+    <string name="send_token_address_text">Address : </string>
+    <string name="send_token_token_text">Token : </string>
+    <string name="send_token_amount_text">Amount : </string>
 
     <string name="title_create_account">New Account</string>
     <string name="navigation_menu_logout">Logout</string>
