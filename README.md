@@ -25,7 +25,7 @@ A Tron wallet for android.
 - Tron Balance
 - My Tokens
 - Node list
-- Witness list
+- Representative list
 
 ## TODO list
 - Transaction history

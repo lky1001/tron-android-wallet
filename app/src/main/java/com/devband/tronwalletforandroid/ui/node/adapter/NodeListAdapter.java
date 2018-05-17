@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.ui.main.adapter.AdapterView;
+import com.devband.tronwalletforandroid.common.AdapterView;
 
 import org.tron.api.GrpcAPI;
 

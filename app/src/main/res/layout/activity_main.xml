@@ -47,7 +47,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="25dp"
                         android:orientation="horizontal"
                         android:gravity="center">
                         <TextView
@@ -67,19 +66,18 @@
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:orientation="vertical"
+                        android:orientation="horizontal"
                         android:gravity="center">
                         <TextView
                             android:id="@+id/login_account_balance_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="2dp"
-                            android:layout_marginRight="5dp"
                             android:textSize="18sp"
                             android:textColor="@android:color/white"
-                            tools:text="10000.000000 TRX" />
+                            tools:text="90,000,000,000 TRX" />
+
                         <LinearLayout
                             android:id="@+id/login_account_price_layout"
                             android:layout_width="wrap_content"
@@ -93,7 +91,8 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="14sp"
                                 android:textColor="@android:color/white"
-                                tools:text="10000.000 USD" />
+                                android:visibility="gone"
+                                tools:text="(10000.000 USD)" />
 
                             <ImageView
                                 android:id="@+id/price_help_image"
@@ -104,6 +103,27 @@
                                 app:srcCompat="@drawable/ic_help_circle" />
                         </LinearLayout>
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/login_frozen_balance_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="5dp"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        tools:text="90,000,000,000 FROZEN TRX" />
+
+                    <TextView
+                        android:id="@+id/login_bandwidth_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="5dp"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        tools:text="90 BANDWIDTH" />
+
                 </LinearLayout>
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>

@@ -9,7 +9,8 @@
     <application
         android:name=".common.CustomApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -58,7 +59,7 @@
             android:theme="@style/WalletTheme" />
 
         <activity
-            android:name=".ui.witness.WitnessActivity"
+            android:name=".ui.representative.RepresentativeActivity"
             android:theme="@style/MainTheme" />
 
         <activity

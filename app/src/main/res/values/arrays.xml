@@ -4,7 +4,7 @@
         <item>47.254.146.147:50051</item>
     </array>
 
-    <array name="witness.ip.list">
+    <array name="representative.ip.list">
         <item>47.254.16.55</item>
         <item>47.254.18.49</item>
         <item>18.188.111.53</item>

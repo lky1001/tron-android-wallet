@@ -14,8 +14,8 @@ import android.widget.TextView;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.ui.main.adapter.AdapterView;
-import com.devband.tronwalletforandroid.ui.main.adapter.DividerItemDecoration;
+import com.devband.tronwalletforandroid.common.AdapterView;
+import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.tronaccount.adapter.TronAccountListAdapter;
 
 import java.text.DecimalFormat;
@@ -137,7 +137,6 @@ public class TronAccountActivity extends CommonActivity implements TronAccountVi
 
     @Override
     public void displayTronAccountInfo(int tronAccountCount, long highestTrx) {
-        hideDialog();
         mAccountCountText.setText(df.format(tronAccountCount));
         mHighestTrxText.setText(df.format(highestTrx / Constants.REAL_TRX_AMOUNT) + " " + Constants.TRON_SYMBOL);
 
@@ -145,6 +144,7 @@ public class TronAccountActivity extends CommonActivity implements TronAccountVi
         mHighestTrxTitleText.setVisibility(View.VISIBLE);
         mAccountCountText.setVisibility(View.VISIBLE);
         mHighestTrxText.setVisibility(View.VISIBLE);
+        hideDialog();
     }
 
     @Override

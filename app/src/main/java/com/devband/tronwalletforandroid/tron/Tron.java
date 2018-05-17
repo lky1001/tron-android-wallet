@@ -44,7 +44,6 @@ public class Tron {
     private ITronManager mTronManager;
 
     private AccountManager mAccountManager;
-    private Object witnessList;
 
     public static synchronized Tron getInstance(@NonNull Context context) {
         if (instance == null) {
@@ -306,5 +305,9 @@ public class Tron {
 
     public Single<GrpcAPI.AccountList> getTronAccountList() {
         return mTronManager.listAccounts();
+    }
+
+    public void voteWitness(@NonNull String address, long amount) {
+
     }
 }

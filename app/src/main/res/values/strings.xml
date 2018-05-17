@@ -8,6 +8,7 @@
     <string name="title_my_address">My Address</string>
     <string name="title_send_coin">Send</string>
     <string name="title_import_account">Import Account</string>
+    <string name="title_vote_representative">Vote Representative</string>
     <string name="title_more">More</string>
     <string name="navigation_drawer_open">open</string>
     <string name="navigation_drawer_close">close</string>
@@ -71,7 +72,7 @@
     <string name="gen_qrcode_text">Generate QR CODE</string>
     <string name="title_request_coin">Request Tron Coin</string>
     <string name="node_list">Node List</string>
-    <string name="witness_list">Witness List</string>
+    <string name="representative_list">Representatives</string>
     <string name="rich_account_list">Rich Account List</string>
     <string name="open_source_text">Open Source</string>
     <string name="info_text">This is Tron</string>
@@ -102,7 +103,7 @@
     <string name="title_export_private_key">Export Private Key</string>
     <string name="input_password_text">Password</string>
     <string name="connection_error_msg">Could not connect tron network. Please try again.</string>
-    <string name="title_witness_list">Witness Nodes</string>
+    <string name="title_representative_list">Representatives</string>
     <string name="title_node_list">Node list</string>
     <string name="title_tron_account_list">Tron Accounts</string>
     <string name="vote_text">Vote</string>
@@ -110,11 +111,19 @@
     <string name="produced_block_text">Produced Blocks</string>
     <string name="missed_block_text">Missed Blocks</string>
     <string name="votes_text">Votes :</string>
-    <string name="witnesses_count_text">Witnesses :</string>
+    <string name="representative_count_text">Representatives :</string>
     <string name="highest_votes_text">Highest Votes :</string>
     <string name="account_count_text">Account :</string>
     <string name="highest_trx_text">Highest :</string>
     <string name="balance_text">Balance</string>
     <string name="menu_transaction_history">Transaction History</string>
     <string name="camera_error_msg">Can\'t access to camera.</string>
+    <string name="navigation_menu_vote">Vote Representative</string>
+    <string name="vote_representative_warning_msg">Are you sure vote representative?</string>
+    <string name="vote_representative_name_text">Name : </string>
+    <string name="vote_representative_amount_text">Amount : </string>
+    <string name="productivity_text">Productivity</string>
+    <string name="frozen_trx">FROZEN TRX</string>
+    <string name="bandwidth_text">BANDWIDTH</string>
+    <string name="markets_text">Markets</string>
 </resources>

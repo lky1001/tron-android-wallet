@@ -65,6 +65,39 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
+                android:background="@android:color/white">
+
+                <Button
+                    android:id="@+id/more_markets_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center_vertical|left"
+                    android:paddingLeft="23dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/markets_text"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/black" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/more_border_color"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="17dp"
+                    android:src="@drawable/ic_left_arrow" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
                 android:layout_marginTop="15dp"
                 android:background="@android:color/white">
 
@@ -105,14 +138,14 @@
                 android:background="@android:color/white">
 
                 <Button
-                    android:id="@+id/more_witness_list_button"
+                    android:id="@+id/more_representative_list_button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:gravity="center_vertical|left"
                     android:paddingLeft="23dp"
                     android:paddingRight="0dp"
-                    android:text="@string/witness_list"
+                    android:text="@string/representative_list"
                     android:textSize="14sp"
                     android:textColor="@android:color/black" />
 
