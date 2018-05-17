@@ -40,6 +40,7 @@ import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.main.adapter.MyTokenListAdapter;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
+import com.devband.tronwalletforandroid.ui.myaccount.MyAccountActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
 import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
@@ -305,6 +306,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.drawer_item_my_account:
+                startActivity(MyAccountActivity.class);
+                break;
             case R.id.drawer_item_my_address:
                 startActivity(AddressActivity.class);
                 break;
