@@ -77,6 +77,11 @@
         <activity
             android:name=".ui.opensource.OpenSourceActivity"
             android:theme="@style/WalletTheme" />
+
+        <activity
+            android:name=".ui.transaction.TransactionActivity"
+            android:theme="@style/WalletTheme" />
+
     </application>
 
 </manifest>
