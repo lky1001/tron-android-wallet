@@ -128,4 +128,11 @@
     <string name="markets_text">Markets</string>
     <string name="navigation_menu_my_account">My Account</string>
     <string name="title_my_account">My Account</string>
+    <string name="my_account_address_text">Address :</string>
+    <string name="test_net_warning_text">(Do not send TRX from your own wallet or exchange to the above account address of testnet!)</string>
+    <string name="account_text">Account</string>
+    <string name="tokens_text">Tokens</string>
+    <string name="frozen_trx_text">Frozen TRX</string>
+    <string name="unfreeze_text">UNFREEZE</string>
+    <string name="freeze_text">FREEZE</string>
 </resources>

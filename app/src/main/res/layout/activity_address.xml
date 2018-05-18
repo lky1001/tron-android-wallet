@@ -44,10 +44,22 @@
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_qrcode"
-        app:layout_constraintVertical_bias="0.288"
+        app:layout_constraintVertical_bias="0.135"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp"
         tools:text="sdfsdfds324hewrkjhdsfk" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/address_title_text"
+        android:padding="15dp"
+        android:text="@string/test_net_warning_text"
+        android:textColor="@android:color/holo_red_dark"
+        app:layout_constraintBottom_toTopOf="@+id/btn_copy_address"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_address" />
 
     <Button
         android:id="@+id/btn_copy_address"
@@ -59,15 +71,16 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@color/colorAccent"
         android:enabled="false"
         android:text="@string/copy_my_address"
         android:textColor="@android:color/white"
-        android:background="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_address"
-        app:layout_constraintVertical_bias="0.164"
+        app:layout_constraintVertical_bias="0.593"
         tools:ignore="MissingConstraints" />
 
 </android.support.constraint.ConstraintLayout>
