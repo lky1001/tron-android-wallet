@@ -165,23 +165,23 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:paddingLeft="25dp"
-                    android:paddingRight="25dp"
+                    android:layout_height="60dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
                     android:gravity="center"
                     android:orientation="horizontal">
                     <TextView
-                        android:id="@+id/token_name_text"
+                        android:id="@+id/frozen_trx_balance_text"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        tools:text="Choco Token" />
+                        tools:text="1,000,000,000" />
 
                     <TextView
-                        android:id="@+id/token_amount_text"
+                        android:id="@+id/frozen_trx_expired_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="1,000,000" />
+                        tools:text="2017-10-10 11:11:11" />
                 </LinearLayout>
 
                 <View
