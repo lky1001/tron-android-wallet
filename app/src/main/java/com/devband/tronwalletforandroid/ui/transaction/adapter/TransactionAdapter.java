@@ -10,7 +10,9 @@ import android.widget.TextView;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -37,6 +39,17 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
         //TODO bindViewHolder
         TransactionInfo info = mList.get(position);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
+        Date date = new Date(info.getTimestamp());
+        holder.time.setText(sdf.format(date));
+
+        holder.hash.setText(info.getHash());
+        holder.block.setText(info.getBlock() + "");
+
+        holder.token.setText(info.getTokenName());
+        holder.amount.setText(info.getAmount() + "");
+
         holder.fromAddress.setText(info.getTransferFromAddress());
         holder.toAddress.setText(info.getTransferToAddress());
     }
@@ -54,9 +67,19 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     public class TransactionViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.from_address)
+        @BindView(R.id.txt_time)
+        TextView time;
+        @BindView(R.id.txt_hash)
+        TextView hash;
+        @BindView(R.id.txt_block)
+        TextView block;
+        @BindView(R.id.txt_amount)
+        TextView amount;
+        @BindView(R.id.txt_token)
+        TextView token;
+        @BindView(R.id.txt_from_address)
         TextView fromAddress;
-        @BindView(R.id.to_address)
+        @BindView(R.id.txt_to_address)
         TextView toAddress;
 
         public TransactionViewHolder(View itemView) {

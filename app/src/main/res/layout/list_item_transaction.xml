@@ -7,51 +7,168 @@
     android:layout_height="match_parent">
 
 
-
     <LinearLayout
-        android:id="@+id/area_address"
+        android:id="@+id/area_token_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/area_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="timestamp"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+            <TextView
+                android:id="@+id/txt_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:gravity="center"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="2018.11.11:00:11:11"/>
+        </android.support.constraint.ConstraintLayout>
+
 
         <LinearLayout
+            android:id="@+id/area_hash"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_gravity="left|center_vertical">
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/from_address" />
-
+            app:layout_constraintTop_toBottomOf="@id/area_time">
             <TextView
-                android:id="@+id/from_address"
-                android:layout_width="match_parent"
+                android:id="@+id/title_hash"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:textColor="#000000"
-                tools:text="27g7bUKnpYVxB8UHdJB8QzA9qSKKhwX5eqs"/>
+                android:text="hash"
+                android:layout_gravity="center_vertical"/>
+            <TextView
+                android:id="@+id/txt_hash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                tools:text="10000.123123123123010000.123123123123010000.123123123123010000.123123123123010000.123123123123010000.1231231231230"/>
         </LinearLayout>
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/area_block"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="right|center_vertical">
+            app:layout_constraintTop_toBottomOf="@id/area_hash">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Block"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+            <TextView
+                android:id="@+id/txt_block"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="10000.1231231231230"/>
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/area_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/area_block">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Amount"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+            <TextView
+                android:id="@+id/txt_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="10000.1231231231230"/>
+        </android.support.constraint.ConstraintLayout>
+
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/area_token_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/area_amount">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Token"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+            <TextView
+                android:id="@+id/txt_token"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="TRX"/>
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/area_from_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/area_token_name">
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/to_address" />
+                android:src="@drawable/from_address"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+            <TextView
+                android:id="@+id/txt_from_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="#000000"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="27g7bUKnpYVxB8UHdJB8QzA9qSKKhwX5eqs"/>
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/area_to_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/area_from_address">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/to_address"
+                app:layout_constraintLeft_toLeftOf="parent"/>
 
             <TextView
-                android:id="@+id/to_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
+                android:id="@+id/txt_to_address"
+                android:layout_width="wrap_content"
+                android:layout_height="23dp"
+                android:layout_gravity="center_vertical"
                 android:textColor="#000000"
-                tools:text="27g7bUKnpYVxB8UHdJB8QzA9qSKKhwX5eqs"/>
-        </LinearLayout>
-
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="27g7bUKnpYVxB8UHdJB8QzA9qSKKhwX5eqs" />
+        </android.support.constraint.ConstraintLayout>
     </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#7d000000"
+        app:layout_constraintTop_toBottomOf="@+id/area_token_info"/>
+
+
+
 
 </android.support.constraint.ConstraintLayout>
