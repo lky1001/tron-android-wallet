@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,8 +12,6 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
-import com.devband.tronwalletforandroid.common.WalletAppManager;
-import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
 import com.devband.tronwalletforandroid.ui.main.MainActivity;
 
 import butterknife.BindView;
@@ -76,6 +73,7 @@ public class BackupAccountActivity extends CommonActivity implements BackupAccou
 
         new MaterialDialog.Builder(BackupAccountActivity.this)
                 .title(R.string.backup_title)
+                .titleColorRes(R.color.colorAccent)
                 .content(R.string.backup_msg)
                 .positiveText(R.string.next_text)
                 .negativeText(R.string.cancen_text)

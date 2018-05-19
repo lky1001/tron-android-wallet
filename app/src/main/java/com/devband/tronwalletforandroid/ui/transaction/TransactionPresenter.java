@@ -5,8 +5,9 @@ import android.util.Log;
 import com.devband.tronlib.Hosts;
 import com.devband.tronlib.ServiceBuilder;
 import com.devband.tronlib.dto.Transaction;
-import com.devband.tronlib.dto.Transactions;
 import com.devband.tronlib.services.TronScanService;
+import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
 
@@ -24,16 +25,16 @@ import io.reactivex.schedulers.Schedulers;
 
 public class TransactionPresenter extends BasePresenter<TransactionView> {
 
-    private static final String TEST_ADDRESS = "27g7bUKnpYVxB8UHdJB8QzA9qSKKhwX5eqs";
-
     public TransactionPresenter(TransactionView view) {
         super(view);
     }
 
     @Override
     public void onCreate() {
+        String address = Tron.getInstance(mContext).getLoginAddress();
+
         TronScanService tronScanService = ServiceBuilder.createService(TronScanService.class, Hosts.TRONSCAM_API);
-        tronScanService.getTransactions(TEST_ADDRESS, "TRX")
+        tronScanService.getTransactions(address, Constants.TRON_SYMBOL)
                 .subscribeOn(Schedulers.io())
                 .map(transactions -> {
                     List<TransactionInfo> infos = new ArrayList<>();
