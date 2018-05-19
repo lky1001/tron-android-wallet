@@ -47,8 +47,9 @@
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/account_title_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginLeft="6dp"
                     android:text="@string/account_text" />
             </LinearLayout>
@@ -81,14 +82,14 @@
                     android:layout_marginRight="15dp"
                     android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@+id/address_title_text"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:gravity="center"
                     tools:text="27g7bUKnpYVxB8UHdJB8QzA9qSKKhwX5eqs" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginBottom="25dp"

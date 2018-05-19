@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -111,7 +112,20 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     public void displayAccountInfo(Protocol.Account account) {
         mAddressText.setText(AccountManager.encode58Check(account.getAddress().toByteArray()));
 
-        for (String key : account.getAssetMap().keySet()) {
+        if (account.getAssetCount() > 0) {
+            for (String key : account.getAssetMap().keySet()) {
+                View v = LayoutInflater.from(MyAccountActivity.this).inflate(R.layout.list_item_token, null);
+                v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                        RecyclerView.LayoutParams.WRAP_CONTENT));
+
+                TextView tokenNameText = v.findViewById(R.id.token_name_text);
+                TextView tokenAmountText = v.findViewById(R.id.token_amount_text);
+
+                tokenNameText.setText(key);
+                tokenAmountText.setText(df.format(account.getAssetMap().get(key)));
+                mTokensLayout.addView(v);
+            }
+        } else {
             View v = LayoutInflater.from(MyAccountActivity.this).inflate(R.layout.list_item_token, null);
             v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                     RecyclerView.LayoutParams.WRAP_CONTENT));
@@ -119,8 +133,9 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
             TextView tokenNameText = v.findViewById(R.id.token_name_text);
             TextView tokenAmountText = v.findViewById(R.id.token_amount_text);
 
-            tokenNameText.setText(key);
-            tokenAmountText.setText(df.format(account.getAssetMap().get(key)));
+            tokenNameText.setText(getString(R.string.no_tokens));
+            tokenNameText.setGravity(Gravity.CENTER);
+            tokenAmountText.setVisibility(View.GONE);
             mTokensLayout.addView(v);
         }
 

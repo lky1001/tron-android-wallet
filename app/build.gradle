@@ -101,6 +101,8 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'com.github.medyo:android-about-page:1.2.4'
     implementation 'com.github.clans:fab:1.6.4'
+    implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
+
 
     implementation('com.mikepenz:aboutlibraries:6.0.8@aar') {
         transitive = true
