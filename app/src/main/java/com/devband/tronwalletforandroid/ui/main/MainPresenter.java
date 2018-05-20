@@ -7,10 +7,9 @@ import com.devband.tronlib.Hosts;
 import com.devband.tronlib.ServiceBuilder;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.services.CoinMarketCapService;
-import com.devband.tronwalletforandroid.common.WalletAppManager;
+import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.Tron;
-import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
@@ -160,13 +159,5 @@ public class MainPresenter extends BasePresenter<MainView> {
         } else if (result == Tron.ERROR_PRIVATE_KEY) {
             mView.failCreateAccount();
         }
-    }
-
-    public boolean matchPassword(@NonNull String password) {
-        return WalletAppManager.getInstance(mContext).login(password) == WalletAppManager.SUCCESS;
-    }
-
-    public String getLoginPrivateKey() {
-        return Tron.getInstance(mContext).getLoginPrivateKey();
     }
 }

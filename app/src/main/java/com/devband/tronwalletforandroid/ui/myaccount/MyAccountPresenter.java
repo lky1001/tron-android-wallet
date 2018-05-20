@@ -1,5 +1,8 @@
 package com.devband.tronwalletforandroid.ui.myaccount;
 
+import android.support.annotation.NonNull;
+
+import com.devband.tronwalletforandroid.common.WalletAppManager;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
@@ -31,7 +34,24 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
     @Override
     public void onResume() {
-        Tron.getInstance(mContext).queryAccount(Tron.getInstance(mContext).getLoginAddress())
+        getAccountAccountInfo();
+    }
+
+    @Override
+    public void onDestroy() {
+
+    }
+
+    public List<AccountModel> getAccountList() {
+        return Tron.getInstance(mContext).getAccountList();
+    }
+
+    public void getAccountAccountInfo() {
+        final String address = Tron.getInstance(mContext).getLoginAddress();
+
+        mView.showLoadingDialog();
+
+        Tron.getInstance(mContext).queryAccount(address)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Protocol.Account>() {
@@ -42,11 +62,13 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
                     @Override
                     public void onSuccess(Protocol.Account account) {
-                        mView.displayAccountInfo(account);
+                        mView.hideDialog();
+                        mView.displayAccountInfo(address, account);
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        mView.hideDialog();
                         e.printStackTrace();
                         // todo - error msg
                         if (e instanceof ConnectException) {
@@ -56,12 +78,15 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
                 });
     }
 
-    @Override
-    public void onDestroy() {
-
+    public boolean matchPassword(@NonNull String password) {
+        return WalletAppManager.getInstance(mContext).login(password) == WalletAppManager.SUCCESS;
     }
 
-    public List<AccountModel> getAccountList() {
-        return Tron.getInstance(mContext).getAccountList();
+    public String getLoginPrivateKey() {
+        return Tron.getInstance(mContext).getLoginPrivateKey();
+    }
+
+    public void changeLoginAccount(@NonNull AccountModel accountModel) {
+        Tron.getInstance(mContext).changeLoginAccount(accountModel);
     }
 }

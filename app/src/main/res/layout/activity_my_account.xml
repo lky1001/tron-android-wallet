@@ -22,20 +22,30 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:orientation="vertical">
-            <Spinner
-                android:id="@+id/account_spinner"
-                style="@style/Widget.AppCompat.Spinner.Underlined"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="15dp"
-                android:paddingBottom="25dp"
-                android:spinnerMode="dropdown" />
+                android:background="@android:color/white">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/my_account_border_color"/>
+
+                <Spinner
+                    android:id="@+id/account_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:paddingBottom="25dp"
+                    android:spinnerMode="dropdown" />
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,11 +74,36 @@
                     android:background="@color/my_account_border_color"/>
 
                 <TextView
-                    android:id="@+id/address_title_text"
+                    android:id="@+id/balance_title_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="25dp"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:text="@string/my_account_balance_text" />
+
+                <TextView
+                    android:id="@+id/balance_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="25dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/balance_title_text"
+                    android:layout_alignBaseline="@+id/balance_title_text"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    tools:text="1,000,000,000 TRX" />
+
+                <TextView
+                    android:id="@+id/address_title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/balance_title_text"
                     android:textSize="14sp"
                     android:gravity="center"
                     android:text="@string/my_account_address_text" />
@@ -82,6 +117,7 @@
                     android:layout_marginRight="15dp"
                     android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@+id/address_title_text"
+                    android:layout_alignBaseline="@+id/address_title_text"
                     android:textSize="12sp"
                     android:gravity="center"
                     tools:text="27g7bUKnpYVxB8UHdJB8QzA9qSKKhwX5eqs" />
@@ -103,6 +139,38 @@
                     android:layout_alignParentBottom="true"
                     android:background="@color/my_account_border_color"/>
             </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/btn_copy_address"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        android:background="@color/colorAccent"
+                        android:textColor="@android:color/white"
+                        android:text="@string/copy_address_text" />
+
+                    <Button
+                        android:id="@+id/btn_export_private_key"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        android:background="@color/colorAccent"
+                        android:textColor="@android:color/white"
+                        android:text="@string/export_private_key_text" />
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

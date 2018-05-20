@@ -135,4 +135,10 @@
     <string name="frozen_trx_text">Frozen TRX</string>
     <string name="unfreeze_text">UNFREEZE</string>
     <string name="freeze_text">FREEZE</string>
+    <string name="my_account_balance_text">Balance :</string>
+    <string name="copy_address_text">Copy Address</string>
+    <string name="export_private_key_text">Export Private Key</string>
+    <string name="title_freeze_trx">Freeze TRX</string>
+    <string name="input_amount_text">Amount</string>
+    <string name="freeze_confirm_text">I confirm to freeze TRX for at least of 3 days</string>
 </resources>

@@ -21,8 +21,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.ui.main.MainActivity;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
+import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 
 import org.tron.protos.Protocol;
@@ -82,7 +82,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
             getSupportActionBar().setTitle(R.string.title_send_token);
         }
 
-        mFromDonations = intent.getBooleanExtra(MainActivity.EXTRA_FROM_DONATIONS, false);
+        mFromDonations = intent.getBooleanExtra(MoreActivity.EXTRA_FROM_DONATIONS, false);
 
         if (intent.getBooleanExtra(QrScanActivity.EXTRA_FROM_TRON_PAY_MENU, false)) {
             String result = intent.getStringExtra(QrScanActivity.EXTRA_QR_CODE_ADDRESS);

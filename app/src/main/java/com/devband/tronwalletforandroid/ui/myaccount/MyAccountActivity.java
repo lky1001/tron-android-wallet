@@ -1,9 +1,13 @@
 package com.devband.tronwalletforandroid.ui.myaccount;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,11 +17,15 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
-import com.devband.tronwalletforandroid.tron.AccountManager;
+import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 
 import org.tron.protos.Protocol;
 
@@ -41,6 +49,9 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     @BindView(R.id.address_text)
     TextView mAddressText;
 
+    @BindView(R.id.balance_text)
+    TextView mBalanceText;
+
     @BindView(R.id.freeze_button)
     Button mFreezeButton;
 
@@ -60,6 +71,8 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private ArrayAdapter<AccountModel> mAccountAdapter;
+
+    private AccountModel mSelectedAccount;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,8 +122,10 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     }
 
     @Override
-    public void displayAccountInfo(Protocol.Account account) {
-        mAddressText.setText(AccountManager.encode58Check(account.getAddress().toByteArray()));
+    public void displayAccountInfo(@NonNull String address, @NonNull Protocol.Account account) {
+        mAddressText.setText(address);
+        mBalanceText.setText(account.getBalance() / Constants.REAL_TRX_AMOUNT + " " + Constants.TRON_SYMBOL);
+        mTokensLayout.removeAllViews();
 
         if (account.getAssetCount() > 0) {
             for (String key : account.getAssetMap().keySet()) {
@@ -165,9 +180,68 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
         }
     }
 
+    @Override
+    public void showLoadingDialog() {
+        showProgressDialog(null, getString(R.string.loading_msg));
+    }
+
+    @Override
+    public void hideDialog() {
+        super.hideDialog();
+    }
+
+    @OnClick(R.id.btn_export_private_key)
+    public void onExportPrivateKeyClick() {
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                .title(R.string.title_export_private_key)
+                .titleColorRes(R.color.colorAccent)
+                .contentColorRes(R.color.colorAccent)
+                .backgroundColorRes(android.R.color.white)
+                .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                .input(getString(R.string.input_password_text), "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        dialog.dismiss();
+                        String password = input.toString();
+
+                        if (!TextUtils.isEmpty(password) && ((MyAccountPresenter) mPresenter).matchPassword(password)) {
+                            String privateKey = ((MyAccountPresenter) mPresenter).getLoginPrivateKey();
+
+                            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                            sharingIntent.setType("text/plain");
+                            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, privateKey);
+                            startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.choice_share_private_key)));
+                        } else {
+                            Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+        MaterialDialog dialog = builder.build();
+        dialog.show();
+    }
+
+    @OnClick(R.id.btn_copy_address)
+    public void onCopyAddressClick() {
+        startActivity(AddressActivity.class);
+    }
+
     @OnClick(R.id.freeze_button)
     public void onFreezeClick() {
-
+        new MaterialDialog.Builder(this)
+                .title(R.string.title_freeze_trx)
+                .titleColorRes(R.color.colorAccent)
+                .contentColorRes(R.color.colorAccent)
+                .backgroundColorRes(android.R.color.white)
+                .customView(R.layout.dialog_freeze_trx, false)
+                .positiveText(R.string.confirm_text)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    }
+                })
+                .show();
     }
 
     @OnClick(R.id.unfreeze_button)
@@ -180,8 +254,8 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
         @Override
         public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int pos, long id) {
             AccountModel accountModel = mAccountAdapter.getItem(pos);
-            //((MainPresenter) mPresenter).changeLoginAccount(accountModel);
-            //checkLoginState();
+            ((MyAccountPresenter) mPresenter).changeLoginAccount(accountModel);
+            ((MyAccountPresenter) mPresenter).getAccountAccountInfo();
         }
 
         @Override
