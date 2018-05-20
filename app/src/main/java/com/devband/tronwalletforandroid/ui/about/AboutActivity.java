@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.devband.tronlib.Hosts;
@@ -87,7 +86,6 @@ public class AboutActivity extends CommonActivity {
                                     .setDescription("TRON is an ambitious project dedicated to building the infrastructure for a truly decentralized Internet. The Tron Protocol, one of the largest blockchain based operating systems in the world, offers scalable, high-availability and high-throughput support that underlies all the decentralized applications in the TRON ecosystem.\n" +
                                             "\n" +
                                             "TRON Protocol and the TVM allow anyone to develop DAPPs for themselves or their communities, with smart contracts making decentralized crowdfunding and token issuance easier than ever. Tron DAPP projects already include Peiwo, Obike, Uplive, game.com, Kitty live and Mico, with 100M+ active users from more than 100 countries and regions around the world.")
-                                    .setImage(R.drawable.ic_tron_red)
                                     .addGroup("Tron info (" + sdf.format(updated) + ")")
                                     .addItem(new Element().setTitle("Name : TRON"))
                                     .addItem(new Element().setTitle("Symbol : TRX"))

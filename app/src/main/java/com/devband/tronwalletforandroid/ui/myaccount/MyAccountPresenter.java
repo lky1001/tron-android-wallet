@@ -2,6 +2,7 @@ package com.devband.tronwalletforandroid.ui.myaccount;
 
 import android.support.annotation.NonNull;
 
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.WalletAppManager;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.Tron;
@@ -68,7 +69,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.hideDialog();
+                        mView.showServerError();
                         e.printStackTrace();
                         // todo - error msg
                         if (e instanceof ConnectException) {
@@ -88,5 +89,69 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
     public void changeLoginAccount(@NonNull AccountModel accountModel) {
         Tron.getInstance(mContext).changeLoginAccount(accountModel);
+    }
+
+    public void freezeBalance(long freezeBalance) {
+        mView.showLoadingDialog();
+
+        Tron.getInstance(mContext).freezeBalance(freezeBalance, Constants.FREEZE_DURATION)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new SingleObserver<Boolean>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result) {
+                    mView.successFreezeBalance();
+                } else {
+                    mView.showServerError();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                mView.showServerError();
+            }
+        });
+    }
+
+    public void unfreezeBalance() {
+        mView.showLoadingDialog();
+        Tron.getInstance(mContext).unfreezeBalance()
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new SingleObserver<Boolean>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result) {
+                    mView.successFreezeBalance();
+                } else {
+                    mView.showServerError();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (e instanceof RuntimeException) {
+                    mView.unableToUnfreeze();
+                } else {
+                    mView.showServerError();
+                }
+            }
+        });
+    }
+
+    public int getLoginAccountIndex() {
+        return Tron.getInstance(mContext).getLoginAccount().getId();
     }
 }

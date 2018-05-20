@@ -260,6 +260,19 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
             AccountModel loginAccount = ((MainPresenter) mPresenter).getLoginAccount();
 
+            List<AccountModel> accountModelList = ((MainPresenter) mPresenter).getAccountList();
+
+            for (int i = 0; i < accountModelList.size(); i++) {
+                int id = ((MainPresenter) mPresenter).getLoginAccountIndex();
+                if (id == accountModelList.get(i).getId()) {
+                    if (mAccountSpinner.getSelectedItemPosition() != i) {
+                        mAccountSpinner.setSelection(i);
+                        return;
+                    }
+                    break;
+                }
+            }
+
             if (loginAccount == null) {
                 mNavHeaderText.setText(R.string.navigation_header_title);
             } else {
@@ -382,8 +395,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         DecimalFormat df = new DecimalFormat("#,##0");
 
         mLoginAccountBalanceText.setText(df.format(balance) + " " + getString(R.string.currency_text));
-        mLoginFrozenBalanceText.setText(df.format(fz) + " " + getString(R.string.frozen_trx));
-        mLoginBandwidthText.setText(df.format(account.getBandwidth() / Constants.REAL_TRX_AMOUNT) + " " + getString(R.string.bandwidth_text));
+        mLoginFrozenBalanceText.setText(df.format(fz));
+        mLoginBandwidthText.setText(df.format(account.getBandwidth() / Constants.REAL_TRX_AMOUNT));
 
         ((MainPresenter) mPresenter).getTronMarketInfo();
     }
@@ -402,6 +415,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
             mPriceHelpImage.setVisibility(View.VISIBLE);
             mLoginAccountPriceText.setVisibility(View.VISIBLE);
+        } else {
+            mPriceHelpImage.setVisibility(View.GONE);
+            mLoginAccountPriceText.setVisibility(View.GONE);
         }
     }
 

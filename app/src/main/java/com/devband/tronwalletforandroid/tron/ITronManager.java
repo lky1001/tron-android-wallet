@@ -28,6 +28,14 @@ public interface ITronManager {
 
     Single<Protocol.Transaction> createTransaction(Contract.TransferContract contract);
 
+    Single<Protocol.Transaction> createTransaction(Contract.FreezeBalanceContract contract);
+
+    Single<Protocol.Transaction> createTransaction(Contract.WithdrawBalanceContract contract);
+
+    Single<Protocol.Transaction> createTransaction(Contract.UnfreezeBalanceContract contract);
+
+    Single<Protocol.Transaction> createTransaction(Contract.UnfreezeAssetContract contract);
+
     Single<Protocol.Transaction> createTransferAssetTransaction(Contract.TransferAssetContract contract);
 
     Single<Boolean> broadcastTransaction(Protocol.Transaction transaction);

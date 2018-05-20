@@ -42,7 +42,17 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="37dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:text="@string/freeze_confirm_text" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_freeze"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/white"
+        android:text="@string/freeze_text" />
 </LinearLayout>

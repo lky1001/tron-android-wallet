@@ -160,4 +160,8 @@ public class MainPresenter extends BasePresenter<MainView> {
             mView.failCreateAccount();
         }
     }
+
+    public int getLoginAccountIndex() {
+        return Tron.getInstance(mContext).getLoginAccount().getId();
+    }
 }

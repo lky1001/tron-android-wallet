@@ -13,11 +13,7 @@ class TronManager implements ITronManager {
     private GrpcClient grpcClient;
 
     TronManager(String host) {
-        grpcClient = new GrpcClient(host);
-    }
-
-    public TronManager(String host, int port) {
-        grpcClient = new GrpcClient(host, port);
+        grpcClient = new GrpcClient(host, host);
     }
 
     @Override
@@ -57,6 +53,26 @@ class TronManager implements ITronManager {
 
     @Override
     public Single<Protocol.Transaction> createTransaction(Contract.TransferContract contract) {
+        return Single.fromCallable(() -> grpcClient.createTransaction(contract));
+    }
+
+    @Override
+    public Single<Protocol.Transaction> createTransaction(Contract.FreezeBalanceContract contract) {
+        return Single.fromCallable(() -> grpcClient.createTransaction(contract));
+    }
+
+    @Override
+    public Single<Protocol.Transaction> createTransaction(Contract.WithdrawBalanceContract contract) {
+        return Single.fromCallable(() -> grpcClient.createTransaction(contract));
+    }
+
+    @Override
+    public Single<Protocol.Transaction> createTransaction(Contract.UnfreezeBalanceContract contract) {
+        return Single.fromCallable(() -> grpcClient.createTransaction(contract));
+    }
+
+    @Override
+    public Single<Protocol.Transaction> createTransaction(Contract.UnfreezeAssetContract contract) {
         return Single.fromCallable(() -> grpcClient.createTransaction(contract));
     }
 

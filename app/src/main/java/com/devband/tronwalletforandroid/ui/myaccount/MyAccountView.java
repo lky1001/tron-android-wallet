@@ -13,4 +13,10 @@ public interface MyAccountView extends IView {
     void showLoadingDialog();
 
     void hideDialog();
+
+    void showServerError();
+
+    void successFreezeBalance();
+
+    void unableToUnfreeze();
 }

@@ -8,18 +8,20 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
@@ -73,6 +75,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     private ArrayAdapter<AccountModel> mAccountAdapter;
 
     private AccountModel mSelectedAccount;
+    private long mAccountBalance;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,6 +104,15 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
         mAccountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mAccountSpinner.setAdapter(mAccountAdapter);
+
+        for (int i = 0; i < accountModelList.size(); i++) {
+            int id = ((MyAccountPresenter) mPresenter).getLoginAccountIndex();
+            if (id == accountModelList.get(i).getId()) {
+                mAccountSpinner.setSelection(i);
+                break;
+            }
+        }
+
         mAccountSpinner.setOnItemSelectedListener(mAccountItemSelectedListener);
     }
 
@@ -123,8 +135,11 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
     @Override
     public void displayAccountInfo(@NonNull String address, @NonNull Protocol.Account account) {
+        Log.d("", address);
+        mAccountBalance = (long) (account.getBalance() / Constants.REAL_TRX_AMOUNT);
+
         mAddressText.setText(address);
-        mBalanceText.setText(account.getBalance() / Constants.REAL_TRX_AMOUNT + " " + Constants.TRON_SYMBOL);
+        mBalanceText.setText(df.format(mAccountBalance) + " " + Constants.TRON_SYMBOL);
         mTokensLayout.removeAllViews();
 
         if (account.getAssetCount() > 0) {
@@ -172,7 +187,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
             mUnFreezeButton.setVisibility(View.GONE);
         }
 
-        mFrozenTrxBalanceText.setText(df.format(frozenBalance));
+        mFrozenTrxBalanceText.setText(df.format(frozenBalance / Constants.REAL_TRX_AMOUNT));
         if (expiredTime > 0) {
             mFrozenTrxExpiredText.setText(sdf.format(new Date(expiredTime)));
         } else {
@@ -188,6 +203,23 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     @Override
     public void hideDialog() {
         super.hideDialog();
+    }
+
+    @Override
+    public void showServerError() {
+        hideDialog();
+        Toast.makeText(MyAccountActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void successFreezeBalance() {
+        ((MyAccountPresenter) mPresenter).getAccountAccountInfo();
+    }
+
+    @Override
+    public void unableToUnfreeze() {
+        hideDialog();
+        Toast.makeText(MyAccountActivity.this, getString(R.string.unable_to_unfreeze_msg), Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.btn_export_private_key)
@@ -229,24 +261,88 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
     @OnClick(R.id.freeze_button)
     public void onFreezeClick() {
-        new MaterialDialog.Builder(this)
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
                 .title(R.string.title_freeze_trx)
                 .titleColorRes(R.color.colorAccent)
                 .contentColorRes(R.color.colorAccent)
                 .backgroundColorRes(android.R.color.white)
-                .customView(R.layout.dialog_freeze_trx, false)
-                .positiveText(R.string.confirm_text)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    }
-                })
-                .show();
+                .customView(R.layout.dialog_freeze_trx, false);
+
+        MaterialDialog dialog = builder.build();
+
+        Button freezeButton = (Button) dialog.getCustomView().findViewById(R.id.btn_freeze);
+        CheckBox agreeFreezeCheckBox = (CheckBox) dialog.getCustomView().findViewById(R.id.agree_freeze_balance);
+        EditText inputAmount = (EditText) dialog.getCustomView().findViewById(R.id.input_amount);
+        EditText inputPassword = (EditText) dialog.getCustomView().findViewById(R.id.input_password);
+
+        freezeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean agree = agreeFreezeCheckBox.isChecked();
+
+                if (!agree) {
+                    Toast.makeText(MyAccountActivity.this, getString(R.string.need_all_agree),
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // check freeze balance
+                long freezeBalance = 0;
+                try {
+                    freezeBalance = Long.parseLong(inputAmount.getText().toString());
+                } catch (NumberFormatException e) {
+                    Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_amount),
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (freezeBalance > mAccountBalance) {
+                    Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_amount),
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String password = inputPassword.getText().toString();
+                if (TextUtils.isEmpty(password) || !((MyAccountPresenter) mPresenter).matchPassword(password)) {
+                    Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password),
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // todo - freeze balance
+                dialog.dismiss();
+                ((MyAccountPresenter) mPresenter).freezeBalance((long) (freezeBalance * Constants.REAL_TRX_AMOUNT));
+            }
+        });
+
+        dialog.show();
     }
 
     @OnClick(R.id.unfreeze_button)
     public void onUnFreezeClick() {
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                .title(R.string.title_unfreeze_trx)
+                .titleColorRes(R.color.colorAccent)
+                .contentColorRes(R.color.colorAccent)
+                .backgroundColorRes(android.R.color.white)
+                .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                .input(getString(R.string.input_password_text), "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        dialog.dismiss();
+                        String password = input.toString();
 
+                        if (!TextUtils.isEmpty(password) && ((MyAccountPresenter) mPresenter).matchPassword(password)) {
+                            ((MyAccountPresenter) mPresenter).unfreezeBalance();
+                        } else {
+                            Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+        MaterialDialog dialog = builder.build();
+        dialog.show();
     }
 
     private android.widget.AdapterView.OnItemSelectedListener mAccountItemSelectedListener = new android.widget.AdapterView.OnItemSelectedListener() {

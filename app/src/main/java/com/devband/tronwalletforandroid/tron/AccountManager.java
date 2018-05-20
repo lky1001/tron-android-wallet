@@ -415,6 +415,30 @@ public class AccountManager {
         return contract;
     }
 
+    public Contract.FreezeBalanceContract createFreezeBalanceContract(long frozenBalance, long frozenDuration) {
+        byte[] ownerAddress = mEcKey.getAddress();
+
+        Contract.FreezeBalanceContract.Builder builder = Contract.FreezeBalanceContract.newBuilder();
+        ByteString byteAddreess = ByteString.copyFrom(ownerAddress);
+
+        builder.setOwnerAddress(byteAddreess).setFrozenBalance(frozenBalance)
+                .setFrozenDuration(frozenDuration);
+
+        return builder.build();
+    }
+
+    public Contract.UnfreezeBalanceContract createUnfreezeBalanceContract() {
+        byte[] ownerAddress = mEcKey.getAddress();
+
+        Contract.UnfreezeBalanceContract.Builder builder = Contract.UnfreezeBalanceContract
+                .newBuilder();
+        ByteString byteAddreess = ByteString.copyFrom(ownerAddress);
+
+        builder.setOwnerAddress(byteAddreess);
+
+        return builder.build();
+    }
+
     public Contract.TransferAssetContract createTransferAssetTransaction(@NonNull byte[] toAddress, @NonNull byte[] assetName, long amount) {
         byte[] ownerAddress = mEcKey.getAddress();
 
