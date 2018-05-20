@@ -17,7 +17,7 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="192dp"
+            android:layout_height="250dp"
             android:fitsSystemWindows="true">
 
             <android.support.design.widget.CollapsingToolbarLayout
@@ -38,7 +38,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="?attr/actionBarSize"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingBottom="10dp"
@@ -54,7 +53,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@android:color/white"
-                            android:textSize="22sp"
+                            android:textSize="18sp"
                             tools:text="ACCOUNT1" />
 
                         <ImageView
@@ -64,17 +63,25 @@
                             android:layout_marginLeft="5dp"
                             app:srcCompat="@drawable/ic_pencil" />
                     </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@color/main_sub_title_color"
+                        android:textSize="12sp"
+                        android:text="@string/current_balance_text" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:orientation="horizontal"
+                        android:orientation="vertical"
                         android:gravity="center">
                         <TextView
                             android:id="@+id/login_account_balance_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="18sp"
+                            android:textSize="22sp"
                             android:textColor="@android:color/white"
                             tools:text="90,000,000,000 TRX" />
 
@@ -82,14 +89,13 @@
                             android:id="@+id/login_account_price_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="5dp"
                             android:gravity="center"
                             android:orientation="horizontal">
                             <TextView
                                 android:id="@+id/login_account_price_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="14sp"
+                                android:textSize="16sp"
                                 android:textColor="@android:color/white"
                                 android:visibility="gone"
                                 tools:text="(10000.000 USD)" />
@@ -104,25 +110,65 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/login_frozen_balance_text"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="2dp"
-                        android:layout_marginRight="5dp"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        tools:text="90,000,000,000 FROZEN TRX" />
+                        android:layout_marginTop="15dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/main_sub_title_color"
+                                android:textSize="12sp"
+                                android:text="@string/frozen_balance_text" />
 
-                    <TextView
-                        android:id="@+id/login_bandwidth_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="2dp"
-                        android:layout_marginRight="5dp"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        tools:text="90 BANDWIDTH" />
+                            <TextView
+                                android:id="@+id/login_frozen_balance_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginRight="5dp"
+                                android:textSize="16sp"
+                                android:textColor="@android:color/white"
+                                tools:text="90,000,000,000" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorPrimaryDark"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/main_sub_title_color"
+                                android:textSize="12sp"
+                                android:text="@string/bandwidth_text" />
+
+                            <TextView
+                                android:id="@+id/login_bandwidth_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginRight="5dp"
+                                android:textSize="16sp"
+                                android:textColor="@android:color/white"
+                                tools:text="90" />
+                        </LinearLayout>
+                    </LinearLayout>
 
                 </LinearLayout>
             </android.support.design.widget.CollapsingToolbarLayout>
@@ -240,7 +286,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_usd"
-                fab:fab_label="@string/menu_request_coin"
+                fab:fab_label="@string/menu_request_token"
                 fab:fab_size="mini" />
 
             <com.github.clans.fab.FloatingActionButton
@@ -248,7 +294,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_qrcode_white"
-                fab:fab_label="@string/menu_send_coin"
+                fab:fab_label="@string/menu_send_token"
                 fab:fab_size="mini" />
         </com.github.clans.fab.FloatingActionMenu>
     </android.support.design.widget.CoordinatorLayout>

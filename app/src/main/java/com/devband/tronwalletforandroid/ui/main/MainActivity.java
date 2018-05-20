@@ -30,21 +30,20 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
-import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
-import com.devband.tronwalletforandroid.common.AdapterView;
-import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.main.adapter.MyTokenListAdapter;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
+import com.devband.tronwalletforandroid.ui.myaccount.MyAccountActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
-import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
-import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
-import com.devband.tronwalletforandroid.ui.transaction.TransactionActivity;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity;
+import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
+import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -61,8 +60,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends CommonActivity implements MainView, NavigationView.OnNavigationItemSelectedListener {
-
-    public static final String EXTRA_FROM_DONATIONS = "from_donations";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -263,6 +260,19 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
             AccountModel loginAccount = ((MainPresenter) mPresenter).getLoginAccount();
 
+            List<AccountModel> accountModelList = ((MainPresenter) mPresenter).getAccountList();
+
+            for (int i = 0; i < accountModelList.size(); i++) {
+                int id = ((MainPresenter) mPresenter).getLoginAccountIndex();
+                if (id == accountModelList.get(i).getId()) {
+                    if (mAccountSpinner.getSelectedItemPosition() != i) {
+                        mAccountSpinner.setSelection(i);
+                        return;
+                    }
+                    break;
+                }
+            }
+
             if (loginAccount == null) {
                 mNavHeaderText.setText(R.string.navigation_header_title);
             } else {
@@ -305,22 +315,17 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.drawer_item_my_account:
+                startActivity(MyAccountActivity.class);
+                break;
             case R.id.drawer_item_my_address:
                 startActivity(AddressActivity.class);
                 break;
             case R.id.drawer_item_send_tron:
-                startActivity(SendCoinActivity.class);
-                break;
-            case R.id.drawer_item_export_private_key:
-                sharePrivateKey();
+                startActivity(SendTokenActivity.class);
                 break;
             case R.id.drawer_item_vote:
                 startActivity(RepresentativeActivity.class);
-                break;
-            case R.id.drawer_item_donations:
-                Intent intent = new Intent(MainActivity.this, SendCoinActivity.class);
-                intent.putExtra(EXTRA_FROM_DONATIONS, true);
-                startActivity(intent);
                 break;
             case R.id.drawer_item_more:
                  startActivity(MoreActivity.class);
@@ -374,7 +379,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             mMyTokenListView.setVisibility(View.VISIBLE);
         }
 
-        Log.i(MainActivity.class.getSimpleName(), "address : " + AccountManager.encode58Check(account.getAddress().toByteArray()));
         Log.i(MainActivity.class.getSimpleName(), "balance : " + account.getBalance() + Constants.TRON_SYMBOL);
         double balance = ((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT;
         long frozenBalance = 0;
@@ -390,8 +394,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         DecimalFormat df = new DecimalFormat("#,##0");
 
         mLoginAccountBalanceText.setText(df.format(balance) + " " + getString(R.string.currency_text));
-        mLoginFrozenBalanceText.setText(df.format(fz) + " " + getString(R.string.frozen_trx));
-        mLoginBandwidthText.setText(df.format(account.getBandwidth() / Constants.REAL_TRX_AMOUNT) + " " + getString(R.string.bandwidth_text));
+        mLoginFrozenBalanceText.setText(df.format(fz));
+        mLoginBandwidthText.setText(df.format(account.getBandwidth() / Constants.REAL_TRX_AMOUNT));
 
         ((MainPresenter) mPresenter).getTronMarketInfo();
     }
@@ -410,6 +414,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
             mPriceHelpImage.setVisibility(View.VISIBLE);
             mLoginAccountPriceText.setVisibility(View.VISIBLE);
+        } else {
+            mPriceHelpImage.setVisibility(View.GONE);
+            mLoginAccountPriceText.setVisibility(View.GONE);
         }
     }
 
@@ -507,34 +514,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                             if (((MainPresenter) mPresenter).changeLoginAccountName(accountName)) {
                                 checkLoginState();
                             }
-                        }
-                    }
-                }).show();
-    }
-
-    private void sharePrivateKey() {
-        new MaterialDialog.Builder(this)
-                .title(R.string.title_export_private_key)
-                .titleColorRes(R.color.colorAccent)
-                .contentColorRes(R.color.colorAccent)
-                .backgroundColorRes(android.R.color.white)
-                .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
-                .input(getString(R.string.input_password_text), "", new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        dialog.dismiss();
-                        String password = input.toString();
-
-                        if (!TextUtils.isEmpty(password) && ((MainPresenter) mPresenter).matchPassword(password)) {
-                            String privateKey = ((MainPresenter) mPresenter).getLoginPrivateKey();
-
-                            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                            sharingIntent.setType("text/plain");
-                            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, privateKey);
-                            startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.choice_share_private_key)));
-                        } else {
-                            Toast.makeText(MainActivity.this, getString(R.string.invalid_password),
-                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).show();

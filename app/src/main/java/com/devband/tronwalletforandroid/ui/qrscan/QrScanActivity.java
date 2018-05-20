@@ -1,20 +1,15 @@
 package com.devband.tronwalletforandroid.ui.qrscan;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.SurfaceView;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
-import com.devband.tronwalletforandroid.ui.sendcoin.SendCoinActivity;
+import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -66,7 +61,7 @@ public class QrScanActivity extends CommonActivity {
                         payInfo = new RequestCoinActivity.PayInfo();
                     }
 
-                    intent = new Intent(QrScanActivity.this, SendCoinActivity.class);
+                    intent = new Intent(QrScanActivity.this, SendTokenActivity.class);
                     intent.putExtra(EXTRA_QR_CODE_ADDRESS, payInfo.address);
                     intent.putExtra(EXTRA_QR_CODE_AMOUNT, payInfo.amount);
                     intent.putExtra(EXTRA_FROM_TRON_PAY_MENU, mFromTronPayMenu);

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:id="@+id/drawer_item_my_account"
+        android:icon="@drawable/ic_account"
+        android:iconTint="@color/colorPrimary"
+        android:title="@string/navigation_menu_my_account" />
+
     <item android:id="@+id/drawer_item_my_address"
         android:icon="@drawable/ic_qrcode_white"
         android:iconTint="@color/colorPrimary"
@@ -10,17 +15,9 @@
         android:icon="@drawable/ic_send"
         android:title="@string/navigation_menu_send" />
 
-    <item android:id="@+id/drawer_item_export_private_key"
-        android:icon="@drawable/ic_backup_wallet"
-        android:title="@string/navigation_menu_export_private_key" />
-
     <item android:id="@+id/drawer_item_vote"
         android:icon="@drawable/ic_thumb"
         android:title="@string/navigation_menu_vote" />
-
-    <item android:id="@+id/drawer_item_donations"
-        android:icon="@drawable/ic_donation"
-        android:title="@string/navigation_menu_donations" />
 
     <item android:id="@+id/drawer_item_more"
         android:icon="@drawable/ic_more"

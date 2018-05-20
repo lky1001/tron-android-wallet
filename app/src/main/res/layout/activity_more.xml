@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -166,6 +166,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
+                android:visibility="gone"
                 android:background="@android:color/white">
 
                 <Button
@@ -248,6 +249,44 @@
                     android:text="@string/feedback_text"
                     android:textSize="14sp"
                     android:textColor="@android:color/black" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/more_border_color"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="17dp"
+                    android:src="@drawable/ic_left_arrow" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="9dp"
+                android:background="@android:color/white">
+
+                <Button
+                    android:id="@+id/more_donations_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center_vertical|left"
+                    android:paddingLeft="23dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/donations_text"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/black" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/more_border_color"/>
 
                 <View
                     android:layout_width="match_parent"

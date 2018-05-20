@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.more;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +14,7 @@ import com.devband.tronwalletforandroid.ui.about.AboutActivity;
 import com.devband.tronwalletforandroid.ui.node.NodeActivity;
 import com.devband.tronwalletforandroid.ui.opensource.OpenSourceActivity;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity;
+import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
 import com.devband.tronwalletforandroid.ui.tronaccount.TronAccountActivity;
 
 import butterknife.BindView;
@@ -20,6 +22,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MoreActivity extends CommonActivity implements MoreView {
+
+    public static final String EXTRA_FROM_DONATIONS = "from_donations";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -86,5 +90,12 @@ public class MoreActivity extends CommonActivity implements MoreView {
     @OnClick(R.id.more_feedback_button)
     public void onFeedbackClick() {
 
+    }
+
+    @OnClick(R.id.more_donations_button)
+    public void onDonationsClick() {
+        Intent intent = new Intent(MoreActivity.this, SendTokenActivity.class);
+        intent.putExtra(EXTRA_FROM_DONATIONS, true);
+        startActivity(intent);
     }
 }

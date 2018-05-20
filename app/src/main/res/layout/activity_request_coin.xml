@@ -52,7 +52,7 @@
             android:id="@+id/input_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/request_coin_text"
+            android:hint="@string/request_token_text"
             android:inputType="numberSigned" />
     </android.support.design.widget.TextInputLayout>
 

@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.sendcoin;
+package com.devband.tronwalletforandroid.ui.sendtoken;
 
 import android.util.Log;
 
@@ -14,9 +14,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class SendCoinPresenter extends BasePresenter<SendCoinView> {
+public class SendTokenPresenter extends BasePresenter<SendTokenView> {
 
-    public SendCoinPresenter(SendCoinView view) {
+    public SendTokenPresenter(SendTokenView view) {
         super(view);
     }
 
@@ -61,7 +61,7 @@ public class SendCoinPresenter extends BasePresenter<SendCoinView> {
 
     }
 
-    public void sendCoin(String password, String toAddress, long amount) {
+    public void sendTron(String password, String toAddress, long amount) {
         if (!Tron.getInstance(mContext).isLogin() || !Tron.getInstance(mContext).validPassword(password)) {
             mView.invalidPassword();
             return;
@@ -79,8 +79,8 @@ public class SendCoinPresenter extends BasePresenter<SendCoinView> {
 
             @Override
             public void onSuccess(Boolean result) {
-                Log.i(SendCoinPresenter.class.getSimpleName(), "send result : " + result);
-                mView.sendCoinResult(result);
+                Log.i(SendTokenPresenter.class.getSimpleName(), "send result : " + result);
+                mView.sendTokenResult(result);
             }
 
             @Override
@@ -109,8 +109,8 @@ public class SendCoinPresenter extends BasePresenter<SendCoinView> {
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        Log.i(SendCoinPresenter.class.getSimpleName(), "send result : " + result);
-                        mView.sendCoinResult(result);
+                        Log.i(SendTokenPresenter.class.getSimpleName(), "send result : " + result);
+                        mView.sendTokenResult(result);
                     }
 
                     @Override

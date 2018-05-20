@@ -39,6 +39,10 @@
             android:theme="@style/WalletTheme" />
 
         <activity
+            android:name=".ui.myaccount.MyAccountActivity"
+            android:theme="@style/WalletTheme" />
+
+        <activity
             android:name=".ui.address.AddressActivity"
             android:theme="@style/WalletTheme" />
 
@@ -47,7 +51,7 @@
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".ui.sendcoin.SendCoinActivity"
+            android:name=".ui.sendtoken.SendTokenActivity"
             android:theme="@style/WalletTheme" />
 
         <activity

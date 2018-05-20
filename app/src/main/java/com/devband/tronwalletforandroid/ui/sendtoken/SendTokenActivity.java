@@ -1,7 +1,6 @@
-package com.devband.tronwalletforandroid.ui.sendcoin;
+package com.devband.tronwalletforandroid.ui.sendtoken;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -22,8 +21,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.ui.main.MainActivity;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
+import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 
 import org.tron.protos.Protocol;
@@ -35,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SendCoinActivity extends CommonActivity implements SendCoinView {
+public class SendTokenActivity extends CommonActivity implements SendTokenView {
 
     private static final int CAMERA_PERMISSION_REQ = 9929;
     public static final int QR_SCAN_ADDRESS = 3321;
@@ -70,7 +69,7 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_send_coin);
+        setContentView(R.layout.activity_send_token);
 
         ButterKnife.bind(this);
 
@@ -80,10 +79,10 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.title_send_coin);
+            getSupportActionBar().setTitle(R.string.title_send_token);
         }
 
-        mFromDonations = intent.getBooleanExtra(MainActivity.EXTRA_FROM_DONATIONS, false);
+        mFromDonations = intent.getBooleanExtra(MoreActivity.EXTRA_FROM_DONATIONS, false);
 
         if (intent.getBooleanExtra(QrScanActivity.EXTRA_FROM_TRON_PAY_MENU, false)) {
             String result = intent.getStringExtra(QrScanActivity.EXTRA_QR_CODE_ADDRESS);
@@ -102,7 +101,7 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
             mQrCodeScanBtn.setVisibility(View.GONE);
         }
 
-        mPresenter = new SendCoinPresenter(this);
+        mPresenter = new SendTokenPresenter(this);
         mPresenter.onCreate();
     }
 
@@ -129,7 +128,7 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
         String address = mInputAddress.getText().toString();
 
         if (address.isEmpty()) {
-            Toast.makeText(SendCoinActivity.this, getString(R.string.invalid_address),
+            Toast.makeText(SendTokenActivity.this, getString(R.string.invalid_address),
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -142,13 +141,13 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
             amountDouble = Double.parseDouble(amountText);
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            Toast.makeText(SendCoinActivity.this, getString(R.string.invalid_amount),
+            Toast.makeText(SendTokenActivity.this, getString(R.string.invalid_amount),
                     Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (amountDouble <= 0 || amountDouble > mSelectedAsset.getBalance()) {
-            Toast.makeText(SendCoinActivity.this, getString(R.string.invalid_amount),
+            Toast.makeText(SendTokenActivity.this, getString(R.string.invalid_amount),
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -157,19 +156,19 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append(getString(R.string.send_coin_warning_msg))
+        sb.append(getString(R.string.send_token_warning_msg))
                 .append("\n\n")
-                .append(getString(R.string.send_coin_address_text))
+                .append(getString(R.string.send_token_address_text))
                 .append(address)
                 .append("\n")
-                .append(getString(R.string.send_coin_token_text))
+                .append(getString(R.string.send_token_token_text))
                 .append(mSelectedAsset.getName())
                 .append("\n")
-                .append(getString(R.string.send_coin_amount_text))
+                .append(getString(R.string.send_token_amount_text))
                 .append(amountText);
 
-        new MaterialDialog.Builder(SendCoinActivity.this)
-                .title(R.string.send_coin_title)
+        new MaterialDialog.Builder(SendTokenActivity.this)
+                .title(R.string.send_token_title)
                 .content(sb.toString())
                 .positiveText(R.string.confirm_text)
                 .negativeText(R.string.cancen_text)
@@ -181,29 +180,29 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
                         long amount = (long) (finalAmountDouble * Constants.REAL_TRX_AMOUNT);
 
                         showProgressDialog(null, getString(R.string.loading_msg));
-                        ((SendCoinPresenter) mPresenter).sendCoin(password, address, amount);
+                        ((SendTokenPresenter) mPresenter).sendTron(password, address, amount);
                     } else {
 //                        showProgressDialog(null, getString(R.string.loading_msg));
-//                        ((SendCoinPresenter) mPresenter).transferAsset(password, address, mSelectedAsset.getName(), (long) finalAmountDouble);
-                        Toast.makeText(SendCoinActivity.this, "Coming soon.", Toast.LENGTH_SHORT).show();
+//                        ((MyAccountPresenter) mPresenter).transferAsset(password, address, mSelectedAsset.getName(), (long) finalAmountDouble);
+                        Toast.makeText(SendTokenActivity.this, "Coming soon.", Toast.LENGTH_SHORT).show();
                     }
                 }).show();
     }
 
     @Override
-    public void sendCoinResult(boolean result) {
+    public void sendTokenResult(boolean result) {
         hideDialog();
 
         if (result) {
             if (mFromDonations) {
                 // todo - thanks donations message
             } else {
-                Toast.makeText(SendCoinActivity.this, getString(R.string.sending_coin_success),
+                Toast.makeText(SendTokenActivity.this, getString(R.string.sending_token_success),
                         Toast.LENGTH_SHORT).show();
                 finishActivity();
             }
         } else {
-            Toast.makeText(SendCoinActivity.this, getString(R.string.sending_coin_failed),
+            Toast.makeText(SendTokenActivity.this, getString(R.string.sending_token_failed),
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -212,7 +211,7 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
     public void invalidPassword() {
         hideDialog();
 
-        Toast.makeText(SendCoinActivity.this, getString(R.string.invalid_password),
+        Toast.makeText(SendTokenActivity.this, getString(R.string.invalid_password),
                 Toast.LENGTH_SHORT).show();
     }
 
@@ -232,7 +231,7 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
                     .build());
         }
 
-        mTokenAdapter = new ArrayAdapter<>(SendCoinActivity.this, android.R.layout.simple_spinner_item,
+        mTokenAdapter = new ArrayAdapter<>(SendTokenActivity.this, android.R.layout.simple_spinner_item,
                 assetModelList);
 
         mTokenAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -246,12 +245,12 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
     public void invalidAddress() {
         hideDialog();
 
-        Toast.makeText(SendCoinActivity.this, getString(R.string.invalid_address),
+        Toast.makeText(SendTokenActivity.this, getString(R.string.invalid_address),
                 Toast.LENGTH_SHORT).show();
     }
 
     private void startQrScan() {
-        Intent qrScanIntent = new Intent(SendCoinActivity.this, QrScanActivity.class);
+        Intent qrScanIntent = new Intent(SendTokenActivity.this, QrScanActivity.class);
         startActivityForResult(qrScanIntent, QR_SCAN_ADDRESS);
     }
 
@@ -264,7 +263,7 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-                    Toast.makeText(SendCoinActivity.this, getString(R.string.camera_error_msg),
+                    Toast.makeText(SendTokenActivity.this, getString(R.string.camera_error_msg),
                             Toast.LENGTH_SHORT).show();
                 } else {
                     requestPermissions(new String[] { Manifest.permission.CAMERA },
@@ -285,7 +284,7 @@ public class SendCoinActivity extends CommonActivity implements SendCoinView {
                 startQrScan();
             }
         } else {
-            Toast.makeText(SendCoinActivity.this, getString(R.string.camera_error_msg),
+            Toast.makeText(SendTokenActivity.this, getString(R.string.camera_error_msg),
                     Toast.LENGTH_SHORT).show();
         }
     }

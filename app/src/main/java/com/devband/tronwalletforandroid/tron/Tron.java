@@ -310,4 +310,42 @@ public class Tron {
     public void voteWitness(@NonNull String address, long amount) {
 
     }
+
+    public Single<Boolean> freezeBalance(long freezeBalance, long freezeDuration) {
+        return Single.fromCallable(() -> {
+            Contract.FreezeBalanceContract freezeBalanceContract = mAccountManager.createFreezeBalanceContract(freezeBalance, freezeDuration);
+
+            return mTronManager.createTransaction(freezeBalanceContract);
+        })
+        .flatMap(transactionSingle -> {
+            Protocol.Transaction transaction = transactionSingle.blockingGet();
+
+            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            // sign transaction
+            transaction = mAccountManager.signTransaction(transaction);
+            return mTronManager.broadcastTransaction(transaction);
+        });
+    }
+
+    public Single<Boolean> unfreezeBalance() {
+        return Single.fromCallable(() -> {
+            Contract.UnfreezeBalanceContract unfreezeBalanceContract = mAccountManager.createUnfreezeBalanceContract();
+
+            return mTronManager.createTransaction(unfreezeBalanceContract);
+        })
+        .flatMap(transactionSingle -> {
+            Protocol.Transaction transaction = transactionSingle.blockingGet();
+
+            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            // sign transaction
+            transaction = mAccountManager.signTransaction(transaction);
+            return mTronManager.broadcastTransaction(transaction);
+        });
+    }
 }

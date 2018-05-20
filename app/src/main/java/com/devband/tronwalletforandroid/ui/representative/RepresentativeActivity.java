@@ -207,7 +207,7 @@ public class RepresentativeActivity extends CommonActivity implements Representa
                 .append(df.format(amount) + " " + Constants.REAL_TRX_AMOUNT);
 
         new MaterialDialog.Builder(RepresentativeActivity.this)
-                .title(R.string.send_coin_title)
+                .title(R.string.send_token_title)
                 .content(sb.toString())
                 .positiveText(R.string.confirm_text)
                 .negativeText(R.string.cancen_text)

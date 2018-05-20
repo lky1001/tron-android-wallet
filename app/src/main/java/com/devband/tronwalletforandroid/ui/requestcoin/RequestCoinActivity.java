@@ -51,7 +51,7 @@ public class RequestCoinActivity extends CommonActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.title_request_coin);
+            getSupportActionBar().setTitle(R.string.title_request_token);
         }
     }
 
