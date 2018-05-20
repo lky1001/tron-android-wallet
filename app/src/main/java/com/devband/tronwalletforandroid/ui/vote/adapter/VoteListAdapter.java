@@ -58,6 +58,9 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
         holder.voteNoText.setText(item.getNo() + ".");
         holder.representativeUrlText.setText(item.getUrl());
         holder.representativeAddressText.setText(item.getAddress());
+        holder.yourVoteText.setText(df.format(item.getMyVoteCount()));
+        holder.totalVoteText.setText(df.format(item.getVoteCount())
+                + " (" + percentDf.format((item.getVoteCount() / item.getTotalVoteCount()) + "%)"));
     }
 
     @Override
@@ -114,6 +117,12 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
 
         @BindView(R.id.representative_address_text)
         TextView representativeAddressText;
+
+        @BindView(R.id.your_votes_text)
+        TextView yourVoteText;
+
+        @BindView(R.id.total_votes_text)
+        TextView totalVoteText;
 
         @BindView(R.id.representative_vote_button)
         Button voteButton;

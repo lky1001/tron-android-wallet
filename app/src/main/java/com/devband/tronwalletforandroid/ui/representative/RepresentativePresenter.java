@@ -71,15 +71,15 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
                 representatives.add(Representative.builder()
                         .address(AccountManager.encode58Check(witness.getAddress().toByteArray()))
                         .url(witness.getUrl())
-                        .voteCount(witness.getVoteCount())
+                        .voteCount(witness.getTotalVoteCount())
                         .latestBlockNum(witness.getLatestBlockNum())
                         .totalProduced(witness.getTotalProduced())
                         .totalMissed(witness.getTotalMissed())
                         .productivity(((double) witness.getTotalProduced()) / (witness.getTotalProduced() + witness.getTotalMissed()))
                         .build());
 
-                if (witness.getVoteCount() > highestVotes) {
-                    highestVotes = witness.getVoteCount();
+                if (witness.getTotalVoteCount() > highestVotes) {
+                    highestVotes = witness.getTotalVoteCount();
                 }
             }
 

@@ -21,5 +21,7 @@ public class VoteItem {
 
     private Long totalVoteCount;
 
+    private Long voteCount;
+
     private Long myVoteCount;
 }

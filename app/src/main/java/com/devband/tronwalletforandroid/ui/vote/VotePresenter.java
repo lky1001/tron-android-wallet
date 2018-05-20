@@ -83,11 +83,11 @@ public class VotePresenter extends BasePresenter<VoteView> {
                 representatives.add(VoteItem.builder()
                         .address(AccountManager.encode58Check(witness.getAddress().toByteArray()))
                         .url(witness.getUrl())
-                        .totalVoteCount(witness.getVoteCount())
+                        .voteCount(witness.getTotalVoteCount())
                         .myVoteCount(myVoteCount)
                         .build());
 
-                totalVotes += witness.getVoteCount();
+                totalVotes += witness.getTotalVoteCount();
             }
 
             Descending descending = new Descending();
@@ -96,6 +96,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
             for (int i = 0; i < cnt; i++) {
                 VoteItem representative = representatives.get(i);
                 representative.setNo(i + 1);
+                representative.setTotalVoteCount(totalVotes);
             }
 
             long myVotePoint = 0;
@@ -142,7 +143,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
 
         @Override
         public int compare(VoteItem o1, VoteItem o2) {
-            return o2.getTotalVoteCount().compareTo(o1.getTotalVoteCount());
+            return o2.getVoteCount().compareTo(o1.getVoteCount());
         }
     }
 }
