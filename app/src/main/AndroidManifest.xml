@@ -67,6 +67,10 @@
             android:theme="@style/MainTheme" />
 
         <activity
+            android:name=".ui.vote.VoteActivity"
+            android:theme="@style/MainTheme" />
+
+        <activity
             android:name=".ui.node.NodeActivity"
             android:theme="@style/MainTheme" />
 

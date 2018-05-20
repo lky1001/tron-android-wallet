@@ -86,7 +86,7 @@ message permision {
 // Witness
 message Witness {
   bytes address = 1;
-  int64 voteCount = 2;
+  int64 totalVoteCount = 2;
   bytes pubKey = 3;
   string url = 4;
   int64 totalProduced = 5;

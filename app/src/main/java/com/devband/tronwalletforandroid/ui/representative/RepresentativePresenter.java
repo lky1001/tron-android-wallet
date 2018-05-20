@@ -59,7 +59,7 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
     public void getRepresentativeList() {
         Single.fromCallable(() -> Tron.getInstance(mContext).getWitnessList().blockingGet())
         .map(witnessList -> {
-            List<Representative> Representatives = new ArrayList<>();
+            List<Representative> representatives = new ArrayList<>();
 
             int cnt = witnessList.getWitnessesCount();
 
@@ -68,7 +68,7 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
             for (int i = 0; i < cnt; i++) {
                 Protocol.Witness witness = witnessList.getWitnesses(i);
 
-                Representatives.add(Representative.builder()
+                representatives.add(Representative.builder()
                         .address(AccountManager.encode58Check(witness.getAddress().toByteArray()))
                         .url(witness.getUrl())
                         .voteCount(witness.getVoteCount())
@@ -84,10 +84,10 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
             }
 
             Descending descending = new Descending();
-            Collections.sort(Representatives, descending);
+            Collections.sort(representatives, descending);
 
             return RepresentativeList.builder()
-                    .representativeList(Representatives)
+                    .representativeList(representatives)
                     .representativeCount(cnt)
                     .highestVotes(highestVotes)
                     .build();

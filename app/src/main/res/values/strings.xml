@@ -148,4 +148,9 @@
     <string name="current_balance_text">CURRENT BALANCE</string>
     <string name="unable_to_unfreeze_msg">Unable to unfreeze TRX. This could be caused because the minimal freeze period hasn\'t been reached yet.</string>
     <string name="my_account_tron_power_text">Tron Power</string>
+    <string name="team_page_text">Team Page</string>
+    <string name="my_votes_text">Show only my votes</string>
+    <string name="title_vote">Votes</string>
+    <string name="your_votes_text">Your votes :</string>
+    <string name="total_votes_text">Total votes :</string>
 </resources>
