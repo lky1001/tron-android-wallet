@@ -199,7 +199,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
-                    android:text="@string/frozen_trx_text" />
+                    android:text="@string/my_account_tron_power_text" />
             </LinearLayout>
 
             <LinearLayout

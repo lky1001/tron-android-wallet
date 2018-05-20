@@ -187,7 +187,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
             mUnFreezeButton.setVisibility(View.GONE);
         }
 
-        mFrozenTrxBalanceText.setText(df.format(frozenBalance / Constants.REAL_TRX_AMOUNT));
+        mFrozenTrxBalanceText.setText(df.format(frozenBalance / Constants.REAL_TRX_AMOUNT) + " " + Constants.TRON_SYMBOL);
         if (expiredTime > 0) {
             mFrozenTrxExpiredText.setText(sdf.format(new Date(expiredTime)));
         } else {

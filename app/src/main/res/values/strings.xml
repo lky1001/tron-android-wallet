@@ -124,7 +124,6 @@
     <string name="vote_representative_amount_text">Amount : </string>
     <string name="productivity_text">Productivity</string>
     <string name="frozen_trx">FROZEN TRX</string>
-    <string name="bandwidth_text">BANDWIDTH</string>
     <string name="markets_text">Markets</string>
     <string name="title_transaction_text">Transactions</string>
     <string name="navigation_menu_my_account">My Account</string>
@@ -144,7 +143,9 @@
     <string name="input_amount_text">Amount</string>
     <string name="freeze_confirm_text">I confirm to freeze TRX for at least of 3 days</string>
     <string name="donations_text">Donations</string>
+    <string name="entropy_text">ENTROPY</string>
+    <string name="tron_power_text">TRON POWER</string>
     <string name="current_balance_text">CURRENT BALANCE</string>
-    <string name="frozen_balance_text">FROZEN TRX</string>
     <string name="unable_to_unfreeze_msg">Unable to unfreeze TRX. This could be caused because the minimal freeze period hasn\'t been reached yet.</string>
+    <string name="my_account_tron_power_text">Tron Power</string>
 </resources>
