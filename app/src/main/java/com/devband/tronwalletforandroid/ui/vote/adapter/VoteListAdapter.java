@@ -13,6 +13,7 @@ import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.vote.dto.VoteItem;
 
 import java.text.DecimalFormat;
@@ -30,16 +31,16 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
 
     private Context mContext;
 
-    private View.OnClickListener mOnClickListener;
+    private View.OnClickListener mVoteClickListener;
 
     private DecimalFormat df = new DecimalFormat("#,##0");
     private DecimalFormat percentDf = new DecimalFormat("#,##0.00");
 
-    public VoteListAdapter(Context mContext, View.OnClickListener onClickListener) {
+    public VoteListAdapter(Context mContext, View.OnClickListener voteClickListener) {
         this.mAllList = new ArrayList<>();
         this.mCurrentList = mAllList;
         this.mContext = mContext;
-        this.mOnClickListener = onClickListener;
+        this.mVoteClickListener = voteClickListener;
     }
 
     @NonNull
@@ -64,6 +65,14 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
                 + " (" + percentDf.format(((double) item.getVoteCount() / (double) item.getTotalVoteCount()) * 100f) + "%)");
 
         long progress = (long) (((double) item.getVoteCount() / (double) item.getTotalVoteCount()) * 10000f);
+        holder.voteProgress.setMax(Constants.VOTE_MAX_PROGRESS);
+        // total representative votes
+        holder.voteProgress.setSecondaryProgress((float) item.getVoteCount() / (float) item.getTotalVoteCount() * Constants.VOTE_MAX_PROGRESS);
+        // user votes
+        holder.voteProgress.setProgress((float) item.getMyVoteCount() / (float) item.getTotalVoteCount() * Constants.VOTE_MAX_PROGRESS);
+
+        holder.voteButton.setOnClickListener(mVoteClickListener);
+        holder.voteButton.setTag(item);
     }
 
     @Override

@@ -310,7 +310,6 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                     return;
                 }
 
-                // todo - freeze balance
                 dialog.dismiss();
                 ((MyAccountPresenter) mPresenter).freezeBalance((long) (freezeBalance * Constants.REAL_TRX_AMOUNT));
             }

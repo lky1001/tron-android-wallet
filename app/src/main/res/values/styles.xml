@@ -42,4 +42,8 @@
         <item name="android:textColorHint">@color/colorPrimaryDark</item>
     </style>
 
+    <style name="CheckBoxTheme" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@android:color/black</item>
+    </style>
+
 </resources>

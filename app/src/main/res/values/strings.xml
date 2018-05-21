@@ -112,6 +112,7 @@
     <string name="missed_block_text">Missed Blocks</string>
     <string name="votes_text">Votes :</string>
     <string name="representative_count_text">Representatives :</string>
+    <string name="vote_representative_count_text">Representatives</string>
     <string name="highest_votes_text">Highest Votes :</string>
     <string name="account_count_text">Account :</string>
     <string name="highest_trx_text">Highest :</string>
@@ -152,5 +153,11 @@
     <string name="my_votes_text">Show only my votes</string>
     <string name="title_vote">Votes</string>
     <string name="your_votes_text">Your votes :</string>
-    <string name="total_votes_text">Total votes :</string>
+    <string name="total_votes_text">Total votes</string>
+    <string name="votes_remaining_text">Votes Remaining</string>
+    <string name="super_representatives_text">Super Representatives</string>
+    <string name="super_representative_candidates_text">Super Representative Candidates</string>
+    <string name="votes_remaining_help_text">You can get vote point(tron power) by freezing trx.\nMy Account > Tron Power > Freeze.</string>
+    <string name="input_vote_text">Vote</string>
+    <string name="vote_confirm_text">I confirm to vote</string>
 </resources>

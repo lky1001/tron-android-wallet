@@ -13,6 +13,7 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.ui.representative.dto.Representative;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -21,7 +22,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RepresentativeListAdapter extends RecyclerView.Adapter<RepresentativeListAdapter.RepresentativeViewHolder> implements AdapterDataModel<Representative>, AdapterView {
+public class RepresentativeListAdapter extends RecyclerView.Adapter<RepresentativeListAdapter.RepresentativeViewHolder>
+        implements AdapterDataModel<Representative>, AdapterView, StickyRecyclerHeadersAdapter<RepresentativeListAdapter.RepresentativeHeaderHolder> {
 
     private List<Representative> mList;
 
@@ -59,6 +61,33 @@ public class RepresentativeListAdapter extends RecyclerView.Adapter<Representati
         holder.producedBlockText.setText(df.format(item.getTotalProduced()));
         holder.missedBlockText.setText(df.format(item.getTotalMissed()));
         holder.productivityText.setText(percentDf.format(item.getProductivity() * 100) + "%");
+    }
+
+    @Override
+    public long getHeaderId(int position) {
+        if (position < Constants.SUPER_REPRESENTATIVE_COUNT) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    @Override
+    public RepresentativeListAdapter.RepresentativeHeaderHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item_representative_header, parent, false);
+        return new RepresentativeHeaderHolder(view);
+    }
+
+    @Override
+    public void onBindHeaderViewHolder(RepresentativeListAdapter.RepresentativeHeaderHolder holder, int position) {
+        if (position < Constants.SUPER_REPRESENTATIVE_COUNT) {
+            holder.headerText.setText(R.string.super_representatives_text);
+            holder.headerText.setBackgroundResource(R.color.colorPrimaryDark);
+        } else {
+            holder.headerText.setText(R.string.super_representative_candidates_text);
+            holder.headerText.setBackgroundResource(R.color.super_representative_background_color);
+        }
     }
 
     @Override
@@ -129,6 +158,17 @@ public class RepresentativeListAdapter extends RecyclerView.Adapter<Representati
         TextView productivityText;
 
         public RepresentativeViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    public class RepresentativeHeaderHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.header_text)
+        TextView headerText;
+
+        public RepresentativeHeaderHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

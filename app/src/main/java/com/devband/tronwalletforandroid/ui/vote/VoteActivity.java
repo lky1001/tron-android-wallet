@@ -7,21 +7,28 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.vote.adapter.VoteListAdapter;
+import com.devband.tronwalletforandroid.ui.vote.dto.VoteItem;
 
 import java.text.DecimalFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class VoteActivity extends CommonActivity implements VoteView {
 
@@ -37,6 +44,9 @@ public class VoteActivity extends CommonActivity implements VoteView {
     @BindView(R.id.listview)
     RecyclerView mVoteListView;
 
+    @BindView(R.id.votes_remaining_count_title_text)
+    TextView mVoteRemainingCountTitleText;
+
     @BindView(R.id.representative_title_text)
     TextView mRepresentativeTitleText;
 
@@ -51,6 +61,11 @@ public class VoteActivity extends CommonActivity implements VoteView {
 
     @BindView(R.id.total_votes_text)
     TextView mTotalVotesText;
+
+    @BindView(R.id.votes_remaining_count_text)
+    TextView mVoteRemainingCountText;
+
+    private long mVotePoint;
 
     private LinearLayoutManager mLayoutManager;
     private AdapterView mAdapterView;
@@ -81,7 +96,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
         mVoteListView.addItemDecoration(new DividerItemDecoration(0));
         mVoteListView.setNestedScrollingEnabled(false);
 
-        mVoteListAdapter = new VoteListAdapter(VoteActivity.this, null);
+        mVoteListAdapter = new VoteListAdapter(VoteActivity.this, mVoteClickListener);
         mVoteListView.setAdapter(mVoteListAdapter);
         mAdapterView = mVoteListAdapter;
 
@@ -101,6 +116,8 @@ public class VoteActivity extends CommonActivity implements VoteView {
                     mTotalVotesTitleText.setVisibility(View.GONE);
                     mRepresentativeCountText.setVisibility(View.GONE);
                     mTotalVotesText.setVisibility(View.GONE);
+                    mVoteRemainingCountTitleText.setVisibility(View.GONE);
+                    mVoteRemainingCountText.setVisibility(View.GONE);
                     isShow = true;
                 } else if(isShow) {
                     mToolbarLayout.setTitle("");
@@ -109,6 +126,8 @@ public class VoteActivity extends CommonActivity implements VoteView {
                     mTotalVotesTitleText.setVisibility(View.VISIBLE);
                     mRepresentativeCountText.setVisibility(View.VISIBLE);
                     mTotalVotesText.setVisibility(View.VISIBLE);
+                    mVoteRemainingCountTitleText.setVisibility(View.VISIBLE);
+                    mVoteRemainingCountText.setVisibility(View.VISIBLE);
                     isShow = false;
                 }
             }
@@ -144,14 +163,97 @@ public class VoteActivity extends CommonActivity implements VoteView {
     @Override
     public void displayVoteInfo(long totalVotes, long voteItemCount, long myVotePoint, long totalMyVotes) {
         mTotalVotesText.setText(df.format(totalVotes));
-        mRepresentativeCountTitleText.setText(df.format(voteItemCount));
+        mRepresentativeCountText.setText(df.format(voteItemCount));
+        mVoteRemainingCountText.setText(String.valueOf(df.format(myVotePoint - totalMyVotes)));
+        mVotePoint = myVotePoint;
 
         mRepresentativeTitleText.setVisibility(View.VISIBLE);
         mRepresentativeCountTitleText.setVisibility(View.VISIBLE);
         mTotalVotesTitleText.setVisibility(View.VISIBLE);
         mRepresentativeCountText.setVisibility(View.VISIBLE);
         mTotalVotesText.setVisibility(View.VISIBLE);
+        mVoteRemainingCountTitleText.setVisibility(View.VISIBLE);
+        mVoteRemainingCountText.setVisibility(View.VISIBLE);
 
         hideDialog();
     }
+
+    @OnClick(R.id.votes_remaining_layout)
+    public void onVoteRemainingHelpClick() {
+        new MaterialDialog.Builder(VoteActivity.this)
+                .title(getString(R.string.votes_remaining_text))
+                .content(getString(R.string.votes_remaining_help_text))
+                .titleColorRes(android.R.color.black)
+                .contentColorRes(android.R.color.black)
+                .backgroundColorRes(android.R.color.white)
+                .autoDismiss(true)
+                .build()
+                .show();
+    }
+
+    private View.OnClickListener mVoteClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            VoteItem item = (VoteItem) v.getTag();
+
+            if (item != null) {
+                MaterialDialog.Builder builder = new MaterialDialog.Builder(VoteActivity.this)
+                        .title(R.string.title_vote)
+                        .titleColorRes(R.color.colorAccent)
+                        .contentColorRes(R.color.colorAccent)
+                        .backgroundColorRes(android.R.color.white)
+                        .customView(R.layout.dialog_vote, false);
+
+                MaterialDialog dialog = builder.build();
+
+                TextView voteInfoText = (TextView) dialog.getCustomView().findViewById(R.id.vote_info);
+                Button voteButton = (Button) dialog.getCustomView().findViewById(R.id.btn_vote);
+                CheckBox agreeVoteCheckBox = (CheckBox) dialog.getCustomView().findViewById(R.id.agree_vote);
+                EditText inputVote = (EditText) dialog.getCustomView().findViewById(R.id.input_vote);
+                EditText inputPassword = (EditText) dialog.getCustomView().findViewById(R.id.input_password);
+
+                voteInfoText.setText(item.getUrl() + "(" + item.getAddress() + ")");
+
+                voteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        boolean agree = agreeVoteCheckBox.isChecked();
+
+                        if (!agree) {
+                            Toast.makeText(VoteActivity.this, getString(R.string.need_all_agree),
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        long voteBalance = 0;
+
+                        try {
+                            voteBalance = Long.parseLong(inputVote.getText().toString());
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(VoteActivity.this, getString(R.string.invalid_amount),
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        if (voteBalance > mVotePoint) {
+                            Toast.makeText(VoteActivity.this, getString(R.string.invalid_amount),
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        String password = inputPassword.getText().toString();
+                        if (TextUtils.isEmpty(password) || !((VotePresenter) mPresenter).matchPassword(password)) {
+                            Toast.makeText(VoteActivity.this, getString(R.string.invalid_password),
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            }
+        }
+    };
 }
