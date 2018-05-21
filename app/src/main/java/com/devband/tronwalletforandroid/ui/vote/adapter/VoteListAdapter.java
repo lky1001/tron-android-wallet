@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
@@ -60,7 +61,9 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
         holder.representativeAddressText.setText(item.getAddress());
         holder.yourVoteText.setText(df.format(item.getMyVoteCount()));
         holder.totalVoteText.setText(df.format(item.getVoteCount())
-                + " (" + percentDf.format((item.getVoteCount() / item.getTotalVoteCount()) + "%)"));
+                + " (" + percentDf.format(((double) item.getVoteCount() / (double) item.getTotalVoteCount()) * 100f) + "%)");
+
+        long progress = (long) (((double) item.getVoteCount() / (double) item.getTotalVoteCount()) * 10000f);
     }
 
     @Override
@@ -123,6 +126,9 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
 
         @BindView(R.id.total_votes_text)
         TextView totalVoteText;
+
+        @BindView(R.id.progress_votes)
+        RoundCornerProgressBar voteProgress;
 
         @BindView(R.id.representative_vote_button)
         Button voteButton;

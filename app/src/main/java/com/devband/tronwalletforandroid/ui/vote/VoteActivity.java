@@ -43,14 +43,14 @@ public class VoteActivity extends CommonActivity implements VoteView {
     @BindView(R.id.representative_count_title_text)
     TextView mRepresentativeCountTitleText;
 
-    @BindView(R.id.highest_votes_title_text)
-    TextView mHighestVotesTitleText;
+    @BindView(R.id.total_votes_title_text)
+    TextView mTotalVotesTitleText;
 
     @BindView(R.id.representative_count_text)
     TextView mRepresentativeCountText;
 
-    @BindView(R.id.highest_votes_text)
-    TextView mHighestVotesText;
+    @BindView(R.id.total_votes_text)
+    TextView mTotalVotesText;
 
     private LinearLayoutManager mLayoutManager;
     private AdapterView mAdapterView;
@@ -98,17 +98,17 @@ public class VoteActivity extends CommonActivity implements VoteView {
                     mToolbarLayout.setTitle(getString(R.string.title_vote));
                     mRepresentativeTitleText.setVisibility(View.GONE);
                     mRepresentativeCountTitleText.setVisibility(View.GONE);
-                    mHighestVotesTitleText.setVisibility(View.GONE);
+                    mTotalVotesTitleText.setVisibility(View.GONE);
                     mRepresentativeCountText.setVisibility(View.GONE);
-                    mHighestVotesText.setVisibility(View.GONE);
+                    mTotalVotesText.setVisibility(View.GONE);
                     isShow = true;
                 } else if(isShow) {
                     mToolbarLayout.setTitle("");
                     mRepresentativeTitleText.setVisibility(View.VISIBLE);
                     mRepresentativeCountTitleText.setVisibility(View.VISIBLE);
-                    mHighestVotesTitleText.setVisibility(View.VISIBLE);
+                    mTotalVotesTitleText.setVisibility(View.VISIBLE);
                     mRepresentativeCountText.setVisibility(View.VISIBLE);
-                    mHighestVotesText.setVisibility(View.VISIBLE);
+                    mTotalVotesText.setVisibility(View.VISIBLE);
                     isShow = false;
                 }
             }
@@ -143,6 +143,14 @@ public class VoteActivity extends CommonActivity implements VoteView {
 
     @Override
     public void displayVoteInfo(long totalVotes, long voteItemCount, long myVotePoint, long totalMyVotes) {
+        mTotalVotesText.setText(df.format(totalVotes));
+        mRepresentativeCountTitleText.setText(df.format(voteItemCount));
+
+        mRepresentativeTitleText.setVisibility(View.VISIBLE);
+        mRepresentativeCountTitleText.setVisibility(View.VISIBLE);
+        mTotalVotesTitleText.setVisibility(View.VISIBLE);
+        mRepresentativeCountText.setVisibility(View.VISIBLE);
+        mTotalVotesText.setVisibility(View.VISIBLE);
 
         hideDialog();
     }

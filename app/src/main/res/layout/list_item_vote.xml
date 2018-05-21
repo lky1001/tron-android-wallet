@@ -46,6 +46,7 @@
                     android:id="@+id/representative_address_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
                     android:textSize="10sp"
                     tools:text="27g8LmoFZqreoGA7DXMBACYUrtHJhwDtRN8"/>
 
@@ -92,11 +93,11 @@
                     android:id="@+id/progress_votes"
                     android:layout_width="200dp"
                     android:layout_height="10dp"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="5dp"
                     app:rcProgress="30"
                     app:rcSecondaryProgress="3000"
                     app:rcMax="10000"
-                    app:rcRadius="0dp"
+                    app:rcRadius="3dp"
                     app:rcBackgroundPadding="1dp"
                     app:rcProgressColor="@color/colorPrimary"
                     app:rcSecondaryProgressColor="@color/colorPrimaryDark"
@@ -117,6 +118,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:background="@color/colorAccent"
+                android:visibility="invisible"
                 android:text="@string/team_page_text" />
 
             <Button
