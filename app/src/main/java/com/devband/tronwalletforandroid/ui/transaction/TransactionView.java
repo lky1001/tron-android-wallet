@@ -11,6 +11,9 @@ import java.util.List;
 
 public interface TransactionView extends IView {
 
-    public void transactionDataLoadSuccess(List<TransactionInfo> transactionInfos);
+    void transactionDataLoadSuccess(List<TransactionInfo> transactionInfos);
 
+    void showLoadingDialog();
+
+    void showServerError();
 }

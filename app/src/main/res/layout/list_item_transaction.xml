@@ -1,174 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/area_token_info"
+        android:id="@+id/send_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/area_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="timestamp"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-            <TextView
-                android:id="@+id/txt_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
-                android:gravity="center"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:text="2018.11.11:00:11:11"/>
-        </android.support.constraint.ConstraintLayout>
-
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:tint="@color/more_text_color"
+            app:srcCompat="@drawable/ic_send" />
 
         <LinearLayout
-            android:id="@+id/area_hash"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/area_time">
+            android:layout_weight="1"
+            android:orientation="vertical">
             <TextView
-                android:id="@+id/title_hash"
+                android:id="@+id/send_date_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:ellipsize="end"
+                android:textSize="12sp"
+                tools:text="2018-07-07 21:22:22" />
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="hash"
-                android:layout_gravity="center_vertical"/>
-            <TextView
-                android:id="@+id/txt_hash"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                tools:text="10000.123123123123010000.123123123123010000.123123123123010000.123123123123010000.123123123123010000.1231231231230"/>
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:text="@string/to_text" />
+
+                <TextView
+                    android:id="@+id/send_address_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    tools:text="sadfsafdasdfasfasfasfas" />
+            </LinearLayout>
         </LinearLayout>
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/area_block"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/send_amount_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/area_hash">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Block"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-            <TextView
-                android:id="@+id/txt_block"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:text="10000.1231231231230"/>
-        </android.support.constraint.ConstraintLayout>
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/colorPrimary"
+            tools:text="1,000,000 TRX" />
+    </LinearLayout>
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/area_amount"
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/receive_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:tint="@color/more_text_color"
+            app:srcCompat="@drawable/ic_download" />
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/area_block">
+            android:layout_weight="1"
+            android:orientation="vertical">
             <TextView
+                android:id="@+id/receive_date_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:ellipsize="end"
+                tools:text="2018-07-07 21:22:22" />
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Amount"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-            <TextView
-                android:id="@+id/txt_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:text="10000.1231231231230"/>
-        </android.support.constraint.ConstraintLayout>
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:text="@string/from_text" />
 
+                <TextView
+                    android:id="@+id/receive_address_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    tools:text="sadfsafdasdfasfasfasfas" />
+            </LinearLayout>
+        </LinearLayout>
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/area_token_name"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/receive_amount_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/area_amount">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Token"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-            <TextView
-                android:id="@+id/txt_token"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:text="TRX"/>
-        </android.support.constraint.ConstraintLayout>
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/area_from_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/area_token_name">
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/from_address"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-            <TextView
-                android:id="@+id/txt_from_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textColor="#000000"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:text="27g7bUKnpYVxB8UHdJB8QzA9qSKKhwX5eqs"/>
-        </android.support.constraint.ConstraintLayout>
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/area_to_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/area_from_address">
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/to_address"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-
-            <TextView
-                android:id="@+id/txt_to_address"
-                android:layout_width="wrap_content"
-                android:layout_height="23dp"
-                android:layout_gravity="center_vertical"
-                android:textColor="#000000"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:text="27g7bUKnpYVxB8UHdJB8QzA9qSKKhwX5eqs" />
-        </android.support.constraint.ConstraintLayout>
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            tools:text="1,000,000 TRX" />
     </LinearLayout>
 
     <View
-        android:id="@+id/divider"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#7d000000"
-        app:layout_constraintTop_toBottomOf="@+id/area_token_info"/>
-
-
-
-
-</android.support.constraint.ConstraintLayout>
+        android:layout_height="1dp"
+        android:background="@color/main_border_color" />
+</LinearLayout>

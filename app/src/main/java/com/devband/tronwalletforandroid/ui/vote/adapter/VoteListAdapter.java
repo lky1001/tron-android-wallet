@@ -85,10 +85,6 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
         }
     }
 
-    public void showMyVotes() {
-
-    }
-
     @Override
     public int getItemCount() {
         return mList.size();

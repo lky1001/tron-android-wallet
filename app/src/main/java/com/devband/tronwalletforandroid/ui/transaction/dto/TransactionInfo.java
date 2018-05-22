@@ -12,10 +12,12 @@ import lombok.Setter;
 public class TransactionInfo {
 
     private String hash;
-    private int block;
+    private long block;
     private long timestamp;
     private String transferFromAddress;
     private String transferToAddress;
+    private boolean isSend;
     private long amount;
     private String tokenName;
+    private boolean confirmed;
 }

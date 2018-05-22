@@ -29,43 +29,7 @@ public class TransactionPresenter extends BasePresenter<TransactionView> {
 
     @Override
     public void onCreate() {
-        String address = Tron.getInstance(mContext).getLoginAddress();
-
-        TronNetwork.getInstance().getTransactions(address, Constants.TRON_SYMBOL)
-                .subscribeOn(Schedulers.io())
-                .map(transactions -> {
-                    List<TransactionInfo> infos = new ArrayList<>();
-
-                    for (Transaction t : transactions.getData()) {
-                        TransactionInfo info = new TransactionInfo();
-                        info.setHash(t.getHash());
-                        info.setAmount(t.getAmount());
-                        info.setBlock(t.getBlock());
-                        info.setTimestamp(t.getTimestamp());
-                        info.setTokenName(t.getTokenName());
-                        info.setTransferFromAddress(t.getTransferFromAddress());
-                        info.setTransferToAddress(t.getTransferToAddress());
-                        infos.add(info);
-                    }
-                    return infos;
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<List<TransactionInfo>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(List<TransactionInfo> transactionInfos) {
-                        mView.transactionDataLoadSuccess(transactionInfos);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("hanseon--", "onError : " + e.getMessage());
-                    }
-                });
+        loadTransaction();
     }
 
     @Override
@@ -82,4 +46,50 @@ public class TransactionPresenter extends BasePresenter<TransactionView> {
     public void onDestroy() {
 
     }
+
+    public void loadTransaction() {
+        mView.showLoadingDialog();
+
+        String address = Tron.getInstance(mContext).getLoginAddress();
+
+        TronNetwork.getInstance().getTransactions(address, Constants.TRON_SYMBOL)
+        .subscribeOn(Schedulers.io())
+        .map(transactions -> {
+            List<TransactionInfo> infos = new ArrayList<>();
+
+            for (Transaction t : transactions.getData()) {
+                TransactionInfo info = new TransactionInfo();
+                info.setHash(t.getHash());
+                info.setAmount(t.getAmount());
+                info.setBlock(t.getBlock());
+                info.setTimestamp(t.getTimestamp());
+                info.setTokenName(t.getTokenName());
+                info.setSend(address.equals(t.getTransferFromAddress()));
+                info.setTransferFromAddress(t.getTransferFromAddress());
+                info.setTransferToAddress(t.getTransferToAddress());
+                info.setConfirmed(t.isConfirmed());
+                infos.add(info);
+            }
+            return infos;
+        })
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new SingleObserver<List<TransactionInfo>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(List<TransactionInfo> transactionInfos) {
+                mView.transactionDataLoadSuccess(transactionInfos);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d("hanseon--", "onError : " + e.getMessage());
+                mView.showServerError();
+            }
+        });
+    }
+
 }

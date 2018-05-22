@@ -5,15 +5,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,12 +30,23 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     private List<TransactionInfo> mList = new ArrayList<>();
 
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
+    private DecimalFormat df = new DecimalFormat("#,##0");
+
+    private View.OnClickListener mOnItemClickListener;
+
+    public TransactionAdapter(View.OnClickListener onClickListener) {
+        mOnItemClickListener = onClickListener;
+    }
+
     @NonNull
     @Override
     public TransactionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_transaction, null);
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                 RecyclerView.LayoutParams.WRAP_CONTENT));
+        v.setOnClickListener(mOnItemClickListener);
         return new TransactionViewHolder(v);
     }
 
@@ -40,18 +55,33 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         //TODO bindViewHolder
         TransactionInfo info = mList.get(position);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
         Date date = new Date(info.getTimestamp());
-        holder.time.setText(sdf.format(date));
 
-        holder.hash.setText(info.getHash());
-        holder.block.setText(info.getBlock() + "");
+        long amount = info.getAmount();
 
-        holder.token.setText(info.getTokenName());
-        holder.amount.setText(info.getAmount() + "");
+        if (info.getTokenName().equalsIgnoreCase(Constants.TRON_SYMBOL)) {
+            amount = (long) (amount / Constants.REAL_TRX_AMOUNT);
+        }
 
-        holder.fromAddress.setText(info.getTransferFromAddress());
-        holder.toAddress.setText(info.getTransferToAddress());
+        if (info.isSend()) {
+            holder.sendAddressText.setText(info.getTransferToAddress());
+            holder.sendAmountText.setText(df.format(amount) + " " + info.getTokenName());
+            holder.sendDateText.setText(sdf.format(date));
+
+            holder.sendLayout.setVisibility(View.VISIBLE);
+            holder.receiveLayout.setVisibility(View.GONE);
+        } else {
+            holder.receiveAddressText.setText(info.getTransferFromAddress());
+            holder.receiveAmountText.setText(df.format(amount) + " " + info.getTokenName());
+            holder.receiveDateText.setText(sdf.format(date));
+
+            holder.sendLayout.setVisibility(View.GONE);
+            holder.receiveLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public TransactionInfo getItem(int pos) {
+        return mList.get(pos);
     }
 
     @Override
@@ -67,20 +97,29 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     public class TransactionViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.txt_time)
-        TextView time;
-        @BindView(R.id.txt_hash)
-        TextView hash;
-        @BindView(R.id.txt_block)
-        TextView block;
-        @BindView(R.id.txt_amount)
-        TextView amount;
-        @BindView(R.id.txt_token)
-        TextView token;
-        @BindView(R.id.txt_from_address)
-        TextView fromAddress;
-        @BindView(R.id.txt_to_address)
-        TextView toAddress;
+        @BindView(R.id.send_layout)
+        LinearLayout sendLayout;
+
+        @BindView(R.id.receive_layout)
+        LinearLayout receiveLayout;
+
+        @BindView(R.id.send_address_text)
+        TextView sendAddressText;
+
+        @BindView(R.id.receive_address_text)
+        TextView receiveAddressText;
+
+        @BindView(R.id.send_date_text)
+        TextView sendDateText;
+
+        @BindView(R.id.receive_date_text)
+        TextView receiveDateText;
+
+        @BindView(R.id.send_amount_text)
+        TextView sendAmountText;
+
+        @BindView(R.id.receive_amount_text)
+        TextView receiveAmountText;
 
         public TransactionViewHolder(View itemView) {
             super(itemView);
