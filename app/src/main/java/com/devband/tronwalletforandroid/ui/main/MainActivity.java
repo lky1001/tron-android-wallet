@@ -58,6 +58,11 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends CommonActivity implements MainView, NavigationView.OnNavigationItemSelectedListener {
 
@@ -258,28 +263,63 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             // get account info
             ((MainPresenter) mPresenter).getMyAccountInfo();
 
-            AccountModel loginAccount = ((MainPresenter) mPresenter).getLoginAccount();
+            Single.fromCallable(() -> ((MainPresenter) mPresenter).getLoginAccount())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new SingleObserver<AccountModel>() {
+                @Override
+                public void onSubscribe(Disposable d) {
 
-            List<AccountModel> accountModelList = ((MainPresenter) mPresenter).getAccountList();
-
-            for (int i = 0; i < accountModelList.size(); i++) {
-                int id = ((MainPresenter) mPresenter).getLoginAccountIndex();
-                if (id == accountModelList.get(i).getId()) {
-                    if (mAccountSpinner.getSelectedItemPosition() != i) {
-                        mAccountSpinner.setSelection(i);
-                        return;
-                    }
-                    break;
                 }
-            }
 
-            if (loginAccount == null) {
-                mNavHeaderText.setText(R.string.navigation_header_title);
-            } else {
-                mLoginAccountName = loginAccount.getName();
-                mNavHeaderText.setText(mLoginAccountName);
-                mMainTitleText.setText(mLoginAccountName);
-            }
+                @Override
+                public void onSuccess(AccountModel loginAccount) {
+                    if (loginAccount == null) {
+                        mNavHeaderText.setText(R.string.navigation_header_title);
+                    } else {
+                        mLoginAccountName = loginAccount.getName();
+                        mNavHeaderText.setText(mLoginAccountName);
+                        mMainTitleText.setText(mLoginAccountName);
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+            });
+
+            Single.fromCallable(() -> ((MainPresenter) mPresenter).getAccountList())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new SingleObserver<List<AccountModel>>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onSuccess(List<AccountModel> accountModelList) {
+                    int id = ((MainPresenter) mPresenter).getLoginAccountIndex();
+
+                    int size = accountModelList.size();
+
+                    for (int i = 0; i < size; i++) {
+                        if (id == accountModelList.get(i).getId()) {
+                            if (mAccountSpinner.getSelectedItemPosition() != i) {
+                                mAccountSpinner.setSelection(i);
+                                return;
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+            });
         } else {
             finishActivity();
             startActivity(LoginActivity.class);
