@@ -11,14 +11,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Account {
+public class Votes {
 
-    @JsonProperty("account_name")
-    private String accountName;
+    @JsonProperty("total_votes")
+    private long totalVotes;
 
-    private String address;
-
-    private String balance;
-
-    private List<Representative> votes;
+    @JsonProperty("candidates")
+    private List<Representative> votesList;
 }

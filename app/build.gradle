@@ -103,6 +103,7 @@ dependencies {
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
     implementation 'com.akexorcist:RoundCornerProgressBar:2.0.3'
+    implementation 'com.thefinestartist:finestwebview:1.2.7'
 
     implementation('com.mikepenz:aboutlibraries:6.0.8@aar') {
         transitive = true

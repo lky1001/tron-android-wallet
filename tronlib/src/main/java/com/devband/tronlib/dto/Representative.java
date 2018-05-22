@@ -3,22 +3,25 @@ package com.devband.tronlib.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Account {
-
-    @JsonProperty("account_name")
-    private String accountName;
+public class Representative {
 
     private String address;
 
-    private String balance;
+    @JsonProperty("change_day")
+    private long changeDay;
 
-    private List<Representative> votes;
+    @JsonProperty("change_hour")
+    private long changeHour;
+
+    private boolean hasPage;
+
+    private String url;
+
+    private Long votes;
 }

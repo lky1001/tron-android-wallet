@@ -15,6 +15,7 @@ import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.vote.dto.VoteItem;
+import com.thefinestartist.finestwebview.FinestWebView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
 
     @Override
     public void onBindViewHolder(@NonNull VoteViewHolder holder, int position) {
-        VoteItem item = mList.get(position);
+        final VoteItem item = mList.get(position);
 
         holder.voteNoText.setText(item.getNo() + ".");
         holder.representativeUrlText.setText(item.getUrl());
@@ -70,6 +71,18 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
 
         holder.voteButton.setOnClickListener(mVoteClickListener);
         holder.voteButton.setTag(item);
+
+        if (item.isHasTeamPage()) {
+            holder.teamPageButton.setVisibility(View.VISIBLE);
+            holder.teamPageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new FinestWebView.Builder(mContext).show(Constants.SUPER_REPRESENTATIVE_TEAM_PAGE_URL + item.getAddress());
+                }
+            });
+        } else {
+            holder.teamPageButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void showMyVotes() {
