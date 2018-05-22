@@ -93,16 +93,19 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
     @Override
     public void add(VoteItem model) {
         mList.add(model);
+        notifyItemInserted(getItemCount() - 1);
     }
 
     @Override
     public void addAll(List<VoteItem> list) {
         mList.addAll(list);
+        notifyItemInserted(getItemCount() - 1);
     }
 
     @Override
     public void remove(int position) {
         mList.remove(position);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -118,6 +121,7 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
     @Override
     public void clear() {
         mList.clear();
+        notifyDataSetChanged();
     }
 
     @Override
