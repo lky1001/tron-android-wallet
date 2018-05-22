@@ -5,12 +5,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.BuildConfig;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.CustomPreference;
+import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.about.AboutActivity;
 import com.devband.tronwalletforandroid.ui.node.NodeActivity;
 import com.devband.tronwalletforandroid.ui.opensource.OpenSourceActivity;
@@ -113,5 +121,54 @@ public class MoreActivity extends CommonActivity implements MoreView {
         Intent intent = new Intent(MoreActivity.this, SendTokenActivity.class);
         intent.putExtra(EXTRA_FROM_DONATIONS, true);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.more_custom_node_button)
+    public void onCustomFullNodeClick() {
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                .title(R.string.title_custom_fullnode)
+                .titleColorRes(R.color.colorAccent)
+                .contentColorRes(R.color.colorAccent)
+                .backgroundColorRes(android.R.color.white)
+                .customView(R.layout.dialog_custom_fullnode, false);
+
+        MaterialDialog dialog = builder.build();
+
+        Button usingButton = (Button) dialog.getCustomView().findViewById(R.id.btn_using);
+        EditText inputHost = (EditText) dialog.getCustomView().findViewById(R.id.input_host);
+        EditText inputPort = (EditText) dialog.getCustomView().findViewById(R.id.input_port);
+
+        String savedHost = CustomPreference.getInstance(this).getCustomFullNodeHost();
+
+        if (!TextUtils.isEmpty(savedHost)) {
+            String[] tmp = savedHost.split(":");
+            if (tmp.length == 2) {
+                inputHost.setText(tmp[0]);
+                inputPort.setText(tmp[1]);
+            }
+        }
+
+        usingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String host = inputHost.getText().toString();
+                String port = inputPort.getText().toString();
+
+                if (!TextUtils.isEmpty(host) && !TextUtils.isEmpty(port)) {
+                    CustomPreference.getInstance(MoreActivity.this).setCustomFullNodeHost(host + ":" + port);
+                } else if (TextUtils.isEmpty(host) && TextUtils.isEmpty(port)) {
+                    CustomPreference.getInstance(MoreActivity.this).setCustomFullNodeHost("");
+                } else {
+                    Toast.makeText(MoreActivity.this, getString(R.string.invalid_host),
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Tron.getInstance(MoreActivity.this).initTronNode();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 }

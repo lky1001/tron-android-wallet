@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.exception.InvalidAddressException;
 import com.devband.tronwalletforandroid.tron.exception.InvalidPasswordException;
@@ -66,16 +67,21 @@ public class Tron {
 
     private void init() {
         mFullNodeList = Arrays.asList(mContext.getResources().getStringArray(R.array.fullnode_ip_list));
+        initTronNode();
 
+        mAccountManager = new AccountManager(AccountManager.ACCOUNT_LOCAL_DB, mContext);
+    }
+
+    public void initTronNode() {
         // todo - fail over
 
-        if (!mFullNodeList.isEmpty()) {
+        if (!TextUtils.isEmpty(CustomPreference.getInstance(mContext).getCustomFullNodeHost())) {
+            mTronManager = new TronManager(CustomPreference.getInstance(mContext).getCustomFullNodeHost());
+        } else if (!mFullNodeList.isEmpty()) {
             mTronManager = new TronManager(mFullNodeList.get(0));
         } else {
             // exception
         }
-
-        mAccountManager = new AccountManager(AccountManager.ACCOUNT_LOCAL_DB, mContext);
     }
 
     public int registerAccount(@NonNull String nickname, @NonNull String password) {

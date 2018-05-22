@@ -64,6 +64,15 @@ public class CustomPreference {
         }
     }
 
+    public void setCustomFullNodeHost(String host) {
+        mSettings.fullNodeHost = host;
+        saveSettings();
+    }
+
+    public String getCustomFullNodeHost() {
+        return mSettings.fullNodeHost;
+    }
+
     public void saveSettings() {
         SharedPreferences pref = mContext.getSharedPreferences(CUSTOM_PREFERENCE, Activity.MODE_PRIVATE);
 
@@ -82,7 +91,6 @@ public class CustomPreference {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class TronSettings {
 
-        public boolean autoLogin;
-        public String address;
+        public String fullNodeHost;
     }
 }

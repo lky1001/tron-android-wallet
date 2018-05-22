@@ -75,7 +75,6 @@
     <string name="representative_list">Representatives</string>
     <string name="rich_account_list">Rich Account List</string>
     <string name="open_source_text">Open Source</string>
-    <string name="info_text">This is Tron</string>
     <string name="feedback_text">Question &amp; Feedback</string>
     <string name="my_tokens">My Tokens</string>
     <string name="no_tokens">No Tokens</string>
@@ -171,4 +170,10 @@
     <string name="string_feedback_email_body1">App version : </string>
     <string name="string_feedback_email_body2">Android version : </string>
     <string name="string_feedback_email_body3">device : </string>
+    <string name="custom_node_setting_text">Use Custom FullNode</string>
+    <string name="input_port_text">Port</string>
+    <string name="input_host_text">Host</string>
+    <string name="use_text">USE</string>
+    <string name="title_custom_fullnode">Use custom full node</string>
+    <string name="invalid_host">Host, Port are required.</string>
 </resources>
