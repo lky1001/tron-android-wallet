@@ -16,7 +16,9 @@ import org.tron.protos.Contract;
 import org.tron.protos.Protocol;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Single;
 
@@ -307,8 +309,26 @@ public class Tron {
         return mTronManager.listAccounts();
     }
 
-    public void voteWitness(@NonNull String address, long amount) {
+    public Single<Boolean> voteWitness(@NonNull String address, long amount) {
+        return Single.fromCallable(() -> {
+            Map<String, String> witness = new HashMap<>();
+            witness.put(address, String.valueOf(amount));
 
+            Contract.VoteWitnessContract voteWitnessContract = mAccountManager.createVoteWitnessContract(witness);
+
+            return mTronManager.createTransaction(voteWitnessContract);
+        })
+        .flatMap(transactionSingle -> {
+            Protocol.Transaction transaction = transactionSingle.blockingGet();
+
+            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            // sign transaction
+            transaction = mAccountManager.signTransaction(transaction);
+            return mTronManager.broadcastTransaction(transaction);
+        });
     }
 
     public Single<Boolean> freezeBalance(long freezeBalance, long freezeDuration) {

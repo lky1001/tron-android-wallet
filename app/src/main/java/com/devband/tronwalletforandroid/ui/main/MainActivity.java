@@ -402,21 +402,16 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @SuppressLint("SetTextI18n")
     @Override
     public void setTronMarketInfo(CoinMarketCap coinMarketCap) {
-        if (mLoginTronAccount != null && mLoginTronAccount.getBalance() > 0) {
-            double balance = ((double) mLoginTronAccount.getBalance()) / Constants.REAL_TRX_AMOUNT;
-            DecimalFormat df = new DecimalFormat("#,##0.000");
+        double balance = ((double) mLoginTronAccount.getBalance()) / Constants.REAL_TRX_AMOUNT;
+        DecimalFormat df = new DecimalFormat("#,##0.000");
 
-            mLoginAccountPriceText.setText("(" + df.format(balance * Double.parseDouble(coinMarketCap.getPriceUsd()))
-                    + " " + getString(R.string.price_text) + ")");
+        mLoginAccountPriceText.setText("(" + df.format(balance * Double.parseDouble(coinMarketCap.getPriceUsd()))
+                + " " + getString(R.string.price_text) + ")");
 
-            mCoinMarketCapPriceInfo = coinMarketCap;
+        mCoinMarketCapPriceInfo = coinMarketCap;
 
-            mPriceHelpImage.setVisibility(View.VISIBLE);
-            mLoginAccountPriceText.setVisibility(View.VISIBLE);
-        } else {
-            mPriceHelpImage.setVisibility(View.GONE);
-            mLoginAccountPriceText.setVisibility(View.GONE);
-        }
+        mPriceHelpImage.setVisibility(View.VISIBLE);
+        mLoginAccountPriceText.setVisibility(View.VISIBLE);
     }
 
     @Override

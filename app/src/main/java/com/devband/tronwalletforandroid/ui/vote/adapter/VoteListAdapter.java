@@ -130,7 +130,7 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
         @BindView(R.id.representative_address_text)
         TextView representativeAddressText;
 
-        @BindView(R.id.your_votes_text)
+        @BindView(R.id.your_vote_text)
         TextView yourVoteText;
 
         @BindView(R.id.total_votes_text)

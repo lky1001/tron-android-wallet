@@ -59,10 +59,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:text="@string/your_votes_text" />
+                        android:text="@string/your_vote_text" />
 
                     <TextView
-                        android:id="@+id/your_votes_text"
+                        android:id="@+id/your_vote_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="3dp"

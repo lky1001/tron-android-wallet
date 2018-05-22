@@ -9,4 +9,6 @@ public interface VoteView extends IView {
     void showServerError();
 
     void displayVoteInfo(long totalVotes, long voteItemCount, long myVotePoint, long totalMyVotes);
+
+    void successVote();
 }

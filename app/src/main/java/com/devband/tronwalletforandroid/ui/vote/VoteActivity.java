@@ -162,10 +162,11 @@ public class VoteActivity extends CommonActivity implements VoteView {
 
     @Override
     public void displayVoteInfo(long totalVotes, long voteItemCount, long myVotePoint, long totalMyVotes) {
+        mVotePoint = myVotePoint - totalMyVotes;
+
         mTotalVotesText.setText(df.format(totalVotes));
         mRepresentativeCountText.setText(df.format(voteItemCount));
-        mVoteRemainingCountText.setText(String.valueOf(df.format(myVotePoint - totalMyVotes)));
-        mVotePoint = myVotePoint;
+        mVoteRemainingCountText.setText(df.format(mVotePoint));
 
         mRepresentativeTitleText.setVisibility(View.VISIBLE);
         mRepresentativeCountTitleText.setVisibility(View.VISIBLE);
@@ -176,6 +177,12 @@ public class VoteActivity extends CommonActivity implements VoteView {
         mVoteRemainingCountText.setVisibility(View.VISIBLE);
 
         hideDialog();
+    }
+
+    @Override
+    public void successVote() {
+        hideDialog();
+        ((VotePresenter) mPresenter).getRepresentativeList();
     }
 
     @OnClick(R.id.votes_remaining_layout)
@@ -206,37 +213,32 @@ public class VoteActivity extends CommonActivity implements VoteView {
 
                 MaterialDialog dialog = builder.build();
 
-                TextView voteInfoText = (TextView) dialog.getCustomView().findViewById(R.id.vote_info);
+                TextView voteUrlText = (TextView) dialog.getCustomView().findViewById(R.id.vote_url_text);
+                TextView voteAddressText = (TextView) dialog.getCustomView().findViewById(R.id.vote_address_text);
                 Button voteButton = (Button) dialog.getCustomView().findViewById(R.id.btn_vote);
                 CheckBox agreeVoteCheckBox = (CheckBox) dialog.getCustomView().findViewById(R.id.agree_vote);
                 EditText inputVote = (EditText) dialog.getCustomView().findViewById(R.id.input_vote);
                 EditText inputPassword = (EditText) dialog.getCustomView().findViewById(R.id.input_password);
 
-                voteInfoText.setText(item.getUrl() + "(" + item.getAddress() + ")");
+                inputVote.setText(String.valueOf(item.getMyVoteCount()));
+                voteUrlText.setText(item.getUrl());
+                voteAddressText.setText(item.getAddress());
 
                 voteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        boolean agree = agreeVoteCheckBox.isChecked();
-
-                        if (!agree) {
-                            Toast.makeText(VoteActivity.this, getString(R.string.need_all_agree),
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
                         long voteBalance = 0;
 
                         try {
                             voteBalance = Long.parseLong(inputVote.getText().toString());
                         } catch (NumberFormatException e) {
-                            Toast.makeText(VoteActivity.this, getString(R.string.invalid_amount),
+                            Toast.makeText(VoteActivity.this, getString(R.string.invalid_vote),
                                     Toast.LENGTH_SHORT).show();
                             return;
                         }
 
-                        if (voteBalance > mVotePoint) {
-                            Toast.makeText(VoteActivity.this, getString(R.string.invalid_amount),
+                        if (voteBalance <= 0 || voteBalance > mVotePoint) {
+                            Toast.makeText(VoteActivity.this, getString(R.string.invalid_vote),
                                     Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -248,7 +250,16 @@ public class VoteActivity extends CommonActivity implements VoteView {
                             return;
                         }
 
+                        boolean agree = agreeVoteCheckBox.isChecked();
+
+                        if (!agree) {
+                            Toast.makeText(VoteActivity.this, getString(R.string.need_all_agree),
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         dialog.dismiss();
+                        ((VotePresenter) mPresenter).voteRepresentative(item.getAddress(), voteBalance);
                     }
                 });
 

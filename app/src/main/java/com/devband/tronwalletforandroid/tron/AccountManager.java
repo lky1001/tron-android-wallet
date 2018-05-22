@@ -29,6 +29,7 @@ import java.io.File;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * https://github.com/tronprotocol/wallet-cli/blob/master/src/main/java/org/tron/walletserver/WalletClient.java
@@ -509,6 +510,28 @@ public class AccountManager {
         this.mEcKey = temKey;
 
         return createAddress(nickname, loadPassword(), mAesKey, true);
+    }
+
+    public Contract.VoteWitnessContract createVoteWitnessContract(Map<String, String> witness) {
+        byte[] ownerAddress = mEcKey.getAddress();
+
+        Contract.VoteWitnessContract.Builder builder = Contract.VoteWitnessContract.newBuilder();
+        builder.setOwnerAddress(ByteString.copyFrom(ownerAddress));
+        for (String addressBase58 : witness.keySet()) {
+            String value = witness.get(addressBase58);
+            long count = Long.parseLong(value);
+            Contract.VoteWitnessContract.Vote.Builder voteBuilder = Contract.VoteWitnessContract.Vote
+                    .newBuilder();
+            byte[] address = AccountManager.decodeFromBase58Check(addressBase58);
+            if (address == null) {
+                continue;
+            }
+            voteBuilder.setVoteAddress(ByteString.copyFrom(address));
+            voteBuilder.setVoteCount(count);
+            builder.addVotes(voteBuilder.build());
+        }
+
+        return builder.build();
     }
 }
 

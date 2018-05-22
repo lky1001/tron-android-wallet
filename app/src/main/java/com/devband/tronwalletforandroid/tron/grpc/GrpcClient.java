@@ -67,6 +67,10 @@ public class GrpcClient {
         return blockingStubFullNode.createTransaction(contract);
     }
 
+    public Transaction createTransaction(Contract.VoteWitnessContract contract) {
+        return blockingStubFullNode.voteWitnessAccount(contract);
+    }
+
     public Transaction createTransferAssetTransaction(Contract.TransferAssetContract contract) {
         return blockingStubFullNode.transferAsset(contract);
     }

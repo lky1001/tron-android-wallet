@@ -7,24 +7,57 @@
     android:padding="10dp"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/vote_info"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="1"
-        android:ellipsize="end"
-        tools:text="http://www.url.com(1asdfsadfewradflkjds23213wddwelfjsaf)" />
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/url_text" />
+
+        <TextView
+            android:id="@+id/vote_url_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:lines="1"
+            android:ellipsize="end"
+            tools:text="http://www.url.com" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vote_address_text" />
+
+        <TextView
+            android:id="@+id/vote_address_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:lines="1"
+            android:ellipsize="end"
+            tools:text="1asdfsadfewradflkjds23213wddwelfjsaf" />
+    </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
         <EditText
             android:id="@+id/input_vote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
             android:hint="@string/input_vote_text"
-            android:inputType="numberDecimal" />
+            android:inputType="number" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -35,6 +68,7 @@
             android:id="@+id/input_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
             android:hint="@string/input_password_text"
             android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>

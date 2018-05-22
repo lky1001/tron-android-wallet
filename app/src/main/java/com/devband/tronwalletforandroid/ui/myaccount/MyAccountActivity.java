@@ -279,14 +279,6 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
         freezeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean agree = agreeFreezeCheckBox.isChecked();
-
-                if (!agree) {
-                    Toast.makeText(MyAccountActivity.this, getString(R.string.need_all_agree),
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
                 // check freeze balance
                 long freezeBalance = 0;
                 try {
@@ -306,6 +298,14 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                 String password = inputPassword.getText().toString();
                 if (TextUtils.isEmpty(password) || !((MyAccountPresenter) mPresenter).matchPassword(password)) {
                     Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password),
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                boolean agree = agreeFreezeCheckBox.isChecked();
+
+                if (!agree) {
+                    Toast.makeText(MyAccountActivity.this, getString(R.string.need_all_agree),
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -343,6 +343,19 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
         MaterialDialog dialog = builder.build();
         dialog.show();
+    }
+
+    @OnClick(R.id.tron_power_layout)
+    public void onTronPowerHelpClick() {
+        new MaterialDialog.Builder(MyAccountActivity.this)
+                .title(getString(R.string.tron_power_text))
+                .content(getString(R.string.tron_power_help_text))
+                .titleColorRes(android.R.color.black)
+                .contentColorRes(android.R.color.black)
+                .backgroundColorRes(android.R.color.white)
+                .autoDismiss(true)
+                .build()
+                .show();
     }
 
     private android.widget.AdapterView.OnItemSelectedListener mAccountItemSelectedListener = new android.widget.AdapterView.OnItemSelectedListener() {

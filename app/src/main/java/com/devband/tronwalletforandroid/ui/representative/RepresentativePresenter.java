@@ -102,8 +102,8 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
 
             @Override
             public void onSuccess(RepresentativeList representativeList) {
-                mAdapterDataModel.addAll(representativeList.getRepresentativeList());
                 mView.displayRepresentativeInfo(representativeList.getRepresentativeCount(), representativeList.getHighestVotes());
+                mAdapterDataModel.addAll(representativeList.getRepresentativeList());
             }
 
             @Override

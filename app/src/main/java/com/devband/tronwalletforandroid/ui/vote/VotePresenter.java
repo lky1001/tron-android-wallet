@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.ui.vote;
 import android.support.annotation.NonNull;
 
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.tron.Tron;
@@ -37,7 +38,6 @@ public class VotePresenter extends BasePresenter<VoteView> {
 
     @Override
     public void onCreate() {
-        mView.showLoadingDialog();
         getRepresentativeList();
     }
 
@@ -57,6 +57,8 @@ public class VotePresenter extends BasePresenter<VoteView> {
     }
 
     public void getRepresentativeList() {
+        mView.showLoadingDialog();
+
         Single.fromCallable(() -> Tron.getInstance(mContext).getWitnessList().blockingGet())
         .map(witnessList -> {
             List<VoteItem> representatives = new ArrayList<>();
@@ -76,6 +78,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
                 for (Protocol.Vote vote : myAccount.getVotesList()) {
                     if (AccountManager.encode58Check(vote.getVoteAddress().toByteArray()).equals(AccountManager.encode58Check(witness.getAddress().toByteArray()))) {
                         myVoteCount = vote.getVoteCount();
+                        totalMyVotes += myVoteCount;
                         break;
                     }
                 }
@@ -105,6 +108,8 @@ public class VotePresenter extends BasePresenter<VoteView> {
                 myVotePoint += frozen.getFrozenBalance();
             }
 
+            myVotePoint = (long) (myVotePoint / Constants.REAL_TRX_AMOUNT);
+
             return VoteItemList.builder()
                     .voteItemList(representatives)
                     .voteItemCount(cnt)
@@ -123,9 +128,10 @@ public class VotePresenter extends BasePresenter<VoteView> {
 
             @Override
             public void onSuccess(VoteItemList voteItemList) {
-                mAdapterDataModel.addAll(voteItemList.getVoteItemList());
                 mView.displayVoteInfo(voteItemList.getTotalVotes(), voteItemList.getVoteItemCount(),
                         voteItemList.getMyVotePoint(), voteItemList.getTotalMyVotes());
+                mAdapterDataModel.clear();
+                mAdapterDataModel.addAll(voteItemList.getVoteItemList());
             }
 
             @Override
@@ -137,6 +143,35 @@ public class VotePresenter extends BasePresenter<VoteView> {
 
     public boolean matchPassword(@NonNull String password) {
         return WalletAppManager.getInstance(mContext).login(password) == WalletAppManager.SUCCESS;
+    }
+
+    public void voteRepresentative(String address, long vote) {
+        mView.showLoadingDialog();
+
+        Tron.getInstance(mContext).voteWitness(address, vote)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new SingleObserver<Boolean>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result) {
+                    mView.successVote();
+                } else {
+                    mView.showServerError();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                mView.showServerError();
+            }
+        });
     }
 
     class Descending implements Comparator<VoteItem> {

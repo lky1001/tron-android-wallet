@@ -36,6 +36,8 @@ public interface ITronManager {
 
     Single<Protocol.Transaction> createTransaction(Contract.UnfreezeAssetContract contract);
 
+    Single<Protocol.Transaction> createTransaction(Contract.VoteWitnessContract contract);
+
     Single<Protocol.Transaction> createTransferAssetTransaction(Contract.TransferAssetContract contract);
 
     Single<Boolean> broadcastTransaction(Protocol.Transaction transaction);
