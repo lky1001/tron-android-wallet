@@ -65,6 +65,9 @@ public class VoteActivity extends CommonActivity implements VoteView {
     @BindView(R.id.votes_remaining_count_text)
     TextView mVoteRemainingCountText;
 
+    @BindView(R.id.check_my_votes)
+    CheckBox mCheckMyVotes;
+
     private long mVotePoint;
 
     private LinearLayoutManager mLayoutManager;
@@ -133,6 +136,13 @@ public class VoteActivity extends CommonActivity implements VoteView {
             }
         });
 
+        mCheckMyVotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((VotePresenter) mPresenter).showOnlyMyVotes(mCheckMyVotes.isChecked());
+            }
+        });
+
         mPresenter = new VotePresenter(this);
         ((VotePresenter) mPresenter).setAdapterDataModel(mVoteListAdapter);
         mPresenter.onCreate();
@@ -182,7 +192,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
     @Override
     public void successVote() {
         hideDialog();
-        ((VotePresenter) mPresenter).getRepresentativeList();
+        ((VotePresenter) mPresenter).getRepresentativeList(mCheckMyVotes.isChecked());
     }
 
     @OnClick(R.id.votes_remaining_layout)

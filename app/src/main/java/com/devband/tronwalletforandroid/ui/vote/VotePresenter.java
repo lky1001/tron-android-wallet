@@ -16,7 +16,9 @@ import org.tron.protos.Protocol;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
@@ -28,6 +30,10 @@ public class VotePresenter extends BasePresenter<VoteView> {
 
     private AdapterDataModel<VoteItem> mAdapterDataModel;
 
+    private List<VoteItem> mAllVotes;
+
+    private List<VoteItem> mMyVotes;
+
     public VotePresenter(VoteView view) {
         super(view);
     }
@@ -38,7 +44,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
 
     @Override
     public void onCreate() {
-        getRepresentativeList();
+        getRepresentativeList(false);
     }
 
     @Override
@@ -56,7 +62,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
 
     }
 
-    public void getRepresentativeList() {
+    public void getRepresentativeList(boolean isMyVotes) {
         mView.showLoadingDialog();
 
         Single.fromCallable(() -> Tron.getInstance(mContext).getWitnessList().blockingGet())
@@ -110,6 +116,18 @@ public class VotePresenter extends BasePresenter<VoteView> {
 
             myVotePoint = (long) (myVotePoint / Constants.REAL_TRX_AMOUNT);
 
+            mAllVotes = new ArrayList<>();
+            mMyVotes = new ArrayList<>();
+            mAllVotes.addAll(representatives);
+
+            for (int i = 0; i < mAllVotes.size(); i++) {
+                VoteItem voteItem = mAllVotes.get(i);
+
+                if (voteItem.getMyVoteCount() > 0) {
+                    mMyVotes.add(voteItem);
+                }
+            }
+
             return VoteItemList.builder()
                     .voteItemList(representatives)
                     .voteItemCount(cnt)
@@ -130,8 +148,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
             public void onSuccess(VoteItemList voteItemList) {
                 mView.displayVoteInfo(voteItemList.getTotalVotes(), voteItemList.getVoteItemCount(),
                         voteItemList.getMyVotePoint(), voteItemList.getTotalMyVotes());
-                mAdapterDataModel.clear();
-                mAdapterDataModel.addAll(voteItemList.getVoteItemList());
+                showOnlyMyVotes(isMyVotes);
             }
 
             @Override
@@ -142,10 +159,12 @@ public class VotePresenter extends BasePresenter<VoteView> {
     }
 
     public void showOnlyMyVotes(boolean isMyVotes) {
-        if (isMyVotes) {
+        mAdapterDataModel.clear();
 
+        if (isMyVotes) {
+            mAdapterDataModel.addAll(mMyVotes);
         } else {
-            
+            mAdapterDataModel.addAll(mAllVotes);
         }
     }
 
@@ -156,7 +175,19 @@ public class VotePresenter extends BasePresenter<VoteView> {
     public void voteRepresentative(String address, long vote) {
         mView.showLoadingDialog();
 
-        Tron.getInstance(mContext).voteWitness(address, vote)
+        Single.fromCallable(() -> {
+            Map<String, String> witness = new HashMap<>();
+
+            for (int i = 0; i < mMyVotes.size(); i++) {
+                VoteItem voteItem = mMyVotes.get(i);
+
+                witness.put(voteItem.getAddress(), String.valueOf(voteItem.getMyVoteCount()));
+            }
+
+            witness.put(address, String.valueOf(vote));
+
+            return Tron.getInstance(mContext).voteWitness(witness).blockingGet();
+        })
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new SingleObserver<Boolean>() {
