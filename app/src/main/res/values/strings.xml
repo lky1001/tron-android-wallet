@@ -112,6 +112,7 @@
     <string name="missed_block_text">Missed Blocks</string>
     <string name="votes_text">Votes :</string>
     <string name="representative_count_text">Representatives :</string>
+    <string name="vote_representative_count_text">Representatives</string>
     <string name="highest_votes_text">Highest Votes :</string>
     <string name="account_count_text">Account :</string>
     <string name="highest_trx_text">Highest :</string>
@@ -148,4 +149,19 @@
     <string name="current_balance_text">CURRENT BALANCE</string>
     <string name="unable_to_unfreeze_msg">Unable to unfreeze TRX. This could be caused because the minimal freeze period hasn\'t been reached yet.</string>
     <string name="my_account_tron_power_text">Tron Power</string>
+    <string name="team_page_text">Team Page</string>
+    <string name="my_votes_text">Show only my votes</string>
+    <string name="title_vote">Votes</string>
+    <string name="your_vote_text">Your vote :</string>
+    <string name="total_votes_text">Total votes</string>
+    <string name="votes_remaining_text">Votes Remaining</string>
+    <string name="super_representatives_text">Super Representatives</string>
+    <string name="super_representative_candidates_text">Super Representative Candidates</string>
+    <string name="votes_remaining_help_text">You can get vote point(tron power) by freezing trx.\nMy Account > Tron Power > Freeze.</string>
+    <string name="input_vote_text">Vote</string>
+    <string name="vote_confirm_text">I confirm to vote</string>
+    <string name="url_text">URL :</string>
+    <string name="vote_address_text">Address :</string>
+    <string name="invalid_vote">Invalid vote</string>
+    <string name="tron_power_help_text">TRX can be frozen/locked to gain Tron Power and enable additional features. For example, with Tron Power you can vote for Super Representatives. Frozen tokens are "locked" for a period of 3 days. During this period the frozen TRX cannot be traded. After this period you can unfreeze the TRX and trade the tokens.</string>
 </resources>

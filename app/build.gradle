@@ -102,7 +102,7 @@ dependencies {
     implementation 'com.github.medyo:android-about-page:1.2.4'
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
-
+    implementation 'com.akexorcist:RoundCornerProgressBar:2.0.3'
 
     implementation('com.mikepenz:aboutlibraries:6.0.8@aar') {
         transitive = true

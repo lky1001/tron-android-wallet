@@ -239,6 +239,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                         if (!TextUtils.isEmpty(password) && ((MyAccountPresenter) mPresenter).matchPassword(password)) {
                             String privateKey = ((MyAccountPresenter) mPresenter).getLoginPrivateKey();
 
+                            Log.d("", privateKey);
                             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                             sharingIntent.setType("text/plain");
                             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, privateKey);
@@ -278,14 +279,6 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
         freezeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean agree = agreeFreezeCheckBox.isChecked();
-
-                if (!agree) {
-                    Toast.makeText(MyAccountActivity.this, getString(R.string.need_all_agree),
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
                 // check freeze balance
                 long freezeBalance = 0;
                 try {
@@ -309,7 +302,14 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                     return;
                 }
 
-                // todo - freeze balance
+                boolean agree = agreeFreezeCheckBox.isChecked();
+
+                if (!agree) {
+                    Toast.makeText(MyAccountActivity.this, getString(R.string.need_all_agree),
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 dialog.dismiss();
                 ((MyAccountPresenter) mPresenter).freezeBalance((long) (freezeBalance * Constants.REAL_TRX_AMOUNT));
             }
@@ -343,6 +343,19 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
         MaterialDialog dialog = builder.build();
         dialog.show();
+    }
+
+    @OnClick(R.id.tron_power_layout)
+    public void onTronPowerHelpClick() {
+        new MaterialDialog.Builder(MyAccountActivity.this)
+                .title(getString(R.string.tron_power_text))
+                .content(getString(R.string.tron_power_help_text))
+                .titleColorRes(android.R.color.black)
+                .contentColorRes(android.R.color.black)
+                .backgroundColorRes(android.R.color.white)
+                .autoDismiss(true)
+                .build()
+                .show();
     }
 
     private android.widget.AdapterView.OnItemSelectedListener mAccountItemSelectedListener = new android.widget.AdapterView.OnItemSelectedListener() {

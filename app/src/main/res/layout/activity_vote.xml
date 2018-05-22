@@ -9,7 +9,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="192dp"
+        android:layout_height="210dp"
         android:background="?attr/colorPrimary"
         android:fitsSystemWindows="true">
 
@@ -44,53 +44,99 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     android:layout_marginBottom="10dp"
-                    android:text="@string/title_representative_list" />
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/representative_count_title_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
-                        android:textSize="20sp"
-                        android:visibility="invisible"
-                        android:text="@string/representative_count_text" />
-                    <TextView
-                        android:id="@+id/representative_count_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:textColor="@android:color/white"
-                        android:textSize="20sp"
-                        android:visibility="invisible"
-                        tools:text="93" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/highest_votes_title_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
-                        android:textSize="20sp"
-                        android:visibility="invisible"
-                        android:text="@string/highest_votes_text" />
+                    android:text="@string/title_vote" />
 
+                <LinearLayout
+                    android:id="@+id/votes_remaining_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
                     <TextView
-                        android:id="@+id/highest_votes_text"
+                        android:id="@+id/votes_remaining_count_title_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/main_sub_title_color"
+                        android:textSize="12sp"
+                        android:text="@string/votes_remaining_text" />
+
+                    <ImageView
+                        android:id="@+id/votes_help_image"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_marginLeft="5dp"
-                        android:textColor="@android:color/white"
-                        android:textSize="20sp"
-                        android:visibility="invisible"
-                        tools:text="375,912,342,123 TRX" />
+                        app:srcCompat="@drawable/ic_help_circle" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/votes_remaining_count_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textColor="@android:color/white"
+                    tools:text="93" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:id="@+id/representative_count_title_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/main_sub_title_color"
+                            android:textSize="12sp"
+                            android:text="@string/vote_representative_count_text" />
+
+                        <TextView
+                            android:id="@+id/representative_count_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginRight="5dp"
+                            android:textSize="16sp"
+                            android:textColor="@android:color/white"
+                            tools:text="90,000,000,000" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorPrimaryDark"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:id="@+id/total_votes_title_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/main_sub_title_color"
+                            android:textSize="12sp"
+                            android:text="@string/total_votes_text" />
+
+                        <TextView
+                            android:id="@+id/total_votes_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginRight="5dp"
+                            android:textSize="16sp"
+                            android:textColor="@android:color/white"
+                            tools:text="90" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -105,6 +151,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <CheckBox
+                    android:id="@+id/check_my_votes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:textColor="@color/main_my_token_color"
+                    android:text="@string/my_votes_text" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/main_border_color" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/listview"

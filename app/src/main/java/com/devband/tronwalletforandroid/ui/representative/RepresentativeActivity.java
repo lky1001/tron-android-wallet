@@ -22,6 +22,7 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.representative.adapter.RepresentativeListAdapter;
 import com.devband.tronwalletforandroid.ui.representative.dto.Representative;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import java.text.DecimalFormat;
 
@@ -87,6 +88,8 @@ public class RepresentativeActivity extends CommonActivity implements Representa
         mRepresentativeListView.setNestedScrollingEnabled(false);
 
         mRepresentativeListAdapter = new RepresentativeListAdapter(RepresentativeActivity.this, mOnListItemClickListener);
+        mRepresentativeListView.addItemDecoration(new StickyRecyclerHeadersDecoration(mRepresentativeListAdapter));
+
         mRepresentativeListView.setAdapter(mRepresentativeListAdapter);
         mAdapterView = mRepresentativeListAdapter;
 

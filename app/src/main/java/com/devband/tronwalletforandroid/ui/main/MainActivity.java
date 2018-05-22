@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,10 +40,10 @@ import com.devband.tronwalletforandroid.ui.main.adapter.MyTokenListAdapter;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.myaccount.MyAccountActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
-import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity;
 import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
 import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
 import com.devband.tronwalletforandroid.ui.transaction.TransactionActivity;
+import com.devband.tronwalletforandroid.ui.vote.VoteActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -326,7 +325,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 startActivity(SendTokenActivity.class);
                 break;
             case R.id.drawer_item_vote:
-                startActivity(RepresentativeActivity.class);
+                startActivity(VoteActivity.class);
                 break;
             case R.id.drawer_item_more:
                  startActivity(MoreActivity.class);
@@ -380,7 +379,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             mMyTokenListView.setVisibility(View.VISIBLE);
         }
 
-        Log.i(MainActivity.class.getSimpleName(), "balance : " + account.getBalance() + Constants.TRON_SYMBOL);
         double balance = ((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT;
         long frozenBalance = 0;
 
@@ -404,21 +402,16 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @SuppressLint("SetTextI18n")
     @Override
     public void setTronMarketInfo(CoinMarketCap coinMarketCap) {
-        if (mLoginTronAccount != null && mLoginTronAccount.getBalance() > 0) {
-            double balance = ((double) mLoginTronAccount.getBalance()) / Constants.REAL_TRX_AMOUNT;
-            DecimalFormat df = new DecimalFormat("#,##0.000");
+        double balance = ((double) mLoginTronAccount.getBalance()) / Constants.REAL_TRX_AMOUNT;
+        DecimalFormat df = new DecimalFormat("#,##0.000");
 
-            mLoginAccountPriceText.setText("(" + df.format(balance * Double.parseDouble(coinMarketCap.getPriceUsd()))
-                    + " " + getString(R.string.price_text) + ")");
+        mLoginAccountPriceText.setText("(" + df.format(balance * Double.parseDouble(coinMarketCap.getPriceUsd()))
+                + " " + getString(R.string.price_text) + ")");
 
-            mCoinMarketCapPriceInfo = coinMarketCap;
+        mCoinMarketCapPriceInfo = coinMarketCap;
 
-            mPriceHelpImage.setVisibility(View.VISIBLE);
-            mLoginAccountPriceText.setVisibility(View.VISIBLE);
-        } else {
-            mPriceHelpImage.setVisibility(View.GONE);
-            mLoginAccountPriceText.setVisibility(View.GONE);
-        }
+        mPriceHelpImage.setVisibility(View.VISIBLE);
+        mLoginAccountPriceText.setVisibility(View.VISIBLE);
     }
 
     @Override
