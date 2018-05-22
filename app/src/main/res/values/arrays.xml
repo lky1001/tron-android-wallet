@@ -17,4 +17,8 @@
         <item>47.91.216.69</item>
         <item>39.106.220.120</item>
     </array>
+
+    <string-array name="feedback_email_recipient">
+        <item>dev@devband.com</item>
+    </string-array>
 </resources>

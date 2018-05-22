@@ -1,6 +1,7 @@
 package com.devband.tronwalletforandroid.ui.more;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -89,7 +90,22 @@ public class MoreActivity extends CommonActivity implements MoreView {
 
     @OnClick(R.id.more_feedback_button)
     public void onFeedbackClick() {
+        String title = getString(R.string.string_feedback_email_title);
+        StringBuilder body = new StringBuilder();
+        body.append("\n\n\n\n\n");
+        body.append(getString(R.string.string_feedback_email_body1));
+        body.append(BuildConfig.VERSION_NAME);
+        body.append("\n");
+        body.append(getString(R.string.string_feedback_email_body2));
+        body.append(Build.VERSION.RELEASE);
+        body.append("\n");
+        body.append(getString(R.string.string_feedback_email_body3));
+        body.append(Build.MANUFACTURER).append(", ")
+                .append(Build.BRAND).append(", ")
+                .append(Build.MODEL);
 
+        sendMailUsingGmail(getResources().getStringArray(R.array.feedback_email_recipient),
+                title, body.toString());
     }
 
     @OnClick(R.id.more_donations_button)

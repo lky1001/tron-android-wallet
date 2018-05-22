@@ -1,9 +1,10 @@
 package com.devband.tronwalletforandroid.common;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.ui.intro.IntroActivity;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
+
+import java.util.List;
 
 public class CommonActivity extends AppCompatActivity {
 
@@ -80,5 +83,35 @@ public class CommonActivity extends AppCompatActivity {
                 .progress(true,0)
                 .canceledOnTouchOutside(false)
                 .show();
+    }
+
+    @SuppressLint("DefaultLocale")
+    public void sendMailUsingGmail(String[] receiver, String emailTitle, String emailBody) {
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, receiver);
+        // intent.putExtra(Intent.EXTRA_CC, ccs);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, emailTitle);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, emailBody);
+        emailIntent.setType("message/rfc882");
+
+        PackageManager pm = getPackageManager();
+        List<ResolveInfo> matches = pm.queryIntentActivities(emailIntent, 0);
+        ResolveInfo best = null;
+
+        for (final ResolveInfo info : matches) {
+            if (info.activityInfo.packageName.endsWith(".gm")
+                    || info.activityInfo.name.toLowerCase().contains("gmail")) {
+                best = info;
+                break;
+            }
+        }
+
+        if (best != null) {
+            emailIntent.setClassName(best.activityInfo.packageName, best.activityInfo.name);
+            startActivity(emailIntent);
+        } else {
+            startActivity(Intent.createChooser(emailIntent, getString(R.string.string_select_email_app)));
+        }
     }
 }
