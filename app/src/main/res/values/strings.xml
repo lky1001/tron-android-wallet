@@ -164,4 +164,6 @@
     <string name="vote_address_text">Address :</string>
     <string name="invalid_vote">Invalid vote</string>
     <string name="tron_power_help_text">TRX can be frozen/locked to gain Tron Power and enable additional features. For example, with Tron Power you can vote for Super Representatives. Frozen tokens are "locked" for a period of 3 days. During this period the frozen TRX cannot be traded. After this period you can unfreeze the TRX and trade the tokens.</string>
+    <string name="navigation_menu_tokens">Tokens</string>
+    <string name="navigation_menu_block_explorer">Block Explorer</string>
 </resources>

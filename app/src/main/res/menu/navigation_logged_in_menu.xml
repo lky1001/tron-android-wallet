@@ -19,6 +19,14 @@
         android:icon="@drawable/ic_thumb"
         android:title="@string/navigation_menu_vote" />
 
+    <item android:id="@+id/drawer_item_tokens"
+        android:icon="@drawable/ic_token"
+        android:title="@string/navigation_menu_tokens" />
+
+    <item android:id="@+id/drawer_item_block_explorer"
+        android:icon="@drawable/ic_block_search"
+        android:title="@string/navigation_menu_block_explorer" />
+
     <item android:id="@+id/drawer_item_more"
         android:icon="@drawable/ic_more"
         android:title="@string/navigation_menu_more" />

@@ -327,6 +327,12 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             case R.id.drawer_item_vote:
                 startActivity(VoteActivity.class);
                 break;
+            case R.id.drawer_item_tokens:
+                Toast.makeText(this, "tbd", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.drawer_item_block_explorer:
+                Toast.makeText(this, "tbd", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.drawer_item_more:
                  startActivity(MoreActivity.class);
                 break;
