@@ -25,9 +25,7 @@ import butterknife.ButterKnife;
 
 public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteViewHolder> implements AdapterDataModel<VoteItem>, AdapterView {
 
-    private List<VoteItem> mCurrentList;
-
-    private List<VoteItem> mAllList;
+    private List<VoteItem> mList;
 
     private Context mContext;
 
@@ -37,8 +35,7 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
     private DecimalFormat percentDf = new DecimalFormat("#,##0.00");
 
     public VoteListAdapter(Context mContext, View.OnClickListener voteClickListener) {
-        this.mAllList = new ArrayList<>();
-        this.mCurrentList = mAllList;
+        this.mList = new ArrayList<>();
         this.mContext = mContext;
         this.mVoteClickListener = voteClickListener;
     }
@@ -55,7 +52,7 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
 
     @Override
     public void onBindViewHolder(@NonNull VoteViewHolder holder, int position) {
-        VoteItem item = mCurrentList.get(position);
+        VoteItem item = mList.get(position);
 
         holder.voteNoText.setText(item.getNo() + ".");
         holder.representativeUrlText.setText(item.getUrl());
@@ -75,42 +72,46 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
         holder.voteButton.setTag(item);
     }
 
+    public void showMyVotes() {
+
+    }
+
     @Override
     public int getItemCount() {
-        return mCurrentList.size();
+        return mList.size();
     }
 
     @Override
     public void add(VoteItem model) {
-        mCurrentList.add(model);
+        mList.add(model);
         notifyItemInserted(getItemCount() - 1);
     }
 
     @Override
     public void addAll(List<VoteItem> list) {
-        mCurrentList.addAll(list);
+        mList.addAll(list);
         notifyItemInserted(getItemCount() - 1);
     }
 
     @Override
     public void remove(int position) {
-        mCurrentList.remove(position);
+        mList.remove(position);
         notifyDataSetChanged();
     }
 
     @Override
     public VoteItem getModel(int position) {
-        return mCurrentList.get(position);
+        return mList.get(position);
     }
 
     @Override
     public int getSize() {
-        return mCurrentList.size();
+        return mList.size();
     }
 
     @Override
     public void clear() {
-        mCurrentList.clear();
+        mList.clear();
         notifyDataSetChanged();
     }
 

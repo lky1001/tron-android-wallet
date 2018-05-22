@@ -141,6 +141,14 @@ public class VotePresenter extends BasePresenter<VoteView> {
         });
     }
 
+    public void showOnlyMyVotes(boolean isMyVotes) {
+        if (isMyVotes) {
+
+        } else {
+            
+        }
+    }
+
     public boolean matchPassword(@NonNull String password) {
         return WalletAppManager.getInstance(mContext).login(password) == WalletAppManager.SUCCESS;
     }
