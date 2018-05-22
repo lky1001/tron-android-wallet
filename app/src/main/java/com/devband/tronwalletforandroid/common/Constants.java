@@ -9,4 +9,5 @@ public class Constants {
 
     public static final float VOTE_MAX_PROGRESS = 10_000f;
     public static final int SUPER_REPRESENTATIVE_COUNT= 27;
+    public static final String TRON_COINMARKET_NAME = "tronix";
 }

@@ -2,10 +2,8 @@ package com.devband.tronwalletforandroid.ui.transaction;
 
 import android.util.Log;
 
-import com.devband.tronlib.Hosts;
-import com.devband.tronlib.ServiceBuilder;
+import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Transaction;
-import com.devband.tronlib.services.TronScanService;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
@@ -33,8 +31,7 @@ public class TransactionPresenter extends BasePresenter<TransactionView> {
     public void onCreate() {
         String address = Tron.getInstance(mContext).getLoginAddress();
 
-        TronScanService tronScanService = ServiceBuilder.createService(TronScanService.class, Hosts.TRONSCAM_API);
-        tronScanService.getTransactions(address, Constants.TRON_SYMBOL)
+        TronNetwork.getInstance().getTransactions(address, Constants.TRON_SYMBOL)
                 .subscribeOn(Schedulers.io())
                 .map(transactions -> {
                     List<TransactionInfo> infos = new ArrayList<>();

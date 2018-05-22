@@ -11,6 +11,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -52,7 +53,7 @@ public class ServiceBuilder {
         RETROFIT_BUILDER.client(okHttpClient);
         RETROFIT_BUILDER.baseUrl(baseUrl);
         RETROFIT_BUILDER.addConverterFactory(JacksonConverterFactory.create());
-        RETROFIT_BUILDER.addCallAdapterFactory(RxJava2CallAdapterFactory.create());
+        RETROFIT_BUILDER.addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()));
 
         Retrofit retrofit = RETROFIT_BUILDER.build();
         return retrofit.create(serviceClass);

@@ -3,11 +3,10 @@ package com.devband.tronwalletforandroid.ui.main;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.devband.tronlib.Hosts;
-import com.devband.tronlib.ServiceBuilder;
+import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.CoinMarketCap;
-import com.devband.tronlib.services.CoinMarketCapService;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
@@ -25,8 +24,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenter extends BasePresenter<MainView> {
 
-    private CoinMarketCapService mCoinMarketCapService;
-
     private AdapterDataModel<Asset> mAdapterDataModel;
 
     public MainPresenter(MainView view) {
@@ -39,7 +36,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     @Override
     public void onCreate() {
-        mCoinMarketCapService = ServiceBuilder.createService(CoinMarketCapService.class, Hosts.COINMARKETCAP_API);
+
     }
 
     @Override
@@ -98,7 +95,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void getTronMarketInfo() {
-        mCoinMarketCapService.getPrice("tronix")
+        TronNetwork.getInstance().getCoinInfo(Constants.TRON_COINMARKET_NAME)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<List<CoinMarketCap>>() {

@@ -7,12 +7,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.devband.tronlib.Hosts;
-import com.devband.tronlib.ServiceBuilder;
+import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.CoinMarketCap;
-import com.devband.tronlib.services.CoinMarketCapService;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.Constants;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -51,8 +50,7 @@ public class AboutActivity extends CommonActivity {
             getSupportActionBar().setTitle(R.string.title_about_tron);
         }
 
-        CoinMarketCapService coinMarketCapService = ServiceBuilder.createService(CoinMarketCapService.class, Hosts.COINMARKETCAP_API);
-        coinMarketCapService.getPrice("tronix")
+        TronNetwork.getInstance().getCoinInfo(Constants.TRON_COINMARKET_NAME)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<List<CoinMarketCap>>() {
