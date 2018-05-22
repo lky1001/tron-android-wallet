@@ -19,7 +19,7 @@ public class Transaction {
     private String hash;
 
     @JsonProperty("block")
-    private int block;
+    private long block;
 
     @JsonProperty("timestamp")
     private long timestamp;
@@ -35,4 +35,7 @@ public class Transaction {
 
     @JsonProperty("tokenName")
     private String tokenName;
+
+    @JsonProperty("confirmed")
+    private boolean confirmed;
 }

@@ -176,4 +176,15 @@
     <string name="use_text">USE</string>
     <string name="title_custom_fullnode">Use custom full node</string>
     <string name="invalid_host">Host, Port are required.</string>
+    <string name="to_text">TO :</string>
+    <string name="from_text">FROM :</string>
+    <string name="hash_id_text">Id :</string>
+    <string name="status_text">Status :</string>
+    <string name="block_text">Block :</string>
+    <string name="transaction_send_text">Send :</string>
+    <string name="transaction_to_text">To :</string>
+    <string name="transaction_amount_text">Amount :</string>
+    <string name="transaction_date_text">Date :</string>
+    <string name="confirmed_text">Confirmed</string>
+    <string name="unconfirmed_text">Unconfirmed</string>
 </resources>

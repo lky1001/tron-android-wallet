@@ -76,7 +76,6 @@ public class VoteActivity extends CommonActivity implements VoteView {
 
     private DecimalFormat df = new DecimalFormat("#,##0");
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,6 +192,16 @@ public class VoteActivity extends CommonActivity implements VoteView {
     public void successVote() {
         hideDialog();
         ((VotePresenter) mPresenter).getRepresentativeList(mCheckMyVotes.isChecked());
+    }
+
+    @Override
+    public void refreshList() {
+        mVoteListView.post(new Runnable() {
+            @Override
+            public void run() {
+                mAdapterView.refresh();
+            }
+        });
     }
 
     @OnClick(R.id.votes_remaining_layout)

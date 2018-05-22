@@ -11,4 +11,6 @@ public interface VoteView extends IView {
     void displayVoteInfo(long totalVotes, long voteItemCount, long myVotePoint, long totalMyVotes);
 
     void successVote();
+
+    void refreshList();
 }

@@ -167,6 +167,8 @@ public class VotePresenter extends BasePresenter<VoteView> {
         } else {
             mAdapterDataModel.addAll(mAllVotes);
         }
+
+        mView.refreshList();
     }
 
     public boolean matchPassword(@NonNull String password) {

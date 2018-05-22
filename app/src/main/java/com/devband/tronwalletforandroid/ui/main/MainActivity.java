@@ -510,7 +510,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
         Date updated = new Date(Long.parseLong(mCoinMarketCapPriceInfo.getLastUpdated()) * 1_000);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
         sb.append("Price : ")
                 .append(mCoinMarketCapPriceInfo.getPriceUsd())
