@@ -20,5 +20,5 @@ public class Account {
 
     private String balance;
 
-    private List<Vote> votes;
+    private List<Representative> votes;
 }

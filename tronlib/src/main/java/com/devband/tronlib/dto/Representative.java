@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Vote {
+public class Representative {
 
     private String address;
 
@@ -23,5 +23,5 @@ public class Vote {
 
     private String url;
 
-    private long votes;
+    private Long votes;
 }

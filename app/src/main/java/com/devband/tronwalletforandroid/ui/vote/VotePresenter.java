@@ -2,6 +2,8 @@ package com.devband.tronwalletforandroid.ui.vote;
 
 import android.support.annotation.NonNull;
 
+import com.devband.tronlib.TronNetwork;
+import com.devband.tronlib.dto.Representative;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.WalletAppManager;
@@ -65,24 +67,23 @@ public class VotePresenter extends BasePresenter<VoteView> {
     public void getRepresentativeList(boolean isMyVotes) {
         mView.showLoadingDialog();
 
-        Single.fromCallable(() -> Tron.getInstance(mContext).getWitnessList().blockingGet())
-        .map(witnessList -> {
+        TronNetwork.getInstance().getVoteCurrentCycle()
+        .map(votes -> {
             List<VoteItem> representatives = new ArrayList<>();
 
-            int cnt = witnessList.getWitnessesCount();
+            int cnt = votes.getVotesList().size();
 
-            long totalVotes = 0;
             long totalMyVotes = 0;
 
             Protocol.Account myAccount = Tron.getInstance(mContext).queryAccount(Tron.getInstance(mContext).getLoginAddress()).blockingGet();
 
             for (int i = 0; i < cnt; i++) {
-                Protocol.Witness witness = witnessList.getWitnesses(i);
+                Representative representative = votes.getVotesList().get(i);
 
                 long myVoteCount = 0;
 
                 for (Protocol.Vote vote : myAccount.getVotesList()) {
-                    if (AccountManager.encode58Check(vote.getVoteAddress().toByteArray()).equals(AccountManager.encode58Check(witness.getAddress().toByteArray()))) {
+                    if (AccountManager.encode58Check(vote.getVoteAddress().toByteArray()).equals(representative.getAddress())) {
                         myVoteCount = vote.getVoteCount();
                         totalMyVotes += myVoteCount;
                         break;
@@ -90,13 +91,13 @@ public class VotePresenter extends BasePresenter<VoteView> {
                 }
 
                 representatives.add(VoteItem.builder()
-                        .address(AccountManager.encode58Check(witness.getAddress().toByteArray()))
-                        .url(witness.getUrl())
-                        .voteCount(witness.getTotalVoteCount())
+                        .address(representative.getAddress())
+                        .url(representative.getUrl())
+                        .totalVoteCount(votes.getTotalVotes())
+                        .voteCount(representative.getVotes())
+                        .hasTeamPage(representative.isHasPage())
                         .myVoteCount(myVoteCount)
                         .build());
-
-                totalVotes += witness.getTotalVoteCount();
             }
 
             Descending descending = new Descending();
@@ -105,7 +106,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
             for (int i = 0; i < cnt; i++) {
                 VoteItem representative = representatives.get(i);
                 representative.setNo(i + 1);
-                representative.setTotalVoteCount(totalVotes);
+                representative.setTotalVoteCount(votes.getTotalVotes());
             }
 
             long myVotePoint = 0;
@@ -131,7 +132,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
             return VoteItemList.builder()
                     .voteItemList(representatives)
                     .voteItemCount(cnt)
-                    .totalVotes(totalVotes)
+                    .totalVotes(votes.getTotalVotes())
                     .totalMyVotes(totalMyVotes)
                     .myVotePoint(myVotePoint)
                     .build();

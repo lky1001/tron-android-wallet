@@ -19,6 +19,8 @@ public class VoteItem {
 
     private String url;
 
+    private boolean hasTeamPage;
+
     private Long totalVoteCount;
 
     private Long voteCount;

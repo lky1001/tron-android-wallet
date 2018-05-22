@@ -17,5 +17,5 @@ public class Votes {
     private long totalVotes;
 
     @JsonProperty("candidates")
-    private List<Votes> votesList;
+    private List<Representative> votesList;
 }

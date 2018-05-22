@@ -118,14 +118,13 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:background="@color/colorAccent"
-                android:visibility="invisible"
                 android:text="@string/team_page_text" />
 
             <Button
                 android:id="@+id/representative_vote_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
                 android:textColor="@android:color/white"
                 android:background="@color/colorAccent"
                 android:text="@string/vote_text" />
