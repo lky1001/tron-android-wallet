@@ -7,7 +7,10 @@ import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Scheduler;
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class IntroPresenter extends BasePresenter<IntroView> {
 
@@ -33,7 +36,9 @@ public class IntroPresenter extends BasePresenter<IntroView> {
                 return NO_WALLET;
             }
         })
+        .subscribeOn(Schedulers.io())
         .delay(2, TimeUnit.SECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe(result -> {
             if (result == SUCCESS) {
                 mView.startLoginActivity();

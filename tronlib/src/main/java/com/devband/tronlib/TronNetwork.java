@@ -1,9 +1,11 @@
 package com.devband.tronlib;
 
 import com.devband.tronlib.dto.CoinMarketCap;
+import com.devband.tronlib.dto.Tokens;
 import com.devband.tronlib.dto.Transactions;
 import com.devband.tronlib.dto.Votes;
 import com.devband.tronlib.services.CoinMarketCapService;
+import com.devband.tronlib.services.TokenService;
 import com.devband.tronlib.services.TronScanService;
 import com.devband.tronlib.services.VoteService;
 
@@ -20,6 +22,7 @@ public class TronNetwork {
     private VoteService mVoteService;
     private CoinMarketCapService mCoinMarketCapService;
     private TronScanService mTronScanService;
+    private TokenService mTokenService;
 
     public static synchronized TronNetwork getInstance() {
         if (instance == null) {
@@ -36,6 +39,7 @@ public class TronNetwork {
         mVoteService = ServiceBuilder.createService(VoteService.class, Hosts.TRONSCAM_API);
         mCoinMarketCapService = ServiceBuilder.createService(CoinMarketCapService.class, Hosts.COINMARKETCAP_API);
         mTronScanService = ServiceBuilder.createService(TronScanService.class, Hosts.TRONSCAM_API);
+        mTokenService = ServiceBuilder.createService(TokenService.class, Hosts.TRONSCAM_API);
     }
 
     public Single<Votes> getVoteCurrentCycle() {
@@ -48,5 +52,9 @@ public class TronNetwork {
 
     public Single<Transactions> getTransactions(String address, String symbol) {
         return mTronScanService.getTransactions(address, symbol);
+    }
+
+    public Single<Tokens> getTokens(int start, int limit, String sort, String status) {
+        return mTokenService.getTokens(start, limit, sort, status);
     }
 }

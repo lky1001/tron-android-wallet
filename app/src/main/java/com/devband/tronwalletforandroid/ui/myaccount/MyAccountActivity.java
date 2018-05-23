@@ -39,6 +39,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Scheduler;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
@@ -97,23 +102,39 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     }
 
     private void initAccountList() {
-        List<AccountModel> accountModelList = ((MyAccountPresenter) mPresenter).getAccountList();
+        ((MyAccountPresenter) mPresenter).getAccountList()
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new SingleObserver<List<AccountModel>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
-        mAccountAdapter = new ArrayAdapter<>(MyAccountActivity.this, android.R.layout.simple_spinner_item,
-                accountModelList);
-
-        mAccountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mAccountSpinner.setAdapter(mAccountAdapter);
-
-        for (int i = 0; i < accountModelList.size(); i++) {
-            int id = ((MyAccountPresenter) mPresenter).getLoginAccountIndex();
-            if (id == accountModelList.get(i).getId()) {
-                mAccountSpinner.setSelection(i);
-                break;
             }
-        }
 
-        mAccountSpinner.setOnItemSelectedListener(mAccountItemSelectedListener);
+            @Override
+            public void onSuccess(List<AccountModel> accountModelList) {
+                mAccountAdapter = new ArrayAdapter<>(MyAccountActivity.this, android.R.layout.simple_spinner_item,
+                        accountModelList);
+
+                mAccountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                mAccountSpinner.setAdapter(mAccountAdapter);
+
+                for (int i = 0; i < accountModelList.size(); i++) {
+                    int id = ((MyAccountPresenter) mPresenter).getLoginAccountIndex();
+                    if (id == accountModelList.get(i).getId()) {
+                        mAccountSpinner.setSelection(i);
+                        break;
+                    }
+                }
+
+                mAccountSpinner.setOnItemSelectedListener(mAccountItemSelectedListener);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        });
     }
 
     @Override

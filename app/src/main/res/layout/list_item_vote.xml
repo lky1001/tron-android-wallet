@@ -38,7 +38,6 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:autoLink="all"
                     android:textColorLink="@color/colorPrimary"
                     tools:text="http://Earth.osdfsdfdsfsrg"/>
 

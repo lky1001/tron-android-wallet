@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.ui.vote.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +36,9 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
     private DecimalFormat df = new DecimalFormat("#,##0");
     private DecimalFormat percentDf = new DecimalFormat("#,##0.00");
 
-    public VoteListAdapter(Context mContext, View.OnClickListener voteClickListener) {
+    public VoteListAdapter(Context context, View.OnClickListener voteClickListener) {
         this.mList = new ArrayList<>();
-        this.mContext = mContext;
+        this.mContext = context;
         this.mVoteClickListener = voteClickListener;
     }
 
@@ -57,6 +58,8 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
 
         holder.voteNoText.setText(item.getNo() + ".");
         holder.representativeUrlText.setText(item.getUrl());
+        Linkify.addLinks(holder.representativeUrlText, Linkify.WEB_URLS);
+
         holder.representativeAddressText.setText(item.getAddress());
         holder.yourVoteText.setText(df.format(item.getMyVoteCount()));
         holder.totalVoteText.setText(df.format(item.getVoteCount())

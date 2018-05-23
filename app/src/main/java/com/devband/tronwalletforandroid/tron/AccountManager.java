@@ -31,6 +31,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Single;
+
 /**
  * https://github.com/tronprotocol/wallet-cli/blob/master/src/main/java/org/tron/walletserver/WalletClient.java
  */
@@ -100,9 +102,9 @@ public class AccountManager {
         }
     }
 
-    public int genAccount(@NonNull String accountName, @NonNull String password) {
+    public Single<Integer> genAccount(@NonNull String accountName, @NonNull String password) {
         if (this.mEcKey == null || this.mEcKey.getPrivKey() == null) {
-            return Tron.ERROR_PRIVATE_KEY;
+            return Single.fromCallable(() -> Tron.ERROR_PRIVATE_KEY);
         }
 
         byte[] pwd = getPassWord(password);
@@ -114,31 +116,33 @@ public class AccountManager {
         return createAddress(accountName, pwdAsc, aseKey, false);
     }
 
-    private int createAddress(@NonNull String accountName, @NonNull String pwdAsc, @NonNull byte[] aseKey, boolean imported) {
-        byte[] privKeyPlain = this.mEcKey.getPrivKeyBytes();
-        byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, aseKey);
+    private Single<Integer> createAddress(@NonNull String accountName, @NonNull String pwdAsc, @NonNull byte[] aseKey, boolean imported) {
+        return Single.fromCallable(() -> {
+            byte[] privKeyPlain = this.mEcKey.getPrivKeyBytes();
+            byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, aseKey);
 
-        String privKeyStr = ByteArray.toHexString(privKeyEnced);
-        byte[] pubKeyBytes = this.mEcKey.getPubKey();
-        String pubKeyStr = ByteArray.toHexString(pubKeyBytes);
+            String privKeyStr = ByteArray.toHexString(privKeyEnced);
+            byte[] pubKeyBytes = this.mEcKey.getPubKey();
+            String pubKeyStr = ByteArray.toHexString(pubKeyBytes);
 
-        if (imported) {
-            AccountModel accountModel = mAccountRepository.loadByAccountKey(pwdAsc + pubKeyStr + privKeyStr);
+            if (imported) {
+                AccountModel accountModel = mAccountRepository.loadByAccountKey(pwdAsc + pubKeyStr + privKeyStr).blockingGet();
 
-            if (accountModel != null) {
-                return Tron.ERROR_EXIST_ACCOUNT;
+                if (accountModel != null) {
+                    return Tron.ERROR_EXIST_ACCOUNT;
+                }
             }
-        }
 
-        mLoginAccountModel = AccountModel.builder()
-                .name(accountName)
-                .account(pwdAsc + pubKeyStr + privKeyStr)
-                .imported(imported)
-                .build();
+            mLoginAccountModel = AccountModel.builder()
+                    .name(accountName)
+                    .account(pwdAsc + pubKeyStr + privKeyStr)
+                    .imported(imported)
+                    .build();
 
-        mAccountRepository.storeAccount(mLoginAccountModel);
+            mAccountRepository.storeAccount(mLoginAccountModel).blockingGet();
 
-        return Tron.SUCCESS;
+            return Tron.SUCCESS;
+        });
     }
 
     public int store(@NonNull String password) {
@@ -186,7 +190,8 @@ public class AccountManager {
 
     private int loadAccountByRepository(@Nullable AccountModel accountModel) {
         if (accountModel == null) {
-            accountModel = mAccountRepository.loadAccount(DEFAULT_ACCOUNT_INDEX);
+            // todo - improve
+            accountModel = mAccountRepository.loadAccount(DEFAULT_ACCOUNT_INDEX).blockingGet();
         }
 
         String priKeyEnced = accountModel.getAccount().substring(162, 226);
@@ -469,7 +474,7 @@ public class AccountManager {
         return mEcKey;
     }
 
-    public int getAccountCount() {
+    public Single<Integer> getAccountCount() {
         return mAccountRepository.countAccount();
     }
 
@@ -478,7 +483,7 @@ public class AccountManager {
         return mLoginAccountModel;
     }
 
-    public boolean changeLoginAccountName(@NonNull String accountName) {
+    public Single<Boolean> changeLoginAccountName(@NonNull String accountName) {
         mLoginAccountModel.setName(accountName);
 
         return mAccountRepository.updateAccount(mLoginAccountModel);
@@ -490,7 +495,7 @@ public class AccountManager {
         createAddress(nickname, loadPassword(), mAesKey, false);
     }
 
-    public List<AccountModel> getAccountList() {
+    public Single<List<AccountModel>> getAccountList() {
         return mAccountRepository.loadAllAccounts();
     }
 
@@ -498,14 +503,14 @@ public class AccountManager {
         loadAccountByRepository(accountModel);
     }
 
-    public int importAccount(@NonNull String nickname, @NonNull String privateKey) {
+    public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey) {
         ECKey temKey = null;
         try {
             BigInteger priK = new BigInteger(privateKey, KEY_SIZE);
             temKey = ECKey.fromPrivate(priK);
         } catch (Exception ex) {
             ex.printStackTrace();
-            return Tron.ERROR_PRIVATE_KEY;
+            Single.fromCallable(() -> Tron.ERROR_PRIVATE_KEY);
         }
         this.mEcKey = temKey;
 

@@ -7,20 +7,19 @@ import com.devband.tronwalletforandroid.database.model.AccountModel;
 
 import java.util.List;
 
+import io.reactivex.Single;
+
 public interface AccountRepository {
 
-    boolean storeAccount(@NonNull AccountModel accountModel);
+    Single<Boolean> storeAccount(@NonNull AccountModel accountModel);
 
-    boolean updateAccount(@NonNull AccountModel accountModel);
+    Single<Boolean> updateAccount(@NonNull AccountModel accountModel);
 
-    @Nullable
-    AccountModel loadAccount(int index);
+    Single<AccountModel> loadAccount(int index);
 
-    @Nullable
-    List<AccountModel> loadAllAccounts();
+    Single<List<AccountModel>> loadAllAccounts();
 
-    int countAccount();
+    Single<Integer> countAccount();
 
-    @Nullable
-    AccountModel loadByAccountKey(String accountKey);
+    Single<AccountModel> loadByAccountKey(String accountKey);
 }

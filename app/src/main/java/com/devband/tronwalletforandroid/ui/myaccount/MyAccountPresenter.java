@@ -13,6 +13,7 @@ import org.tron.protos.Protocol;
 import java.net.ConnectException;
 import java.util.List;
 
+import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -43,7 +44,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
     }
 
-    public List<AccountModel> getAccountList() {
+    public Single<List<AccountModel>> getAccountList() {
         return Tron.getInstance(mContext).getAccountList();
     }
 

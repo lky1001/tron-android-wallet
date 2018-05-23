@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.ui.representative.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +57,7 @@ public class RepresentativeListAdapter extends RecyclerView.Adapter<Representati
 
         holder.representativeNoText.setText((position + 1) + ".");
         holder.representativeUrlText.setText(item.getUrl());
+        Linkify.addLinks(holder.representativeUrlText, Linkify.WEB_URLS);
         holder.representativeVotesText.setText(df.format(item.getVoteCount()) + Constants.TRON_SYMBOL);
         holder.latestBlockText.setText(df.format(item.getLatestBlockNum()));
         holder.producedBlockText.setText(df.format(item.getTotalProduced()));

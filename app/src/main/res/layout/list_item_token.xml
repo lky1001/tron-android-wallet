@@ -13,6 +13,7 @@
         android:padding="15dp"
         android:orientation="horizontal">
         <ImageView
+            android:id="@+id/token_symbol_image"
             android:layout_width="30dp"
             android:layout_height="30dp"
             app:srcCompat="@drawable/ic_tron" />
@@ -84,7 +85,7 @@
     </LinearLayout>
 
     <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
-        android:id="@+id/progress_votes"
+        android:id="@+id/progress_token_sales"
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:layout_marginLeft="15dp"

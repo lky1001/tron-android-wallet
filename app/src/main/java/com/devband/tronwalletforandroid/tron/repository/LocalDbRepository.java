@@ -12,6 +12,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Single;
+
 public class LocalDbRepository implements AccountRepository {
 
     private AccountDao mAccountDao;
@@ -21,45 +23,46 @@ public class LocalDbRepository implements AccountRepository {
     }
 
     @Override
-    public boolean storeAccount(@NonNull AccountModel accountModel) {
-        Date now = Calendar.getInstance().getTime();
-        accountModel.setCreated(now);
+    public Single<Boolean> storeAccount(@NonNull AccountModel accountModel) {
+        return Single.fromCallable(() -> {
+            Date now = Calendar.getInstance().getTime();
+            accountModel.setCreated(now);
 
-        mAccountDao.insert(accountModel);
+            mAccountDao.insert(accountModel);
 
-        return true;
+            return true;
+        });
     }
 
     @Override
-    public boolean updateAccount(@NonNull AccountModel accountModel) {
-        Date now = Calendar.getInstance().getTime();
-        accountModel.setUpdated(now);
+    public Single<Boolean> updateAccount(@NonNull AccountModel accountModel) {
+        return Single.fromCallable(() -> {
+            Date now = Calendar.getInstance().getTime();
+            accountModel.setUpdated(now);
 
-        mAccountDao.update(accountModel);
+            mAccountDao.update(accountModel);
 
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public AccountModel loadAccount(int index) {
-        return mAccountDao.loadAccountById(index);
-    }
-
-    @Nullable
-    @Override
-    public List<AccountModel> loadAllAccounts() {
-        return mAccountDao.loadAllAccounts();
+            return true;
+        });
     }
 
     @Override
-    public int countAccount() {
-        return mAccountDao.countAccounts();
+    public Single<AccountModel> loadAccount(int index) {
+        return Single.fromCallable(() -> mAccountDao.loadAccountById(index));
     }
 
-    @Nullable
     @Override
-    public AccountModel loadByAccountKey(String accountKey) {
-        return mAccountDao.loadByAccountKey(accountKey);
+    public Single<List<AccountModel>> loadAllAccounts() {
+        return Single.fromCallable(() -> mAccountDao.loadAllAccounts());
+    }
+
+    @Override
+    public Single<Integer> countAccount() {
+        return Single.fromCallable(() -> mAccountDao.countAccounts());
+    }
+
+    @Override
+    public Single<AccountModel> loadByAccountKey(String accountKey) {
+        return Single.fromCallable(() -> mAccountDao.loadByAccountKey(accountKey));
     }
 }
