@@ -144,7 +144,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
         if (account.getAssetCount() > 0) {
             for (String key : account.getAssetMap().keySet()) {
-                View v = LayoutInflater.from(MyAccountActivity.this).inflate(R.layout.list_item_token, null);
+                View v = LayoutInflater.from(MyAccountActivity.this).inflate(R.layout.list_item_my_token, null);
                 v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                         RecyclerView.LayoutParams.WRAP_CONTENT));
 
@@ -156,7 +156,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                 mTokensLayout.addView(v);
             }
         } else {
-            View v = LayoutInflater.from(MyAccountActivity.this).inflate(R.layout.list_item_token, null);
+            View v = LayoutInflater.from(MyAccountActivity.this).inflate(R.layout.list_item_my_token, null);
             v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                     RecyclerView.LayoutParams.WRAP_CONTENT));
 
