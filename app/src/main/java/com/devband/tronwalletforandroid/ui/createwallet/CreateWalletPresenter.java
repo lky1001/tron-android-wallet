@@ -41,7 +41,7 @@ public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
             int result = WalletAppManager.getInstance(mContext).createWallet(password);
 
             if (result == WalletAppManager.SUCCESS) {
-                result = Tron.getInstance(mContext).registerAccount(Constants.PREFIX_ACCOUNT_NAME, password);
+                result = Tron.getInstance(mContext).registerAccount(Constants.PREFIX_ACCOUNT_NAME, password).blockingGet();
                 if (result != Tron.SUCCESS) {
                     return result;
                 }

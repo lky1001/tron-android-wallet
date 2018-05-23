@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.ui.main;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronlib.dto.CoinMarketCap;
+import com.devband.tronwalletforandroid.BuildConfig;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
@@ -37,6 +39,8 @@ import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 import com.devband.tronwalletforandroid.ui.main.adapter.MyTokenListAdapter;
+import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
+import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.myaccount.MyAccountActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
@@ -47,10 +51,9 @@ import com.devband.tronwalletforandroid.ui.vote.VoteActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
-import org.tron.protos.Protocol;
-
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -121,7 +124,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     String mLoginAccountName;
 
-    private Protocol.Account mLoginTronAccount;
+    private TronAccount mLoginTronAccount;
 
     private CoinMarketCap mCoinMarketCapPriceInfo;
 
@@ -131,9 +134,17 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     private AdapterView mAdapterView;
     private MyTokenListAdapter mMyTokenListAdapter;
 
+    private boolean mLoadingAccountInfo;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectAll().penaltyLog().penaltyDeath().build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll()
+                    .penaltyLog().penaltyDeath().build());
+        }
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
@@ -242,8 +253,29 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     }
 
     private void initAccountList() {
-        List<AccountModel> accountModelList = ((MainPresenter) mPresenter).getAccountList();
+        ((MainPresenter) mPresenter).getAccountList()
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new SingleObserver<List<AccountModel>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
+            }
+
+            @Override
+            public void onSuccess(List<AccountModel> accountModelList) {
+                initAccountList(accountModelList);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                initAccountList(new ArrayList<>());
+            }
+        });
+    }
+
+    private void initAccountList(List<AccountModel> accountModelList) {
         mAccountAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item,
                 accountModelList);
 
@@ -259,7 +291,12 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     }
 
     private void checkLoginState() {
+        if (mLoadingAccountInfo) {
+            return;
+        }
+
         if (((MainPresenter) mPresenter).isLogin()) {
+            mLoadingAccountInfo = true;
             // get account info
             ((MainPresenter) mPresenter).getMyAccountInfo();
 
@@ -289,7 +326,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 }
             });
 
-            Single.fromCallable(() -> ((MainPresenter) mPresenter).getAccountList())
+            ((MainPresenter) mPresenter).getAccountList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new SingleObserver<List<AccountModel>>() {
@@ -414,10 +451,10 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     }
 
     @Override
-    public void displayAccountInfo(@NonNull Protocol.Account account) {
+    public void displayAccountInfo(@NonNull TronAccount account) {
         mLoginTronAccount = account;
 
-        if (mLoginTronAccount.getAssetMap().isEmpty()) {
+        if (mLoginTronAccount.getAssetList().isEmpty()) {
             mNoTokenLayout.setVisibility(View.VISIBLE);
             mMyTokenListView.setVisibility(View.GONE);
         } else {
@@ -429,7 +466,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         long frozenBalance = 0;
 
         for (int i = 0; i < account.getFrozenList().size(); i++) {
-            Protocol.Account.Frozen frozen = account.getFrozen(i);
+            Frozen frozen = account.getFrozenList().get(i);
 
             frozenBalance += frozen.getFrozenBalance();
         }
@@ -441,6 +478,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         mLoginAccountBalanceText.setText(df.format(balance) + " " + getString(R.string.currency_text));
         mLoginFrozenBalanceText.setText(df.format(fz));
         mLoginBandwidthText.setText(df.format(account.getBandwidth() / Constants.REAL_TRX_AMOUNT));
+
+        mLoadingAccountInfo = false;
 
         ((MainPresenter) mPresenter).getTronMarketInfo();
     }
@@ -495,6 +534,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     @Override
     public void connectionError() {
+        mLoadingAccountInfo = false;
         Toast.makeText(MainActivity.this, getString(R.string.connection_error_msg),
                 Toast.LENGTH_SHORT).show();
     }
@@ -551,9 +591,27 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                         String accountName = input.toString();
 
                         if (!TextUtils.isEmpty(accountName)) {
-                            if (((MainPresenter) mPresenter).changeLoginAccountName(accountName)) {
-                                checkLoginState();
-                            }
+                            ((MainPresenter) mPresenter).changeLoginAccountName(accountName)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new SingleObserver<Boolean>() {
+                                @Override
+                                public void onSubscribe(Disposable d) {
+
+                                }
+
+                                @Override
+                                public void onSuccess(Boolean result) {
+                                    if (result) {
+                                        checkLoginState();
+                                    }
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+
+                                }
+                            });
                         }
                     }
                 }).show();

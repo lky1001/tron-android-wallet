@@ -84,20 +84,20 @@ public class Tron {
         }
     }
 
-    public int registerAccount(@NonNull String nickname, @NonNull String password) {
+    public Single<Integer> registerAccount(@NonNull String nickname, @NonNull String password) {
         if (!AccountManager.passwordValid(password)) {
-            return ERROR_INVALID_PASSWORD;
+            return Single.fromCallable(() -> ERROR_INVALID_PASSWORD);
         }
 
         if (mAccountManager == null) {
             mAccountManager = new AccountManager(true, mContext);
         }
 
-        return mAccountManager.genAccount(generateDefaultAccountName(nickname), password);
+        return mAccountManager.genAccount(generateDefaultAccountName(nickname).blockingGet(), password);
     }
 
-    public int importAccount(@NonNull String nickname, @NonNull String privateKey) {
-        return mAccountManager.importAccount(generateDefaultAccountName(nickname), privateKey);
+    public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey) {
+        return mAccountManager.importAccount(generateDefaultAccountName(nickname).blockingGet(), privateKey);
     }
 
     public int login(String password) {
@@ -271,8 +271,10 @@ public class Tron {
         mAccountManager = null;
     }
 
-    public boolean hasAccount() {
-        return mAccountManager.getAccountCount() > 0;
+    public Single<Boolean> hasAccount() {
+        return Single.fromCallable(() -> {
+            return mAccountManager.getAccountCount().blockingGet() > 0;
+        });
     }
 
     @Nullable
@@ -280,16 +282,18 @@ public class Tron {
         return mAccountManager.getLoginAccount();
     }
 
-    public boolean changeLoginAccountName(@NonNull String accountName) {
-        mAccountManager.changeLoginAccountName(accountName);
-        return true;
+    public Single<Boolean> changeLoginAccountName(@NonNull String accountName) {
+        return mAccountManager.changeLoginAccountName(accountName);
     }
 
-    public void createAccount(@NonNull String nickname) {
-        mAccountManager.createAccount(generateDefaultAccountName(nickname));
+    public Single<Boolean> createAccount(@NonNull String nickname) {
+        return Single.fromCallable(() -> {
+            mAccountManager.createAccount(generateDefaultAccountName(nickname).blockingGet());
+            return true;
+        });
     }
 
-    public List<AccountModel> getAccountList() {
+    public Single<List<AccountModel>> getAccountList() {
         return mAccountManager.getAccountList();
     }
 
@@ -297,9 +301,11 @@ public class Tron {
         mAccountManager.changeLoginAccount(accountModel);
     }
 
-    private String generateDefaultAccountName(String prefix) {
-        int cnt = mAccountManager.getAccountCount();
-        return prefix + (++cnt);
+    private Single<String> generateDefaultAccountName(String prefix) {
+        return Single.fromCallable(() -> {
+            int cnt = mAccountManager.getAccountCount().blockingGet();
+            return prefix + (++cnt);
+        });
     }
 
     public Single<GrpcAPI.WitnessList> getWitnessList() {

@@ -10,13 +10,17 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
+import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
+import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import org.tron.protos.Protocol;
 
 import java.net.ConnectException;
+import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -61,24 +65,44 @@ public class MainPresenter extends BasePresenter<MainView> {
     public void getMyAccountInfo() {
         Tron.getInstance(mContext).queryAccount(Tron.getInstance(mContext).getLoginAddress())
         .subscribeOn(Schedulers.io())
+        .map((account -> {
+            List<Frozen> frozenList = new ArrayList<>();
+
+            for (Protocol.Account.Frozen frozen : account.getFrozenList()) {
+                frozenList.add(Frozen.builder()
+                        .frozenBalance(frozen.getFrozenBalance())
+                        .expireTime(frozen.getExpireTime())
+                        .build());
+            }
+
+            List<Asset> assetList = new ArrayList<>();
+
+            for (String s : account.getAssetMap().keySet()) {
+                assetList.add(Asset.builder()
+                        .name(s)
+                        .balance(account.getAssetMap().get(s))
+                        .build());
+            }
+
+            return TronAccount.builder()
+                    .balance(account.getBalance())
+                    .bandwidth(account.getBandwidth())
+                    .assetList(assetList)
+                    .frozenList(frozenList)
+                    .build();
+        }))
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new SingleObserver<Protocol.Account>() {
+        .subscribe(new SingleObserver<TronAccount>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onSuccess(Protocol.Account account) {
-                mAdapterDataModel.clear();
+            public void onSuccess(TronAccount account) {
                 mView.displayAccountInfo(account);
-
-                for (String key : account.getAssetMap().keySet()) {
-                    mAdapterDataModel.add(Asset.builder()
-                            .name(key)
-                            .balance(account.getAssetMap().get(key))
-                            .build());
-                }
+                mAdapterDataModel.clear();
+                mAdapterDataModel.addAll(account.getAssetList());
             }
 
             @Override
@@ -129,7 +153,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         return Tron.getInstance(mContext).getLoginAccount();
     }
 
-    public boolean changeLoginAccountName(@NonNull String accountName) {
+    public Single<Boolean> changeLoginAccountName(@NonNull String accountName) {
         return Tron.getInstance(mContext).changeLoginAccountName(accountName);
     }
 
@@ -138,7 +162,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         mView.successCreateAccount();
     }
 
-    public List<AccountModel> getAccountList() {
+    public Single<List<AccountModel>> getAccountList() {
         return Tron.getInstance(mContext).getAccountList();
     }
 
@@ -147,15 +171,31 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void importAccount(@NonNull String nickname, @NonNull String privateKey) {
-        int result = Tron.getInstance(mContext).importAccount(nickname, privateKey);
+        Tron.getInstance(mContext).importAccount(nickname, privateKey)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new SingleObserver<Integer>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
-        if (result == Tron.SUCCESS) {
-            mView.successImportAccount();
-        } else if (result == Tron.ERROR_EXIST_ACCOUNT) {
-            mView.duplicatedAccount();
-        } else if (result == Tron.ERROR_PRIVATE_KEY) {
-            mView.failCreateAccount();
-        }
+            }
+
+            @Override
+            public void onSuccess(Integer result) {
+                if (result == Tron.SUCCESS) {
+                    mView.successImportAccount();
+                } else if (result == Tron.ERROR_EXIST_ACCOUNT) {
+                    mView.duplicatedAccount();
+                } else if (result == Tron.ERROR_PRIVATE_KEY) {
+                    mView.failCreateAccount();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.failCreateAccount();
+            }
+        });
     }
 
     public int getLoginAccountIndex() {
