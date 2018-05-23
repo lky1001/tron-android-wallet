@@ -91,6 +91,10 @@
             android:theme="@style/WalletTheme" />
 
         <activity
+            android:name=".ui.token.TokenActivity"
+            android:theme="@style/WalletTheme" />
+
+        <activity
             android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor"

@@ -7,4 +7,6 @@ public interface TokenView extends IView {
     void showLoadingDialog();
 
     void showServerError();
+
+    void finishLoading(int total);
 }

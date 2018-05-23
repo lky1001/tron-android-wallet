@@ -3,7 +3,6 @@ package com.devband.tronwalletforandroid.ui.main;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -29,7 +28,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronlib.dto.CoinMarketCap;
-import com.devband.tronwalletforandroid.BuildConfig;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
@@ -46,6 +44,7 @@ import com.devband.tronwalletforandroid.ui.myaccount.MyAccountActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
 import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
+import com.devband.tronwalletforandroid.ui.token.TokenActivity;
 import com.devband.tronwalletforandroid.ui.transaction.TransactionActivity;
 import com.devband.tronwalletforandroid.ui.vote.VoteActivity;
 import com.github.clans.fab.FloatingActionButton;
@@ -139,12 +138,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (BuildConfig.DEBUG) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                    .detectAll().penaltyLog().penaltyDeath().build());
-            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll()
-                    .penaltyLog().penaltyDeath().build());
-        }
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
@@ -405,7 +398,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 startActivity(VoteActivity.class);
                 break;
             case R.id.drawer_item_tokens:
-                Toast.makeText(this, "tbd", Toast.LENGTH_SHORT).show();
+                startActivity(TokenActivity.class);
                 break;
             case R.id.drawer_item_block_explorer:
                 Toast.makeText(this, "tbd", Toast.LENGTH_SHORT).show();
