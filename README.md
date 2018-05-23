@@ -17,19 +17,26 @@ A Tron wallet for android.
 ```
 
 ## Feature
+
 - Create Wallet
-- Send Coin
-- Receive Coin
-- QR Code
+- Send Tron
+- Receive Tron
+- My Address QR Code
 - Tron Price
 - Tron Balance
 - My Tokens
+- Vote Representative
+- My Transaction history
 - Node list
 - Representative list
 
+
 ## TODO list
-- Transaction history
-- Vote
-- Buy Contract token
+
+- Block Explorer
+- Tron market info
+- Send token
+- Token list 
+- Participate token
 - Tron Pay
 - bip 32, 39, 44
