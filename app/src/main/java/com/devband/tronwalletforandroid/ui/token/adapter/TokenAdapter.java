@@ -16,7 +16,6 @@ import com.devband.tronlib.dto.Token;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
-import com.devband.tronwalletforandroid.common.Constants;
 import com.thefinestartist.finestwebview.FinestWebView;
 
 import java.text.DecimalFormat;
@@ -53,12 +52,18 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
     public void onBindViewHolder(@NonNull TokenViewHolder holder, int position) {
         Token item = mList.get(position);
 
+        if (position == 0) {
+            holder.marginView.setVisibility(View.GONE);
+        } else {
+            holder.marginView.setVisibility(View.VISIBLE);
+        }
+
         holder.tokenSymbolImage.setVisibility(View.GONE);
         holder.tokenNameText.setText(item.getName());
         holder.tokenDescText.setText(item.getDescription());
         holder.tokenSaleText.setText(df.format(item.getIssued()));
         holder.tokenSupplyText.setText(df.format(item.getTotalSupply()));
-        holder.tokenSalePercentText.setText(percentDf.format(item.getPercentage()));
+        holder.tokenSalePercentText.setText(percentDf.format(item.getPercentage()) + "%");
         holder.tokenSaleProgress.setMax(100f);
         holder.tokenSaleProgress.setProgress((float) item.getPercentage());
         holder.visitWebsiteButton.setOnClickListener(new View.OnClickListener() {
@@ -67,12 +72,20 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
                 new FinestWebView.Builder(mContext).show(item.getUrl());
             }
         });
-        holder.participateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, "Coming soon", Toast.LENGTH_SHORT).show();
-            }
-        });
+        if (item.getIssued() == item.getTotalSupply()) {
+            holder.participateButton.setBackgroundResource(R.color.token_finish_button_color);
+            holder.participateButton.setText(R.string.finish_btn_text);
+            holder.participateButton.setEnabled(false);
+        } else {
+            holder.participateButton.setBackgroundResource(R.color.token_participate_button_color);
+            holder.participateButton.setText(R.string.participate_btn_text);
+            holder.participateButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext, "Coming soon", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     @Override
@@ -87,7 +100,21 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
 
     @Override
     public void addAll(List<Token> list) {
-        mList.addAll(list);
+        for (Token token : list) {
+            if (!isContain(token)) {
+                mList.add(token);
+            }
+        }
+    }
+
+    private boolean isContain(Token token) {
+        for (Token t : mList) {
+            if (t.getId().equalsIgnoreCase(token.getId())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -116,6 +143,9 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
     }
 
     class TokenViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.margin_view)
+        View marginView;
 
         @BindView(R.id.token_symbol_image)
         ImageView tokenSymbolImage;

@@ -96,17 +96,20 @@ public class NodeActivity extends CommonActivity implements NodeView {
     }
 
     private void initNodeList() {
+        showProgressDialog(null, getString(R.string.loading_msg));
         ((NodePresenter) mPresenter).getTronNodeList();
     }
 
     @Override
     public void displayNodeList(int count) {
+        hideDialog();
         tronnodeListview.setVisibility(View.VISIBLE);
         countNodeText.setText("Found "+count+" node(s).");
     }
 
     @Override
     public void errorNodeList() {
+        hideDialog();
         tronnodeListview.setVisibility(View.GONE);
         Toast.makeText(NodeActivity.this, "Failed to get node list.", Toast.LENGTH_SHORT).show();
     }

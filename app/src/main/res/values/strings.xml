@@ -188,4 +188,6 @@
     <string name="confirmed_text">Confirmed</string>
     <string name="unconfirmed_text">Unconfirmed</string>
     <string name="participate_btn_text">PARTICIPATE</string>
+    <string name="finish_btn_text">FINISH</string>
+    <string name="title_tokens">Tokens</string>
 </resources>

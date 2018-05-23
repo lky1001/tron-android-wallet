@@ -65,7 +65,6 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
         holder.totalVoteText.setText(df.format(item.getVoteCount())
                 + " (" + percentDf.format(((double) item.getVoteCount() / (double) item.getTotalVoteCount()) * 100f) + "%)");
 
-        long progress = (long) (((double) item.getVoteCount() / (double) item.getTotalVoteCount()) * 10000f);
         holder.voteProgress.setMax(Constants.VOTE_MAX_PROGRESS);
         // total representative votes
         holder.voteProgress.setSecondaryProgress((float) item.getVoteCount() / (float) item.getTotalVoteCount() * Constants.VOTE_MAX_PROGRESS);
