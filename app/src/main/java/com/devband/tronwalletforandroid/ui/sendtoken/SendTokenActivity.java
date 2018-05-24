@@ -23,6 +23,7 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
+import com.devband.tronwalletforandroid.ui.myaccount.MyAccountPresenter;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 
 import org.tron.protos.Protocol;
@@ -182,8 +183,8 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                         showProgressDialog(null, getString(R.string.loading_msg));
                         ((SendTokenPresenter) mPresenter).sendTron(password, address, amount);
                     } else {
-//                        showProgressDialog(null, getString(R.string.loading_msg));
-//                        ((MyAccountPresenter) mPresenter).transferAsset(password, address, mSelectedAsset.getName(), (long) finalAmountDouble);
+                        showProgressDialog(null, getString(R.string.loading_msg));
+                        ((SendTokenPresenter) mPresenter).transferAsset(password, address, mSelectedAsset.getName(), (long) finalAmountDouble);
                         Toast.makeText(SendTokenActivity.this, "Coming soon.", Toast.LENGTH_SHORT).show();
                     }
                 }).show();

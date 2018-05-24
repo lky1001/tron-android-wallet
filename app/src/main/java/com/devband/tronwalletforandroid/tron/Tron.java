@@ -236,9 +236,9 @@ public class Tron {
         .flatMap(transactionSingle -> {
             Protocol.Transaction transaction = transactionSingle.blockingGet();
 
-            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
-                throw new RuntimeException();
-            }
+//            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+//                throw new RuntimeException();
+//            }
 
             // sign transaction
             transaction = mAccountManager.signTransaction(transaction);

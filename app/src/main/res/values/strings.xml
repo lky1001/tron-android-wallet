@@ -193,4 +193,6 @@
     <string name="invalid_freeze_amount">No trx.</string>
     <string name="my_account_tron_power_title_text">Tron power :</string>
     <string name="my_account_entropy_text">Entropy :</string>
+    <string name="received_text">RECEIVED</string>
+    <string name="send_text">SEND</string>
 </resources>
