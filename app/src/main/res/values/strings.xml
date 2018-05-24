@@ -80,7 +80,7 @@
     <string name="no_tokens">No Tokens</string>
     <string name="but_token_text">Buy Token</string>
     <string name="title_about_tron">About Tron</string>
-    <string name="title_market">Market</string>
+    <string name="title_markets">Markets</string>
     <string name="title_rename_account">Rename</string>
     <string name="menu_create_account">Create Account</string>
     <string name="menu_import_account">Import Account</string>
@@ -201,4 +201,8 @@
     <string name="external_website_warning_msg">is not an official Tron site. Never enter your private key on an untrusted website.</string>
     <string name="visit_site_text">Visit site</string>
     <string name="visit_external_site_text">Visit external site</string>
+    <string name="white_paper_text">White Paper</string>
+    <string name="tron_white_paper_url">https://dn-peiwo-web.qbox.me/What_is_TRON1.4.pdf</string>
+    <string name="tron_architecture_text">TRON Architecture</string>
+    <string name="tron_architecture_url">https://dn-peiwo-web.qbox.me/Design_Book_of_TRON_Architecture1.4.pdf</string>
 </resources>
