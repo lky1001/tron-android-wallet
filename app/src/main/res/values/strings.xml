@@ -190,4 +190,5 @@
     <string name="participate_btn_text">PARTICIPATE</string>
     <string name="finish_btn_text">FINISH</string>
     <string name="title_tokens">Tokens</string>
+    <string name="invalid_freeze_amount">No trx.</string>
 </resources>

@@ -283,6 +283,12 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
     @OnClick(R.id.freeze_button)
     public void onFreezeClick() {
+        if (mAccountBalance == 0) {
+            Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_freeze_amount),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
                 .title(R.string.title_freeze_trx)
                 .titleColorRes(R.color.colorAccent)
