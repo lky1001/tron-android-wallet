@@ -65,7 +65,7 @@ public class TransactionActivity extends CommonActivity implements TransactionVi
             getSupportActionBar().setTitle(R.string.title_transaction_text);
         }
 
-        mAdapter = new TransactionAdapter(mOnItemClickListener);
+        mAdapter = new TransactionAdapter(TransactionActivity.this, mOnItemClickListener);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
     }

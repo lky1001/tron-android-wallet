@@ -57,8 +57,9 @@
 
                 <TextView
                     android:id="@+id/send_address_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginLeft="5dp"
                     android:lines="1"
                     android:ellipsize="end"
@@ -69,6 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
                     android:tint="@color/copy_button_color"
                     app:srcCompat="@drawable/ic_copy" />
             </LinearLayout>
@@ -133,8 +135,9 @@
 
                 <TextView
                     android:id="@+id/receive_address_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginLeft="5dp"
                     android:lines="1"
                     android:ellipsize="end"
@@ -145,6 +148,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
                     android:tint="@color/copy_button_color"
                     app:srcCompat="@drawable/ic_copy" />
             </LinearLayout>
