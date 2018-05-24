@@ -189,7 +189,7 @@
     <string name="confirmed_text">Confirmed</string>
     <string name="unconfirmed_text">Unconfirmed</string>
     <string name="participate_btn_text">PARTICIPATE</string>
-    <string name="finish_btn_text">FINISH</string>
+    <string name="finished_btn_text">FINISHED</string>
     <string name="title_tokens">Tokens</string>
     <string name="invalid_freeze_amount">No trx.</string>
     <string name="my_account_tron_power_title_text">Tron power :</string>

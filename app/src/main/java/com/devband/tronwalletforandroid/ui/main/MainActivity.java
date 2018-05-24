@@ -554,7 +554,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 )
                 .append("%)\nLast updated : ")
                 .append(sdf.format(updated))
-                .append("(UTC)\nFrom CoinMarketCap");
+                .append("\nFrom CoinMarketCap");
 
         hideDialog();
 

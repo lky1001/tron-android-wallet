@@ -21,6 +21,7 @@ import com.thefinestartist.finestwebview.FinestWebView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -84,9 +85,10 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
                         }).show();
             }
         });
-        if (item.getIssued() == item.getTotalSupply()) {
-            holder.participateButton.setBackgroundResource(R.color.token_finish_button_color);
-            holder.participateButton.setText(R.string.finish_btn_text);
+        if (item.getIssued() == item.getTotalSupply()
+                || Calendar.getInstance().getTimeInMillis() > item.getEndTime()) {
+            holder.participateButton.setBackgroundResource(R.color.token_finished_button_color);
+            holder.participateButton.setText(R.string.finished_btn_text);
             holder.participateButton.setEnabled(false);
         } else {
             holder.participateButton.setBackgroundResource(R.color.token_participate_button_color);
