@@ -3,13 +3,13 @@ package com.devband.tronwalletforandroid.ui.vote.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
@@ -58,7 +58,23 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
 
         holder.voteNoText.setText(item.getNo() + ".");
         holder.representativeUrlText.setText(item.getUrl());
-        Linkify.addLinks(holder.representativeUrlText, Linkify.WEB_URLS);
+        holder.representativeUrlText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new MaterialDialog.Builder(mContext)
+                        .title(R.string.visit_external_site_text)
+                        .content(item.getUrl() + " " + mContext.getString(R.string.external_website_warning_msg))
+                        .titleColorRes(android.R.color.black)
+                        .contentColorRes(android.R.color.black)
+                        .backgroundColorRes(android.R.color.white)
+                        .positiveText(R.string.visit_site_text)
+                        .negativeText(R.string.cancen_text)
+                        .onPositive((dialog, which) -> {
+                            dialog.dismiss();
+                            new FinestWebView.Builder(mContext).show(item.getUrl());
+                        }).show();
+            }
+        });
 
         holder.representativeAddressText.setText(item.getAddress());
         holder.yourVoteText.setText(df.format(item.getMyVoteCount()));

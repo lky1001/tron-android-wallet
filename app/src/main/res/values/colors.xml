@@ -19,6 +19,6 @@
     <color name="main_sub_title_color">#aaffffff</color>
     <color name="super_representative_background_color">#7c7b81</color>
     <color name="token_participate_button_color">#0084ff</color>
-    <color name="token_finish_button_color">#8b8b8b</color>
+    <color name="token_finished_button_color">#8b8b8b</color>
     <color name="copy_button_color">#8b8b8b</color>
 </resources>

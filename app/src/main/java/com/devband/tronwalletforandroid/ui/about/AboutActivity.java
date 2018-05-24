@@ -12,6 +12,7 @@ import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.thefinestartist.finestwebview.FinestWebView;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -77,7 +78,25 @@ public class AboutActivity extends CommonActivity {
                                     .append("-".equals(coinMarketCap.getPercentChange24h().substring(0, 1)) ?
                                             coinMarketCap.getPercentChange24h() :
                                             "+" + coinMarketCap.getPercentChange24h()
-                                    ).append(")");
+                                    ).append("%)");
+
+                            Element whitePaper = new Element()
+                                    .setTitle(getString(R.string.white_paper_text))
+                                    .setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                new FinestWebView.Builder(AboutActivity.this).show(getString(R.string.tron_white_paper_url));
+                                            }
+                                        });
+
+                            Element architecture = new Element()
+                                    .setTitle(getString(R.string.tron_architecture_text))
+                                    .setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            new FinestWebView.Builder(AboutActivity.this).show(getString(R.string.tron_architecture_url));
+                                        }
+                                    });
 
                             View aboutPage = new AboutPage(AboutActivity.this)
                                     .isRTL(false)
@@ -93,6 +112,8 @@ public class AboutActivity extends CommonActivity {
                                     .addItem(new Element().setTitle("Market Rank : " + coinMarketCap.getRank()))
                                     .addItem(new Element().setTitle("Market Cap : " + df.format(Double.parseDouble(coinMarketCap.getMarketCapUsd())) + " USD"))
                                     .addItem(new Element().setTitle("24H Volume : " + df.format(Double.parseDouble(coinMarketCap.get_24hVolumeUsd())) + " USD"))
+                                    //.addItem(whitePaper)
+                                    //.addItem(architecture)
                                     .addGroup("Connect with tron team")
                                     .addWebsite("https://tron.network")
                                     .addFacebook("tronfoundation")

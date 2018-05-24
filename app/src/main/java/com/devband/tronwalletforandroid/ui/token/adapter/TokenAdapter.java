@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.devband.tronlib.dto.Token;
 import com.devband.tronwalletforandroid.R;
@@ -20,6 +21,7 @@ import com.thefinestartist.finestwebview.FinestWebView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -69,12 +71,24 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
         holder.visitWebsiteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new FinestWebView.Builder(mContext).show(item.getUrl());
+                new MaterialDialog.Builder(mContext)
+                        .title(R.string.visit_external_site_text)
+                        .content(item.getUrl() + " " + mContext.getString(R.string.external_website_warning_msg))
+                        .titleColorRes(android.R.color.black)
+                        .contentColorRes(android.R.color.black)
+                        .backgroundColorRes(android.R.color.white)
+                        .positiveText(R.string.visit_site_text)
+                        .negativeText(R.string.cancen_text)
+                        .onPositive((dialog, which) -> {
+                            dialog.dismiss();
+                            new FinestWebView.Builder(mContext).show(item.getUrl());
+                        }).show();
             }
         });
-        if (item.getIssued() == item.getTotalSupply()) {
-            holder.participateButton.setBackgroundResource(R.color.token_finish_button_color);
-            holder.participateButton.setText(R.string.finish_btn_text);
+        if (item.getIssued() == item.getTotalSupply()
+                || Calendar.getInstance().getTimeInMillis() > item.getEndTime()) {
+            holder.participateButton.setBackgroundResource(R.color.token_finished_button_color);
+            holder.participateButton.setText(R.string.finished_btn_text);
             holder.participateButton.setEnabled(false);
         } else {
             holder.participateButton.setBackgroundResource(R.color.token_participate_button_color);
