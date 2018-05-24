@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
-            android:textSize="20sp"
+            android:textSize="22sp"
             tools:text="DEVBAND" />
 
         <ImageView
@@ -52,7 +52,8 @@
         android:id="@+id/token_desc_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="15dp"
+        android:padding="20dp"
+        android:textSize="18sp"
         tools:text="A Social digital currency that allows people to send and receive digital currency on social networks to anyone in the world." />
 
     <LinearLayout

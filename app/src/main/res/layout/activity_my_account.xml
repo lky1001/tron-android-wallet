@@ -78,12 +78,62 @@
                     tools:text="1,000,000,000 TRX" />
 
                 <TextView
-                    android:id="@+id/address_title_text"
+                    android:id="@+id/tron_power_title_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="10dp"
                     android:layout_below="@+id/balance_title_text"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:text="@string/my_account_tron_power_title_text" />
+
+                <TextView
+                    android:id="@+id/tron_power_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="25dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/tron_power_title_text"
+                    android:layout_alignBaseline="@+id/tron_power_title_text"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    tools:text="1,000,000,000" />
+
+                <TextView
+                    android:id="@+id/entropy_title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/tron_power_title_text"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:text="@string/my_account_entropy_text" />
+
+                <TextView
+                    android:id="@+id/entropy_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="25dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/entropy_title_text"
+                    android:layout_alignBaseline="@+id/entropy_title_text"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    tools:text="1,000,000,000" />
+
+                <TextView
+                    android:id="@+id/address_title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/bandwidth_title_text"
                     android:textSize="14sp"
                     android:gravity="center"
                     android:text="@string/my_account_address_text" />

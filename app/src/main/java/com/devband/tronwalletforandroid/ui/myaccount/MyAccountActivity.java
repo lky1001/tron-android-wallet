@@ -59,6 +59,12 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     @BindView(R.id.balance_text)
     TextView mBalanceText;
 
+    @BindView(R.id.tron_power_text)
+    TextView mTronPowerText;
+
+    @BindView(R.id.entropy_text)
+    TextView mEntropyText;
+
     @BindView(R.id.freeze_button)
     Button mFreezeButton;
 
@@ -161,6 +167,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
         mAddressText.setText(address);
         mBalanceText.setText(df.format(mAccountBalance) + " " + Constants.TRON_SYMBOL);
+        mEntropyText.setText(df.format(account.getBandwidth() / Constants.REAL_TRX_AMOUNT));
         mTokensLayout.removeAllViews();
 
         if (account.getAssetCount() > 0) {
@@ -208,6 +215,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
             mUnFreezeButton.setVisibility(View.GONE);
         }
 
+        mTronPowerText.setText(df.format(frozenBalance / Constants.REAL_TRX_AMOUNT) + " " + Constants.TRON_SYMBOL);
         mFrozenTrxBalanceText.setText(df.format(frozenBalance / Constants.REAL_TRX_AMOUNT) + " " + Constants.TRON_SYMBOL);
         if (expiredTime > 0) {
             mFrozenTrxExpiredText.setText(sdf.format(new Date(expiredTime)));

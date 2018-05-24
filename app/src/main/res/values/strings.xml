@@ -191,4 +191,6 @@
     <string name="finish_btn_text">FINISH</string>
     <string name="title_tokens">Tokens</string>
     <string name="invalid_freeze_amount">No trx.</string>
+    <string name="my_account_tron_power_title_text">Tron power :</string>
+    <string name="my_account_entropy_text">Entropy :</string>
 </resources>
