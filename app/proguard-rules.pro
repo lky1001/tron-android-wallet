@@ -33,3 +33,10 @@
 -dontwarn com.fasterxml.jackson.**
 -dontwarn okhttp3.**
 -dontwarn retrofit2.**
+
+-dontwarn github.nisrulz.**
+-keep public class com.google.android.gms.* { public *; }
+-dontwarn com.google.android.gms.**
+
+-dontwarn com.akexorcist.roundcornerprogressbar.**
+-dontnote com.akexorcist.roundcornerprogressbar.**
