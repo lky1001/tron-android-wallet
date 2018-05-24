@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:textColorLink="@color/colorPrimary"
+                    android:textColor="@color/colorPrimary"
                     tools:text="http://Earth.osdfsdfdsfsrg"/>
 
                 <TextView

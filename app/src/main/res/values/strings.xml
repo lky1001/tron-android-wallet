@@ -198,4 +198,7 @@
     <string name="send_text">SEND</string>
     <string name="copy_to_address_msg">Copied to address.</string>
     <string name="copy_from_address_msg">Copied from address.</string>
+    <string name="external_website_warning_msg">is not an official Tron site. Never enter your private key on an untrusted website.</string>
+    <string name="visit_site_text">Visit site</string>
+    <string name="visit_external_site_text">Visit external site</string>
 </resources>
