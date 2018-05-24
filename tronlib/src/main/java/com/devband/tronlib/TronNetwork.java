@@ -1,6 +1,7 @@
 package com.devband.tronlib;
 
 import com.devband.tronlib.dto.CoinMarketCap;
+import com.devband.tronlib.dto.Market;
 import com.devband.tronlib.dto.Tokens;
 import com.devband.tronlib.dto.Transactions;
 import com.devband.tronlib.dto.Votes;
@@ -56,5 +57,9 @@ public class TronNetwork {
 
     public Single<Tokens> getTokens(int start, int limit, String sort, String status) {
         return mTokenService.getTokens(start, limit, sort, status);
+    }
+
+    public Single<List<Market>> getMarkets() {
+        return mTronScanService.getMarket();
     }
 }

@@ -47,7 +47,7 @@ public class TransactionPresenter extends BasePresenter<TransactionView> {
 
     }
 
-    public void loadTransaction() {
+    private void loadTransaction() {
         mView.showLoadingDialog();
 
         String address = Tron.getInstance(mContext).getLoginAddress();

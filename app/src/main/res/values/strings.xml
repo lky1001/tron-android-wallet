@@ -80,6 +80,7 @@
     <string name="no_tokens">No Tokens</string>
     <string name="but_token_text">Buy Token</string>
     <string name="title_about_tron">About Tron</string>
+    <string name="title_market">Market</string>
     <string name="title_rename_account">Rename</string>
     <string name="menu_create_account">Create Account</string>
     <string name="menu_import_account">Import Account</string>

@@ -20,6 +20,7 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.about.AboutActivity;
+import com.devband.tronwalletforandroid.ui.market.MarketActivity;
 import com.devband.tronwalletforandroid.ui.node.NodeActivity;
 import com.devband.tronwalletforandroid.ui.opensource.OpenSourceActivity;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity;
@@ -74,6 +75,11 @@ public class MoreActivity extends CommonActivity implements MoreView {
     @OnClick(R.id.more_about_tron_button)
     public void onAboutTronClick() {
         startActivity(AboutActivity.class);
+    }
+
+    @OnClick(R.id.more_markets_button)
+    public void onMarketsClick() {
+        startActivity(MarketActivity.class);
     }
 
     @OnClick(R.id.more_node_list_button)
