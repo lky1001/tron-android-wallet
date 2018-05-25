@@ -3,13 +3,16 @@
 
     <item
         android:id="@+id/bottom_navigation_overview"
+        android:icon="@drawable/ic_overview"
         android:title="@string/bottom_navigation_menu_overview" />
 
     <item
         android:id="@+id/bottom_navigation_transaction"
+        android:icon="@drawable/ic_more"
         android:title="@string/bottom_navigation_menu_transaction" />
 
     <item
         android:id="@+id/bottom_navigation_holder"
+        android:icon="@drawable/ic_account"
         android:title="@string/bottom_navigation_menu_holder" />
 </menu>

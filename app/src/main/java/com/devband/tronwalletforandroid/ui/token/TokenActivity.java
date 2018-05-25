@@ -1,13 +1,16 @@
 package com.devband.tronwalletforandroid.ui.token;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
+import com.devband.tronlib.dto.Token;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
@@ -56,7 +59,7 @@ public class TokenActivity extends CommonActivity implements TokenView {
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new TokenAdapter(TokenActivity.this);
+        mAdapter = new TokenAdapter(TokenActivity.this, mOnItemClickListener);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(mRecyclerViewOnScrollListener);
         mAdapterView = mAdapter;
@@ -101,6 +104,18 @@ public class TokenActivity extends CommonActivity implements TokenView {
                     ((TokenPresenter) mPresenter).loadItems(mStartIndex, PAGE_SIZE);
                 }
             }
+        }
+    };
+
+    private View.OnClickListener mOnItemClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int pos = mRecyclerView.getChildLayoutPosition(v);
+            Token item = mAdapter.getModel(pos);
+
+            Intent intent = new Intent(TokenActivity.this, TokenDetailActivity.class);
+            intent.putExtra(TokenDetailActivity.EXTRA_TOKEN_NAME, item.getName());
+            startActivity(intent);
         }
     };
 

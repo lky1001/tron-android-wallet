@@ -33,9 +33,12 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
 
     private Context mContext;
 
-    public TokenAdapter(Context context) {
+    private View.OnClickListener mOnItemClickListener;
+
+    public TokenAdapter(Context context, View.OnClickListener onItemClickListener) {
         this.mList = new ArrayList<>();
         this.mContext = context;
+        this.mOnItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -44,6 +47,7 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_token, null);
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                 RecyclerView.LayoutParams.WRAP_CONTENT));
+        v.setOnClickListener(mOnItemClickListener);
         return new TokenViewHolder(v);
     }
 
