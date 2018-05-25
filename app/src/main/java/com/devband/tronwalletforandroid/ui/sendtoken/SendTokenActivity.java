@@ -23,7 +23,6 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
-import com.devband.tronwalletforandroid.ui.myaccount.MyAccountPresenter;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 
 import org.tron.protos.Protocol;
@@ -178,7 +177,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                     String password = mInputPassword.getText().toString();
 
                     if (Constants.TRON_SYMBOL.equals(mSelectedAsset.getName())) {
-                        long amount = (long) (finalAmountDouble * Constants.REAL_TRX_AMOUNT);
+                        long amount = (long) (finalAmountDouble * Constants.ONE_TRX);
 
                         showProgressDialog(null, getString(R.string.loading_msg));
                         ((SendTokenPresenter) mPresenter).sendTron(password, address, amount);
@@ -222,7 +221,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
 
         assetModelList.add(Asset.builder()
                 .name(Constants.TRON_SYMBOL)
-                .balance(((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT)
+                .balance(((double) account.getBalance()) / Constants.ONE_TRX)
                 .build());
 
         for (String key : account.getAssetMap().keySet()) {

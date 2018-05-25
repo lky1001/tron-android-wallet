@@ -14,7 +14,6 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.thefinestartist.finestwebview.FinestWebView;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -64,8 +63,6 @@ public class AboutActivity extends CommonActivity {
                     public void onSuccess(List<CoinMarketCap> coinMarketCaps) {
                         if (coinMarketCaps != null && !coinMarketCaps.isEmpty()) {
                             CoinMarketCap coinMarketCap = coinMarketCaps.get(0);
-                            DecimalFormat df = new DecimalFormat("#,##0.000");
-                            DecimalFormat df2 = new DecimalFormat("#,##0");
 
                             Date updated = new Date(Long.parseLong(coinMarketCap.getLastUpdated()) * 1_000);
 
@@ -73,7 +70,7 @@ public class AboutActivity extends CommonActivity {
 
                             StringBuilder sb = new StringBuilder();
                             sb.append("Market Price : ")
-                                    .append(df.format(Double.parseDouble(coinMarketCap.getPriceUsd())))
+                                    .append(Constants.usdFormat.format(Double.parseDouble(coinMarketCap.getPriceUsd())))
                                     .append(" USD (")
                                     .append("-".equals(coinMarketCap.getPercentChange24h().substring(0, 1)) ?
                                             coinMarketCap.getPercentChange24h() :
@@ -106,12 +103,12 @@ public class AboutActivity extends CommonActivity {
                                     .addGroup("Tron info (" + sdf.format(updated) + ")")
                                     .addItem(new Element().setTitle("Name : TRON"))
                                     .addItem(new Element().setTitle("Symbol : TRX"))
-                                    .addItem(new Element().setTitle("Total Supply : " + df2.format(Double.parseDouble(coinMarketCap.getTotalSupply())) + " TRX"))
-                                    .addItem(new Element().setTitle("Supply : " + df2.format(Double.parseDouble(coinMarketCap.getAvailableSupply())) + " TRX"))
+                                    .addItem(new Element().setTitle("Total Supply : " + Constants.numberFormat.format(Double.parseDouble(coinMarketCap.getTotalSupply())) + " TRX"))
+                                    .addItem(new Element().setTitle("Supply : " + Constants.numberFormat.format(Double.parseDouble(coinMarketCap.getAvailableSupply())) + " TRX"))
                                     .addItem(new Element().setTitle(sb.toString()))
                                     .addItem(new Element().setTitle("Market Rank : " + coinMarketCap.getRank()))
-                                    .addItem(new Element().setTitle("Market Cap : " + df.format(Double.parseDouble(coinMarketCap.getMarketCapUsd())) + " USD"))
-                                    .addItem(new Element().setTitle("24H Volume : " + df.format(Double.parseDouble(coinMarketCap.get_24hVolumeUsd())) + " USD"))
+                                    .addItem(new Element().setTitle("Market Cap : " + Constants.usdFormat.format(Double.parseDouble(coinMarketCap.getMarketCapUsd())) + " USD"))
+                                    .addItem(new Element().setTitle("24H Volume : " + Constants.usdFormat.format(Double.parseDouble(coinMarketCap.get_24hVolumeUsd())) + " USD"))
                                     //.addItem(whitePaper)
                                     //.addItem(architecture)
                                     .addGroup("Connect with tron team")

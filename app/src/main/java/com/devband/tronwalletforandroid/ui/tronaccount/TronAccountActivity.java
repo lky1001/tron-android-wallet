@@ -12,13 +12,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.tronaccount.adapter.TronAccountListAdapter;
-
-import java.text.DecimalFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,8 +53,6 @@ public class TronAccountActivity extends CommonActivity implements TronAccountVi
     private LinearLayoutManager mLayoutManager;
     private AdapterView mAdapterView;
     private TronAccountListAdapter mTronAccountListAdapter;
-
-    private DecimalFormat df = new DecimalFormat("#,##0");
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -137,8 +133,8 @@ public class TronAccountActivity extends CommonActivity implements TronAccountVi
 
     @Override
     public void displayTronAccountInfo(int tronAccountCount, long highestTrx) {
-        mAccountCountText.setText(df.format(tronAccountCount));
-        mHighestTrxText.setText(df.format(highestTrx / Constants.REAL_TRX_AMOUNT) + " " + Constants.TRON_SYMBOL);
+        mAccountCountText.setText(Constants.numberFormat.format(tronAccountCount));
+        mHighestTrxText.setText(Constants.tronBalanceFormat.format(highestTrx / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
 
         mAccountCountTitleText.setVisibility(View.VISIBLE);
         mHighestTrxTitleText.setVisibility(View.VISIBLE);

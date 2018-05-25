@@ -17,9 +17,9 @@ import com.devband.tronlib.dto.Token;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.thefinestartist.finestwebview.FinestWebView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -32,9 +32,6 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
     private List<Token> mList;
 
     private Context mContext;
-
-    private DecimalFormat df = new DecimalFormat("#,##0");
-    private DecimalFormat percentDf = new DecimalFormat("#,##0.00");
 
     public TokenAdapter(Context context) {
         this.mList = new ArrayList<>();
@@ -63,9 +60,9 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
         holder.tokenSymbolImage.setVisibility(View.GONE);
         holder.tokenNameText.setText(item.getName());
         holder.tokenDescText.setText(item.getDescription());
-        holder.tokenSaleText.setText(df.format(item.getIssued()));
-        holder.tokenSupplyText.setText(df.format(item.getTotalSupply()));
-        holder.tokenSalePercentText.setText(percentDf.format(item.getPercentage()) + "%");
+        holder.tokenSaleText.setText(Constants.numberFormat.format(item.getIssued()));
+        holder.tokenSupplyText.setText(Constants.numberFormat.format(item.getTotalSupply()));
+        holder.tokenSalePercentText.setText(Constants.percentFormat.format(item.getPercentage()) + "%");
         holder.tokenSaleProgress.setMax(100f);
         holder.tokenSaleProgress.setProgress((float) item.getPercentage());
         holder.visitWebsiteButton.setOnClickListener(new View.OnClickListener() {

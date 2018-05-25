@@ -24,8 +24,6 @@ import com.devband.tronwalletforandroid.ui.representative.adapter.Representative
 import com.devband.tronwalletforandroid.ui.representative.dto.Representative;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
-import java.text.DecimalFormat;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -61,8 +59,6 @@ public class RepresentativeActivity extends CommonActivity implements Representa
     private LinearLayoutManager mLayoutManager;
     private AdapterView mAdapterView;
     private RepresentativeListAdapter mRepresentativeListAdapter;
-
-    private DecimalFormat df = new DecimalFormat("#,##0");
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -207,7 +203,7 @@ public class RepresentativeActivity extends CommonActivity implements Representa
                 .append(item.getUrl())
                 .append("\n")
                 .append(getString(R.string.vote_representative_amount_text))
-                .append(df.format(amount) + " " + Constants.REAL_TRX_AMOUNT);
+                .append(Constants.numberFormat.format(amount) + " " + Constants.ONE_TRX);
 
         new MaterialDialog.Builder(RepresentativeActivity.this)
                 .title(R.string.send_token_title)
@@ -227,8 +223,8 @@ public class RepresentativeActivity extends CommonActivity implements Representa
 
     @Override
     public void displayRepresentativeInfo(int witnessCount, long highestVotes) {
-        mRepresentativeCountText.setText(df.format(witnessCount));
-        mHighestVotesText.setText(df.format(highestVotes) + " " + Constants.TRON_SYMBOL);
+        mRepresentativeCountText.setText(Constants.numberFormat.format(witnessCount));
+        mHighestVotesText.setText(Constants.numberFormat.format(highestVotes) + " " + Constants.TRON_SYMBOL);
 
         mRepresentativeCountTitleText.setVisibility(View.VISIBLE);
         mHighestVotesTitleText.setVisibility(View.VISIBLE);

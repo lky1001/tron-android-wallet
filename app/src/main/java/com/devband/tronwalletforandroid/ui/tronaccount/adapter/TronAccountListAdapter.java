@@ -9,12 +9,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.tronaccount.dto.TronAccount;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +25,6 @@ public class TronAccountListAdapter extends RecyclerView.Adapter<TronAccountList
     private List<TronAccount> mList;
 
     private Context mContext;
-
-    private DecimalFormat df = new DecimalFormat("#,##0");
 
     public TronAccountListAdapter(Context mContext) {
         this.mList = new ArrayList<>();
@@ -48,7 +45,7 @@ public class TronAccountListAdapter extends RecyclerView.Adapter<TronAccountList
         TronAccount item = mList.get(position);
 
         holder.addressText.setText(item.getAddress());
-        holder.trxText.setText(df.format(item.getBalance() / Constants.REAL_TRX_AMOUNT));
+        holder.trxText.setText(Constants.tronBalanceFormat.format(item.getBalance() / Constants.ONE_TRX));
     }
 
     @Override

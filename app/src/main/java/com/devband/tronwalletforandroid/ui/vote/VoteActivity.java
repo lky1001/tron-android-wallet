@@ -20,11 +20,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.vote.adapter.VoteListAdapter;
 import com.devband.tronwalletforandroid.ui.vote.dto.VoteItem;
-
-import java.text.DecimalFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,8 +72,6 @@ public class VoteActivity extends CommonActivity implements VoteView {
     private LinearLayoutManager mLayoutManager;
     private AdapterView mAdapterView;
     private VoteListAdapter mVoteListAdapter;
-
-    private DecimalFormat df = new DecimalFormat("#,##0");
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -175,9 +172,10 @@ public class VoteActivity extends CommonActivity implements VoteView {
             new MaterialDialog.Builder(VoteActivity.this)
                     .title(getString(R.string.votes_help_text))
                     .content(getString(R.string.votes_help_msg_text))
-                    .titleColorRes(android.R.color.black)
+                    .titleColorRes(R.color.colorAccent)
                     .contentColorRes(android.R.color.black)
                     .backgroundColorRes(android.R.color.white)
+                    .positiveText(R.string.close_text)
                     .autoDismiss(true)
                     .build()
                     .show();
@@ -185,9 +183,9 @@ public class VoteActivity extends CommonActivity implements VoteView {
 
         mRemainVotePoint = myVotePoint - totalMyVotes;
 
-        mTotalVotesText.setText(df.format(totalVotes));
-        mRepresentativeCountText.setText(df.format(voteItemCount));
-        mVoteRemainingCountText.setText(df.format(mRemainVotePoint));
+        mTotalVotesText.setText(Constants.numberFormat.format(totalVotes));
+        mRepresentativeCountText.setText(Constants.numberFormat.format(voteItemCount));
+        mVoteRemainingCountText.setText(Constants.numberFormat.format(mRemainVotePoint));
 
         mRepresentativeTitleText.setVisibility(View.VISIBLE);
         mRepresentativeCountTitleText.setVisibility(View.VISIBLE);

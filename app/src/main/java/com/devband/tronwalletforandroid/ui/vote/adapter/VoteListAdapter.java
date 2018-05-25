@@ -18,7 +18,6 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.vote.dto.VoteItem;
 import com.thefinestartist.finestwebview.FinestWebView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +31,6 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
     private Context mContext;
 
     private View.OnClickListener mVoteClickListener;
-
-    private DecimalFormat df = new DecimalFormat("#,##0");
-    private DecimalFormat percentDf = new DecimalFormat("#,##0.00");
 
     public VoteListAdapter(Context context, View.OnClickListener voteClickListener) {
         this.mList = new ArrayList<>();
@@ -77,9 +73,9 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
         });
 
         holder.representativeAddressText.setText(item.getAddress());
-        holder.yourVoteText.setText(df.format(item.getMyVoteCount()));
-        holder.totalVoteText.setText(df.format(item.getVoteCount())
-                + " (" + percentDf.format(((double) item.getVoteCount() / (double) item.getTotalVoteCount()) * 100f) + "%)");
+        holder.yourVoteText.setText(Constants.numberFormat.format(item.getMyVoteCount()));
+        holder.totalVoteText.setText(Constants.numberFormat.format(item.getVoteCount())
+                + " (" + Constants.percentFormat.format(((double) item.getVoteCount() / (double) item.getTotalVoteCount()) * 100f) + "%)");
 
         holder.voteProgress.setMax(Constants.VOTE_MAX_PROGRESS);
         // total representative votes

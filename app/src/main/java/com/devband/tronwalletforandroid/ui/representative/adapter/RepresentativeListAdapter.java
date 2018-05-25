@@ -17,7 +17,6 @@ import com.devband.tronwalletforandroid.ui.representative.dto.Representative;
 import com.thefinestartist.finestwebview.FinestWebView;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +31,6 @@ public class RepresentativeListAdapter extends RecyclerView.Adapter<Representati
     private Context mContext;
 
     private View.OnClickListener mOnClickListener;
-
-    private DecimalFormat df = new DecimalFormat("#,##0");
-    private DecimalFormat percentDf = new DecimalFormat("#,##0.00");
 
     public RepresentativeListAdapter(Context mContext, View.OnClickListener onClickListener) {
         this.mList = new ArrayList<>();
@@ -77,11 +73,11 @@ public class RepresentativeListAdapter extends RecyclerView.Adapter<Representati
             }
         });
 
-        holder.representativeVotesText.setText(df.format(item.getVoteCount()) + Constants.TRON_SYMBOL);
-        holder.latestBlockText.setText(df.format(item.getLatestBlockNum()));
-        holder.producedBlockText.setText(df.format(item.getTotalProduced()));
-        holder.missedBlockText.setText(df.format(item.getTotalMissed()));
-        holder.productivityText.setText(percentDf.format(item.getProductivity() * 100) + "%");
+        holder.representativeVotesText.setText(Constants.numberFormat.format(item.getVoteCount()) + Constants.TRON_SYMBOL);
+        holder.latestBlockText.setText(Constants.numberFormat.format(item.getLatestBlockNum()));
+        holder.producedBlockText.setText(Constants.numberFormat.format(item.getTotalProduced()));
+        holder.missedBlockText.setText(Constants.numberFormat.format(item.getTotalMissed()));
+        holder.productivityText.setText(Constants.percentFormat.format(item.getProductivity() * 100) + "%");
     }
 
     @Override

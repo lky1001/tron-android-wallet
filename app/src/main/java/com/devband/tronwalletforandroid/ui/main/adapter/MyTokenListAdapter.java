@@ -11,9 +11,9 @@ import android.widget.TextView;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +25,6 @@ public class MyTokenListAdapter extends RecyclerView.Adapter<MyTokenListAdapter.
     private List<Asset> mList;
 
     private Context mContext;
-
-    private DecimalFormat df = new DecimalFormat("#,##0.00000000");
 
     public MyTokenListAdapter(Context mContext) {
         this.mList = new ArrayList<>();
@@ -47,7 +45,7 @@ public class MyTokenListAdapter extends RecyclerView.Adapter<MyTokenListAdapter.
         Asset item = mList.get(position);
 
         holder.tokenNameText.setText(item.getName());
-        holder.tokenAmountText.setText(df.format(item.getBalance()));
+        holder.tokenAmountText.setText(Constants.tronBalanceFormat.format(item.getBalance()));
     }
 
     @Override
