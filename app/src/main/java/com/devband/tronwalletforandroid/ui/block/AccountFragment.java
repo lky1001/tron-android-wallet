@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.BaseFragment;
 
 import butterknife.ButterKnife;
 
@@ -36,7 +37,7 @@ public class AccountFragment extends BaseFragment {
     }
 
     @Override
-    void refresh() {
+    protected void refresh() {
 
     }
 }

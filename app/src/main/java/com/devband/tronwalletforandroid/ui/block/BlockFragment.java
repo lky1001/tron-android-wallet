@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.BaseFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,7 +51,7 @@ public class BlockFragment extends BaseFragment implements BlockView {
     }
 
     @Override
-    void refresh() {
+    protected void refresh() {
         ((BlockPresenter) mPresenter).loadBlockData();
     }
 
