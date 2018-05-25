@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:id="@+id/area_number"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/txt_number"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:background="#000000"
+            android:textSize="14dp"
+            tools:text="#177099" />
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/area_info"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_toRightOf="@+id/area_number"
+        android:paddingTop="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="5dp"
+                app:srcCompat="@drawable/ic_transaction"/>
+
+            <TextView
+                android:id="@+id/txt_transaction"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:gravity="center_vertical"
+                android:textColor="#000000"
+                tools:text="0 transactions"/>
+
+            <TextView
+                android:id="@+id/txt_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:gravity="center_vertical|right"
+                tools:text="timestamp"/>
+        </LinearLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/temp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintVertical_bias="0.5"
+                android:layout_marginRight="4dp"
+                android:gravity="center_vertical"
+                android:textColor="#000000"
+                tools:text="Produced by"/>
+
+            <TextView
+                android:id="@+id/txt_produced_by"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintLeft_toRightOf="@+id/temp"
+                app:layout_constraintRight_toLeftOf="@+id/txt_reward"
+                tools:text="ADSsdfsdfsfsfsfsdfsdsfsfsfF"/>
+
+            <TextView
+                android:id="@+id/txt_reward"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintVertical_bias="0.5"
+                android:gravity="center_vertical"
+                tools:text="Reward 32TRX"/>
+
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="1dp"
+        android:layout_below="@+id/area_info"
+        android:background="#7d000000" />
+
+</RelativeLayout>

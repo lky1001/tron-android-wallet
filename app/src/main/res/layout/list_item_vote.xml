@@ -39,7 +39,7 @@
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:textColor="@color/colorPrimary"
-                    tools:text="http://Earth.osdfsdfdsfsrg"/>
+                    tools:text="http://Earth.osdfsdfdskkkkkkkkkkkkfsrg"/>
 
                 <TextView
                     android:id="@+id/representative_address_text"

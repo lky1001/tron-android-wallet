@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
@@ -62,6 +63,11 @@ public class BlockActivity extends CommonActivity {
     }
 
     private void initUi() {
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         mFragments.add(OverviewFragment.newInstance());
         mFragments.add(BlockFragment.newInstance());
         mFragments.add(TransactionFragment.newInstance());
@@ -77,6 +83,17 @@ public class BlockActivity extends CommonActivity {
 
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mBottomNavigationView.setSelectedItemId(FRAGMENT_OVERVIEW);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finishActivity();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void changeFragment(int num) {
@@ -127,7 +144,6 @@ public class BlockActivity extends CommonActivity {
         }
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(titleResId);
         }
     }

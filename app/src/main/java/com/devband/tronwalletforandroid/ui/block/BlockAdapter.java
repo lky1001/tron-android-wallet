@@ -9,10 +9,14 @@ import android.widget.TextView;
 
 import com.devband.tronlib.dto.Block;
 import com.devband.tronlib.dto.Blocks;
+import com.devband.tronlib.dto.Token;
 import com.devband.tronwalletforandroid.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,16 +29,25 @@ public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.BlockViewHol
 
     private List<Block> mList = new ArrayList<>();
 
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
     @NonNull
     @Override
     public BlockViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_market, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_block, parent, false);
         return new BlockViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull BlockViewHolder holder, int position) {
+        Block block = mList.get(position);
 
+        holder.txtNumber.setText("#" + block.getNumber());
+        holder.txtTransaction.setText(block.getNrOfTrx() + " transactions");
+        holder.txtProducedBy.setText(block.getWitnessAddress());
+
+        Date date = new Date(block.getTimestamp());
+        holder.txtTimestamp.setText(sdf.format(date));
     }
 
     @Override
@@ -50,25 +63,37 @@ public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.BlockViewHol
 
     public void addData(Blocks blocks) {
         int beforeIndex = getItemCount() - 1;
-        mList.addAll(blocks.getData());
+
+        for (Block block : blocks.getData()) {
+            if (!isContain(block)) {
+                mList.add(block);
+            }
+        }
         notifyItemInserted(beforeIndex);
     }
 
+    private boolean isContain(Block block) {
+        for (Block b: mList) {
+            if (b.getNumber() == block.getNumber()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public class BlockViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.txt_market)
-        TextView txtMarket;
+        @BindView(R.id.txt_number)
+        TextView txtNumber;
 
-        @BindView(R.id.txt_pair)
-        TextView txtPair;
+        @BindView(R.id.txt_transaction)
+        TextView txtTransaction;
 
-        @BindView(R.id.txt_volume)
-        TextView txtVolume;
+        @BindView(R.id.txt_timestamp)
+        TextView txtTimestamp;
 
-        @BindView(R.id.txt_percentage)
-        TextView txtPercentage;
-
-        @BindView(R.id.txt_price)
-        TextView txtPrice;
+        @BindView(R.id.txt_produced_by)
+        TextView txtProducedBy;
 
         public BlockViewHolder(View itemView) {
             super(itemView);
