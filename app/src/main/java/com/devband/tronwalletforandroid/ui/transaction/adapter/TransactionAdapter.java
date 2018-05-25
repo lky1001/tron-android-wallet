@@ -17,7 +17,6 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,8 +35,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private List<TransactionInfo> mList = new ArrayList<>();
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-
-    private DecimalFormat df = new DecimalFormat("#,##0");
 
     private Context mContext;
 
@@ -68,12 +65,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         long amount = info.getAmount();
 
         if (info.getTokenName().equalsIgnoreCase(Constants.TRON_SYMBOL)) {
-            amount = (long) (amount / Constants.REAL_TRX_AMOUNT);
+            amount = (long) (amount / Constants.ONE_TRX);
         }
 
         if (info.isSend()) {
             holder.sendAddressText.setText(info.getTransferToAddress());
-            holder.sendAmountText.setText(df.format(amount) + " " + info.getTokenName());
+            holder.sendAmountText.setText(Constants.tronBalanceFormat.format(amount) + " " + info.getTokenName());
             holder.sendDateText.setText(sdf.format(date));
 
             holder.sendLayout.setVisibility(View.VISIBLE);
@@ -90,7 +87,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             });
         } else {
             holder.receiveAddressText.setText(info.getTransferFromAddress());
-            holder.receiveAmountText.setText(df.format(amount) + " " + info.getTokenName());
+            holder.receiveAmountText.setText(Constants.tronBalanceFormat.format(amount) + " " + info.getTokenName());
             holder.receiveDateText.setText(sdf.format(date));
 
             holder.sendLayout.setVisibility(View.GONE);

@@ -13,8 +13,6 @@ import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.ui.token.adapter.TokenAdapter;
 
-import java.text.DecimalFormat;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -31,8 +29,6 @@ public class TokenActivity extends CommonActivity implements TokenView {
     private TokenAdapter mAdapter;
 
     private LinearLayoutManager mLayoutManager;
-
-    private DecimalFormat df = new DecimalFormat("#,##0");
 
     private int mStartIndex = 0;
 

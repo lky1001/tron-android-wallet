@@ -1,9 +1,17 @@
 package com.devband.tronwalletforandroid.common;
 
+import java.text.DecimalFormat;
+
 public class Constants {
 
+    public static final DecimalFormat tronBalanceFormat = new DecimalFormat("#,##0.000000");
+    public static final DecimalFormat numberFormat = new DecimalFormat("#,##0");
+    public static final DecimalFormat usdFormat = new DecimalFormat("#,##0.000");
+    public static final  DecimalFormat percentFormat = new DecimalFormat("#,##0.00");
+
     public static final String TRON_SYMBOL = "TRX";
-    public static final double REAL_TRX_AMOUNT = 1_000_000;
+    public static final double ONE_TRX = 1_000_000;
+    public static final int TRX_DECIMALS = 6;
     public static final String PREFIX_ACCOUNT_NAME = "Account";
     public static final long FREEZE_DURATION = 3;
 

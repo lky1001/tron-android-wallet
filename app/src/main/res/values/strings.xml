@@ -157,7 +157,7 @@
     <string name="votes_remaining_text">Votes Remaining</string>
     <string name="super_representatives_text">Super Representatives</string>
     <string name="super_representative_candidates_text">Super Representative Candidates</string>
-    <string name="votes_remaining_help_text">You can get vote point(tron power) by freezing trx.\nMy Account > Tron Power > Freeze.</string>
+    <string name="votes_remaining_help_text">You can get vote point(tron power) by freezing trx.\nMain Page Menu > My Account > Tron Power > Freeze.</string>
     <string name="input_vote_text">Vote</string>
     <string name="vote_confirm_text">I confirm to vote</string>
     <string name="url_text">URL :</string>
@@ -207,9 +207,10 @@
     <string name="tron_architecture_text">TRON Architecture</string>
     <string name="tron_architecture_url">https://dn-peiwo-web.qbox.me/Design_Book_of_TRON_Architecture1.4.pdf</string>
     <string name="close_text">CLOSE</string>
-
     <string name="bottom_navigation_menu_overview">Overview</string>
     <string name="bottom_navigation_menu_block">Block</string>
     <string name="bottom_navigation_menu_transaction">Transaction</string>
     <string name="bottom_navigation_menu_account">Account</string>
+    <string name="votes_help_text">Help</string>
+    <string name="votes_help_msg_text">At least 1 Tron Power is required to start voting. Tron Power is gained by freezing TRX on the\nMain Page Menu > My Account > Tron Power > Freeze</string>
 </resources>

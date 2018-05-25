@@ -115,7 +115,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
                 myVotePoint += frozen.getFrozenBalance();
             }
 
-            myVotePoint = (long) (myVotePoint / Constants.REAL_TRX_AMOUNT);
+            myVotePoint = (long) (myVotePoint / Constants.ONE_TRX);
 
             mAllVotes = new ArrayList<>();
             mMyVotes = new ArrayList<>();

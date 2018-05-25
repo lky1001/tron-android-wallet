@@ -31,7 +31,6 @@ import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 
 import org.tron.protos.Protocol;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -39,7 +38,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -80,7 +78,6 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     @BindView(R.id.tokens_layout)
     LinearLayout mTokensLayout;
 
-    private DecimalFormat df = new DecimalFormat("#,##0");
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private ArrayAdapter<AccountModel> mAccountAdapter;
@@ -163,11 +160,11 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     @Override
     public void displayAccountInfo(@NonNull String address, @NonNull Protocol.Account account) {
         Log.d("", address);
-        mAccountBalance = (long) (account.getBalance() / Constants.REAL_TRX_AMOUNT);
+        mAccountBalance = (long) (account.getBalance() / Constants.ONE_TRX);
 
         mAddressText.setText(address);
-        mBalanceText.setText(df.format(mAccountBalance) + " " + Constants.TRON_SYMBOL);
-        mEntropyText.setText(df.format(account.getBandwidth() / Constants.REAL_TRX_AMOUNT));
+        mBalanceText.setText(Constants.tronBalanceFormat.format(mAccountBalance) + " " + Constants.TRON_SYMBOL);
+        mEntropyText.setText(Constants.tronBalanceFormat.format(account.getBandwidth() / Constants.ONE_TRX));
         mTokensLayout.removeAllViews();
 
         if (account.getAssetCount() > 0) {
@@ -180,7 +177,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                 TextView tokenAmountText = v.findViewById(R.id.token_amount_text);
 
                 tokenNameText.setText(key);
-                tokenAmountText.setText(df.format(account.getAssetMap().get(key)));
+                tokenAmountText.setText(Constants.tronBalanceFormat.format(account.getAssetMap().get(key)));
                 mTokensLayout.addView(v);
             }
         } else {
@@ -215,8 +212,8 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
             mUnFreezeButton.setVisibility(View.GONE);
         }
 
-        mTronPowerText.setText(df.format(frozenBalance / Constants.REAL_TRX_AMOUNT) + " " + Constants.TRON_SYMBOL);
-        mFrozenTrxBalanceText.setText(df.format(frozenBalance / Constants.REAL_TRX_AMOUNT) + " " + Constants.TRON_SYMBOL);
+        mTronPowerText.setText(Constants.tronBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
+        mFrozenTrxBalanceText.setText(Constants.tronBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
         if (expiredTime > 0) {
             mFrozenTrxExpiredText.setText(sdf.format(new Date(expiredTime)));
         } else {
@@ -346,7 +343,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                 }
 
                 dialog.dismiss();
-                ((MyAccountPresenter) mPresenter).freezeBalance((long) (freezeBalance * Constants.REAL_TRX_AMOUNT));
+                ((MyAccountPresenter) mPresenter).freezeBalance((long) (freezeBalance * Constants.ONE_TRX));
             }
         });
 

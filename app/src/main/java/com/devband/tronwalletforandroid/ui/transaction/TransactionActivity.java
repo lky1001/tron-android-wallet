@@ -17,7 +17,6 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.transaction.adapter.TransactionAdapter;
 import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -39,8 +38,6 @@ public class TransactionActivity extends CommonActivity implements TransactionVi
     RecyclerView mRecyclerView;
 
     private TransactionAdapter mAdapter;
-
-    private DecimalFormat df = new DecimalFormat("#,##0");
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
@@ -110,15 +107,15 @@ public class TransactionActivity extends CommonActivity implements TransactionVi
             long amount = item.getAmount();
 
             if (item.getTokenName().equalsIgnoreCase(Constants.TRON_SYMBOL)) {
-                amount = (long) (amount / Constants.REAL_TRX_AMOUNT);
+                amount = (long) (amount / Constants.ONE_TRX);
             }
 
             hashText.setText(item.getHash());
-            blockText.setText(df.format(item.getBlock()));
+            blockText.setText(Constants.numberFormat.format(item.getBlock()));
             sendText.setText(item.getTransferFromAddress());
             toText.setText(item.getTransferToAddress());
             statusText.setText(item.isConfirmed() ? getString(R.string.confirmed_text) : getString(R.string.unconfirmed_text));
-            amountText.setText(df.format(amount) + " " + item.getTokenName());
+            amountText.setText(Constants.tronBalanceFormat.format(amount) + " " + item.getTokenName());
             dateText.setText(sdf.format(new Date(item.getTimestamp())));
 
             dialog.show();
@@ -131,7 +128,7 @@ public class TransactionActivity extends CommonActivity implements TransactionVi
         if (mAdapter != null) {
             mAdapter.refresh(transactionInfos);
             getSupportActionBar().setTitle(getString(R.string.title_transaction_text)
-                    + "(" + df.format(transactionInfos.size()) + ")");
+                    + "(" + Constants.numberFormat.format(transactionInfos.size()) + ")");
         }
     }
 

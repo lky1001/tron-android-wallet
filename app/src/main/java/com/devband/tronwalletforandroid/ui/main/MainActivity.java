@@ -51,7 +51,6 @@ import com.devband.tronwalletforandroid.ui.vote.VoteActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -456,7 +455,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             mMyTokenListView.setVisibility(View.VISIBLE);
         }
 
-        double balance = ((double) account.getBalance()) / Constants.REAL_TRX_AMOUNT;
+        double balance = ((double) account.getBalance()) / Constants.ONE_TRX;
         long frozenBalance = 0;
 
         for (int i = 0; i < account.getFrozenList().size(); i++) {
@@ -465,13 +464,12 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             frozenBalance += frozen.getFrozenBalance();
         }
 
-        double fz = frozenBalance / Constants.REAL_TRX_AMOUNT;
+        double fz = frozenBalance / Constants.ONE_TRX;
+        double entropy = account.getBandwidth() / Constants.ONE_TRX;
 
-        DecimalFormat df = new DecimalFormat("#,##0");
-
-        mLoginAccountBalanceText.setText(df.format(balance) + " " + getString(R.string.currency_text));
-        mLoginFrozenBalanceText.setText(df.format(fz));
-        mLoginBandwidthText.setText(df.format(account.getBandwidth() / Constants.REAL_TRX_AMOUNT));
+        mLoginAccountBalanceText.setText(Constants.tronBalanceFormat.format(balance) + " " + getString(R.string.currency_text));
+        mLoginFrozenBalanceText.setText(Constants.tronBalanceFormat.format(fz));
+        mLoginBandwidthText.setText(Constants.tronBalanceFormat.format(entropy));
 
         mLoadingAccountInfo = false;
 
@@ -481,10 +479,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @SuppressLint("SetTextI18n")
     @Override
     public void setTronMarketInfo(CoinMarketCap coinMarketCap) {
-        double balance = ((double) mLoginTronAccount.getBalance()) / Constants.REAL_TRX_AMOUNT;
-        DecimalFormat df = new DecimalFormat("#,##0.000");
+        double balance = ((double) mLoginTronAccount.getBalance()) / Constants.ONE_TRX;
 
-        mLoginAccountPriceText.setText("(" + df.format(balance * Double.parseDouble(coinMarketCap.getPriceUsd()))
+        mLoginAccountPriceText.setText("(" + Constants.usdFormat.format(balance * Double.parseDouble(coinMarketCap.getPriceUsd()))
                 + " " + getString(R.string.price_text) + ")");
 
         mCoinMarketCapPriceInfo = coinMarketCap;
