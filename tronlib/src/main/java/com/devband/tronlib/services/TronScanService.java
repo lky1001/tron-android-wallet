@@ -1,5 +1,6 @@
 package com.devband.tronlib.services;
 
+import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.Market;
 import com.devband.tronlib.dto.Transactions;
 
@@ -19,4 +20,7 @@ public interface TronScanService {
 
     @GET("api/market/markets")
     Single<List<Market>> getMarket();
+
+    @GET("api/block")
+    Single<Blocks> getBlock(@Query("sort") String sort, @Query("limit") int limit, @Query("start") int start);
 }

@@ -1,5 +1,6 @@
 package com.devband.tronlib;
 
+import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.dto.Market;
 import com.devband.tronlib.dto.Tokens;
@@ -61,5 +62,9 @@ public class TronNetwork {
 
     public Single<List<Market>> getMarkets() {
         return mTronScanService.getMarket();
+    }
+
+    public Single<Blocks> getBlocks(int limit, int start) {
+        return mTronScanService.getBlock("-number", limit, start);
     }
 }

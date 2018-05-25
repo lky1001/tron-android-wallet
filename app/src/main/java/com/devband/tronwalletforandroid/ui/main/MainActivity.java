@@ -35,6 +35,7 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
+import com.devband.tronwalletforandroid.ui.block.BlockActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 import com.devband.tronwalletforandroid.ui.main.adapter.MyTokenListAdapter;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
@@ -401,7 +402,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 startActivity(TokenActivity.class);
                 break;
             case R.id.drawer_item_block_explorer:
-                Toast.makeText(this, "tbd", Toast.LENGTH_SHORT).show();
+                startActivity(BlockActivity.class);
                 break;
             case R.id.drawer_item_more:
                  startActivity(MoreActivity.class);

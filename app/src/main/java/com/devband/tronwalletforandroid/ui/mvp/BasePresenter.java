@@ -1,6 +1,7 @@
 package com.devband.tronwalletforandroid.ui.mvp;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 
 public abstract class BasePresenter<T extends IView> {
 
@@ -9,7 +10,11 @@ public abstract class BasePresenter<T extends IView> {
 
     public BasePresenter(T view) {
         this.mView = view;
-        this.mContext = (Context) view;
+        if (view instanceof Fragment) {
+            this.mContext = ((Fragment) view).getContext();
+        } else {
+            this.mContext = (Context) view;
+        }
     }
 
     public abstract void onCreate();
