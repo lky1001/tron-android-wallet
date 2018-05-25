@@ -213,4 +213,5 @@
     <string name="bottom_navigation_menu_account">Account</string>
     <string name="votes_help_text">Help</string>
     <string name="votes_help_msg_text">At least 1 Tron Power is required to start voting. Tron Power is gained by freezing TRX on the\nMain Page Menu > My Account > Tron Power > Freeze</string>
+    <string name="bottom_navigation_menu_holder">Holder</string>
 </resources>
