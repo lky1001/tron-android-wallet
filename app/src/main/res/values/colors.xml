@@ -22,4 +22,5 @@
     <color name="token_finished_button_color">#8b8b8b</color>
     <color name="copy_button_color">#8b8b8b</color>
     <color name="bottom_navi_unselected">#8b8b8b</color>
+    <color name="token_detail_border_color">#e5e5e5</color>
 </resources>
