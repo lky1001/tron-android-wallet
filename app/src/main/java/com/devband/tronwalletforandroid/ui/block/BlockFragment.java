@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.ui.token.TokenPresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,6 +27,33 @@ public class BlockFragment extends BaseFragment implements BlockView {
     RecyclerView mRecyclerView;
 
     private BlockAdapter mBlockAdapter;
+    private LinearLayoutManager mLayoutManager;
+
+    private boolean mDataLoading = false;
+
+    private RecyclerView.OnScrollListener mRecyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            int visibleItemCount = mLayoutManager.getChildCount();
+            int totalItemCount = mLayoutManager.getItemCount();
+            int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
+
+            if (!mDataLoading) {
+                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                        && firstVisibleItemPosition >= 0) {
+                    mDataLoading = true;
+                    ((BlockPresenter) mPresenter).loadBlockData();
+                }
+            }
+        }
+    };
 
 
     static BaseFragment newInstance() {
@@ -45,8 +73,11 @@ public class BlockFragment extends BaseFragment implements BlockView {
 
     private void initUi() {
         mBlockAdapter = new BlockAdapter();
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mLayoutManager = new LinearLayoutManager(getContext());
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mBlockAdapter);
+        mRecyclerView.addOnScrollListener(mRecyclerViewOnScrollListener);
     }
 
     @Override
@@ -56,12 +87,14 @@ public class BlockFragment extends BaseFragment implements BlockView {
 
     @Override
     public void blockDataLoadSuccess(Blocks blocks, boolean added) {
+        mDataLoading = false;
         hideDialog();
         if (added) {
             mBlockAdapter.addData(blocks);
         } else {
             mBlockAdapter.refresh(blocks);
         }
+
     }
 
     @Override
