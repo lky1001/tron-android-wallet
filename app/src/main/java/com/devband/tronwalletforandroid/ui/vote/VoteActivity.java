@@ -222,6 +222,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
                 .titleColorRes(android.R.color.black)
                 .contentColorRes(android.R.color.black)
                 .backgroundColorRes(android.R.color.white)
+                .positiveText(R.string.close_text)
                 .autoDismiss(true)
                 .build()
                 .show();
