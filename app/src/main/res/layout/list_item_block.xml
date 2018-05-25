@@ -49,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="5dp"
+                android:tint="@android:color/black"
                 app:srcCompat="@drawable/ic_transaction"/>
 
             <TextView

@@ -3,17 +3,21 @@
 
     <item
         android:id="@+id/bottom_navigation_overview"
-        android:title="@string/bottom_navigation_menu_overview" />
+        android:title="@string/bottom_navigation_menu_overview"
+        android:icon="@drawable/ic_overview"/>
 
     <item
         android:id="@+id/bottom_navigation_block"
-        android:title="@string/bottom_navigation_menu_block" />
+        android:title="@string/bottom_navigation_menu_block"
+        android:icon="@drawable/ic_block"/>
 
     <item
         android:id="@+id/bottom_navigation_transaction"
-        android:title="@string/bottom_navigation_menu_transaction" />
+        android:title="@string/bottom_navigation_menu_transaction"
+        android:icon="@drawable/ic_transaction"/>
 
     <item
         android:id="@+id/bottom_navigation_account"
-        android:title="@string/bottom_navigation_menu_account" />
+        android:title="@string/bottom_navigation_menu_account"
+        android:icon="@drawable/ic_account"/>
 </menu>

@@ -84,6 +84,7 @@ public class BlockActivity extends CommonActivity {
 
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mBottomNavigationView.setSelectedItemId(FRAGMENT_OVERVIEW);
+        changeFragment(FRAGMENT_OVERVIEW);
     }
 
     @Override
