@@ -1,6 +1,5 @@
-package com.devband.tronwalletforandroid.ui.block;
+package com.devband.tronwalletforandroid.common;
 
-import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,13 +13,13 @@ import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
  * Created by user on 2018. 5. 25..
  */
 
-abstract class BaseFragment extends Fragment{
+public abstract class BaseFragment extends Fragment {
 
     protected BasePresenter mPresenter;
     protected MaterialDialog mMaterialDialog;
 
 
-    abstract void refresh();
+    protected abstract void refresh();
 
     @Override
     public void onHiddenChanged(boolean hidden) {
