@@ -68,7 +68,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
     @BindView(R.id.check_my_votes)
     CheckBox mCheckMyVotes;
 
-    private long mVotePoint;
+    private long mRemainVotePoint;
 
     private LinearLayoutManager mLayoutManager;
     private AdapterView mAdapterView;
@@ -171,11 +171,23 @@ public class VoteActivity extends CommonActivity implements VoteView {
 
     @Override
     public void displayVoteInfo(long totalVotes, long voteItemCount, long myVotePoint, long totalMyVotes) {
-        mVotePoint = myVotePoint - totalMyVotes;
+        if (myVotePoint == 0) {
+            new MaterialDialog.Builder(VoteActivity.this)
+                    .title(getString(R.string.votes_help_text))
+                    .content(getString(R.string.votes_help_msg_text))
+                    .titleColorRes(android.R.color.black)
+                    .contentColorRes(android.R.color.black)
+                    .backgroundColorRes(android.R.color.white)
+                    .autoDismiss(true)
+                    .build()
+                    .show();
+        }
+
+        mRemainVotePoint = myVotePoint - totalMyVotes;
 
         mTotalVotesText.setText(df.format(totalVotes));
         mRepresentativeCountText.setText(df.format(voteItemCount));
-        mVoteRemainingCountText.setText(df.format(mVotePoint));
+        mVoteRemainingCountText.setText(df.format(mRemainVotePoint));
 
         mRepresentativeTitleText.setVisibility(View.VISIBLE);
         mRepresentativeCountTitleText.setVisibility(View.VISIBLE);
@@ -256,7 +268,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
                             return;
                         }
 
-                        if (voteBalance <= 0 || voteBalance > mVotePoint) {
+                        if (voteBalance <= 0 || voteBalance > mRemainVotePoint) {
                             Toast.makeText(VoteActivity.this, getString(R.string.invalid_vote),
                                     Toast.LENGTH_SHORT).show();
                             return;
