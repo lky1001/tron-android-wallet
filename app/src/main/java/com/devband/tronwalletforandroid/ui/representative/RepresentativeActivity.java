@@ -11,6 +11,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class RepresentativeActivity extends CommonActivity implements RepresentativeView {
 
@@ -55,6 +57,9 @@ public class RepresentativeActivity extends CommonActivity implements Representa
 
     @BindView(R.id.highest_votes_text)
     TextView mHighestVotesText;
+
+    @BindView(R.id.retry_button)
+    Button mRetryButton;
 
     private LinearLayoutManager mLayoutManager;
     private AdapterView mAdapterView;
@@ -223,6 +228,8 @@ public class RepresentativeActivity extends CommonActivity implements Representa
 
     @Override
     public void displayRepresentativeInfo(int witnessCount, long highestVotes) {
+        mRetryButton.setVisibility(View.GONE);
+
         mRepresentativeCountText.setText(Constants.numberFormat.format(witnessCount));
         mHighestVotesText.setText(Constants.numberFormat.format(highestVotes) + " " + Constants.TRON_SYMBOL);
 
@@ -235,7 +242,13 @@ public class RepresentativeActivity extends CommonActivity implements Representa
 
     @Override
     public void showServerError() {
+        mRetryButton.setVisibility(View.VISIBLE);
         hideDialog();
         Toast.makeText(RepresentativeActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.retry_button)
+    public void onRetryClick() {
+        ((RepresentativePresenter) mPresenter).getRepresentativeList();
     }
 }

@@ -67,6 +67,9 @@ public class VoteActivity extends CommonActivity implements VoteView {
     @BindView(R.id.check_my_votes)
     CheckBox mCheckMyVotes;
 
+    @BindView(R.id.retry_button)
+    Button mRetryButton;
+
     private long mRemainVotePoint;
 
     private LinearLayoutManager mLayoutManager;
@@ -162,12 +165,15 @@ public class VoteActivity extends CommonActivity implements VoteView {
 
     @Override
     public void showServerError() {
+        mRetryButton.setVisibility(View.VISIBLE);
         hideDialog();
         Toast.makeText(VoteActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void displayVoteInfo(long totalVotes, long voteItemCount, long myVotePoint, long totalMyVotes) {
+        mRetryButton.setVisibility(View.GONE);
+
         if (myVotePoint == 0) {
             new MaterialDialog.Builder(VoteActivity.this)
                     .title(getString(R.string.votes_help_text))
@@ -226,6 +232,11 @@ public class VoteActivity extends CommonActivity implements VoteView {
                 .autoDismiss(true)
                 .build()
                 .show();
+    }
+
+    @OnClick(R.id.retry_button)
+    public void onRetryClick() {
+        ((VotePresenter) mPresenter).getRepresentativeList(mCheckMyVotes.isChecked());
     }
 
     private View.OnClickListener mVoteClickListener = new View.OnClickListener() {
