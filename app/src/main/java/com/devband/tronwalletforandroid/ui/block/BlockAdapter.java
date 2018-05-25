@@ -62,7 +62,7 @@ public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.BlockViewHol
     }
 
     public void addData(Blocks blocks) {
-        int beforeIndex = getItemCount() - 1;
+        int beforeIndex = getItemCount();
 
         for (Block block : blocks.getData()) {
             if (!isContain(block)) {
