@@ -8,17 +8,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.devband.tronlib.dto.Token;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
+import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.ui.token.TokenDetailActivity;
+import com.thefinestartist.finestwebview.FinestWebView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class OverviewFragment extends BaseFragment {
+public class OverviewFragment extends BaseFragment implements OverviewView {
 
-    public static BaseFragment newInstance() {
+    public static BaseFragment newInstance(@NonNull String tokenName) {
         OverviewFragment fragment = new OverviewFragment();
+        Bundle args = new Bundle(1);
+        args.putString(TokenDetailActivity.EXTRA_TOKEN_NAME, tokenName);
+
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -52,21 +65,79 @@ public class OverviewFragment extends BaseFragment {
     @BindView(R.id.token_total_transactions_text)
     TextView mTokenTotalTransactionsText;
 
+    private String mTokenName;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_token_overview, container, false);
         ButterKnife.bind(this, view);
+
+        mTokenName = getArguments().getString(TokenDetailActivity.EXTRA_TOKEN_NAME);
+
+        mPresenter = new OverviewPresenter(this);
+        mPresenter.onCreate();
+
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        ((OverviewPresenter) mPresenter).loadTokenInfo(mTokenName);
     }
 
     @Override
     protected void refresh() {
 
+    }
+
+    @Override
+    public void tokenInfoLoadSuccess(@NonNull Token token) {
+        mTokenNameText.setText(token.getName());
+        mTokenDescText.setText(token.getDescription());
+        mTokenWebsiteText.setText(token.getUrl());
+        mTokenTotalSupplyText.setText(Constants.numberFormat.format(token.getTotalSupply()));
+        mTokenIssuerText.setText(token.getOwnerAddress());
+        mTokenHoldersText.setText(Constants.numberFormat.format(token.getNrOfTokenHolders()));
+        mTokenTotalTransactionsText.setText(Constants.numberFormat.format(token.getTotalTransactions()));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm z");
+
+        mTokenStartDateText.setText(sdf.format(new Date(token.getStartTime())));
+        mTokenEndDateText.setText(sdf.format(new Date(token.getEndTime())));
+
+        mVisitWebsiteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.visit_external_site_text)
+                        .content(token.getUrl() + " " + getString(R.string.external_website_warning_msg))
+                        .titleColorRes(android.R.color.black)
+                        .contentColorRes(android.R.color.black)
+                        .backgroundColorRes(android.R.color.white)
+                        .positiveText(R.string.visit_site_text)
+                        .negativeText(R.string.cancen_text)
+                        .onPositive((dialog, which) -> {
+                            dialog.dismiss();
+                            new FinestWebView.Builder(getActivity()).show(token.getUrl());
+                        }).show();
+            }
+        });
+
+        hideDialog();
+    }
+
+    @Override
+    public void showLoadingDialog() {
+        showProgressDialog(null, getString(R.string.loading_msg));
+    }
+
+    @Override
+    public void showServerError() {
+        hideDialog();
+        Toast.makeText(getActivity(), getString(R.string.connection_error_msg),
+                Toast.LENGTH_SHORT).show();
     }
 }

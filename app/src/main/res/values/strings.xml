@@ -152,8 +152,9 @@
     <string name="team_page_text">Team Page</string>
     <string name="my_votes_text">Show only my votes</string>
     <string name="title_vote">Votes</string>
-    <string name="your_vote_text">Your vote :</string>
     <string name="total_votes_text">Total votes</string>
+    <string name="representative_your_vote_text">Your vote :</string>
+    <string name="representative_total_votes_text">Total votes :</string>
     <string name="votes_remaining_text">Votes Remaining</string>
     <string name="super_representatives_text">Super Representatives</string>
     <string name="super_representative_candidates_text">Super Representative Candidates</string>

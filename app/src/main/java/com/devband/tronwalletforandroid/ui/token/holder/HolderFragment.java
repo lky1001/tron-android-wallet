@@ -9,12 +9,20 @@ import android.view.ViewGroup;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
+import com.devband.tronwalletforandroid.ui.token.TokenDetailActivity;
 
 import butterknife.ButterKnife;
 
 public class HolderFragment extends BaseFragment {
-    public static BaseFragment newInstance() {
+
+    private String mTokenName;
+
+    public static BaseFragment newInstance(@NonNull String tokenName) {
         HolderFragment fragment = new HolderFragment();
+        Bundle args = new Bundle(1);
+        args.putString(TokenDetailActivity.EXTRA_TOKEN_NAME, tokenName);
+
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -23,6 +31,9 @@ public class HolderFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_token_holder, container, false);
         ButterKnife.bind(this, view);
+
+        mTokenName = getArguments().getString(TokenDetailActivity.EXTRA_TOKEN_NAME);
+
         return view;
     }
 
