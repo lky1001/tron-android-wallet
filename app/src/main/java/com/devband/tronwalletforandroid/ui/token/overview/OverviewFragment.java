@@ -20,6 +20,7 @@ import com.thefinestartist.finestwebview.FinestWebView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -103,7 +104,7 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
         mTokenHoldersText.setText(Constants.numberFormat.format(token.getNrOfTokenHolders()));
         mTokenTotalTransactionsText.setText(Constants.numberFormat.format(token.getTotalTransactions()));
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm z");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm z", Locale.US);
 
         mTokenStartDateText.setText(sdf.format(new Date(token.getStartTime())));
         mTokenEndDateText.setText(sdf.format(new Date(token.getEndTime())));
