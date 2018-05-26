@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.devband.tronlib.dto.Market;
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +37,9 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.MarketView
         Market market = mList.get(position);
         holder.txtMarket.setText(market.getName());
         holder.txtPair.setText(market.getPair());
-        holder.txtPercentage.setText(market.getVolumePercentage() + "");
-        holder.txtVolume.setText(market.getVolume() + "");
-        holder.txtPrice.setText(market.getPrice() + "");
+        holder.txtVolume.setText(Constants.numberFormat.format(market.getVolume()) + " TRX");
+        holder.txtPercentage.setText("(" + Constants.percentFormat.format(market.getVolumePercentage()) + "%)");
+        holder.txtPrice.setText("$" + Constants.usdFormat.format(market.getPrice()));
     }
 
     @Override

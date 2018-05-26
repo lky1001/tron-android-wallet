@@ -35,13 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="@integer/market_volume_weight"
-            android:text="Volume"
-            android:gravity="center"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="@integer/market_percentage_weight"
-            android:text="%"
+            android:text="Volume (24h)"
             android:gravity="center"/>
         <TextView
             android:layout_width="0dp"
