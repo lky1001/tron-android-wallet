@@ -7,7 +7,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +16,6 @@ import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
-import com.devband.tronwalletforandroid.ui.main.MainActivity;
 import com.devband.tronwalletforandroid.ui.tronaccount.adapter.TronAccountListAdapter;
 
 import butterknife.BindView;
@@ -115,17 +113,6 @@ public class TronAccountActivity extends CommonActivity implements TronAccountVi
         mPresenter = new TronAccountPresenter(this);
         ((TronAccountPresenter) mPresenter).setAdapterDataModel(mTronAccountListAdapter);
         mPresenter.onCreate();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finishActivity();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
@@ -13,7 +14,7 @@ import com.devband.tronwalletforandroid.ui.token.TokenDetailActivity;
 
 import butterknife.ButterKnife;
 
-public class TransactionFragment extends BaseFragment {
+public class TransactionFragment extends BaseFragment implements TransactionView {
 
     private String mTokenName;
 
@@ -45,5 +46,17 @@ public class TransactionFragment extends BaseFragment {
     @Override
     protected void refresh() {
 
+    }
+
+    @Override
+    public void showLoadingDialog() {
+        showProgressDialog(null, getString(R.string.loading_msg));
+    }
+
+    @Override
+    public void showServerError() {
+        hideDialog();
+        Toast.makeText(getActivity(), getString(R.string.connection_error_msg),
+                Toast.LENGTH_SHORT).show();
     }
 }

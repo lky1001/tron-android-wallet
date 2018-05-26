@@ -1,6 +1,7 @@
 package com.devband.tronlib.services;
 
 import com.devband.tronlib.dto.Token;
+import com.devband.tronlib.dto.TokenHolders;
 import com.devband.tronlib.dto.Tokens;
 
 import io.reactivex.Single;
@@ -16,4 +17,8 @@ public interface TokenService {
 
     @GET("/api/token/{name}")
     Single<Token> getTokenDetail(@Path("name") String tokenName);
+
+    @GET("/api/token/{name}/address")
+    Single<TokenHolders> getTokenHolders(@Path("name") String tokenName, @Query("start") int start,
+            @Query("limit") int limit, @Query("sort") String sort);
 }

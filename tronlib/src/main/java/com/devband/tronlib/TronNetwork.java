@@ -4,6 +4,7 @@ import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.dto.Market;
 import com.devband.tronlib.dto.Token;
+import com.devband.tronlib.dto.TokenHolders;
 import com.devband.tronlib.dto.Tokens;
 import com.devband.tronlib.dto.Transactions;
 import com.devband.tronlib.dto.Votes;
@@ -63,6 +64,10 @@ public class TronNetwork {
 
     public Single<Token> getTokenDetail(String tokenName) {
         return mTokenService.getTokenDetail(tokenName);
+    }
+
+    public Single<TokenHolders> getTokenHolders(String tokenName, int start, int limit, String sort) {
+        return mTokenService.getTokenHolders(tokenName, start, limit, sort);
     }
 
     public Single<List<Market>> getMarkets() {

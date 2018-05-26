@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -70,17 +69,6 @@ public class TokenActivity extends CommonActivity implements TokenView {
 
         mIsLoading = true;
         ((TokenPresenter) mPresenter).loadItems(mStartIndex, PAGE_SIZE);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finishActivity();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private RecyclerView.OnScrollListener mRecyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {

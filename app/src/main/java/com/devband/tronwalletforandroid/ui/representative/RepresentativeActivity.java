@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -126,17 +125,6 @@ public class RepresentativeActivity extends CommonActivity implements Representa
         mPresenter = new RepresentativePresenter(this);
         ((RepresentativePresenter) mPresenter).setAdapterDataModel(mRepresentativeListAdapter);
         mPresenter.onCreate();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finishActivity();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private View.OnClickListener mOnListItemClickListener = new View.OnClickListener() {

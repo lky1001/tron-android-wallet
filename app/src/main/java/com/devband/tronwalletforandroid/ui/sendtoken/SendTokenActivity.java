@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -110,17 +109,6 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
         super.onResume();
         showProgressDialog(null, getString(R.string.loading_msg));
         mPresenter.onResume();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finishActivity();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.btn_send_trx)

@@ -8,7 +8,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -112,16 +111,5 @@ public class NodeActivity extends CommonActivity implements NodeView {
         hideDialog();
         tronnodeListview.setVisibility(View.GONE);
         Toast.makeText(NodeActivity.this, "Failed to get node list.", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finishActivity();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

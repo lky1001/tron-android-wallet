@@ -79,6 +79,8 @@ public class TokenDetailActivity extends CommonActivity {
 
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mBottomNavigationView.setSelectedItemId(FRAGMENT_OVERVIEW);
+
+        changeFragment(FRAGMENT_OVERVIEW);
     }
 
     private void changeFragment(int num) {
