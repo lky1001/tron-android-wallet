@@ -10,12 +10,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
+import com.devband.tronwalletforandroid.ui.main.MainActivity;
 import com.devband.tronwalletforandroid.ui.tronaccount.adapter.TronAccountListAdapter;
 
 import butterknife.BindView;
@@ -146,6 +148,7 @@ public class TronAccountActivity extends CommonActivity implements TronAccountVi
     @Override
     public void showServerError() {
         hideDialog();
-        showProgressDialog(null, getString(R.string.connection_error_msg));
+        Toast.makeText(TronAccountActivity.this, getString(R.string.connection_error_msg),
+                Toast.LENGTH_SHORT).show();
     }
 }

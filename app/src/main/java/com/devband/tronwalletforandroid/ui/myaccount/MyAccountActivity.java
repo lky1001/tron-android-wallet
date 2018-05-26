@@ -78,7 +78,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     @BindView(R.id.tokens_layout)
     LinearLayout mTokensLayout;
 
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
     private ArrayAdapter<AccountModel> mAccountAdapter;
 

@@ -152,8 +152,9 @@
     <string name="team_page_text">Team Page</string>
     <string name="my_votes_text">Show only my votes</string>
     <string name="title_vote">Votes</string>
-    <string name="your_vote_text">Your vote :</string>
     <string name="total_votes_text">Total votes</string>
+    <string name="representative_your_vote_text">Your vote :</string>
+    <string name="representative_total_votes_text">Total votes :</string>
     <string name="votes_remaining_text">Votes Remaining</string>
     <string name="super_representatives_text">Super Representatives</string>
     <string name="super_representative_candidates_text">Super Representative Candidates</string>
@@ -216,4 +217,13 @@
     <string name="bottom_navigation_menu_holder">Holder</string>
     <string name="retry_text">RETRY</string>
     <string name="activity_main_back_exit">Press once again to exit</string>
+    <string name="token_name_text">Token Name :</string>
+    <string name="token_desc_text">Description</string>
+    <string name="website_text">Website :</string>
+    <string name="total_supply_text">Total Supply :</string>
+    <string name="issuer_text">Issuer :</string>
+    <string name="start_date_text">Start Date :</string>
+    <string name="end_date_text">End Date :</string>
+    <string name="holders_text">Token Holders :</string>
+    <string name="total_transactions_text">Total Transactions :</string>
 </resources>

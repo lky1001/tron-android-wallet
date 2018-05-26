@@ -66,9 +66,9 @@ public class TokenDetailActivity extends CommonActivity {
     }
 
     private void initUi() {
-        mFragments.add(OverviewFragment.newInstance());
-        mFragments.add(TransactionFragment.newInstance());
-        mFragments.add(HolderFragment.newInstance());
+        mFragments.add(OverviewFragment.newInstance(mTokenName));
+        mFragments.add(TransactionFragment.newInstance(mTokenName));
+        mFragments.add(HolderFragment.newInstance(mTokenName));
 
         getSupportFragmentManager()
                 .beginTransaction()

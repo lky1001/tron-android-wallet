@@ -39,7 +39,7 @@ public class TransactionActivity extends CommonActivity implements TransactionVi
 
     private TransactionAdapter mAdapter;
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.US);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

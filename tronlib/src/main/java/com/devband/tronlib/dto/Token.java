@@ -43,4 +43,11 @@ public class Token {
     private int voteScore;
 
     private long created;
+
+    private long dateCreated;
+
+    private long nrOfTokenHolders;
+
+    private long totalTransactions;
+
 }

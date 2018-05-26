@@ -59,7 +59,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:text="@string/your_vote_text" />
+                        android:text="@string/representative_your_vote_text" />
 
                     <TextView
                         android:id="@+id/your_vote_text"
@@ -78,7 +78,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:text="@string/total_votes_text" />
+                        android:text="@string/representative_total_votes_text" />
 
                     <TextView
                         android:id="@+id/total_votes_text"

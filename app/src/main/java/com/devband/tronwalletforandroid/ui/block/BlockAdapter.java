@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.devband.tronlib.dto.Block;
 import com.devband.tronlib.dto.Blocks;
-import com.devband.tronlib.dto.Token;
 import com.devband.tronwalletforandroid.R;
 
 import java.text.SimpleDateFormat;
@@ -29,7 +28,7 @@ public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.BlockViewHol
 
     private List<Block> mList = new ArrayList<>();
 
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.US);
 
     @NonNull
     @Override

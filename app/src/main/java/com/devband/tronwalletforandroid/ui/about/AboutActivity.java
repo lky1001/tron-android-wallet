@@ -66,7 +66,7 @@ public class AboutActivity extends CommonActivity {
 
                             Date updated = new Date(Long.parseLong(coinMarketCap.getLastUpdated()) * 1_000);
 
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.US);
 
                             StringBuilder sb = new StringBuilder();
                             sb.append("Market Price : ")

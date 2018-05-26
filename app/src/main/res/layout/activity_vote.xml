@@ -153,16 +153,6 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/retry_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
-                android:textColor="@android:color/white"
-                android:layout_marginTop="150dp"
-                android:visibility="gone"
-                android:text="@string/retry_text" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -188,6 +178,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/main_border_color" />
+
+            <Button
+                android:id="@+id/retry_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="150dp"
+                android:visibility="gone"
+                android:text="@string/retry_text" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/listview"
