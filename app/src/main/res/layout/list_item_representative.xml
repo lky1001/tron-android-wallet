@@ -35,8 +35,6 @@
                     android:id="@+id/representative_url_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:ellipsize="end"
                     android:textColor="@color/colorPrimary"
                     tools:text="http://Earth.osdfsdfdsfsrg"/>
 

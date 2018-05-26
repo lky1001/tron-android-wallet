@@ -37,10 +37,8 @@
                     android:id="@+id/representative_url_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:ellipsize="end"
                     android:textColor="@color/colorPrimary"
-                    tools:text="http://Earth.osdfsdfdskkkkkkkkkkkkfsrg"/>
+                    tools:text="http://Earth.osdfsdfd3dfdfdfdfskkkkkkkkkkkkfsrg"/>
 
                 <TextView
                     android:id="@+id/representative_address_text"
