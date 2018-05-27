@@ -53,7 +53,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
-        //TODO bindViewHolder
         TransactionInfo info = mList.get(position);
 
         Date date = new Date(info.getTimestamp());

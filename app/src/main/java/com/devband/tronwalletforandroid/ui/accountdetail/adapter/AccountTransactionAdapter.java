@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.AdapterDataModel;
+import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
 
@@ -24,7 +26,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTransactionAdapter.TransactionViewHolder> {
+public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTransactionAdapter.TransactionViewHolder>  implements AdapterDataModel<TransactionInfo>, AdapterView {
 
     private List<TransactionInfo> mList = new ArrayList<>();
 
@@ -49,7 +51,6 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
 
     @Override
     public void onBindViewHolder(@NonNull AccountTransactionAdapter.TransactionViewHolder holder, int position) {
-        //TODO bindViewHolder
         TransactionInfo info = mList.get(position);
 
         Date date = new Date(info.getTimestamp());
@@ -115,6 +116,41 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
     public void refresh(List<TransactionInfo> datas) {
         mList.clear();
         mList.addAll(datas);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void add(TransactionInfo model) {
+        mList.add(model);
+    }
+
+    @Override
+    public void addAll(List<TransactionInfo> list) {
+        mList.addAll(list);
+    }
+
+    @Override
+    public void remove(int position) {
+        mList.remove(position);
+    }
+
+    @Override
+    public TransactionInfo getModel(int position) {
+        return mList.get(position);
+    }
+
+    @Override
+    public int getSize() {
+        return mList.size();
+    }
+
+    @Override
+    public void clear() {
+        mList.clear();
+    }
+
+    @Override
+    public void refresh() {
         notifyDataSetChanged();
     }
 

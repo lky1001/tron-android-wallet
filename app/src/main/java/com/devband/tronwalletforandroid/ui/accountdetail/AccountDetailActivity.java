@@ -130,13 +130,13 @@ public class AccountDetailActivity extends CommonActivity {
             case R.id.bottom_navigation_overview:
                 changeFragment(FRAGMENT_OVERVIEW);
                 return true;
-            case R.id.bottom_navigation_block:
+            case R.id.bottom_navigation_tokens:
                 changeFragment(FRAGMENT_TOKEN_BALANCE);
                 return true;
             case R.id.bottom_navigation_transaction:
                 changeFragment(FRAGMENT_TRANSACTION);
                 return true;
-            case R.id.bottom_navigation_holder:
+            case R.id.bottom_navigation_representative:
                 changeFragment(FRAGMENT_REPRESENTATIVE);
                 return true;
         }

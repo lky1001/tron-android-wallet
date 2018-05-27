@@ -62,6 +62,14 @@ public class TronNetwork {
         return mTronScanService.getTransactions(address, symbol);
     }
 
+    public Single<Transactions> getTransactions(String address, int start, int limit, String sort, boolean hasTotal) {
+        return mTronScanService.getTransactions(address, start, limit, sort, hasTotal);
+    }
+
+    public Single<Transactions> getTransactions(int start, int limit, String sort, boolean hasTotal) {
+        return mTronScanService.getTransactions(start, limit, sort, hasTotal);
+    }
+
     public Single<Tokens> getTokens(int start, int limit, String sort, String status) {
         return mTokenService.getTokens(start, limit, sort, status);
     }
@@ -84,9 +92,5 @@ public class TronNetwork {
 
     public Single<TronAccounts> getAccounts(int start, int limit, String sort) {
         return mAccountService.getAccounts(start, limit, sort);
-    }
-
-    public Single<Transactions> getAllTransactions(int start, int limit, String sort, boolean hasTotal) {
-        return mTronScanService.getAllTransactions(start, limit, sort, hasTotal);
     }
 }

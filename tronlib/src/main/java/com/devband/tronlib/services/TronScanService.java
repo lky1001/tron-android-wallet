@@ -19,7 +19,11 @@ public interface TronScanService {
     Single<Transactions> getTransactions(@Query("address") String address, @Query("token") String token);
 
     @GET("api/transaction")
-    Single<Transactions> getAllTransactions(@Query("start") int start, @Query("limit") int limit,
+    Single<Transactions> getTransactions(@Query("address") String address, @Query("start") int start,
+            @Query("limit") int limit, @Query("sort") String sort, @Query("count") boolean count);
+
+    @GET("api/transaction")
+    Single<Transactions> getTransactions(@Query("start") int start, @Query("limit") int limit,
             @Query("sort") String sort, @Query("count") boolean count);
 
     @GET("api/market/markets")
