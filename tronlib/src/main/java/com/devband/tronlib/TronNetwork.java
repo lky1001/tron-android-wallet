@@ -7,7 +7,9 @@ import com.devband.tronlib.dto.Token;
 import com.devband.tronlib.dto.TokenHolders;
 import com.devband.tronlib.dto.Tokens;
 import com.devband.tronlib.dto.Transactions;
+import com.devband.tronlib.dto.TronAccounts;
 import com.devband.tronlib.dto.Votes;
+import com.devband.tronlib.services.AccountService;
 import com.devband.tronlib.services.CoinMarketCapService;
 import com.devband.tronlib.services.TokenService;
 import com.devband.tronlib.services.TronScanService;
@@ -27,6 +29,7 @@ public class TronNetwork {
     private CoinMarketCapService mCoinMarketCapService;
     private TronScanService mTronScanService;
     private TokenService mTokenService;
+    private AccountService mAccountService;
 
     public static synchronized TronNetwork getInstance() {
         if (instance == null) {
@@ -40,10 +43,11 @@ public class TronNetwork {
     }
 
     private TronNetwork() {
-        mVoteService = ServiceBuilder.createService(VoteService.class, Hosts.TRONSCAM_API);
+        mVoteService = ServiceBuilder.createService(VoteService.class, Hosts.TRONSCAN_API);
         mCoinMarketCapService = ServiceBuilder.createService(CoinMarketCapService.class, Hosts.COINMARKETCAP_API);
-        mTronScanService = ServiceBuilder.createService(TronScanService.class, Hosts.TRONSCAM_API);
-        mTokenService = ServiceBuilder.createService(TokenService.class, Hosts.TRONSCAM_API);
+        mTronScanService = ServiceBuilder.createService(TronScanService.class, Hosts.TRONSCAN_API);
+        mTokenService = ServiceBuilder.createService(TokenService.class, Hosts.TRONSCAN_API);
+        mAccountService = ServiceBuilder.createService(AccountService.class, Hosts.TRONSCAN_API);
     }
 
     public Single<Votes> getVoteCurrentCycle() {
@@ -76,5 +80,9 @@ public class TronNetwork {
 
     public Single<Blocks> getBlocks(int limit, int start) {
         return mTronScanService.getBlock("-number", limit, start);
+    }
+
+    public Single<TronAccounts> getAccounts(int start, int limit, String sort) {
+        return mAccountService.getAccounts(start, limit, sort);
     }
 }
