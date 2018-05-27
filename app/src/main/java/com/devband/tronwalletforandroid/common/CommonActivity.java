@@ -8,8 +8,12 @@ import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -17,6 +21,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.ui.intro.IntroActivity;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 public class CommonActivity extends AppCompatActivity {
@@ -124,6 +129,27 @@ public class CommonActivity extends AppCompatActivity {
             startActivity(emailIntent);
         } else {
             startActivity(Intent.createChooser(emailIntent, getString(R.string.string_select_email_app)));
+        }
+    }
+
+    @SuppressWarnings("RestrictedApi")
+    protected void removeShiftMode(BottomNavigationView view) {
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
+        try {
+            Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
+            shiftingMode.setAccessible(true);
+            shiftingMode.setBoolean(menuView, false);
+            shiftingMode.setAccessible(false);
+            for (int i = 0; i < menuView.getChildCount(); i++) {
+                BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
+                item.setShiftingMode(false);
+                // set once again checked value, so view will be updated
+                item.setChecked(item.getItemData().isChecked());
+            }
+        } catch (NoSuchFieldException e) {
+            Log.e("ERROR NO SUCH FIELD", "Unable to get shift mode field");
+        } catch (IllegalAccessException e) {
+            Log.e("ERROR ILLEGAL ALG", "Unable to change value of shift mode");
         }
     }
 }

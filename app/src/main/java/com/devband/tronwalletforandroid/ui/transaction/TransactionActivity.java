@@ -16,10 +16,8 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.transaction.adapter.TransactionAdapter;
 import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,8 +35,6 @@ public class TransactionActivity extends CommonActivity implements TransactionVi
     RecyclerView mRecyclerView;
 
     private TransactionAdapter mAdapter;
-
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.US);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,7 +100,7 @@ public class TransactionActivity extends CommonActivity implements TransactionVi
             toText.setText(item.getTransferToAddress());
             statusText.setText(item.isConfirmed() ? getString(R.string.confirmed_text) : getString(R.string.unconfirmed_text));
             amountText.setText(Constants.tronBalanceFormat.format(amount) + " " + item.getTokenName());
-            dateText.setText(sdf.format(new Date(item.getTimestamp())));
+            dateText.setText(Constants.sdf.format(new Date(item.getTimestamp())));
 
             dialog.show();
         }

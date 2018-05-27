@@ -209,9 +209,9 @@
     <string name="tron_architecture_url">https://dn-peiwo-web.qbox.me/Design_Book_of_TRON_Architecture1.4.pdf</string>
     <string name="close_text">CLOSE</string>
     <string name="bottom_navigation_menu_overview">Overview</string>
-    <string name="bottom_navigation_menu_block">Block</string>
-    <string name="bottom_navigation_menu_transaction">Transaction</string>
-    <string name="bottom_navigation_menu_account">Account</string>
+    <string name="bottom_navigation_menu_block">Blocks</string>
+    <string name="bottom_navigation_menu_transaction">Transactions</string>
+    <string name="bottom_navigation_menu_account">Accounts</string>
     <string name="votes_help_text">Help</string>
     <string name="votes_help_msg_text">At least 1 Tron Power is required to start voting. Tron Power is gained by freezing TRX on the\nMain Page Menu > My Account > Tron Power > Freeze</string>
     <string name="bottom_navigation_menu_holder">Holder</string>
@@ -229,5 +229,9 @@
     <string name="number_text">Number</string>
     <string name="transactions_text">transactions</string>
     <string name="produced_by_text">Produced by</string>
-    <string name="block_reward_text">Reward 32TRX</string>
+    <string name="block_reward_text">Reward</string>
+    <string name="trans_from_text">From :</string>
+    <string name="trans_to_text">To :</string>
+    <string name="value_text">Value :</string>
+    <string name="created_text">Created :</string>
 </resources>

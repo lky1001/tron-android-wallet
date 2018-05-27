@@ -63,6 +63,8 @@ public class BlockExplorerActivity extends CommonActivity {
         setContentView(R.layout.activity_block);
 
         ButterKnife.bind(this);
+        removeShiftMode(mBottomNavigationView);
+
         initUi();
     }
 

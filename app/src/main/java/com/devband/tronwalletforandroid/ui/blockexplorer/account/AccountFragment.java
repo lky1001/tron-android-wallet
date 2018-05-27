@@ -28,7 +28,7 @@ public class AccountFragment extends BaseFragment implements AccountView {
     private static final int PAGE_SIZE = 25;
 
     @BindView(R.id.recycler_view)
-    RecyclerView mHolderListView;
+    RecyclerView mAccountListView;
 
     private LinearLayoutManager mLayoutManager;
     private AdapterView mAdapterView;
@@ -64,17 +64,12 @@ public class AccountFragment extends BaseFragment implements AccountView {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        mHolderListView.setLayoutManager(mLayoutManager);
-        mHolderListView.addItemDecoration(new DividerItemDecoration(0));
-        mHolderListView.setAdapter(mTronAccountAdapter);
-        mHolderListView.addOnScrollListener(mRecyclerViewOnScrollListener);
+        mAccountListView.setLayoutManager(mLayoutManager);
+        mAccountListView.addItemDecoration(new DividerItemDecoration(0));
+        mAccountListView.setAdapter(mTronAccountAdapter);
+        mAccountListView.addOnScrollListener(mRecyclerViewOnScrollListener);
 
         mAdapterView = mTronAccountAdapter;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
     }
 
     private RecyclerView.OnScrollListener mRecyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
@@ -110,7 +105,9 @@ public class AccountFragment extends BaseFragment implements AccountView {
 
     @Override
     protected void refresh() {
-        ((AccountPresenter) mPresenter).getTronAccounts(mStartIndex, PAGE_SIZE);
+        if (!mIsLastPage) {
+            ((AccountPresenter) mPresenter).getTronAccounts(mStartIndex, PAGE_SIZE);
+        }
     }
 
     @Override

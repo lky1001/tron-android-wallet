@@ -53,11 +53,9 @@ import com.devband.tronwalletforandroid.ui.vote.VoteActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -562,8 +560,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
         Date updated = new Date(Long.parseLong(mCoinMarketCapPriceInfo.getLastUpdated()) * 1_000);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.US);
-
         sb.append("Price : ")
                 .append(mCoinMarketCapPriceInfo.getPriceUsd())
                 .append(" USD (")
@@ -572,7 +568,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                         "+" + mCoinMarketCapPriceInfo.getPercentChange24h()
                 )
                 .append("%)\nLast updated : ")
-                .append(sdf.format(updated))
+                .append(Constants.sdf.format(updated))
                 .append("\nFrom CoinMarketCap");
 
         hideDialog();

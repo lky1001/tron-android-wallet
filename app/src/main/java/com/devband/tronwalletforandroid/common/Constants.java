@@ -1,8 +1,12 @@
 package com.devband.tronwalletforandroid.common;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class Constants {
+
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.US);
 
     public static final DecimalFormat tronBalanceFormat = new DecimalFormat("#,##0.000000");
     public static final DecimalFormat numberFormat = new DecimalFormat("#,##0");

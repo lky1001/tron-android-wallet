@@ -30,7 +30,6 @@ import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 
 import org.tron.protos.Protocol;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -76,8 +75,6 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
     @BindView(R.id.tokens_layout)
     LinearLayout mTokensLayout;
-
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
     private ArrayAdapter<AccountModel> mAccountAdapter;
 
@@ -203,7 +200,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
         mTronPowerText.setText(Constants.tronBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
         mFrozenTrxBalanceText.setText(Constants.tronBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
         if (expiredTime > 0) {
-            mFrozenTrxExpiredText.setText(sdf.format(new Date(expiredTime)));
+            mFrozenTrxExpiredText.setText(Constants.sdf.format(new Date(expiredTime)));
         } else {
             mFrozenTrxExpiredText.setText("-");
         }
