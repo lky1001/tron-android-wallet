@@ -24,7 +24,6 @@ import com.devband.tronwalletforandroid.ui.node.NodeActivity;
 import com.devband.tronwalletforandroid.ui.opensource.OpenSourceActivity;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity;
 import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
-import com.devband.tronwalletforandroid.ui.tronaccount.TronAccountActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,11 +77,6 @@ public class MoreActivity extends CommonActivity implements MoreView {
     @OnClick(R.id.more_representative_list_button)
     public void onWitnessListClick() {
         startActivity(RepresentativeActivity.class);
-    }
-
-    @OnClick(R.id.more_account_list_button)
-    public void onAccountListClick() {
-        startActivity(TronAccountActivity.class);
     }
 
     @OnClick(R.id.more_open_source_button)

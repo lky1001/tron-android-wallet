@@ -1,8 +1,11 @@
 package com.devband.tronwalletforandroid.ui.blockexplorer.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +53,22 @@ public class TronAccountAdapter extends RecyclerView.Adapter<TronAccountAdapter.
     public void onBindViewHolder(@NonNull TokenHolderViewHolder holder, int position) {
         TronAccount item = mList.get(position);
 
-        holder.tronAddressText.setText((position + 1) + ". " + item.getAddress());
+        holder.tronAddressNoText.setText((position + 1) + ".");
+
+        SpannableString content = new SpannableString(item.getAddress());
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+
+        holder.tronAddressText.setText(content);
+
+        holder.tronAddressText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, AccountDetailActivity.class);
+                intent.putExtra(AccountDetailActivity.EXTRA_ADDRESS, item.getAddress());
+                mContext.startActivity(intent);
+            }
+        });
+
         holder.tronBalanceText.setText(Constants.tronBalanceFormat.format(item.getBalance() / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
         holder.tronBalancePercentText.setText(Constants.percentFormat.format(item.getBalancePercent()) + "%");
         holder.tronBalanceProgress.setMax((float) item.getAvailableSypply());
@@ -97,6 +116,9 @@ public class TronAccountAdapter extends RecyclerView.Adapter<TronAccountAdapter.
     }
 
     class TokenHolderViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.tron_address_no_text)
+        public TextView tronAddressNoText;
 
         @BindView(R.id.tron_address_text)
         public TextView tronAddressText;

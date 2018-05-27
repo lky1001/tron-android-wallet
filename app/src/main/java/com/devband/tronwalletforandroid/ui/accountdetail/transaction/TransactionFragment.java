@@ -11,12 +11,20 @@ import android.widget.Toast;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
+import com.devband.tronwalletforandroid.ui.accountdetail.adapter.AccountTransactionAdapter;
+import com.devband.tronwalletforandroid.ui.transaction.TransactionPresenter;
+import com.devband.tronwalletforandroid.ui.transaction.TransactionView;
+import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 
 public class TransactionFragment extends BaseFragment implements TransactionView {
 
     private String mAddress;
+
+    private AccountTransactionAdapter mAdapter;
 
     public static BaseFragment newInstance(@NonNull String tokenName) {
         TransactionFragment fragment = new TransactionFragment();
@@ -35,17 +43,22 @@ public class TransactionFragment extends BaseFragment implements TransactionView
 
         mAddress = getArguments().getString(AccountDetailActivity.EXTRA_ADDRESS);
 
+        mPresenter = new TransactionPresenter(this);
+        mPresenter.onCreate();
+
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    protected void refresh() {
     }
 
     @Override
-    protected void refresh() {
-
+    public void transactionDataLoadSuccess(List<TransactionInfo> transactionInfos) {
+        hideDialog();
+        if (mAdapter != null) {
+            mAdapter.refresh(transactionInfos);
+        }
     }
 
     @Override
