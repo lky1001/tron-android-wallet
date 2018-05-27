@@ -226,4 +226,8 @@
     <string name="end_date_text">End Date :</string>
     <string name="holders_text">Token Holders :</string>
     <string name="total_transactions_text">Total Transactions :</string>
+    <string name="number_text">Number</string>
+    <string name="transactions_text">transactions</string>
+    <string name="produced_by_text">Produced by</string>
+    <string name="block_reward_text">Reward 32TRX</string>
 </resources>

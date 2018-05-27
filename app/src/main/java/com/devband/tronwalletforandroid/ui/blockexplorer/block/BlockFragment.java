@@ -56,7 +56,6 @@ public class BlockFragment extends BaseFragment implements BlockView {
         }
     };
 
-
     public static BaseFragment newInstance() {
         BlockFragment fragment = new BlockFragment();
         return fragment;
@@ -95,12 +94,11 @@ public class BlockFragment extends BaseFragment implements BlockView {
         } else {
             mBlockAdapter.refresh(blocks);
         }
-
     }
 
     @Override
     public void showLoadingDialog() {
-        showProgressDialog(null, null);
+        showProgressDialog(null, getString(R.string.loading_msg));
     }
 
     @Override

@@ -50,27 +50,31 @@ public class AccountFragment extends BaseFragment implements AccountView {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account, container, false);
         ButterKnife.bind(this, view);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mHolderListView.setLayoutManager(mLayoutManager);
-        mHolderListView.addItemDecoration(new DividerItemDecoration(0));
-        mHolderListView.addOnScrollListener(mRecyclerViewOnScrollListener);
-
-        mTronAccountAdapter = new TronAccountAdapter(getActivity(), mOnItemClickListener);
-        mHolderListView.setAdapter(mTronAccountAdapter);
-        mAdapterView = mTronAccountAdapter;
+        initUi();
 
         mPresenter = new AccountPresenter(this);
         ((AccountPresenter) mPresenter).setAdapterDataModel(mTronAccountAdapter);
         mPresenter.onCreate();
 
-        ((AccountPresenter) mPresenter).getTronAccounts(mStartIndex, PAGE_SIZE);
+        return view;
+    }
+
+    private void initUi() {
+        mTronAccountAdapter = new TronAccountAdapter(getActivity(), mOnItemClickListener);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        mHolderListView.setLayoutManager(mLayoutManager);
+        mHolderListView.addItemDecoration(new DividerItemDecoration(0));
+        mHolderListView.setAdapter(mTronAccountAdapter);
+        mHolderListView.addOnScrollListener(mRecyclerViewOnScrollListener);
+
+        mAdapterView = mTronAccountAdapter;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private RecyclerView.OnScrollListener mRecyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
@@ -106,7 +110,7 @@ public class AccountFragment extends BaseFragment implements AccountView {
 
     @Override
     protected void refresh() {
-        mAdapterView.refresh();
+        ((AccountPresenter) mPresenter).getTronAccounts(mStartIndex, PAGE_SIZE);
     }
 
     @Override

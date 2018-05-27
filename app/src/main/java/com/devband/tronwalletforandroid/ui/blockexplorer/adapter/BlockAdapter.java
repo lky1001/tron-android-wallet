@@ -42,7 +42,7 @@ public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.BlockViewHol
         Block block = mList.get(position);
 
         holder.txtNumber.setText("#" + block.getNumber());
-        holder.txtTransaction.setText(block.getNrOfTrx() + " transactions");
+        holder.txtTransaction.setText(String.valueOf(block.getNrOfTrx()));
         holder.txtProducedBy.setText(block.getWitnessAddress());
 
         Date date = new Date(block.getTimestamp());
