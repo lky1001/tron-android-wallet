@@ -7,13 +7,24 @@
     android:paddingTop="15dp"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tron_address_text"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        tools:text="27g8LmoFZqreoGA7DXMBACYUrtHJhwDtRN8"/>
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tron_address_no_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            tools:text="1." />
+        <TextView
+            android:id="@+id/tron_address_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="15dp"
+            tools:text="27g8LmoFZqreoGA7DXMBACYUrtHJhwDtRN8"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

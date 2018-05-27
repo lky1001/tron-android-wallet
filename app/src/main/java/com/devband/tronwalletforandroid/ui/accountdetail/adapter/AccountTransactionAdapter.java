@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.transaction.adapter;
+package com.devband.tronwalletforandroid.ui.accountdetail.adapter;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.AdapterDataModel;
+import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
 
@@ -24,11 +26,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by user on 2018. 5. 17..
- */
-
-public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder> {
+public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTransactionAdapter.TransactionViewHolder>  implements AdapterDataModel<TransactionInfo>, AdapterView {
 
     private List<TransactionInfo> mList = new ArrayList<>();
 
@@ -36,23 +34,23 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     private View.OnClickListener mOnItemClickListener;
 
-    public TransactionAdapter(Context context, View.OnClickListener onClickListener) {
+    public AccountTransactionAdapter(Context context, View.OnClickListener onClickListener) {
         this.mContext = context;
         this.mOnItemClickListener = onClickListener;
     }
 
     @NonNull
     @Override
-    public TransactionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AccountTransactionAdapter.TransactionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_my_transaction, null);
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                 RecyclerView.LayoutParams.WRAP_CONTENT));
         v.setOnClickListener(mOnItemClickListener);
-        return new TransactionViewHolder(v);
+        return new AccountTransactionAdapter.TransactionViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AccountTransactionAdapter.TransactionViewHolder holder, int position) {
         TransactionInfo info = mList.get(position);
 
         Date date = new Date(info.getTimestamp());
@@ -118,6 +116,41 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     public void refresh(List<TransactionInfo> datas) {
         mList.clear();
         mList.addAll(datas);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void add(TransactionInfo model) {
+        mList.add(model);
+    }
+
+    @Override
+    public void addAll(List<TransactionInfo> list) {
+        mList.addAll(list);
+    }
+
+    @Override
+    public void remove(int position) {
+        mList.remove(position);
+    }
+
+    @Override
+    public TransactionInfo getModel(int position) {
+        return mList.get(position);
+    }
+
+    @Override
+    public int getSize() {
+        return mList.size();
+    }
+
+    @Override
+    public void clear() {
+        mList.clear();
+    }
+
+    @Override
+    public void refresh() {
         notifyDataSetChanged();
     }
 

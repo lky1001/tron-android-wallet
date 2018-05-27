@@ -9,9 +9,10 @@ import android.text.TextUtils;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.CommonActivity;
-import com.devband.tronwalletforandroid.ui.token.holder.HolderFragment;
-import com.devband.tronwalletforandroid.ui.token.overview.OverviewFragment;
-import com.devband.tronwalletforandroid.ui.token.transaction.TransactionFragment;
+import com.devband.tronwalletforandroid.ui.accountdetail.overview.OverviewFragment;
+import com.devband.tronwalletforandroid.ui.accountdetail.representative.RepresentativeFragment;
+import com.devband.tronwalletforandroid.ui.accountdetail.tokenbalance.TokenBalanceFragment;
+import com.devband.tronwalletforandroid.ui.accountdetail.transaction.TransactionFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +65,9 @@ public class AccountDetailActivity extends CommonActivity {
 
     private void initUi() {
         mFragments.add(OverviewFragment.newInstance(mAddress));
+        mFragments.add(TokenBalanceFragment.newInstance(mAddress));
         mFragments.add(TransactionFragment.newInstance(mAddress));
-        mFragments.add(HolderFragment.newInstance(mAddress));
+        mFragments.add(RepresentativeFragment.newInstance(mAddress));
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -128,13 +130,13 @@ public class AccountDetailActivity extends CommonActivity {
             case R.id.bottom_navigation_overview:
                 changeFragment(FRAGMENT_OVERVIEW);
                 return true;
-            case R.id.bottom_navigation_block:
+            case R.id.bottom_navigation_tokens:
                 changeFragment(FRAGMENT_TOKEN_BALANCE);
                 return true;
             case R.id.bottom_navigation_transaction:
                 changeFragment(FRAGMENT_TRANSACTION);
                 return true;
-            case R.id.bottom_navigation_holder:
+            case R.id.bottom_navigation_representative:
                 changeFragment(FRAGMENT_REPRESENTATIVE);
                 return true;
         }

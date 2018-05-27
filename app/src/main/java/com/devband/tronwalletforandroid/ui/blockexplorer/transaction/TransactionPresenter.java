@@ -46,7 +46,7 @@ public class TransactionPresenter extends BasePresenter<TransactionView> {
         mView.showLoadingDialog();
 
         TronNetwork.getInstance()
-                .getAllTransactions(startIndex, pageSize, "-timestamp", true)
+                .getTransactions(startIndex, pageSize, "-timestamp", true)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Transactions>() {
                     @Override
