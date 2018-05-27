@@ -38,7 +38,7 @@ public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.BlockViewHol
     public void onBindViewHolder(@NonNull BlockViewHolder holder, int position) {
         Block block = mList.get(position);
 
-        holder.txtNumber.setText("#" + block.getNumber());
+        holder.txtNumber.setText("#" + Constants.numberFormat.format(block.getNumber()));
         holder.txtTransaction.setText(String.valueOf(block.getNrOfTrx()));
         holder.txtProducedBy.setText(block.getWitnessAddress());
 
