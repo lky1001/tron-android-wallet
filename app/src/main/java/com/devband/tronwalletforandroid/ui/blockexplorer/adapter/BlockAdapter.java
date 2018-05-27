@@ -10,12 +10,11 @@ import android.widget.TextView;
 import com.devband.tronlib.dto.Block;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.Constants;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,8 +26,6 @@ import butterknife.ButterKnife;
 public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.BlockViewHolder> {
 
     private List<Block> mList = new ArrayList<>();
-
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.US);
 
     @NonNull
     @Override
@@ -46,7 +43,7 @@ public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.BlockViewHol
         holder.txtProducedBy.setText(block.getWitnessAddress());
 
         Date date = new Date(block.getTimestamp());
-        holder.txtTimestamp.setText(sdf.format(date));
+        holder.txtTimestamp.setText(Constants.sdf.format(date));
     }
 
     @Override

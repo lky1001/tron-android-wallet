@@ -50,7 +50,7 @@ public class TronAccountAdapter extends RecyclerView.Adapter<TronAccountAdapter.
         TronAccount item = mList.get(position);
 
         holder.tronAddressText.setText((position + 1) + ". " + item.getAddress());
-        holder.tronBalanceText.setText(Constants.numberFormat.format(item.getBalance() / Constants.ONE_TRX));
+        holder.tronBalanceText.setText(Constants.tronBalanceFormat.format(item.getBalance() / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
         holder.tronBalancePercentText.setText(Constants.percentFormat.format(item.getBalancePercent()) + "%");
         holder.tronBalanceProgress.setMax((float) item.getAvailableSypply());
         holder.tronBalanceProgress.setProgress((float) ((double) item.getBalance() / Constants.ONE_TRX));

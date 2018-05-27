@@ -230,4 +230,8 @@
     <string name="transactions_text">transactions</string>
     <string name="produced_by_text">Produced by</string>
     <string name="block_reward_text">Reward 32TRX</string>
+    <string name="trans_from_text">From :</string>
+    <string name="trans_to_text">To :</string>
+    <string name="value_text">Value :</string>
+    <string name="created_text">Created :</string>
 </resources>

@@ -13,10 +13,8 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.thefinestartist.finestwebview.FinestWebView;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,8 +63,6 @@ public class AboutActivity extends CommonActivity {
 
                             Date updated = new Date(Long.parseLong(coinMarketCap.getLastUpdated()) * 1_000);
 
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.US);
-
                             StringBuilder sb = new StringBuilder();
                             sb.append("Market Price : ")
                                     .append(Constants.usdFormat.format(Double.parseDouble(coinMarketCap.getPriceUsd())))
@@ -99,7 +95,7 @@ public class AboutActivity extends CommonActivity {
                                     .setDescription("TRON is an ambitious project dedicated to building the infrastructure for a truly decentralized Internet. The Tron Protocol, one of the largest blockchain based operating systems in the world, offers scalable, high-availability and high-throughput support that underlies all the decentralized applications in the TRON ecosystem.\n" +
                                             "\n" +
                                             "TRON Protocol and the TVM allow anyone to develop DAPPs for themselves or their communities, with smart contracts making decentralized crowdfunding and token issuance easier than ever. Tron DAPP projects already include Peiwo, Obike, Uplive, game.com, Kitty live and Mico, with 100M+ active users from more than 100 countries and regions around the world.")
-                                    .addGroup("Tron info (" + sdf.format(updated) + ")")
+                                    .addGroup("Tron info (" + Constants.sdf.format(updated) + ")")
                                     .addItem(new Element().setTitle("Name : TRON"))
                                     .addItem(new Element().setTitle("Symbol : TRX"))
                                     .addItem(new Element().setTitle("Total Supply : " + Constants.numberFormat.format(Double.parseDouble(coinMarketCap.getTotalSupply())) + " TRX"))

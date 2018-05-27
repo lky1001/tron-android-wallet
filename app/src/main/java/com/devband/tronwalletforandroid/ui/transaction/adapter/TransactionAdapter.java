@@ -17,11 +17,9 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,8 +31,6 @@ import butterknife.ButterKnife;
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder> {
 
     private List<TransactionInfo> mList = new ArrayList<>();
-
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.US);
 
     private Context mContext;
 
@@ -48,7 +44,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     @NonNull
     @Override
     public TransactionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_transaction, null);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_my_transaction, null);
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                 RecyclerView.LayoutParams.WRAP_CONTENT));
         v.setOnClickListener(mOnItemClickListener);
@@ -71,7 +67,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         if (info.isSend()) {
             holder.sendAddressText.setText(info.getTransferToAddress());
             holder.sendAmountText.setText(Constants.tronBalanceFormat.format(amount) + " " + info.getTokenName());
-            holder.sendDateText.setText(sdf.format(date));
+            holder.sendDateText.setText(Constants.sdf.format(date));
 
             holder.sendLayout.setVisibility(View.VISIBLE);
             holder.receiveLayout.setVisibility(View.GONE);
@@ -88,7 +84,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         } else {
             holder.receiveAddressText.setText(info.getTransferFromAddress());
             holder.receiveAmountText.setText(Constants.tronBalanceFormat.format(amount) + " " + info.getTokenName());
-            holder.receiveDateText.setText(sdf.format(date));
+            holder.receiveDateText.setText(Constants.sdf.format(date));
 
             holder.sendLayout.setVisibility(View.GONE);
             holder.receiveLayout.setVisibility(View.VISIBLE);

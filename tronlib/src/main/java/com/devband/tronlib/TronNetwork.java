@@ -85,4 +85,8 @@ public class TronNetwork {
     public Single<TronAccounts> getAccounts(int start, int limit, String sort) {
         return mAccountService.getAccounts(start, limit, sort);
     }
+
+    public Single<Transactions> getAllTransactions(int start, int limit, String sort, boolean hasTotal) {
+        return mTronScanService.getAllTransactions(start, limit, sort, hasTotal);
+    }
 }
