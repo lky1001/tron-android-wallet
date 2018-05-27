@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.block;
+package com.devband.tronwalletforandroid.ui.blockexplorer.block;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
+import com.devband.tronwalletforandroid.ui.blockexplorer.adapter.BlockAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,7 +57,7 @@ public class BlockFragment extends BaseFragment implements BlockView {
     };
 
 
-    static BaseFragment newInstance() {
+    public static BaseFragment newInstance() {
         BlockFragment fragment = new BlockFragment();
         return fragment;
     }

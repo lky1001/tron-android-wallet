@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.block;
+package com.devband.tronwalletforandroid.ui.blockexplorer;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +8,10 @@ import android.support.v7.widget.Toolbar;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.ui.blockexplorer.account.AccountFragment;
+import com.devband.tronwalletforandroid.ui.blockexplorer.block.BlockFragment;
+import com.devband.tronwalletforandroid.ui.blockexplorer.overview.OverviewFragment;
+import com.devband.tronwalletforandroid.ui.blockexplorer.transaction.TransactionFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +23,7 @@ import butterknife.ButterKnife;
  * Created by user on 2018. 5. 24..
  */
 
-public class BlockActivity extends CommonActivity {
+public class BlockExplorerActivity extends CommonActivity {
 
     private static final int FRAGMENT_OVERVIEW = 0;
     private static final int FRAGMENT_BLOCK = 1;

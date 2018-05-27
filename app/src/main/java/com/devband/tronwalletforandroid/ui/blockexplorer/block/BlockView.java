@@ -1,10 +1,8 @@
-package com.devband.tronwalletforandroid.ui.block;
+package com.devband.tronwalletforandroid.ui.blockexplorer.block;
 
 
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronwalletforandroid.ui.mvp.IView;
-
-import java.util.List;
 
 /**
  * Created by user on 2018. 5. 25..

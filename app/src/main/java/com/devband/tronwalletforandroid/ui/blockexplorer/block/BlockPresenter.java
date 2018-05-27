@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.block;
+package com.devband.tronwalletforandroid.ui.blockexplorer.block;
 
 import android.util.Log;
 

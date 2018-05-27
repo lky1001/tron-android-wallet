@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.block;
+package com.devband.tronwalletforandroid.ui.blockexplorer.overview;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,19 +13,20 @@ import com.devband.tronwalletforandroid.common.BaseFragment;
 import butterknife.ButterKnife;
 
 /**
- * Created by user on 2018. 5. 24..
+ * Created by user on 2018. 5. 25..
  */
 
-public class TransactionFragment extends BaseFragment {
+public class OverviewFragment extends BaseFragment {
+
     public static BaseFragment newInstance() {
-        TransactionFragment fragment = new TransactionFragment();
+        OverviewFragment fragment = new OverviewFragment();
         return fragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_transaction, container, false);
+        View view = inflater.inflate(R.layout.fragment_overview, container, false);
         ButterKnife.bind(this, view);
         return view;
     }

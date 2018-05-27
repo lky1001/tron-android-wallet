@@ -63,7 +63,7 @@
             android:theme="@style/WalletTheme" />
 
         <activity
-            android:name=".ui.block.BlockActivity"
+            android:name=".ui.blockexplorer.BlockExplorerActivity"
             android:theme="@style/WalletTheme" />
 
         <activity
