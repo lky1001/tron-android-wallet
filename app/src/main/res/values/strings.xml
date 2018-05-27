@@ -234,4 +234,5 @@
     <string name="trans_to_text">To :</string>
     <string name="value_text">Value :</string>
     <string name="created_text">Created :</string>
+    <string name="account_title">Account</string>
 </resources>
