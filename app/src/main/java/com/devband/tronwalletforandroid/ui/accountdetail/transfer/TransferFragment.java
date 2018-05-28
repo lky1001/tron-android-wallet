@@ -18,7 +18,7 @@ import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
-import com.devband.tronwalletforandroid.ui.accountdetail.adapter.AccountTransactionAdapter;
+import com.devband.tronwalletforandroid.ui.accountdetail.adapter.AccountTransferAdapter;
 import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
 
 import java.util.Date;
@@ -37,7 +37,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
     private LinearLayoutManager mLayoutManager;
     private AdapterView mAdapterView;
-    private AccountTransactionAdapter mAdapter;
+    private AccountTransferAdapter mAdapter;
 
     private int mStartIndex = 0;
 
@@ -71,7 +71,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
     }
 
     private void initUi() {
-        mAdapter = new AccountTransactionAdapter(getActivity(), mOnItemClickListener);
+        mAdapter = new AccountTransferAdapter(getActivity(), mOnItemClickListener);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
