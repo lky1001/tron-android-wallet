@@ -281,13 +281,14 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        tools:text="1,000,000,000" />
+                        tools:text="1,000,000,000 TRX" />
 
                     <TextView
                         android:id="@+id/frozen_trx_expired_text"
-                        android:layout_width="wrap_content"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        tools:text="2017-10-10 11:11:11" />
+                        android:gravity="right"
+                        tools:text="2017-10-10 11:11:11 GMT+09:00" />
                 </LinearLayout>
 
                 <View

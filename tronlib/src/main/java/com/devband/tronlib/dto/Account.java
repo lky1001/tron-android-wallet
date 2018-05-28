@@ -20,13 +20,23 @@ public class Account {
 
     private long balance;
 
-    private Map<String, Double> balances;
+    private List<Balance> balances;
 
     private Bandwidth bandwidth;
 
-    private Map<String, Double> tokenBalances;
+    private List<Balance> tokenBalances;
 
     private Representative representative;
+
+    private Frozen frozen;
+
+    @Getter
+    @Setter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Balance {
+        private String name;
+        private long balance;
+    }
 
     @Getter
     @Setter

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.devband.tronlib.TronNetwork;
+import com.devband.tronlib.dto.Account;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.Constants;
@@ -63,30 +64,34 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void getMyAccountInfo() {
-        Tron.getInstance(mContext).queryAccount(Tron.getInstance(mContext).getLoginAddress())
+        Tron.getInstance(mContext).getAccount(Tron.getInstance(mContext).getLoginAddress())
         .subscribeOn(Schedulers.io())
         .map((account -> {
             List<Frozen> frozenList = new ArrayList<>();
 
-            for (Protocol.Account.Frozen frozen : account.getFrozenList()) {
+            for (Account.FrozenTrx frozen : account.getFrozen().getBalances()) {
                 frozenList.add(Frozen.builder()
-                        .frozenBalance(frozen.getFrozenBalance())
-                        .expireTime(frozen.getExpireTime())
+                        .frozenBalance(frozen.getAmount())
+                        .expireTime(frozen.getExpires())
                         .build());
             }
 
             List<Asset> assetList = new ArrayList<>();
 
-            for (String s : account.getAssetMap().keySet()) {
+            for (Account.Balance balance : account.getTokenBalances()) {
+                if (Constants.TRON_SYMBOL.equalsIgnoreCase(balance.getName())) {
+                    continue;
+                }
+
                 assetList.add(Asset.builder()
-                        .name(s)
-                        .balance(account.getAssetMap().get(s))
+                        .name(balance.getName())
+                        .balance(balance.getBalance())
                         .build());
             }
 
             return TronAccount.builder()
                     .balance(account.getBalance())
-                    .bandwidth(account.getBandwidth())
+                    .bandwidth(account.getBandwidth().getNetRemaining())
                     .assetList(assetList)
                     .frozenList(frozenList)
                     .build();
