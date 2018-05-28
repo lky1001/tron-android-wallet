@@ -6,17 +6,19 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.devband.tronlib.dto.Account;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class OverviewFragment extends BaseFragment implements OverviewView {
-
-    private String mAddress;
 
     public static BaseFragment newInstance(@NonNull String tokenName) {
         OverviewFragment fragment = new OverviewFragment();
@@ -27,10 +29,39 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
         return fragment;
     }
 
+    @BindView(R.id.address_text)
+    TextView mAddressText;
+
+    @BindView(R.id.account_name_text)
+    TextView mAccountNameText;
+
+    @BindView(R.id.account_type_text)
+    TextView mAccountTypeText;
+
+    @BindView(R.id.balance_text)
+    TextView mBalanceText;
+
+    @BindView(R.id.tron_power_text)
+    TextView mTronPowerText;
+
+    @BindView(R.id.transaction_out_text)
+    TextView mTransactionOutText;
+
+    @BindView(R.id.transaction_in_text)
+    TextView mTransactionInText;
+
+    @BindView(R.id.tokens_layout)
+    LinearLayout mTokenLayout;
+
+    @BindView(R.id.votes_layout)
+    LinearLayout mVoteLayout;
+
+    private String mAddress;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_token_transaction, container, false);
+        View view = inflater.inflate(R.layout.fragment_account_overview, container, false);
         ButterKnife.bind(this, view);
 
         mAddress = getArguments().getString(AccountDetailActivity.EXTRA_ADDRESS);
@@ -45,7 +76,7 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
     @Override
     protected void refresh() {
-
+        ((OverviewPresenter) mPresenter).getAccount(mAddress);
     }
 
     @Override
@@ -58,6 +89,12 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
         hideDialog();
         Toast.makeText(getActivity(), getString(R.string.connection_error_msg),
                 Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void finishLoading(@NonNull Account account) {
+
+        hideDialog();
     }
 }
 

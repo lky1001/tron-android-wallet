@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.google.protobuf.ByteString;
 
 import org.tron.api.GrpcAPI;
-import org.tron.api.GrpcAPI.AccountList;
 import org.tron.api.GrpcAPI.AssetIssueList;
 import org.tron.api.GrpcAPI.BytesMessage;
 import org.tron.api.GrpcAPI.EmptyMessage;
@@ -104,12 +103,6 @@ public class GrpcClient {
         NumberMessage.Builder builder = NumberMessage.newBuilder();
         builder.setNum(blockNum);
         return blockingStubFullNode.getBlockByNum(builder.build());
-    }
-
-    @Nullable
-    public AccountList listAccounts() {
-        AccountList accountList = blockingStubSolidityNode.listAccounts(EmptyMessage.newBuilder().build());
-        return accountList;
     }
 
     @Nullable

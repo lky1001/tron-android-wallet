@@ -163,10 +163,6 @@ public class Tron {
         }
     }
 
-    public Single<GrpcAPI.AccountList> listAccounts() {
-        return mTronManager.listAccounts();
-    }
-
     public Single<GrpcAPI.WitnessList> listWitnesses() {
         return mTronManager.listWitnesses();
     }
@@ -314,10 +310,6 @@ public class Tron {
 
     public Single<GrpcAPI.NodeList> getNodeList() {
         return mTronManager.listNodes();
-    }
-
-    public Single<GrpcAPI.AccountList> getTronAccountList() {
-        return mTronManager.listAccounts();
     }
 
     public Single<Boolean> voteWitness(Map<String, String> witness) {

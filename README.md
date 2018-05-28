@@ -17,7 +17,7 @@ A Tron wallet for android.
 ./gradlew build
 ```
 
-## Feature
+## Features
 
 - Create wallet
 - Import wallet
@@ -31,12 +31,11 @@ A Tron wallet for android.
 - Token list
 - Node list
 - Representative list
-- Tron market price
+- Tron market listing & price
 
 ## TODO list
 
 - Block explorer
-- Tron market listing
 - Send token
 - Participate token
 - Tron pay

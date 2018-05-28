@@ -57,7 +57,7 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
 
         long amount = info.getAmount();
 
-        if (info.getTokenName().equalsIgnoreCase(Constants.TRON_SYMBOL)) {
+        if (Constants.TRON_SYMBOL.equalsIgnoreCase(info.getTokenName())) {
             amount = (long) (amount / Constants.ONE_TRX);
         }
 
