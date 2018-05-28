@@ -48,7 +48,7 @@ import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
 import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
 import com.devband.tronwalletforandroid.ui.token.TokenActivity;
-import com.devband.tronwalletforandroid.ui.transaction.TransactionActivity;
+import com.devband.tronwalletforandroid.ui.mytransfer.TransferActivity;
 import com.devband.tronwalletforandroid.ui.vote.VoteActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -380,7 +380,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 checkLoginState();
                 break;
             case R.id.action_transaction_history:
-                startActivity(new Intent(this, TransactionActivity.class));
+                startActivity(new Intent(this, TransferActivity.class));
                 break;
         }
 
@@ -452,7 +452,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 .contentColorRes(R.color.colorAccent)
                 .backgroundColorRes(android.R.color.white)
                 .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
-                .input(getString(R.string.import_account_hint), "bc053d0804b08cd7ee778eaefb59d73347b6a4d8a2584d0ad6b76f50ed26c7b9", new MaterialDialog.InputCallback() {
+                .input(getString(R.string.import_account_hint), "6320B00E038A6EA898227820866B9F1A0B69FFB5953AB388552861704F07ADC6", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         dialog.dismiss();

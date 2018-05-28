@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.transaction;
+package com.devband.tronwalletforandroid.ui.mytransfer;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,8 +13,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.ui.transaction.adapter.TransactionAdapter;
-import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
+import com.devband.tronwalletforandroid.ui.mytransfer.adapter.TransferAdapter;
+import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
 
 import java.util.Date;
 import java.util.List;
@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
  * Created by user on 2018. 5. 17..
  */
 
-public class TransactionActivity extends CommonActivity implements TransactionView {
+public class TransferActivity extends CommonActivity implements TransferView {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -34,18 +34,18 @@ public class TransactionActivity extends CommonActivity implements TransactionVi
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
-    private TransactionAdapter mAdapter;
+    private TransferAdapter mAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_transaction);
+        setContentView(R.layout.activity_my_transfer);
 
         ButterKnife.bind(this);
 
         initUi();
 
-        mPresenter = new TransactionPresenter(this);
+        mPresenter = new TransferPresenter(this);
         mPresenter.onCreate();
     }
 
@@ -54,10 +54,10 @@ public class TransactionActivity extends CommonActivity implements TransactionVi
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.title_transaction_text);
+            getSupportActionBar().setTitle(R.string.title_transfer_text);
         }
 
-        mAdapter = new TransactionAdapter(TransactionActivity.this, mOnItemClickListener);
+        mAdapter = new TransferAdapter(TransferActivity.this, mOnItemClickListener);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -67,10 +67,10 @@ public class TransactionActivity extends CommonActivity implements TransactionVi
         @Override
         public void onClick(View v) {
             int pos = mRecyclerView.getChildLayoutPosition(v);
-            TransactionInfo item = mAdapter.getItem(pos);
+            TransferInfo item = mAdapter.getItem(pos);
 
-            MaterialDialog.Builder builder = new MaterialDialog.Builder(TransactionActivity.this)
-                    .title(R.string.title_transaction_text)
+            MaterialDialog.Builder builder = new MaterialDialog.Builder(TransferActivity.this)
+                    .title(R.string.title_transfer_text)
                     .titleColorRes(android.R.color.black)
                     .contentColorRes(android.R.color.black)
                     .backgroundColorRes(android.R.color.white)
@@ -107,12 +107,12 @@ public class TransactionActivity extends CommonActivity implements TransactionVi
     };
 
     @Override
-    public void transactionDataLoadSuccess(List<TransactionInfo> transactionInfos) {
+    public void transferDataLoadSuccess(List<TransferInfo> TransferInfos) {
         hideDialog();
         if (mAdapter != null) {
-            mAdapter.refresh(transactionInfos);
-            getSupportActionBar().setTitle(getString(R.string.title_transaction_text)
-                    + "(" + Constants.numberFormat.format(transactionInfos.size()) + ")");
+            mAdapter.refresh(TransferInfos);
+            getSupportActionBar().setTitle(getString(R.string.title_transfer_text)
+                    + "(" + Constants.numberFormat.format(TransferInfos.size()) + ")");
         }
     }
 
@@ -124,6 +124,6 @@ public class TransactionActivity extends CommonActivity implements TransactionVi
     @Override
     public void showServerError() {
         hideDialog();
-        Toast.makeText(TransactionActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
+        Toast.makeText(TransferActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
     }
 }

@@ -27,8 +27,9 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
-
-import org.tron.protos.Protocol;
+import com.devband.tronwalletforandroid.ui.main.dto.Asset;
+import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
+import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
 
 import java.util.Date;
 import java.util.List;
@@ -143,17 +144,17 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     }
 
     @Override
-    public void displayAccountInfo(@NonNull String address, @NonNull Protocol.Account account) {
+    public void displayAccountInfo(@NonNull String address, @NonNull TronAccount account) {
         Log.d("", address);
         mAccountBalance = (long) (account.getBalance() / Constants.ONE_TRX);
 
         mAddressText.setText(address);
         mBalanceText.setText(Constants.tronBalanceFormat.format(mAccountBalance) + " " + Constants.TRON_SYMBOL);
-        mEntropyText.setText(Constants.tronBalanceFormat.format(account.getBandwidth() / Constants.ONE_TRX));
+        mEntropyText.setText(Constants.tronBalanceFormat.format(account.getBandwidth()));
         mTokensLayout.removeAllViews();
 
-        if (account.getAssetCount() > 0) {
-            for (String key : account.getAssetMap().keySet()) {
+        if (!account.getAssetList().isEmpty()) {
+            for (Asset asset : account.getAssetList()) {
                 View v = LayoutInflater.from(MyAccountActivity.this).inflate(R.layout.list_item_my_token, null);
                 v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                         RecyclerView.LayoutParams.WRAP_CONTENT));
@@ -161,8 +162,8 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                 TextView tokenNameText = v.findViewById(R.id.token_name_text);
                 TextView tokenAmountText = v.findViewById(R.id.token_amount_text);
 
-                tokenNameText.setText(key);
-                tokenAmountText.setText(Constants.tronBalanceFormat.format(account.getAssetMap().get(key)));
+                tokenNameText.setText(asset.getName());
+                tokenAmountText.setText(Constants.tronBalanceFormat.format(asset.getBalance()));
                 mTokensLayout.addView(v);
             }
         } else {
@@ -184,8 +185,8 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
         long frozenBalance = 0;
         long expiredTime = 0;
 
-        if (account.getFrozenCount() > 0) {
-            for (Protocol.Account.Frozen frozen : account.getFrozenList()) {
+        if (!account.getFrozenList().isEmpty()) {
+            for (Frozen frozen : account.getFrozenList()) {
                 frozenBalance += frozen.getFrozenBalance();
                 if (frozen.getExpireTime() > expiredTime) {
                     expiredTime = frozen.getExpireTime();

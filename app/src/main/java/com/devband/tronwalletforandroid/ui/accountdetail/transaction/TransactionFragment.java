@@ -19,7 +19,7 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 import com.devband.tronwalletforandroid.ui.accountdetail.adapter.AccountTransactionAdapter;
-import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
+import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
 
 import java.util.Date;
 
@@ -45,10 +45,10 @@ public class TransactionFragment extends BaseFragment implements TransactionView
 
     private boolean mIsLastPage;
 
-    public static BaseFragment newInstance(@NonNull String tokenName) {
+    public static BaseFragment newInstance(@NonNull String address) {
         TransactionFragment fragment = new TransactionFragment();
         Bundle args = new Bundle(1);
-        args.putString(AccountDetailActivity.EXTRA_ADDRESS, tokenName);
+        args.putString(AccountDetailActivity.EXTRA_ADDRESS, address);
 
         fragment.setArguments(args);
         return fragment;
@@ -111,10 +111,10 @@ public class TransactionFragment extends BaseFragment implements TransactionView
         @Override
         public void onClick(View v) {
             int pos = mListView.getChildLayoutPosition(v);
-            TransactionInfo item = mAdapter.getItem(pos);
+            TransferInfo item = mAdapter.getItem(pos);
 
             MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
-                    .title(R.string.title_transaction_text)
+                    .title(R.string.title_transfer_text)
                     .titleColorRes(android.R.color.black)
                     .contentColorRes(android.R.color.black)
                     .backgroundColorRes(android.R.color.white)

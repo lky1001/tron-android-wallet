@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.devband.tronlib.dto.Transaction;
+import com.devband.tronlib.dto.Transfer;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
@@ -30,9 +30,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder> implements AdapterDataModel<Transaction>, AdapterView {
+public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder> implements AdapterDataModel<Transfer>, AdapterView {
 
-    private List<Transaction> mList;
+    private List<Transfer> mList;
 
     private Context mContext;
 
@@ -56,7 +56,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
-        Transaction item = mList.get(position);
+        Transfer item = mList.get(position);
 
         holder.hashText.setText("#" + item.getHash());
         holder.blockNumberText.setText(Constants.numberFormat.format(item.getBlock()));
@@ -133,12 +133,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     }
 
     @Override
-    public void add(Transaction model) {
+    public void add(Transfer model) {
         mList.add(model);
     }
 
     @Override
-    public void addAll(List<Transaction> list) {
+    public void addAll(List<Transfer> list) {
         mList.addAll(list);
     }
 
@@ -148,7 +148,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     }
 
     @Override
-    public Transaction getModel(int position) {
+    public Transfer getModel(int position) {
         return mList.get(position);
     }
 

@@ -1,12 +1,9 @@
 package com.devband.tronlib.services;
 
-import com.devband.tronlib.dto.Account;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.Market;
-import com.devband.tronlib.dto.Token;
-import com.devband.tronlib.dto.TopAddressAccounts;
 import com.devband.tronlib.dto.TransactionStats;
-import com.devband.tronlib.dto.Transactions;
+import com.devband.tronlib.dto.Transfers;
 
 import java.util.List;
 
@@ -20,16 +17,16 @@ import retrofit2.http.Query;
  */
 
 public interface TronScanService {
-    @GET("api/transaction")
-    Single<Transactions> getTransactions(@Query("address") String address, @Query("token") String token);
+    @GET("api/transfer")
+    Single<Transfers> getTransfers(@Query("address") String address, @Query("token") String token);
 
-    @GET("api/transaction")
-    Single<Transactions> getTransactions(@Query("address") String address, @Query("start") int start,
-            @Query("limit") int limit, @Query("sort") String sort, @Query("count") boolean count);
+    @GET("api/transfer")
+    Single<Transfers> getTransfers(@Query("address") String address, @Query("start") int start,
+                                   @Query("limit") int limit, @Query("sort") String sort, @Query("count") boolean count);
 
-    @GET("api/transaction")
-    Single<Transactions> getTransactions(@Query("start") int start, @Query("limit") int limit,
-            @Query("sort") String sort, @Query("count") boolean count);
+    @GET("api/transfer")
+    Single<Transfers> getTransfers(@Query("start") int start, @Query("limit") int limit,
+                                   @Query("sort") String sort, @Query("count") boolean count);
 
     @GET("api/market/markets")
     Single<List<Market>> getMarket();

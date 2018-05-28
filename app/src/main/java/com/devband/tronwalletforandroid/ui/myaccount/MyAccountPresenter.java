@@ -2,15 +2,18 @@ package com.devband.tronwalletforandroid.ui.myaccount;
 
 import android.support.annotation.NonNull;
 
+import com.devband.tronlib.dto.Account;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.WalletAppManager;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.Tron;
+import com.devband.tronwalletforandroid.ui.main.dto.Asset;
+import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
+import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
-import org.tron.protos.Protocol;
-
 import java.net.ConnectException;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
@@ -53,29 +56,59 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
         mView.showLoadingDialog();
 
-        Tron.getInstance(mContext).queryAccount(address)
+        Tron.getInstance(mContext).getAccount(Tron.getInstance(mContext).getLoginAddress())
                 .subscribeOn(Schedulers.io())
+                .map((account -> {
+                    List<Frozen> frozenList = new ArrayList<>();
+
+                    for (Account.FrozenTrx frozen : account.getFrozen().getBalances()) {
+                        frozenList.add(Frozen.builder()
+                                .frozenBalance(frozen.getAmount())
+                                .expireTime(frozen.getExpires())
+                                .build());
+                    }
+
+                    List<Asset> assetList = new ArrayList<>();
+
+                    for (Account.Balance balance : account.getTokenBalances()) {
+                        if (Constants.TRON_SYMBOL.equalsIgnoreCase(balance.getName())) {
+                            continue;
+                        }
+
+                        assetList.add(Asset.builder()
+                                .name(balance.getName())
+                                .balance(balance.getBalance())
+                                .build());
+                    }
+
+                    return TronAccount.builder()
+                            .balance(account.getBalance())
+                            .bandwidth(account.getBandwidth().getNetRemaining())
+                            .assetList(assetList)
+                            .frozenList(frozenList)
+                            .build();
+                }))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Protocol.Account>() {
+                .subscribe(new SingleObserver<TronAccount>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(Protocol.Account account) {
-                        mView.hideDialog();
+                    public void onSuccess(TronAccount account) {
                         mView.displayAccountInfo(address, account);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.showServerError();
                         e.printStackTrace();
                         // todo - error msg
                         if (e instanceof ConnectException) {
                             // internet error
                         }
+
+                        mView.showServerError();
                     }
                 });
     }

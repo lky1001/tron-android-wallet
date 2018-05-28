@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.transaction.adapter;
+package com.devband.tronwalletforandroid.ui.mytransfer.adapter;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
+import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,15 +28,15 @@ import butterknife.ButterKnife;
  * Created by user on 2018. 5. 17..
  */
 
-public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder> {
+public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.TransactionViewHolder> {
 
-    private List<TransactionInfo> mList = new ArrayList<>();
+    private List<TransferInfo> mList = new ArrayList<>();
 
     private Context mContext;
 
     private View.OnClickListener mOnItemClickListener;
 
-    public TransactionAdapter(Context context, View.OnClickListener onClickListener) {
+    public TransferAdapter(Context context, View.OnClickListener onClickListener) {
         this.mContext = context;
         this.mOnItemClickListener = onClickListener;
     }
@@ -53,7 +53,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
-        TransactionInfo info = mList.get(position);
+        TransferInfo info = mList.get(position);
 
         Date date = new Date(info.getTimestamp());
 
@@ -106,7 +106,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         clipboard.setPrimaryClip(clip);
     }
 
-    public TransactionInfo getItem(int pos) {
+    public TransferInfo getItem(int pos) {
         return mList.get(pos);
     }
 
@@ -115,7 +115,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         return mList.size();
     }
 
-    public void refresh(List<TransactionInfo> datas) {
+    public void refresh(List<TransferInfo> datas) {
         mList.clear();
         mList.addAll(datas);
         notifyDataSetChanged();

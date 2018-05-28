@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.devband.tronlib.dto.Transaction;
+import com.devband.tronlib.dto.Transfer;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.BaseFragment;
@@ -107,10 +107,10 @@ public class TransactionFragment extends BaseFragment implements TransactionView
         @Override
         public void onClick(View v) {
             int pos = mListView.getChildLayoutPosition(v);
-            Transaction item = mAdapter.getModel(pos);
+            Transfer item = mAdapter.getModel(pos);
 
             MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
-                    .title(R.string.title_transaction_text)
+                    .title(R.string.title_transfer_text)
                     .titleColorRes(android.R.color.black)
                     .contentColorRes(android.R.color.black)
                     .backgroundColorRes(android.R.color.white)

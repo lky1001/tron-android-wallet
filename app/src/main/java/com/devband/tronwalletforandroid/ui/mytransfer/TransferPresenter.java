@@ -1,13 +1,13 @@
-package com.devband.tronwalletforandroid.ui.transaction;
+package com.devband.tronwalletforandroid.ui.mytransfer;
 
 import android.util.Log;
 
 import com.devband.tronlib.TronNetwork;
-import com.devband.tronlib.dto.Transaction;
+import com.devband.tronlib.dto.Transfer;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
-import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
+import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +21,9 @@ import io.reactivex.schedulers.Schedulers;
  * Created by user on 2018. 5. 17..
  */
 
-public class TransactionPresenter extends BasePresenter<TransactionView> {
+public class TransferPresenter extends BasePresenter<TransferView> {
 
-    public TransactionPresenter(TransactionView view) {
+    public TransferPresenter(TransferView view) {
         super(view);
     }
 
@@ -52,13 +52,13 @@ public class TransactionPresenter extends BasePresenter<TransactionView> {
 
         String address = Tron.getInstance(mContext).getLoginAddress();
 
-        TronNetwork.getInstance().getTransactions(address, Constants.TRON_SYMBOL)
+        TronNetwork.getInstance().getTransfers(address, Constants.TRON_SYMBOL)
         .subscribeOn(Schedulers.io())
         .map(transactions -> {
-            List<TransactionInfo> infos = new ArrayList<>();
+            List<TransferInfo> infos = new ArrayList<>();
 
-            for (Transaction t : transactions.getData()) {
-                TransactionInfo info = new TransactionInfo();
+            for (Transfer t : transactions.getData()) {
+                TransferInfo info = new TransferInfo();
                 info.setHash(t.getHash());
                 info.setAmount(t.getAmount());
                 info.setBlock(t.getBlock());
@@ -73,15 +73,15 @@ public class TransactionPresenter extends BasePresenter<TransactionView> {
             return infos;
         })
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new SingleObserver<List<TransactionInfo>>() {
+        .subscribe(new SingleObserver<List<TransferInfo>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onSuccess(List<TransactionInfo> transactionInfos) {
-                mView.transactionDataLoadSuccess(transactionInfos);
+            public void onSuccess(List<TransferInfo> transactionInfos) {
+                mView.transferDataLoadSuccess(transactionInfos);
             }
 
             @Override
