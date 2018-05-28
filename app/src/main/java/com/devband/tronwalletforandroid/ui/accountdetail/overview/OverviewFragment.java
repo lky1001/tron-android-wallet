@@ -16,8 +16,6 @@ import butterknife.ButterKnife;
 
 public class OverviewFragment extends BaseFragment implements OverviewView {
 
-    private String mAddress;
-
     public static BaseFragment newInstance(@NonNull String tokenName) {
         OverviewFragment fragment = new OverviewFragment();
         Bundle args = new Bundle(1);
@@ -27,10 +25,12 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
         return fragment;
     }
 
+    private String mAddress;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_token_transaction, container, false);
+        View view = inflater.inflate(R.layout.fragment_account_overview, container, false);
         ButterKnife.bind(this, view);
 
         mAddress = getArguments().getString(AccountDetailActivity.EXTRA_ADDRESS);
