@@ -27,11 +27,6 @@ class TronManager implements ITronManager {
     }
 
     @Override
-    public Single<GrpcAPI.AccountList> listAccounts() {
-        return Single.fromCallable(() -> grpcClient.listAccounts());
-    }
-
-    @Override
     public Single<GrpcAPI.WitnessList> listWitnesses() {
         return Single.fromCallable(() -> grpcClient.listWitnesses());
     }

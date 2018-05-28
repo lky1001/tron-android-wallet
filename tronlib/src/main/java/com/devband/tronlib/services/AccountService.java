@@ -9,17 +9,15 @@ import io.reactivex.Single;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface AccountService {
 
-    @POST("v1/account")
-    Single<Account> getAccount(@Body Account account);
+    @GET("api/account/{address}")
+    Single<Account> getAccount(@Path("address") String address);
 
-    @POST("v1/account/list")
-    Single<List<Account>> getAccountList();
-
-    @GET("/api/account")
+    @GET("api/account")
     Single<TronAccounts> getAccounts(@Query("start") int start, @Query("limit") int limit,
             @Query("sort") String sort);
 }
