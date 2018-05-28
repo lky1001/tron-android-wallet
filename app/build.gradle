@@ -144,6 +144,9 @@ dependencies {
     implementation 'com.github.kenglxn.QRGen:android:2.2.0'
     implementation 'com.github.nisrulz:qreader:2.1.2'
 
+    //chart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+
     // test
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.powermock:powermock-module-junit4:1.6.2'
