@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public class LocalDbRepository implements AccountRepository {
@@ -47,8 +48,8 @@ public class LocalDbRepository implements AccountRepository {
     }
 
     @Override
-    public Single<AccountModel> loadAccount(int index) {
-        return Single.fromCallable(() -> mAccountDao.loadAccountById(index));
+    public Maybe<AccountModel> loadAccount(int index) {
+        return Maybe.fromCallable(() -> mAccountDao.loadAccountById(index));
     }
 
     @Override
@@ -62,7 +63,7 @@ public class LocalDbRepository implements AccountRepository {
     }
 
     @Override
-    public Single<AccountModel> loadByAccountKey(String accountKey) {
-        return Single.fromCallable(() -> mAccountDao.loadByAccountKey(accountKey));
+    public Maybe<AccountModel> loadByAccountKey(String accountKey) {
+        return Maybe.fromCallable(() -> mAccountDao.loadByAccountKey(accountKey));
     }
 }

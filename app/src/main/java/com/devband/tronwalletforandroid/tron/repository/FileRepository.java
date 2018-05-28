@@ -7,6 +7,7 @@ import com.devband.tronwalletforandroid.database.model.AccountModel;
 
 import java.util.List;
 
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public class FileRepository implements AccountRepository {
@@ -22,7 +23,7 @@ public class FileRepository implements AccountRepository {
     }
 
     @Override
-    public Single<AccountModel> loadAccount(int index) {
+    public Maybe<AccountModel> loadAccount(int index) {
         return null;
     }
 
@@ -37,7 +38,7 @@ public class FileRepository implements AccountRepository {
     }
 
     @Override
-    public Single<AccountModel> loadByAccountKey(String accountKey) {
+    public Maybe<AccountModel> loadByAccountKey(String accountKey) {
         return null;
     }
 }

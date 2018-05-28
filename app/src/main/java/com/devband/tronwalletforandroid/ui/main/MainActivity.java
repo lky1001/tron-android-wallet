@@ -247,7 +247,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         mSideMenu.inflateMenu(R.menu.navigation_logged_in_menu);
     }
 
-    private void initAccountList() {
+    private void initAccountList(boolean isImported) {
         ((MainPresenter) mPresenter).getAccountList()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
@@ -260,6 +260,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             @Override
             public void onSuccess(List<AccountModel> accountModelList) {
                 initAccountList(accountModelList);
+                if (isImported) {
+                    mAccountSpinner.setSelection(mAccountAdapter.getCount() - 1);
+                }
             }
 
             @Override
@@ -449,7 +452,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 .contentColorRes(R.color.colorAccent)
                 .backgroundColorRes(android.R.color.white)
                 .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
-                .input(getString(R.string.import_account_hint), "bc82841406e33d12374fb2933ddfafab3769157e999fd92981ab006ce49bcddf", new MaterialDialog.InputCallback() {
+                .input(getString(R.string.import_account_hint), "bc053d0804b08cd7ee778eaefb59d73347b6a4d8a2584d0ad6b76f50ed26c7b9", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         dialog.dismiss();
@@ -519,13 +522,13 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     public void successCreateAccount() {
         hideDialog();
-        initAccountList();
-        mAccountSpinner.setSelection(mAccountAdapter.getCount() - 1);
+        initAccountList(false);
     }
 
     @Override
     public void successImportAccount() {
-        successCreateAccount();
+        hideDialog();
+        initAccountList(true);
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.devband.tronwalletforandroid.database.model.AccountModel;
 
 import java.util.List;
 
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public interface AccountRepository {
@@ -15,11 +16,11 @@ public interface AccountRepository {
 
     Single<Boolean> updateAccount(@NonNull AccountModel accountModel);
 
-    Single<AccountModel> loadAccount(int index);
+    Maybe<AccountModel> loadAccount(int index);
 
     Single<List<AccountModel>> loadAllAccounts();
 
     Single<Integer> countAccount();
 
-    Single<AccountModel> loadByAccountKey(String accountKey);
+    Maybe<AccountModel> loadByAccountKey(String accountKey);
 }
