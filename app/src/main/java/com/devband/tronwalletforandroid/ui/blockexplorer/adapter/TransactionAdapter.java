@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,14 +61,17 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         holder.hashText.setText("#" + item.getHash());
         holder.blockNumberText.setText(Constants.numberFormat.format(item.getBlock()));
 
-        SpannableString fromAddressContent = new SpannableString(item.getTransferFromAddress());
-        fromAddressContent.setSpan(new UnderlineSpan(), 0, fromAddressContent.length(), 0);
+        if (!TextUtils.isEmpty(item.getTransferFromAddress())) {
+            SpannableString fromAddressContent = new SpannableString(item.getTransferFromAddress());
+            fromAddressContent.setSpan(new UnderlineSpan(), 0, fromAddressContent.length(), 0);
+            holder.fromAddressText.setText(fromAddressContent);
+        }
 
-        SpannableString toAddressContent = new SpannableString(item.getTransferToAddress());
-        toAddressContent.setSpan(new UnderlineSpan(), 0, toAddressContent.length(), 0);
-
-        holder.fromAddressText.setText(fromAddressContent);
-        holder.toAddressText.setText(toAddressContent);
+        if (!TextUtils.isEmpty(item.getTransferToAddress())) {
+            SpannableString toAddressContent = new SpannableString(item.getTransferToAddress());
+            toAddressContent.setSpan(new UnderlineSpan(), 0, toAddressContent.length(), 0);
+            holder.toAddressText.setText(toAddressContent);
+        }
 
         holder.fromAddressText.setOnClickListener(new View.OnClickListener() {
             @Override
