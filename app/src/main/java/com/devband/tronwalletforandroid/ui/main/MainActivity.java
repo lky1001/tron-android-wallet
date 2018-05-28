@@ -219,7 +219,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             }
         });
 
-        initAccountList();
+        initAccountList(false);
     }
 
     private void setupDrawerLayout() {
