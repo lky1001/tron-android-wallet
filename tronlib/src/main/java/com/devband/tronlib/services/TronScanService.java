@@ -37,6 +37,6 @@ public interface TronScanService {
     @GET("api/block")
     Single<Blocks> getBlock(@Query("sort") String sort, @Query("limit") int limit, @Query("start") int start);
 
-    @GET("api/account/{address}")
+    @GET("api/account/{address}/stats")
     Single<TransactionStats> getTransactionStats(@Path("address") String address);
 }
