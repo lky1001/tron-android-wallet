@@ -197,6 +197,7 @@
     <string name="my_account_entropy_text">Entropy :</string>
     <string name="received_text">RECEIVED</string>
     <string name="send_text">SEND</string>
+    <string name="title_detail_block">Block Information</string>
 
     <string name="copy_to_address_msg">Copied to address.</string>
     <string name="copy_from_address_msg">Copied from address.</string>

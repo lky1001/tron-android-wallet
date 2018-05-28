@@ -98,6 +98,9 @@
             android:name=".ui.token.TokenActivity"
             android:theme="@style/WalletTheme" />
 
+        <activity android:name=".ui.detail_block.BlockDetailActivity"
+            android:theme="@style/WalletTheme" />
+
         <activity
             android:name=".ui.token.TokenDetailActivity"
             android:theme="@style/WalletTheme" />

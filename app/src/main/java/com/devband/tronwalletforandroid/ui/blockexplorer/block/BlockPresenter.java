@@ -57,7 +57,4 @@ public class BlockPresenter extends BasePresenter<BlockView> {
                         }
                 );
     }
-
-    private void blockDataLoadSuccess(Blocks blocks) {
-    }
 }

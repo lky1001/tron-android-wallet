@@ -38,9 +38,6 @@ public class LoginActivity extends CommonActivity implements LoginView {
 
         mPresenter = new LoginPresenter(this);
         mPresenter.onCreate();
-
-        mInputPassword.setText("1234567890");
-        onLoginClick();
     }
 
     @Override

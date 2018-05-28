@@ -26,11 +26,17 @@ import butterknife.ButterKnife;
 public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.BlockViewHolder> {
 
     private List<Block> mList = new ArrayList<>();
+    private View.OnClickListener mItemViewClickListener;
+
+    public BlockAdapter(View.OnClickListener itemViewClickListener) {
+        this.mItemViewClickListener = itemViewClickListener;
+    }
 
     @NonNull
     @Override
     public BlockViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_block, parent, false);
+        view.setOnClickListener(mItemViewClickListener);
         return new BlockViewHolder(view);
     }
 
@@ -66,6 +72,10 @@ public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.BlockViewHol
             }
         }
         notifyItemInserted(beforeIndex);
+    }
+
+    public Block getItem(int position) {
+        return mList.get(position);
     }
 
     private boolean isContain(Block block) {

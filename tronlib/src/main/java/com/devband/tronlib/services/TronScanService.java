@@ -3,13 +3,16 @@ package com.devband.tronlib.services;
 import com.devband.tronlib.dto.Account;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.Market;
+import com.devband.tronlib.dto.Token;
 import com.devband.tronlib.dto.TopAddressAccounts;
+import com.devband.tronlib.dto.TransactionStats;
 import com.devband.tronlib.dto.Transactions;
 
 import java.util.List;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -33,4 +36,7 @@ public interface TronScanService {
 
     @GET("api/block")
     Single<Blocks> getBlock(@Query("sort") String sort, @Query("limit") int limit, @Query("start") int start);
+
+    @GET("api/account/{address}")
+    Single<TransactionStats> getTransactionStats(@Path("address") String address);
 }

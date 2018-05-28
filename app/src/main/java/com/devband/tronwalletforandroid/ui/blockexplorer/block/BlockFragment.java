@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.blockexplorer.block;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,10 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.devband.tronlib.dto.Block;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.ui.blockexplorer.adapter.BlockAdapter;
+import com.devband.tronwalletforandroid.ui.detail_block.BlockDetailActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,6 +59,16 @@ public class BlockFragment extends BaseFragment implements BlockView {
         }
     };
 
+    private View.OnClickListener mOnItemClickListener = v -> {
+        int pos = mRecyclerView.getChildLayoutPosition(v);
+        Block model = mBlockAdapter.getItem(pos);
+        if (model != null) {
+            Intent intent = new Intent(BlockFragment.this.getContext(), BlockDetailActivity.class);
+            intent.putExtra(BlockDetailActivity.KEY_ADDRESS, model.getWitnessAddress());
+            startActivity(intent);
+        }
+    };
+
     public static BaseFragment newInstance() {
         BlockFragment fragment = new BlockFragment();
         return fragment;
@@ -72,7 +85,7 @@ public class BlockFragment extends BaseFragment implements BlockView {
     }
 
     private void initUi() {
-        mBlockAdapter = new BlockAdapter();
+        mBlockAdapter = new BlockAdapter(mOnItemClickListener);
         mLayoutManager = new LinearLayoutManager(getContext());
 
         mRecyclerView.setLayoutManager(mLayoutManager);
