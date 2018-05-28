@@ -54,7 +54,7 @@
                     android:layout_marginLeft="3dp"
                     android:gravity="center_vertical"
                     android:textColor="@android:color/black"
-                    android:text="@string/transactions_text" />
+                    android:text="@string/transfers_text" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

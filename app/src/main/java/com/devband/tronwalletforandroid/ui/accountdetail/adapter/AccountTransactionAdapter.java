@@ -17,7 +17,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
+import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,9 +26,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTransactionAdapter.TransactionViewHolder>  implements AdapterDataModel<TransactionInfo>, AdapterView {
+public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTransactionAdapter.TransactionViewHolder>  implements AdapterDataModel<TransferInfo>, AdapterView {
 
-    private List<TransactionInfo> mList = new ArrayList<>();
+    private List<TransferInfo> mList = new ArrayList<>();
 
     private Context mContext;
 
@@ -51,7 +51,7 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
 
     @Override
     public void onBindViewHolder(@NonNull AccountTransactionAdapter.TransactionViewHolder holder, int position) {
-        TransactionInfo info = mList.get(position);
+        TransferInfo info = mList.get(position);
 
         Date date = new Date(info.getTimestamp());
 
@@ -104,7 +104,7 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
         clipboard.setPrimaryClip(clip);
     }
 
-    public TransactionInfo getItem(int pos) {
+    public TransferInfo getItem(int pos) {
         return mList.get(pos);
     }
 
@@ -113,19 +113,19 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
         return mList.size();
     }
 
-    public void refresh(List<TransactionInfo> datas) {
+    public void refresh(List<TransferInfo> datas) {
         mList.clear();
         mList.addAll(datas);
         notifyDataSetChanged();
     }
 
     @Override
-    public void add(TransactionInfo model) {
+    public void add(TransferInfo model) {
         mList.add(model);
     }
 
     @Override
-    public void addAll(List<TransactionInfo> list) {
+    public void addAll(List<TransferInfo> list) {
         mList.addAll(list);
     }
 
@@ -135,7 +135,7 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
     }
 
     @Override
-    public TransactionInfo getModel(int position) {
+    public TransferInfo getModel(int position) {
         return mList.get(position);
     }
 

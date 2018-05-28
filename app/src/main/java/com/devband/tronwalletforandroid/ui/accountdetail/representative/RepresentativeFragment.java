@@ -18,10 +18,10 @@ public class RepresentativeFragment extends BaseFragment implements Representati
 
     private String mAddress;
 
-    public static BaseFragment newInstance(@NonNull String tokenName) {
+    public static BaseFragment newInstance(@NonNull String address) {
         RepresentativeFragment fragment = new RepresentativeFragment();
         Bundle args = new Bundle(1);
-        args.putString(AccountDetailActivity.EXTRA_ADDRESS, tokenName);
+        args.putString(AccountDetailActivity.EXTRA_ADDRESS, address);
 
         fragment.setArguments(args);
         return fragment;

@@ -117,7 +117,7 @@
     <string name="account_count_text">Account :</string>
     <string name="highest_trx_text">Highest :</string>
     <string name="balance_text">Balance</string>
-    <string name="menu_transaction_history">Transaction History</string>
+    <string name="menu_transfer_history">Transfer History</string>
     <string name="camera_error_msg">Can\'t access to camera.</string>
     <string name="navigation_menu_vote">Vote Representative</string>
     <string name="vote_representative_warning_msg">Are you sure vote representative?</string>
@@ -126,7 +126,7 @@
     <string name="productivity_text">Productivity</string>
     <string name="frozen_trx">FROZEN TRX</string>
     <string name="markets_text">Markets</string>
-    <string name="title_transaction_text">Transactions</string>
+    <string name="title_transfer_text">Transfers</string>
     <string name="navigation_menu_my_account">My Account</string>
     <string name="title_my_account">My Account</string>
     <string name="my_account_address_text">Address :</string>
@@ -183,10 +183,10 @@
     <string name="hash_id_text">Id :</string>
     <string name="status_text">Status :</string>
     <string name="block_text">Block :</string>
-    <string name="transaction_send_text">Send :</string>
-    <string name="transaction_to_text">To :</string>
-    <string name="transaction_amount_text">Amount :</string>
-    <string name="transaction_date_text">Date :</string>
+    <string name="transfer_send_text">Send :</string>
+    <string name="transfer_to_text">To :</string>
+    <string name="transfer_amount_text">Amount :</string>
+    <string name="transfer_date_text">Date :</string>
     <string name="confirmed_text">Confirmed</string>
     <string name="unconfirmed_text">Unconfirmed</string>
     <string name="participate_btn_text">PARTICIPATE</string>
@@ -211,7 +211,7 @@
     <string name="close_text">CLOSE</string>
     <string name="bottom_navigation_menu_overview">Overview</string>
     <string name="bottom_navigation_menu_block">Blocks</string>
-    <string name="bottom_navigation_menu_transaction">Transactions</string>
+    <string name="bottom_navigation_menu_transfers">Transfers</string>
     <string name="bottom_navigation_menu_account">Accounts</string>
     <string name="votes_help_text">Help</string>
     <string name="votes_help_msg_text">At least 1 Tron Power is required to start voting. Tron Power is gained by freezing TRX on the\nMain Page Menu > My Account > Tron Power > Freeze</string>
@@ -226,9 +226,9 @@
     <string name="start_date_text">Start Date :</string>
     <string name="end_date_text">End Date :</string>
     <string name="holders_text">Token Holders :</string>
-    <string name="total_transactions_text">Total Transactions :</string>
+    <string name="total_transfers_text">Total Transfers :</string>
     <string name="number_text">Number</string>
-    <string name="transactions_text">transactions</string>
+    <string name="transfers_text">transfers</string>
     <string name="produced_by_text">Produced by</string>
     <string name="block_reward_text">Reward</string>
     <string name="trans_from_text">From :</string>
@@ -242,7 +242,7 @@
     <string name="account_type_text">Type :</string>
     <string name="account_balance_text">Balance :</string>
     <string name="account_tron_power_text">Tron Power:</string>
-    <string name="account_transaction_text">Transactions :</string>
+    <string name="account_transfers_text">Transfers :</string>
     <string name="account_detail_name_text">Name :</string>
     <string name="account_votes_text">Votes</string>
 </resources>

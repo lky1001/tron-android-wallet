@@ -26,7 +26,7 @@ A Tron wallet for android.
 - My address QR code
 - My tron balance
 - My tokens
-- My transaction history
+- My transfer history
 - Vote representative
 - Token list
 - Node list

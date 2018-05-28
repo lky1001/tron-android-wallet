@@ -91,7 +91,7 @@
             android:theme="@style/WalletTheme" />
 
         <activity
-            android:name=".ui.transaction.TransactionActivity"
+            android:name=".ui.mytransfer.TransferActivity"
             android:theme="@style/WalletTheme" />
 
         <activity

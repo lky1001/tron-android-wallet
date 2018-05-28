@@ -52,10 +52,16 @@ service Wallet {
   rpc WithdrawBalance (WithdrawBalanceContract) returns (Transaction) {
   }
 
+  rpc UpdateAsset (UpdateAssetContract) returns (Transaction) {
+  }
+
   rpc ListNodes (EmptyMessage) returns (NodeList) {
   }
 
   rpc GetAssetIssueByAccount (Account) returns (AssetIssueList) {
+  }
+
+  rpc GetAccountNet (Account) returns (AccountNetMessage) {
   }
 
   rpc GetAssetIssueByName (BytesMessage) returns (AssetIssueContract) {
@@ -87,15 +93,15 @@ service Wallet {
 
   rpc TotalTransaction (EmptyMessage) returns (NumberMessage) {
   }
+
+  rpc GetNextMaintenanceTime (EmptyMessage) returns (NumberMessage) {
+  }
 };
 
 
 service WalletSolidity {
 
   rpc GetAccount (Account) returns (Account) {
-  }
-
-  rpc ListAccounts (EmptyMessage) returns (AccountList) {
   }
 
   rpc ListWitnesses (EmptyMessage) returns (WitnessList) {
@@ -125,14 +131,25 @@ service WalletSolidity {
 
   rpc GetTransactionById (BytesMessage) returns (Transaction) {
   }
+};
 
-  rpc GetTransactionsByTimestamp (TimeMessage) returns (TransactionList) {
+service WalletExtension {
+  rpc GetTransactionsByTimestamp (TimePaginatedMessage) returns (TransactionList) {
   }
 
-  rpc GetTransactionsFromThis (Account) returns (TransactionList) {
+  rpc GetTransactionsByTimestampCount (TimeMessage) returns (NumberMessage) {
   }
 
-  rpc GetTransactionsToThis (Account) returns (TransactionList) {
+  rpc GetTransactionsFromThis (AccountPaginated) returns (TransactionList) {
+  }
+
+  rpc GetTransactionsToThis (AccountPaginated) returns (TransactionList) {
+  }
+
+  rpc GetTransactionsFromThisCount (Account) returns (NumberMessage) {
+  }
+
+  rpc GetTransactionsToThisCount (Account) returns (NumberMessage) {
   }
 };
 
@@ -183,15 +200,9 @@ service Network {
 
 };
 
-
-message AccountList {
-  repeated Account accounts = 1;
-}
-
 message WitnessList {
   repeated Witness witnesses = 1;
 }
-
 message AssetIssueList {
   repeated AssetIssueContract assetIssue = 1;
 }
@@ -237,4 +248,22 @@ message BlockLimit {
 message TransactionLimit {
   bytes transactionId = 1;
   int64 limitNum = 2;
+}
+message AccountPaginated {
+  Account account = 1;
+  int64 offset = 2;
+  int64 limit = 3;
+}
+message TimePaginatedMessage {
+  TimeMessage timeMessage = 1;
+  int64 offset = 2;
+  int64 limit = 3;
+}
+message AccountNetMessage {
+  int64 freeNetUsed = 1;
+  int64 freeNetLimit = 2;
+  int64 NetUsed = 3;
+  int64 NetLimit = 4;
+  map<string, int64> assetNetUsed = 5;
+  map<string, int64> assetNetLimit = 6;
 }

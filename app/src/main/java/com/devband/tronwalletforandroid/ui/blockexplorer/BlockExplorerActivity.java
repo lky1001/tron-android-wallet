@@ -125,7 +125,7 @@ public class BlockExplorerActivity extends CommonActivity {
                         .show(mFragments.get(FRAGMENT_TRANSACTION))
                         .hide(mFragments.get(FRAGMENT_ACCOUNT))
                         .commit();
-                titleResId = R.string.bottom_navigation_menu_transaction;
+                titleResId = R.string.bottom_navigation_menu_transfers;
                 break;
             case FRAGMENT_ACCOUNT:
                 getSupportFragmentManager()

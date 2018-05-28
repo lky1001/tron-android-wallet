@@ -30,7 +30,7 @@ import static org.tron.common.crypto.Hash.sha256;
 
 public class TransactionUtils {
 
-//  private static final Logger logger = LoggerFactory.getLogger("Transaction");
+//  private static final Logger logger = LoggerFactory.getLogger("Transfer");
   private final static int RESERVE_BALANCE = 10;
 
   /**

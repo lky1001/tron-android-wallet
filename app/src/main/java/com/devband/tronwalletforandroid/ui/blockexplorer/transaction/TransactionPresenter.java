@@ -1,8 +1,8 @@
 package com.devband.tronwalletforandroid.ui.blockexplorer.transaction;
 
 import com.devband.tronlib.TronNetwork;
-import com.devband.tronlib.dto.Transaction;
-import com.devband.tronlib.dto.Transactions;
+import com.devband.tronlib.dto.Transfer;
+import com.devband.tronlib.dto.Transfers;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
@@ -12,13 +12,13 @@ import io.reactivex.disposables.Disposable;
 
 public class TransactionPresenter extends BasePresenter<TransactionView> {
 
-    private AdapterDataModel<Transaction> mAdapterDataModel;
+    private AdapterDataModel<Transfer> mAdapterDataModel;
 
     public TransactionPresenter(TransactionView view) {
         super(view);
     }
 
-    public void setAdapterDataModel(AdapterDataModel<Transaction> adapterDataModel) {
+    public void setAdapterDataModel(AdapterDataModel<Transfer> adapterDataModel) {
         this.mAdapterDataModel = adapterDataModel;
     }
 
@@ -46,16 +46,16 @@ public class TransactionPresenter extends BasePresenter<TransactionView> {
         mView.showLoadingDialog();
 
         TronNetwork.getInstance()
-                .getTransactions(startIndex, pageSize, "-timestamp", true)
+                .getTransfers(startIndex, pageSize, "-timestamp", true)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Transactions>() {
+                .subscribe(new SingleObserver<Transfers>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(Transactions transactions) {
+                    public void onSuccess(Transfers transactions) {
                         mAdapterDataModel.addAll(transactions.getData());
                         mView.finishLoading(transactions.getTotal());
                     }

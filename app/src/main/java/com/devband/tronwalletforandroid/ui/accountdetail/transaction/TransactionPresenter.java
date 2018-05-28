@@ -1,10 +1,10 @@
 package com.devband.tronwalletforandroid.ui.accountdetail.transaction;
 
 import com.devband.tronlib.TronNetwork;
-import com.devband.tronlib.dto.Transaction;
+import com.devband.tronlib.dto.Transfer;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
-import com.devband.tronwalletforandroid.ui.transaction.dto.TransactionInfo;
+import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +15,13 @@ import io.reactivex.disposables.Disposable;
 
 public class TransactionPresenter extends BasePresenter<TransactionView> {
 
-    private AdapterDataModel<TransactionInfo> mAdapterDataModel;
+    private AdapterDataModel<TransferInfo> mAdapterDataModel;
 
     public TransactionPresenter(TransactionView view) {
         super(view);
     }
 
-    public void setAdapterDataModel(AdapterDataModel<TransactionInfo> adapterDataModel) {
+    public void setAdapterDataModel(AdapterDataModel<TransferInfo> adapterDataModel) {
         this.mAdapterDataModel = adapterDataModel;
     }
 
@@ -49,12 +49,12 @@ public class TransactionPresenter extends BasePresenter<TransactionView> {
         mView.showLoadingDialog();
 
         TronNetwork.getInstance()
-                .getTransactions(address, startIndex, pageSize, "-timestamp", true)
+                .getTransfers(address, startIndex, pageSize, "-timestamp", true)
                 .map(transactions -> {
-                    List<TransactionInfo> infos = new ArrayList<>();
+                    List<TransferInfo> infos = new ArrayList<>();
 
-                    for (Transaction t : transactions.getData()) {
-                        TransactionInfo info = new TransactionInfo();
+                    for (Transfer t : transactions.getData()) {
+                        TransferInfo info = new TransferInfo();
                         info.setHash(t.getHash());
                         info.setAmount(t.getAmount());
                         info.setBlock(t.getBlock());
@@ -95,7 +95,7 @@ public class TransactionPresenter extends BasePresenter<TransactionView> {
 
     class Transactions {
         long total;
-        List<TransactionInfo> infos;
+        List<TransferInfo> infos;
 
         public long getTotal() {
             return total;
@@ -105,11 +105,11 @@ public class TransactionPresenter extends BasePresenter<TransactionView> {
             this.total = total;
         }
 
-        public List<TransactionInfo> getInfos() {
+        public List<TransferInfo> getInfos() {
             return infos;
         }
 
-        public void setInfos(List<TransactionInfo> infos) {
+        public void setInfos(List<TransferInfo> infos) {
             this.infos = infos;
         }
     }

@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.transaction.dto;
+package com.devband.tronwalletforandroid.ui.mytransfer.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TransactionInfo {
+public class TransferInfo {
 
     private String hash;
     private long block;

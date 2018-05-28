@@ -18,10 +18,10 @@ public class TokenBalanceFragment extends BaseFragment implements TokenBalanceVi
 
     private String mAddress;
 
-    public static BaseFragment newInstance(@NonNull String tokenName) {
+    public static BaseFragment newInstance(@NonNull String address) {
         TokenBalanceFragment fragment = new TokenBalanceFragment();
         Bundle args = new Bundle(1);
-        args.putString(AccountDetailActivity.EXTRA_ADDRESS, tokenName);
+        args.putString(AccountDetailActivity.EXTRA_ADDRESS, address);
 
         fragment.setArguments(args);
         return fragment;

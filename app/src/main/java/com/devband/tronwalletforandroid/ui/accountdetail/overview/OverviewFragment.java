@@ -20,10 +20,10 @@ import butterknife.ButterKnife;
 
 public class OverviewFragment extends BaseFragment implements OverviewView {
 
-    public static BaseFragment newInstance(@NonNull String tokenName) {
+    public static BaseFragment newInstance(@NonNull String address) {
         OverviewFragment fragment = new OverviewFragment();
         Bundle args = new Bundle(1);
-        args.putString(AccountDetailActivity.EXTRA_ADDRESS, tokenName);
+        args.putString(AccountDetailActivity.EXTRA_ADDRESS, address);
 
         fragment.setArguments(args);
         return fragment;

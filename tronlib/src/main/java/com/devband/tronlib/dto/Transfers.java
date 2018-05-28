@@ -15,10 +15,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Transactions {
+public class Transfers {
     @JsonProperty("total")
     private long total;
 
     @JsonProperty("data")
-    private List<Transaction> data;
+    private List<Transfer> data;
 }

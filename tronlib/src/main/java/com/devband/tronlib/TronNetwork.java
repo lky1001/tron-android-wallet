@@ -9,7 +9,7 @@ import com.devband.tronlib.dto.TokenHolders;
 import com.devband.tronlib.dto.Tokens;
 import com.devband.tronlib.dto.TopAddressAccounts;
 import com.devband.tronlib.dto.TransactionStats;
-import com.devband.tronlib.dto.Transactions;
+import com.devband.tronlib.dto.Transfers;
 import com.devband.tronlib.dto.TronAccounts;
 import com.devband.tronlib.dto.Votes;
 import com.devband.tronlib.services.AccountService;
@@ -61,16 +61,16 @@ public class TronNetwork {
         return mCoinMarketCapService.getPrice(symbol);
     }
 
-    public Single<Transactions> getTransactions(String address, String symbol) {
-        return mTronScanService.getTransactions(address, symbol);
+    public Single<Transfers> getTransfers(String address, String symbol) {
+        return mTronScanService.getTransfers(address, symbol);
     }
 
-    public Single<Transactions> getTransactions(String address, int start, int limit, String sort, boolean hasTotal) {
-        return mTronScanService.getTransactions(address, start, limit, sort, hasTotal);
+    public Single<Transfers> getTransfers(String address, int start, int limit, String sort, boolean hasTotal) {
+        return mTronScanService.getTransfers(address, start, limit, sort, hasTotal);
     }
 
-    public Single<Transactions> getTransactions(int start, int limit, String sort, boolean hasTotal) {
-        return mTronScanService.getTransactions(start, limit, sort, hasTotal);
+    public Single<Transfers> getTransfers(int start, int limit, String sort, boolean hasTotal) {
+        return mTronScanService.getTransfers(start, limit, sort, hasTotal);
     }
 
     public Single<Tokens> getTokens(int start, int limit, String sort, String status) {
