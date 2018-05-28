@@ -3,6 +3,7 @@ package com.devband.tronlib.services;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.Market;
 import com.devband.tronlib.dto.TransactionStats;
+import com.devband.tronlib.dto.Transactions;
 import com.devband.tronlib.dto.Transfers;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public interface TronScanService {
 
     @GET("api/transfer")
     Single<Transfers> getTransfers(@Query("start") int start, @Query("limit") int limit,
-                                   @Query("sort") String sort, @Query("count") boolean count);
+            @Query("sort") String sort, @Query("count") boolean count);
 
     @GET("api/market/markets")
     Single<List<Market>> getMarket();
@@ -36,4 +37,9 @@ public interface TronScanService {
 
     @GET("api/account/{address}/stats")
     Single<TransactionStats> getTransactionStats(@Path("address") String address);
+
+    @GET("api/transaction")
+    Single<Transactions> getTransactions(@Query("start") int start, @Query("limit") int limit,
+            @Query("sort") String sort, @Query("count") boolean count);
+
 }

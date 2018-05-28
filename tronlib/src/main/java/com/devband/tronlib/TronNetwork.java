@@ -10,6 +10,7 @@ import com.devband.tronlib.dto.TokenHolders;
 import com.devband.tronlib.dto.Tokens;
 import com.devband.tronlib.dto.TopAddressAccounts;
 import com.devband.tronlib.dto.TransactionStats;
+import com.devband.tronlib.dto.Transactions;
 import com.devband.tronlib.dto.Transfers;
 import com.devband.tronlib.dto.TronAccounts;
 import com.devband.tronlib.dto.Votes;
@@ -112,5 +113,9 @@ public class TronNetwork {
 
     public Single<AccountVotes> getAccountVotes(String voterAddress, int start, int limit, String sort) {
         return mVoteService.getAccountVotes(voterAddress, start, limit, sort);
+    }
+
+    public Single<Transactions> getTransactions(int start, int limit, String sort, boolean hasTotal) {
+        return mTronScanService.getTransactions(start, limit, sort, hasTotal);
     }
 }
