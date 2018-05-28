@@ -1,7 +1,6 @@
 package com.devband.tronlib.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 import java.util.Map;
@@ -42,7 +41,7 @@ public class Account {
     @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Representative {
-        private int allowance;
+        private long allowance;
         private boolean enabled;
         private long lastWithDrawTime;
         private String url;

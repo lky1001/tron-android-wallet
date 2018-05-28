@@ -1,8 +1,8 @@
-package com.devband.tronwalletforandroid.ui.blockexplorer.transaction;
+package com.devband.tronwalletforandroid.ui.accountdetail.transfer;
 
 import com.devband.tronwalletforandroid.ui.mvp.IView;
 
-public interface TransactionView extends IView {
+public interface TransferView extends IView {
 
     void finishLoading(long total);
     void showLoadingDialog();

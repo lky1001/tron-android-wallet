@@ -11,7 +11,7 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.ui.blockexplorer.account.AccountFragment;
 import com.devband.tronwalletforandroid.ui.blockexplorer.block.BlockFragment;
 import com.devband.tronwalletforandroid.ui.blockexplorer.overview.OverviewFragment;
-import com.devband.tronwalletforandroid.ui.blockexplorer.transaction.TransactionFragment;
+import com.devband.tronwalletforandroid.ui.blockexplorer.transfer.TransferFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,7 @@ public class BlockExplorerActivity extends CommonActivity {
             case R.id.bottom_navigation_block:
                 changeFragment(FRAGMENT_BLOCK);
                 return true;
-            case R.id.bottom_navigation_transaction:
+            case R.id.bottom_navigation_transfer:
                 changeFragment(FRAGMENT_TRANSACTION);
                 return true;
             case R.id.bottom_navigation_account:
@@ -76,7 +76,7 @@ public class BlockExplorerActivity extends CommonActivity {
 
         mFragments.add(OverviewFragment.newInstance());
         mFragments.add(BlockFragment.newInstance());
-        mFragments.add(TransactionFragment.newInstance());
+        mFragments.add(TransferFragment.newInstance());
         mFragments.add(AccountFragment.newInstance());
 
         getSupportFragmentManager()

@@ -156,31 +156,31 @@
                 android:text="@string/account_transfers_text" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:layout_marginLeft="5dp"
-                android:tint="@color/token_participate_button_color"
-                app:srcCompat="@drawable/ic_send" />
+                android:tint="@color/Color_Green"
+                app:srcCompat="@drawable/ic_arrow_down"/>
+
+            <TextView
+                android:id="@+id/transaction_in_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                tools:text="123" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginLeft="5dp"
+                android:tint="@color/Color_Red"
+                app:srcCompat="@drawable/ic_arrow_up"/>
 
             <TextView
                 android:id="@+id/transaction_out_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                tools:text="123" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:tint="@color/colorAccent"
-                app:srcCompat="@drawable/ic_download" />
-
-            <TextView
-                android:id="@+id/transaction_in_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="2dp"
                 tools:text="123" />
         </LinearLayout>
 
@@ -216,31 +216,14 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <Button
+            android:id="@+id/view_votes_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/votes_title_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:text="@string/account_votes_text" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/my_account_border_color"/>
-
-            <LinearLayout
-                android:id="@+id/votes_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_marginBottom="15dp"
+            android:background="@color/votes_button_color"
+            android:textColor="@android:color/white"
+            android:text="@string/view_votes_text" />
     </LinearLayout>
 </ScrollView>

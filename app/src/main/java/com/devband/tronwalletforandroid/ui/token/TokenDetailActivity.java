@@ -114,7 +114,7 @@ public class TokenDetailActivity extends CommonActivity {
             case R.id.bottom_navigation_overview:
                 changeFragment(FRAGMENT_OVERVIEW);
                 return true;
-            case R.id.bottom_navigation_transaction:
+            case R.id.bottom_navigation_transfer:
                 changeFragment(FRAGMENT_TRANSACTION);
                 return true;
             case R.id.bottom_navigation_holder:

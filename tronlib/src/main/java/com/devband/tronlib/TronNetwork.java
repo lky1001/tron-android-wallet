@@ -1,6 +1,7 @@
 package com.devband.tronlib;
 
 import com.devband.tronlib.dto.Account;
+import com.devband.tronlib.dto.AccountVotes;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.dto.Market;
@@ -107,5 +108,9 @@ public class TronNetwork {
 
     public Single<TransactionStats> getTransactionStats(String address) {
         return mTronScanService.getTransactionStats(address);
+    }
+
+    public Single<AccountVotes> getAccountVotes(String voterAddress, int start, int limit, String sort) {
+        return mVoteService.getAccountVotes(voterAddress, start, limit, sort);
     }
 }

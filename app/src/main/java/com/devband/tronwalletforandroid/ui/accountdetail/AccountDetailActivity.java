@@ -11,8 +11,8 @@ import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.ui.accountdetail.overview.OverviewFragment;
 import com.devband.tronwalletforandroid.ui.accountdetail.representative.RepresentativeFragment;
-import com.devband.tronwalletforandroid.ui.accountdetail.tokenbalance.TokenBalanceFragment;
 import com.devband.tronwalletforandroid.ui.accountdetail.transaction.TransactionFragment;
+import com.devband.tronwalletforandroid.ui.accountdetail.transfer.TransferFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +25,8 @@ public class AccountDetailActivity extends CommonActivity {
     public static final String EXTRA_ADDRESS = "extra_address";
 
     private static final int FRAGMENT_OVERVIEW = 0;
-    private static final int FRAGMENT_TOKEN_BALANCE = 1;
-    private static final int FRAGMENT_TRANSACTION = 2;
+    private static final int FRAGMENT_TRANSACTION = 1;
+    private static final int FRAGMENT_TRANSFER = 2;
     private static final int FRAGMENT_REPRESENTATIVE = 3;
 
     @BindView(R.id.toolbar)
@@ -65,15 +65,15 @@ public class AccountDetailActivity extends CommonActivity {
 
     private void initUi() {
         mFragments.add(OverviewFragment.newInstance(mAddress));
-        mFragments.add(TokenBalanceFragment.newInstance(mAddress));
         mFragments.add(TransactionFragment.newInstance(mAddress));
+        mFragments.add(TransferFragment.newInstance(mAddress));
         mFragments.add(RepresentativeFragment.newInstance(mAddress));
 
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.content, mFragments.get(FRAGMENT_OVERVIEW))
-                .add(R.id.content, mFragments.get(FRAGMENT_TOKEN_BALANCE))
                 .add(R.id.content, mFragments.get(FRAGMENT_TRANSACTION))
+                .add(R.id.content, mFragments.get(FRAGMENT_TRANSFER))
                 .add(R.id.content, mFragments.get(FRAGMENT_REPRESENTATIVE))
                 .commit();
 
@@ -89,17 +89,8 @@ public class AccountDetailActivity extends CommonActivity {
                 getSupportFragmentManager()
                         .beginTransaction()
                         .show(mFragments.get(FRAGMENT_OVERVIEW))
-                        .hide(mFragments.get(FRAGMENT_TOKEN_BALANCE))
                         .hide(mFragments.get(FRAGMENT_TRANSACTION))
-                        .hide(mFragments.get(FRAGMENT_REPRESENTATIVE))
-                        .commit();
-                break;
-            case FRAGMENT_TOKEN_BALANCE:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .hide(mFragments.get(FRAGMENT_OVERVIEW))
-                        .show(mFragments.get(FRAGMENT_TOKEN_BALANCE))
-                        .hide(mFragments.get(FRAGMENT_TRANSACTION))
+                        .hide(mFragments.get(FRAGMENT_TRANSFER))
                         .hide(mFragments.get(FRAGMENT_REPRESENTATIVE))
                         .commit();
                 break;
@@ -107,8 +98,17 @@ public class AccountDetailActivity extends CommonActivity {
                 getSupportFragmentManager()
                         .beginTransaction()
                         .hide(mFragments.get(FRAGMENT_OVERVIEW))
-                        .hide(mFragments.get(FRAGMENT_TOKEN_BALANCE))
                         .show(mFragments.get(FRAGMENT_TRANSACTION))
+                        .hide(mFragments.get(FRAGMENT_TRANSFER))
+                        .hide(mFragments.get(FRAGMENT_REPRESENTATIVE))
+                        .commit();
+                break;
+            case FRAGMENT_TRANSFER:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .hide(mFragments.get(FRAGMENT_OVERVIEW))
+                        .hide(mFragments.get(FRAGMENT_TRANSACTION))
+                        .show(mFragments.get(FRAGMENT_TRANSFER))
                         .hide(mFragments.get(FRAGMENT_REPRESENTATIVE))
                         .commit();
                 break;
@@ -116,8 +116,8 @@ public class AccountDetailActivity extends CommonActivity {
                 getSupportFragmentManager()
                         .beginTransaction()
                         .hide(mFragments.get(FRAGMENT_OVERVIEW))
-                        .hide(mFragments.get(FRAGMENT_TOKEN_BALANCE))
                         .hide(mFragments.get(FRAGMENT_TRANSACTION))
+                        .hide(mFragments.get(FRAGMENT_TRANSFER))
                         .show(mFragments.get(FRAGMENT_REPRESENTATIVE))
                         .commit();
                 break;
@@ -130,11 +130,11 @@ public class AccountDetailActivity extends CommonActivity {
             case R.id.bottom_navigation_overview:
                 changeFragment(FRAGMENT_OVERVIEW);
                 return true;
-            case R.id.bottom_navigation_tokens:
-                changeFragment(FRAGMENT_TOKEN_BALANCE);
-                return true;
             case R.id.bottom_navigation_transaction:
                 changeFragment(FRAGMENT_TRANSACTION);
+                return true;
+            case R.id.bottom_navigation_transfer:
+                changeFragment(FRAGMENT_TRANSFER);
                 return true;
             case R.id.bottom_navigation_representative:
                 changeFragment(FRAGMENT_REPRESENTATIVE);
@@ -142,4 +142,9 @@ public class AccountDetailActivity extends CommonActivity {
         }
         return false;
     };
+
+    public void removeRepresentativeMenu() {
+        mBottomNavigationView.getMenu().removeItem(R.id.bottom_navigation_representative);
+        removeShiftMode(mBottomNavigationView);
+    }
 }

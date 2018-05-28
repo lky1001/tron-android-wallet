@@ -1,5 +1,7 @@
 package com.devband.tronwalletforandroid.ui.main.dto;
 
+import com.devband.tronlib.dto.Account;
+
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -19,7 +21,15 @@ public class TronAccount {
 
     private long bandwidth;
 
+    private long transactions;
+
+    private long transactionIn;
+
+    private long transactionOut;
+
     private List<Frozen> frozenList;
 
     private List<Asset> assetList;
+
+    private Account account;
 }

@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.blockexplorer.transaction;
+package com.devband.tronwalletforandroid.ui.blockexplorer.transfer;
 
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Transfer;
@@ -10,11 +10,11 @@ import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
-public class TransactionPresenter extends BasePresenter<TransactionView> {
+public class TransferPresenter extends BasePresenter<TransferView> {
 
     private AdapterDataModel<Transfer> mAdapterDataModel;
 
-    public TransactionPresenter(TransactionView view) {
+    public TransferPresenter(TransferView view) {
         super(view);
     }
 

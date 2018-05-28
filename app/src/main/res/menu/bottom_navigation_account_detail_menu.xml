@@ -7,12 +7,12 @@
         android:title="@string/bottom_navigation_menu_overview" />
 
     <item
-        android:id="@+id/bottom_navigation_tokens"
-        android:icon="@drawable/ic_token"
-        android:title="@string/bottom_navigation_menu_tokens" />
+        android:id="@+id/bottom_navigation_transaction"
+        android:icon="@drawable/ic_transaction"
+        android:title="@string/bottom_navigation_menu_transactions" />
 
     <item
-        android:id="@+id/bottom_navigation_transaction"
+        android:id="@+id/bottom_navigation_transfer"
         android:icon="@drawable/ic_transaction"
         android:title="@string/bottom_navigation_menu_transfers" />
 

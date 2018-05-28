@@ -1,8 +1,14 @@
 package com.devband.tronwalletforandroid.ui.accountdetail.overview;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +16,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.devband.tronlib.dto.Account;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
+import com.devband.tronwalletforandroid.ui.main.dto.Asset;
+import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class OverviewFragment extends BaseFragment implements OverviewView {
 
@@ -51,10 +60,7 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
     TextView mTransactionInText;
 
     @BindView(R.id.tokens_layout)
-    LinearLayout mTokenLayout;
-
-    @BindView(R.id.votes_layout)
-    LinearLayout mVoteLayout;
+    LinearLayout mTokensLayout;
 
     private String mAddress;
 
@@ -92,9 +98,71 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
     }
 
     @Override
-    public void finishLoading(@NonNull Account account) {
+    public void finishLoading(@NonNull TronAccount account) {
+        mAddressText.setText(account.getAccount().getAddress());
+
+        if (!TextUtils.isEmpty(account.getAccount().getName())) {
+            mAccountNameText.setText(account.getAccount().getName());
+        } else {
+            mAccountNameText.setText("-");
+        }
+        mBalanceText.setText(Constants.tronBalanceFormat.format(account.getBalance() / Constants.ONE_TRX)
+                + " " + Constants.TRON_SYMBOL);
+        mTronPowerText.setText(Constants.numberFormat.format(account.getBandwidth()));
+        mTransactionInText.setText(Constants.numberFormat.format(account.getTransactionIn()));
+        mTransactionOutText.setText(Constants.numberFormat.format(account.getTransactionOut()));
+
+        if (!account.getAccount().getRepresentative().isEnabled()) {
+            mAccountTypeText.setText(getString(R.string.normal_text));
+        } else {
+            mAccountTypeText.setText(getString(R.string.representative_text));
+            ((AccountDetailActivity) getActivity()).removeRepresentativeMenu();
+        }
+
+        mTokensLayout.removeAllViews();
+
+        if (!account.getAssetList().isEmpty()) {
+            for (Asset asset : account.getAssetList()) {
+                View v = LayoutInflater.from(getContext()).inflate(R.layout.list_item_my_token, null);
+                v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                        RecyclerView.LayoutParams.WRAP_CONTENT));
+
+                TextView tokenNameText = v.findViewById(R.id.token_name_text);
+                TextView tokenAmountText = v.findViewById(R.id.token_amount_text);
+
+                tokenNameText.setText(asset.getName());
+                tokenAmountText.setText(Constants.tronBalanceFormat.format(asset.getBalance()));
+                mTokensLayout.addView(v);
+            }
+        } else {
+            View v = LayoutInflater.from(getContext()).inflate(R.layout.list_item_my_token, null);
+            v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                    RecyclerView.LayoutParams.WRAP_CONTENT));
+
+            TextView tokenNameText = v.findViewById(R.id.token_name_text);
+            TextView tokenAmountText = v.findViewById(R.id.token_amount_text);
+
+            tokenNameText.setText(getString(R.string.no_tokens));
+            tokenNameText.setGravity(Gravity.CENTER);
+            tokenAmountText.setVisibility(View.GONE);
+            mTokensLayout.addView(v);
+        }
 
         hideDialog();
+    }
+
+    @OnClick(R.id.copy_address)
+    public void onCopyAddressClick() {
+        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("", mAddress);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(getActivity(), getString(R.string.copy_address_msg), Toast.LENGTH_SHORT)
+                .show();
+    }
+
+    @OnClick(R.id.view_votes_button)
+    public void onViewVotesClick() {
+
     }
 }
 

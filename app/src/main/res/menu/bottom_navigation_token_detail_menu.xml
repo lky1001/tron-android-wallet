@@ -7,7 +7,7 @@
         android:title="@string/bottom_navigation_menu_overview" />
 
     <item
-        android:id="@+id/bottom_navigation_transaction"
+        android:id="@+id/bottom_navigation_transfer"
         android:icon="@drawable/ic_transaction"
         android:title="@string/bottom_navigation_menu_transfers" />
 

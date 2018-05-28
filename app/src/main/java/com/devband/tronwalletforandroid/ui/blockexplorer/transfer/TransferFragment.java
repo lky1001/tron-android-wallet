@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.blockexplorer.transaction;
+package com.devband.tronwalletforandroid.ui.blockexplorer.transfer;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
  * Created by user on 2018. 5. 24..
  */
 
-public class TransactionFragment extends BaseFragment implements TransactionView {
+public class TransferFragment extends BaseFragment implements TransferView {
     private static final int PAGE_SIZE = 25;
 
     @BindView(R.id.recycler_view)
@@ -48,19 +48,19 @@ public class TransactionFragment extends BaseFragment implements TransactionView
     private boolean mIsLastPage;
 
     public static BaseFragment newInstance() {
-        TransactionFragment fragment = new TransactionFragment();
+        TransferFragment fragment = new TransferFragment();
         return fragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_transaction, container, false);
+        View view = inflater.inflate(R.layout.fragment_transfer, container, false);
         ButterKnife.bind(this, view);
         initUi();
 
-        mPresenter = new TransactionPresenter(this);
-        ((TransactionPresenter) mPresenter).setAdapterDataModel(mAdapter);
+        mPresenter = new TransferPresenter(this);
+        ((TransferPresenter) mPresenter).setAdapterDataModel(mAdapter);
         mPresenter.onCreate();
 
         return view;
@@ -149,7 +149,7 @@ public class TransactionFragment extends BaseFragment implements TransactionView
     @Override
     protected void refresh() {
         if (!mIsLastPage) {
-            ((TransactionPresenter) mPresenter).getTransactions(mStartIndex, PAGE_SIZE);
+            ((TransferPresenter) mPresenter).getTransactions(mStartIndex, PAGE_SIZE);
         }
     }
 

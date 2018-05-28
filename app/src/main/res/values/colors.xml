@@ -25,4 +25,5 @@
     <color name="token_detail_border_color">#e5e5e5</color>
     <color name="account_detail_border_color">#e5e5e5</color>
     <color name="price_up_color">#029f2a</color>
+    <color name="votes_button_color">#7c7b81</color>
 </resources>

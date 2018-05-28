@@ -4,12 +4,8 @@ import com.devband.tronlib.dto.Account;
 import com.devband.tronlib.dto.TopAddressAccounts;
 import com.devband.tronlib.dto.TronAccounts;
 
-import java.util.List;
-
 import io.reactivex.Single;
-import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -24,5 +20,5 @@ public interface AccountService {
 
     @GET("api/account")
     Single<TopAddressAccounts> getTopAddressAccounts(@Query("sort") String sort,
-                                                     @Query("limit") int limit);
+            @Query("limit") int limit);
 }

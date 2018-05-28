@@ -211,6 +211,7 @@
     <string name="close_text">CLOSE</string>
     <string name="bottom_navigation_menu_overview">Overview</string>
     <string name="bottom_navigation_menu_block">Blocks</string>
+    <string name="bottom_navigation_menu_transactions">Transactions</string>
     <string name="bottom_navigation_menu_transfers">Transfers</string>
     <string name="bottom_navigation_menu_account">Accounts</string>
     <string name="votes_help_text">Help</string>
@@ -245,4 +246,7 @@
     <string name="account_transfers_text">Transfers :</string>
     <string name="account_detail_name_text">Name :</string>
     <string name="account_votes_text">Votes</string>
+    <string name="representative_text">Representative</string>
+    <string name="normal_text">Normal</string>
+    <string name="view_votes_text">View Votes</string>
 </resources>
