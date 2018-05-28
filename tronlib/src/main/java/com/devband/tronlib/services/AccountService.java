@@ -1,6 +1,7 @@
 package com.devband.tronlib.services;
 
 import com.devband.tronlib.dto.Account;
+import com.devband.tronlib.dto.TopAddressAccounts;
 import com.devband.tronlib.dto.TronAccounts;
 
 import java.util.List;
@@ -22,4 +23,8 @@ public interface AccountService {
     @GET("/api/account")
     Single<TronAccounts> getAccounts(@Query("start") int start, @Query("limit") int limit,
             @Query("sort") String sort);
+
+    @GET("api/account")
+    Single<TopAddressAccounts> getTopAddressAccounts(@Query("sort") String sort,
+                                                     @Query("limit") int limit);
 }

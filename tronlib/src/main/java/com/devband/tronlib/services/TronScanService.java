@@ -1,7 +1,9 @@
 package com.devband.tronlib.services;
 
+import com.devband.tronlib.dto.Account;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.Market;
+import com.devband.tronlib.dto.TopAddressAccounts;
 import com.devband.tronlib.dto.Transactions;
 
 import java.util.List;
