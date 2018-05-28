@@ -124,7 +124,6 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
         dataSet.setValueLinePart2Length(0.4f);
         dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
-
         PieData d = new PieData(dataSet);
         d.setValueFormatter(new DefaultValueFormatter(0));
         d.setValueTextSize(11f);
