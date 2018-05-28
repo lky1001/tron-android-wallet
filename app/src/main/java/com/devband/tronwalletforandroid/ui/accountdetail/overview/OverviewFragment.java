@@ -66,12 +66,12 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
         mAddress = getArguments().getString(AccountDetailActivity.EXTRA_ADDRESS);
 
-        return view;
-    }
+        mPresenter = new OverviewPresenter(this);
+        mPresenter.onCreate();
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        ((OverviewPresenter) mPresenter).getAccount(mAddress);
+
+        return view;
     }
 
     @Override
