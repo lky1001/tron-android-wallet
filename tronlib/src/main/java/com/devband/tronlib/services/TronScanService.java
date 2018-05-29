@@ -20,6 +20,11 @@ import retrofit2.http.Query;
  */
 
 public interface TronScanService {
+
+    @GET("api/transfer")
+    Single<Transfers> getTransfers(@Query("sort") String sort, @Query("count") boolean hasCount, @Query("limit") int limit,
+                                   @Query("start") long start, @Query("block") long block);
+
     @GET("api/transfer")
     Single<Transfers> getTransfers(@Query("address") String address, @Query("token") String token);
 

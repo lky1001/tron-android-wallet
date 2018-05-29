@@ -66,6 +66,11 @@ public class TronNetwork {
         return mCoinMarketCapService.getPrice(symbol);
     }
 
+    public Single<Transfers> getTransfers(String sort, boolean hasCount, int limit,
+                                          long start, long block) {
+        return mTronScanService.getTransfers(sort, hasCount, limit, start, block);
+    }
+
     public Single<Transfers> getTransfers(String address, String symbol) {
         return mTronScanService.getTransfers(address, symbol);
     }
