@@ -267,4 +267,5 @@
     <string name="block_explorer_height_text">Block Height</string>
     <string name="top_address_text">Top 10 Address Trx</string>
     <string name="avg_block_size_text">Average Block Size</string>
+    <string name="name_title_text">Name :</string>
 </resources>

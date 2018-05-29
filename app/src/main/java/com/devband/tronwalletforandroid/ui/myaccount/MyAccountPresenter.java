@@ -82,6 +82,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
                     }
 
                     return TronAccount.builder()
+                            .name(account.getName())
                             .balance(account.getBalance())
                             .bandwidth(account.getBandwidth().getNetRemaining())
                             .assetList(assetList)

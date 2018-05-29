@@ -50,6 +50,9 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     @BindView(R.id.account_spinner)
     Spinner mAccountSpinner;
 
+    @BindView(R.id.name_text)
+    TextView mNameText;
+
     @BindView(R.id.address_text)
     TextView mAddressText;
 
@@ -147,6 +150,12 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     public void displayAccountInfo(@NonNull String address, @NonNull TronAccount account) {
         Log.d("", address);
         mAccountBalance = (long) (account.getBalance() / Constants.ONE_TRX);
+
+        if (TextUtils.isEmpty(account.getName())) {
+            mNameText.setText("-");
+        } else {
+            mNameText.setText(account.getName());
+        }
 
         mAddressText.setText(address);
         mBalanceText.setText(Constants.tronBalanceFormat.format(mAccountBalance) + " " + Constants.TRON_SYMBOL);

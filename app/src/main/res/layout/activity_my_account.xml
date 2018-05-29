@@ -54,11 +54,36 @@
                     android:background="@color/my_account_border_color"/>
 
                 <TextView
-                    android:id="@+id/balance_title_text"
+                    android:id="@+id/name_title_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="25dp"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:text="@string/name_title_text" />
+
+                <TextView
+                    android:id="@+id/name_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="25dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/name_title_text"
+                    android:layout_alignBaseline="@+id/name_title_text"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    tools:text="Tron wallet" />
+
+                <TextView
+                    android:id="@+id/balance_title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/name_title_text"
                     android:textSize="14sp"
                     android:gravity="center"
                     android:text="@string/my_account_balance_text" />

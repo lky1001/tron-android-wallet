@@ -17,6 +17,8 @@ import lombok.Setter;
 @Builder
 public class TronAccount {
 
+    private String name;
+
     private long balance;
 
     private long bandwidth;
