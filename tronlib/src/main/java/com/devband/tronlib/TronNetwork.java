@@ -134,6 +134,10 @@ public class TronNetwork {
         return mTronScanService.getTransactions(address, start, limit, sort, hasTotal);
     }
 
+    public Single<Transactions> getTransactions(long block, long start, int limit, String sort, boolean hasTotal) {
+        return mTronScanService.getTransactions(sort, hasTotal, limit, start, block);
+    }
+
     public Single<AccountMedia> getAccountMedia(String address) {
         return mAccountService.getAccountMedia(address);
     }

@@ -61,4 +61,7 @@ public interface TronScanService {
     @GET("api/block/stats")
     Single<List<BlockStats>> getBlockStats(@Query("info") String info);
 
+    @GET("api/transaction")
+    Single<Transactions> getTransactions(@Query("sort") String sort, @Query("count") boolean count,
+                                         @Query("limit") int limit, @Query("start") long start, @Query("block") long block);
 }

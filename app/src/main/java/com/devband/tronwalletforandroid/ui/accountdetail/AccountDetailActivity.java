@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 public class AccountDetailActivity extends CommonActivity {
 
     public static final String EXTRA_ADDRESS = "extra_address";
+    public static final String EXTRA_BLOCK = "extra_block";
 
     private static final int FRAGMENT_OVERVIEW = 0;
     private static final int FRAGMENT_TRANSACTION = 1;

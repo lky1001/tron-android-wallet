@@ -20,11 +20,6 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 import com.devband.tronwalletforandroid.ui.accountdetail.adapter.AccountTransactionAdapter;
-import com.devband.tronwalletforandroid.ui.accountdetail.adapter.AccountTransferAdapter;
-import com.devband.tronwalletforandroid.ui.accountdetail.transfer.TransferPresenter;
-import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
-
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +27,7 @@ import butterknife.ButterKnife;
 public class TransactionFragment extends BaseFragment implements TransactionView {
 
     private String mAddress;
+    private long mBlock;
 
     private static final int PAGE_SIZE = 25;
 
@@ -57,6 +53,15 @@ public class TransactionFragment extends BaseFragment implements TransactionView
         return fragment;
     }
 
+    public static BaseFragment newInstance(@NonNull long block) {
+        TransactionFragment fragment = new TransactionFragment();
+        Bundle args = new Bundle(1);
+        args.putLong(AccountDetailActivity.EXTRA_ADDRESS, block);
+
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,6 +70,7 @@ public class TransactionFragment extends BaseFragment implements TransactionView
         initUi();
 
         mAddress = getArguments().getString(AccountDetailActivity.EXTRA_ADDRESS);
+        mBlock = getArguments().getLong(AccountDetailActivity.EXTRA_BLOCK, 0L);
 
         mPresenter = new TransactionPresenter(this);
         ((TransactionPresenter) mPresenter).setAdapterDataModel(mAdapter);
@@ -104,7 +110,12 @@ public class TransactionFragment extends BaseFragment implements TransactionView
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    ((TransactionPresenter) mPresenter).getTransactions(mAddress, mStartIndex, PAGE_SIZE);
+
+                    if (mBlock > 0l) {
+                        ((TransactionPresenter) mPresenter).getTransactions(mBlock, mStartIndex, PAGE_SIZE);
+                    } else {
+                        ((TransactionPresenter) mPresenter).getTransactions(mAddress, mStartIndex, PAGE_SIZE);
+                    }
                 }
             }
         }
@@ -122,7 +133,11 @@ public class TransactionFragment extends BaseFragment implements TransactionView
     @Override
     protected void refresh() {
         if (!mIsLastPage) {
-            ((TransactionPresenter) mPresenter).getTransactions(mAddress, mStartIndex, PAGE_SIZE);
+            if (mBlock > 0l) {
+                ((TransactionPresenter) mPresenter).getTransactions(mBlock, mStartIndex, PAGE_SIZE);
+            } else {
+                ((TransactionPresenter) mPresenter).getTransactions(mAddress, mStartIndex, PAGE_SIZE);
+            }
         }
     }
 

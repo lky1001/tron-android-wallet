@@ -42,6 +42,29 @@ public class TransactionPresenter extends BasePresenter<TransactionView> {
 
     }
 
+    public void getTransactions(long block, long startIndex, int pageSize) {
+        mView.showLoadingDialog();
+        TronNetwork.getInstance().getTransactions(block, startIndex, pageSize, "-timestamp", true)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Transactions>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Transactions transactions) {
+                        mAdapterDataModel.addAll(transactions.getData());
+                        mView.finishLoading(transactions.getTotal());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.showServerError();
+                    }
+                });
+    }
+
     public void getTransactions(String address, long startIndex, int pageSize) {
         mView.showLoadingDialog();
 

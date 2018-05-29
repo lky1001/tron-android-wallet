@@ -8,8 +8,9 @@ import android.support.v7.widget.Toolbar;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.ui.accountdetail.transaction.TransactionFragment;
 import com.devband.tronwalletforandroid.ui.blockdetail.fragment.BlockOverviewFragment;
-import com.devband.tronwalletforandroid.ui.blockdetail.fragment.TransactionFragment;
+
 import com.devband.tronwalletforandroid.ui.blockdetail.fragment.TransferFragment;
 
 import java.util.ArrayList;
