@@ -38,10 +38,24 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
     void dataLoad() {
         mView.showLoadingDialog();
 
-        TronNetwork.getInstance().getTopAddressAccounts(10)
+        TronNetwork.getInstance().getTopAddressAccounts(13)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mView::overviewDataLoadSuccess,
+                        t -> mView.showServerError()
+                );
+
+        TronNetwork.getInstance().getAvgBlockSize()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        mView::overviewAvgBlockSize,
+                        t -> mView.showServerError()
+                );
+
+        TronNetwork.getInstance().getSystemStatus()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        mView::getBlockStatus,
                         t -> mView.showServerError()
                 );
     }

@@ -40,3 +40,5 @@
 
 -dontwarn com.akexorcist.roundcornerprogressbar.**
 -dontnote com.akexorcist.roundcornerprogressbar.**
+
+-keep class com.github.mikephil.charting.** { *; }
