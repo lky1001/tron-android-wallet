@@ -29,6 +29,11 @@ public interface TronScanService {
     Single<Transfers> getTransfers(@Query("start") int start, @Query("limit") int limit,
             @Query("sort") String sort, @Query("count") boolean count);
 
+    @GET("api/transfer")
+    Single<Transfers> getTransfers(@Query("start") int start, @Query("limit") int limit,
+                                   @Query("sort") String sort, @Query("count") boolean count,
+                                   @Query("address") String address);
+
     @GET("api/market/markets")
     Single<List<Market>> getMarket();
 

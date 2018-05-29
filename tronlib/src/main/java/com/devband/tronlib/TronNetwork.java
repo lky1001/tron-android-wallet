@@ -1,6 +1,7 @@
 package com.devband.tronlib;
 
 import com.devband.tronlib.dto.Account;
+import com.devband.tronlib.dto.AccountMedia;
 import com.devband.tronlib.dto.AccountVotes;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.CoinMarketCap;
@@ -75,6 +76,10 @@ public class TronNetwork {
         return mTronScanService.getTransfers(start, limit, sort, hasTotal);
     }
 
+    public Single<Transfers> getTransfers(int start, int limit, String sort, boolean hasTotal, String address) {
+        return mTronScanService.getTransfers(start, limit, sort, hasTotal, address);
+    }
+
     public Single<Tokens> getTokens(int start, int limit, String sort, String status) {
         return mTokenService.getTokens(start, limit, sort, status);
     }
@@ -121,5 +126,9 @@ public class TronNetwork {
 
     public Single<Transactions> getTransactions(String address, int start, int limit, String sort, boolean hasTotal) {
         return mTronScanService.getTransactions(address, start, limit, sort, hasTotal);
+    }
+
+    public Single<AccountMedia> getAccountMedia(String address) {
+        return mAccountService.getAccountMedia(address);
     }
 }

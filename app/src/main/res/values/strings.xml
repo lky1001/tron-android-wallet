@@ -235,6 +235,7 @@
     <string name="trans_from_text">From :</string>
     <string name="trans_to_text">To :</string>
     <string name="value_text">Value :</string>
+    <string name="amout_text">Amout :</string>
     <string name="created_text">Created :</string>
     <string name="account_title">Account</string>
     <string name="bottom_navigation_menu_tokens">Tokens</string>
@@ -251,4 +252,6 @@
     <string name="view_votes_text">View Votes</string>
     <string name="contract_text">Contract :</string>
     <string name="unrecognized_text">Unrecognized</string>
+
+    <string name="list_header_transfers">Transfers</string>
 </resources>

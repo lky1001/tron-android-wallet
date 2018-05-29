@@ -2,20 +2,20 @@ package com.devband.tronwalletforandroid.ui.detail_block;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.devband.tronlib.dto.TransactionStats;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.ui.detail_block.model.BaseModel;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.opencensus.internal.StringUtil;
 
 /**
  * Created by user on 2018. 5. 28..
@@ -28,16 +28,10 @@ public class BlockDetailActivity extends CommonActivity implements DetailBlockVi
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
-    @BindView(R.id.txt_address_value)
-    TextView mTxtAddress;
-
-    @BindView(R.id.txt_stats_in)
-    TextView mTxtStatsIn;
-    @BindView(R.id.txt_stats_out)
-    TextView mTxtStatsOut;
-
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
+
+    private BlockDetailAdapter mAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,7 +50,7 @@ public class BlockDetailActivity extends CommonActivity implements DetailBlockVi
             //TODO SHOW ERROR DIALOG
             return;
         }
-        ((DetailBlockPresenter) mPresenter).loadTransactionStats(address);
+        ((DetailBlockPresenter) mPresenter).loadData(address);
     }
 
     private String getStringIntentData(String key) {
@@ -69,22 +63,15 @@ public class BlockDetailActivity extends CommonActivity implements DetailBlockVi
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.title_detail_block);
         }
-
+        mAdapter = new BlockDetailAdapter();
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
-    public void transactionStatsLoadSuccess(TransactionStats data) {
+    public void dataLoadSuccess(List<BaseModel> viewModels) {
         hideDialog();
-        if (mTxtAddress == null || mTxtStatsIn == null || mTxtStatsOut == null) {
-            return;
-        }
-        String address = getStringIntentData(KEY_ADDRESS);
-        long in = data.getTransactionsIn();
-        long out = data.getTransactionsOut();
-
-        mTxtAddress.setText(address);
-        mTxtStatsIn.setText(in + "");
-        mTxtStatsOut.setText(out + "");
+        mAdapter.refresh(viewModels);
     }
 
     @Override
