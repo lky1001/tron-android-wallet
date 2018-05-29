@@ -91,7 +91,7 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
         List<PieEntry> entries = new ArrayList<>();
 
-        for (int i=2; i<data.size(); i++) {
+        for (int i=3; i<data.size(); i++) {
             TopAddressAccount account = data.get(i);
             double balance = account.getBalance() / Constants.ONE_TRX;
             entries.add(new PieEntry((float) balance));

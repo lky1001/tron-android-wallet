@@ -39,7 +39,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
     @Override
     public void onResume() {
-        getAccountAccountInfo();
+
     }
 
     @Override

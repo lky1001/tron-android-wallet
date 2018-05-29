@@ -205,6 +205,8 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
         } else {
             mFrozenTrxExpiredText.setText("-");
         }
+
+        hideDialog();
     }
 
     @Override

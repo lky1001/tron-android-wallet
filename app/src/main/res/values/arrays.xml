@@ -23,6 +23,22 @@
     </string-array>
 
     <array name="contract_types">
-        <item>47.254.16.55:50051</item>
+        <item>AccountCreateContract</item>
+        <item>TransferContract</item>
+        <item>TransferAssetContract</item>
+        <item>VoteAssetContract</item>
+        <item>VoteWitnessContract</item>
+        <item>WitnessCreateContract</item>
+        <item>AssetIssueContract</item>
+        <item>DeployContract</item>
+        <item>WitnessUpdateContract</item>
+        <item>ParticipateAssetIssueContract</item>
+        <item>AccountUpdateContract</item>
+        <item>FreezeBalanceContract</item>
+        <item>UnfreezeBalanceContract</item>
+        <item>WithdrawBalanceContract</item>
+        <item>UnfreezeAssetContract</item>
+        <item>UpdateAssetContract</item>
+        <item>CustomContract</item>
     </array>
 </resources>
