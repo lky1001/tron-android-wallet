@@ -5,6 +5,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -12,22 +14,36 @@ import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.devband.tronlib.dto.BlockStats;
+import com.devband.tronlib.dto.SystemStatus;
 import com.devband.tronlib.dto.TopAddressAccount;
 import com.devband.tronlib.dto.TopAddressAccounts;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.DefaultValueFormatter;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,8 +54,23 @@ import butterknife.ButterKnife;
 
 public class OverviewFragment extends BaseFragment implements OverviewView {
 
-    @BindView(R.id.pie_chart)
-    PieChart mPieChart;
+    @BindView(R.id.appbar_layout)
+    public AppBarLayout mAppBarLayout;
+
+    @BindView(R.id.toolbar_layout)
+    public CollapsingToolbarLayout mToolbarLayout;
+
+    @BindView(R.id.block_height_title_text)
+    TextView mBlockHeightTitleText;
+
+    @BindView(R.id.block_height_text)
+    TextView mBlockHeightText;
+
+    @BindView(R.id.account_pie_chart)
+    PieChart mAccountPieChart;
+
+    @BindView(R.id.avg_block_size_line_chart)
+    LineChart mAvgBlockSizeLineChart;
 
     public static BaseFragment newInstance() {
         OverviewFragment fragment = new OverviewFragment();
@@ -58,36 +89,62 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
         return view;
     }
 
+    private void initAvgBlockSizeChart() {
+        //mAvgBlockSizeLineChart
+    }
+
     private void initUi() {
-
         //initialize PieChart
-        mPieChart.getDescription().setEnabled(false);
-        mPieChart.setExtraOffsets(20.f, 0.f, 20.f, 0.f);
+        mAccountPieChart.getDescription().setEnabled(false);
+        mAccountPieChart.setExtraOffsets(20.f, 0.f, 20.f, 0.f);
 
-        mPieChart.setDragDecelerationFrictionCoef(0.95f);
-        mPieChart.setCenterText(generateCenterSpannableText());
+        mAccountPieChart.setDragDecelerationFrictionCoef(0.95f);
+        mAccountPieChart.setCenterText(generateCenterSpannableText());
 
-        mPieChart.setDrawHoleEnabled(true);
-        mPieChart.setHoleColor(Color.WHITE);
+        mAccountPieChart.setDrawHoleEnabled(true);
+        mAccountPieChart.setHoleColor(Color.WHITE);
 
-        mPieChart.setTransparentCircleColor(Color.WHITE);
-        mPieChart.setTransparentCircleAlpha(110);
+        mAccountPieChart.setTransparentCircleColor(Color.WHITE);
+        mAccountPieChart.setTransparentCircleAlpha(110);
 
-        mPieChart.setHoleRadius(58f);
-        mPieChart.setTransparentCircleRadius(61f);
+        mAccountPieChart.setHoleRadius(58f);
+        mAccountPieChart.setTransparentCircleRadius(61f);
 
-        mPieChart.setDrawCenterText(true);
+        mAccountPieChart.setDrawCenterText(true);
 
-        mPieChart.setRotationAngle(0);
+        mAccountPieChart.setRotationAngle(0);
         // enable rotation of the chart by touch
-        mPieChart.setRotationEnabled(true);
-        mPieChart.setHighlightPerTapEnabled(false);
+        mAccountPieChart.setRotationEnabled(true);
+        mAccountPieChart.setHighlightPerTapEnabled(false);
 
-        mPieChart.getLegend().setEnabled(false);
+        mAccountPieChart.getLegend().setEnabled(false);
+
+        mToolbarLayout.setTitle("");
+
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    mBlockHeightTitleText.setVisibility(View.GONE);
+                    mBlockHeightText.setVisibility(View.GONE);
+                    isShow = true;
+                } else if(isShow) {
+                    mBlockHeightTitleText.setVisibility(View.VISIBLE);
+                    mBlockHeightText.setVisibility(View.VISIBLE);
+                    isShow = false;
+                }
+            }
+        });
     }
 
     private void setTopAddressData(List<TopAddressAccount> data) {
-        mPieChart.setUsePercentValues(false);
+        mAccountPieChart.setUsePercentValues(false);
 
         List<PieEntry> entries = new ArrayList<>();
 
@@ -97,7 +154,7 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
             entries.add(new PieEntry((float) balance));
         }
 
-        PieDataSet dataSet = new PieDataSet(entries, "Top Adress");
+        PieDataSet dataSet = new PieDataSet(entries, "Top Address");
 
         ArrayList<Integer> colors = new ArrayList<>();
         for (int c : ColorTemplate.VORDIPLOM_COLORS)
@@ -128,17 +185,17 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
         d.setValueFormatter(new DefaultValueFormatter(0));
         d.setValueTextSize(11f);
         d.setValueTextColor(Color.BLACK);
-        mPieChart.setData(d);
+        mAccountPieChart.setData(d);
 
         // undo all highlights
-        mPieChart.highlightValues(null);
+        mAccountPieChart.highlightValues(null);
 
-        mPieChart.invalidate();
+        mAccountPieChart.invalidate();
     }
 
     private SpannableString generateCenterSpannableText() {
 
-        SpannableString s = new SpannableString("TRON\nWallert Top 15 Address");
+        SpannableString s = new SpannableString("TRON\nWallet Top 10 Address");
         s.setSpan(new RelativeSizeSpan(1.7f), 0, 4, 0);
         s.setSpan(new StyleSpan(Typeface.NORMAL), 4, s.length()-1, 0);
         s.setSpan(new ForegroundColorSpan(Color.GRAY), 4, s.length(), 0);
@@ -159,9 +216,73 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
     }
 
     @Override
+    public void getBlockStatus(SystemStatus systemStatus) {
+        mBlockHeightText.setText(Constants.numberFormat.format(systemStatus.getDatabase().getBlock()));
+    }
+
+    @Override
     public void overviewDataLoadSuccess(TopAddressAccounts topAddressAccounts) {
         hideDialog();
         setTopAddressData(topAddressAccounts.getData());
+    }
+
+    @Override
+    public void overviewTransferPastHour() {
+
+    }
+
+    @Override
+    public void overviewTransactionPastHour() {
+
+    }
+
+    @Override
+    public void overviewAvgBlockSize(List<BlockStats> stats) {
+        List<Entry> yVals = new ArrayList<>();
+
+        Map<Integer, String> x = new HashMap<>();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+        for (int i = 0; i < stats.size(); i++) {
+            x.put(i, sdf.format(new Date(stats.get(i).getTimestamp())));
+            yVals.add(new Entry((float) i, stats.get(i).getValue()));
+        }
+
+        LineDataSet set1;
+
+        // create a dataset and give it a type
+        set1 = new LineDataSet(yVals, "Avg Block Size");
+        set1.setFillAlpha(110);
+        // set1.setFillColor(Color.RED);
+
+        // set the line to be drawn like this "- - - - - -"
+        // set1.enableDashedLine(10f, 5f, 0f);
+        // set1.enableDashedHighlightLine(10f, 5f, 0f);
+        set1.setColor(Color.BLACK);
+        set1.setCircleColor(Color.BLACK);
+        set1.setLineWidth(1f);
+        set1.setCircleRadius(3f);
+        set1.setDrawCircleHole(false);
+        set1.setValueTextSize(9f);
+        set1.setDrawFilled(true);
+
+        List<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets.add(set1); // add the datasets
+
+        // create a data object with the datasets
+        LineData data = new LineData(dataSets);
+
+        mAvgBlockSizeLineChart.getXAxis().setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return x.get((int) value); // xVal is a string array
+            }
+        });
+
+        // set data
+        mAvgBlockSizeLineChart.setData(data);
+        mAvgBlockSizeLineChart.invalidate();
     }
 
     @Override

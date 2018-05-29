@@ -83,19 +83,25 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
     @Override
     protected void refresh() {
-        ((OverviewPresenter) mPresenter).getAccount(mAddress);
+        if (isAdded()) {
+            ((OverviewPresenter) mPresenter).getAccount(mAddress);
+        }
     }
 
     @Override
     public void showLoadingDialog() {
-        showProgressDialog(null, getString(R.string.loading_msg));
+        if (isAdded()) {
+            showProgressDialog(null, getString(R.string.loading_msg));
+        }
     }
 
     @Override
     public void showServerError() {
-        hideDialog();
-        Toast.makeText(getActivity(), getString(R.string.connection_error_msg),
-                Toast.LENGTH_SHORT).show();
+        if (isAdded()) {
+            hideDialog();
+            Toast.makeText(getActivity(), getString(R.string.connection_error_msg),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

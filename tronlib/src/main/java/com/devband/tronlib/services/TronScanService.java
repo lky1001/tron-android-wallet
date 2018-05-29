@@ -1,7 +1,9 @@
 package com.devband.tronlib.services;
 
+import com.devband.tronlib.dto.BlockStats;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.Market;
+import com.devband.tronlib.dto.SystemStatus;
 import com.devband.tronlib.dto.TransactionStats;
 import com.devband.tronlib.dto.Transactions;
 import com.devband.tronlib.dto.Transfers;
@@ -50,4 +52,11 @@ public interface TronScanService {
     @GET("api/transaction")
     Single<Transactions> getTransactions(@Query("address") String address, @Query("start") long start, @Query("limit") int limit,
             @Query("sort") String sort, @Query("count") boolean count);
+
+    @GET("api/system/status")
+    Single<SystemStatus> getStatus();
+
+    @GET("api/block/stats")
+    Single<List<BlockStats>> getBlockStats(@Query("info") String info);
+
 }

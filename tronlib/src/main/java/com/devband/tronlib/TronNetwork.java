@@ -3,9 +3,11 @@ package com.devband.tronlib;
 import com.devband.tronlib.dto.Account;
 import com.devband.tronlib.dto.AccountMedia;
 import com.devband.tronlib.dto.AccountVotes;
+import com.devband.tronlib.dto.BlockStats;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.dto.Market;
+import com.devband.tronlib.dto.SystemStatus;
 import com.devband.tronlib.dto.Token;
 import com.devband.tronlib.dto.TokenHolders;
 import com.devband.tronlib.dto.Tokens;
@@ -130,5 +132,13 @@ public class TronNetwork {
 
     public Single<AccountMedia> getAccountMedia(String address) {
         return mAccountService.getAccountMedia(address);
+    }
+
+    public Single<SystemStatus> getSystemStatus() {
+        return mTronScanService.getStatus();
+    }
+
+    public Single<List<BlockStats>> getAvgBlockSize() {
+        return mTronScanService.getBlockStats("avg-block-size");
     }
 }

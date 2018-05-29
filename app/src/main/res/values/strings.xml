@@ -255,4 +255,8 @@
     <string name="list_header_transfers">Transfers</string>
     <string name="vote_title">Votes</string>
     <string name="no_votes_text">No Votes</string>
+    <string name="overview_title">Overview</string>
+    <string name="block_height_text">Block Height</string>
+    <string name="top_address_text">Top 10 Address Trx</string>
+    <string name="avg_block_size_text">Average Block Size</string>
 </resources>
