@@ -178,6 +178,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
     @Override
     public void finishLoading(long total) {
+
         mStartIndex += PAGE_SIZE;
 
         if (mStartIndex >= total) {
