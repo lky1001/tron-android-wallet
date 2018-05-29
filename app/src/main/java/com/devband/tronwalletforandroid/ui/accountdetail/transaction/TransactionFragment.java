@@ -74,7 +74,7 @@ public class TransactionFragment extends BaseFragment implements TransactionView
     }
 
     private void initUi() {
-        mAdapter = new AccountTransactionAdapter(getActivity(), mOnItemClickListener);
+        mAdapter = new AccountTransactionAdapter(getActivity(), mOnItemClickListener, false);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -104,7 +104,7 @@ public class TransactionFragment extends BaseFragment implements TransactionView
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    ((TransactionPresenter) mPresenter).getTransactions(mStartIndex, PAGE_SIZE);
+                    ((TransactionPresenter) mPresenter).getTransactions(mAddress, mStartIndex, PAGE_SIZE);
                 }
             }
         }
@@ -122,7 +122,7 @@ public class TransactionFragment extends BaseFragment implements TransactionView
     @Override
     protected void refresh() {
         if (!mIsLastPage) {
-            ((TransactionPresenter) mPresenter).getTransactions(mStartIndex, PAGE_SIZE);
+            ((TransactionPresenter) mPresenter).getTransactions(mAddress, mStartIndex, PAGE_SIZE);
         }
     }
 

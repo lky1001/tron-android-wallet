@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.accountdetail.transaction;
+package com.devband.tronwalletforandroid.ui.blockexplorer.transaction;
 
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Transaction;
@@ -42,10 +42,10 @@ public class TransactionPresenter extends BasePresenter<TransactionView> {
 
     }
 
-    public void getTransactions(String address, int startIndex, int pageSize) {
+    public void getTransactions(int startIndex, int pageSize) {
         mView.showLoadingDialog();
 
-        TronNetwork.getInstance().getTransactions(address, startIndex, pageSize, "-timestamp", true)
+        TronNetwork.getInstance().getTransactions(startIndex, pageSize, "-timestamp", true)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Transactions>() {
                     @Override

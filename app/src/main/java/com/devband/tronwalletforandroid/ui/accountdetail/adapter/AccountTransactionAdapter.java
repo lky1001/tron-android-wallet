@@ -3,8 +3,12 @@ package com.devband.tronwalletforandroid.ui.accountdetail.adapter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +20,7 @@ import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.Utils;
+import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 
 import org.tron.protos.Protocol;
 
@@ -34,9 +39,12 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
 
     private View.OnClickListener mOnItemClickListener;
 
-    public AccountTransactionAdapter(Context context, View.OnClickListener onClickListener) {
+    private boolean mViewAddressDetail;
+
+    public AccountTransactionAdapter(Context context, View.OnClickListener onClickListener, boolean viewAddressDetail) {
         this.mContext = context;
         this.mOnItemClickListener = onClickListener;
+        this.mViewAddressDetail = viewAddressDetail;
     }
 
     @NonNull
@@ -57,7 +65,24 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
 
         holder.hashText.setText(item.getHash());
         holder.blockNumberText.setText(Constants.numberFormat.format(item.getBlock()));
-        holder.addressText.setText(item.getOwnerAddress());
+
+        if (mViewAddressDetail) {
+            SpannableString toAddressContent = new SpannableString(item.getOwnerAddress());
+            toAddressContent.setSpan(new UnderlineSpan(), 0, toAddressContent.length(), 0);
+            holder.addressText.setText(toAddressContent);
+
+            holder.addressText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, AccountDetailActivity.class);
+                    intent.putExtra(AccountDetailActivity.EXTRA_ADDRESS, item.getOwnerAddress());
+                    mContext.startActivity(intent);
+                }
+            });
+        } else {
+            holder.addressText.setText(item.getOwnerAddress());
+        }
+
         holder.createdText.setText(Constants.sdf.format(date));
         holder.contractTypeText.setText(Utils.getContractTypeString(mContext, item.getContractType()));
     }

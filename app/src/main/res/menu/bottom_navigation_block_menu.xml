@@ -19,7 +19,7 @@
     <item
         android:id="@+id/bottom_navigation_transfer"
         android:title="@string/bottom_navigation_menu_transfers"
-        android:icon="@drawable/ic_transaction"/>
+        android:icon="@drawable/ic_transfer"/>
 
     <item
         android:id="@+id/bottom_navigation_account"

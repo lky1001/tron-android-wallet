@@ -118,4 +118,8 @@ public class TronNetwork {
     public Single<Transactions> getTransactions(int start, int limit, String sort, boolean hasTotal) {
         return mTronScanService.getTransactions(start, limit, sort, hasTotal);
     }
+
+    public Single<Transactions> getTransactions(String address, int start, int limit, String sort, boolean hasTotal) {
+        return mTronScanService.getTransactions(address, start, limit, sort, hasTotal);
+    }
 }

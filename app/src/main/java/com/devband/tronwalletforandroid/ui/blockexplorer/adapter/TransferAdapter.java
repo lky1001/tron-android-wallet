@@ -30,7 +30,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder> implements AdapterDataModel<Transfer>, AdapterView {
+public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.TransferViewHolder> implements AdapterDataModel<Transfer>, AdapterView {
 
     private List<Transfer> mList;
 
@@ -38,7 +38,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     private View.OnClickListener mOnItemClickListener;
 
-    public TransactionAdapter(Context context, View.OnClickListener onItemClickListener) {
+    public TransferAdapter(Context context, View.OnClickListener onItemClickListener) {
         this.mList = new ArrayList<>();
         this.mContext = context;
         this.mOnItemClickListener = onItemClickListener;
@@ -46,16 +46,16 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     @NonNull
     @Override
-    public TransactionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TransferViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_block_transfer, null);
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                 RecyclerView.LayoutParams.WRAP_CONTENT));
         v.setOnClickListener(mOnItemClickListener);
-        return new TransactionViewHolder(v);
+        return new TransferViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TransferViewHolder holder, int position) {
         Transfer item = mList.get(position);
 
         holder.hashText.setText("#" + item.getHash());
@@ -167,7 +167,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         notifyDataSetChanged();
     }
 
-    class TransactionViewHolder extends RecyclerView.ViewHolder {
+    class TransferViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.hash_text)
         public TextView hashText;
@@ -193,7 +193,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         @BindView(R.id.created_text)
         public TextView createdText;
 
-        public TransactionViewHolder(View itemView) {
+        public TransferViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

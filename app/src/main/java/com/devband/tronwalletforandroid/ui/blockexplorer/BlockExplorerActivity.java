@@ -11,6 +11,7 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.ui.blockexplorer.account.AccountFragment;
 import com.devband.tronwalletforandroid.ui.blockexplorer.block.BlockFragment;
 import com.devband.tronwalletforandroid.ui.blockexplorer.overview.OverviewFragment;
+import com.devband.tronwalletforandroid.ui.blockexplorer.transaction.TransactionFragment;
 import com.devband.tronwalletforandroid.ui.blockexplorer.transfer.TransferFragment;
 
 import java.util.ArrayList;
@@ -28,7 +29,8 @@ public class BlockExplorerActivity extends CommonActivity {
     private static final int FRAGMENT_OVERVIEW = 0;
     private static final int FRAGMENT_BLOCK = 1;
     private static final int FRAGMENT_TRANSACTION = 2;
-    private static final int FRAGMENT_ACCOUNT = 3;
+    private static final int FRAGMENT_TRANSFER = 3;
+    private static final int FRAGMENT_ACCOUNT = 4;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -47,8 +49,11 @@ public class BlockExplorerActivity extends CommonActivity {
             case R.id.bottom_navigation_block:
                 changeFragment(FRAGMENT_BLOCK);
                 return true;
-            case R.id.bottom_navigation_transfer:
+            case R.id.bottom_navigation_transaction:
                 changeFragment(FRAGMENT_TRANSACTION);
+                return true;
+            case R.id.bottom_navigation_transfer:
+                changeFragment(FRAGMENT_TRANSFER);
                 return true;
             case R.id.bottom_navigation_account:
                 changeFragment(FRAGMENT_ACCOUNT);
@@ -76,6 +81,7 @@ public class BlockExplorerActivity extends CommonActivity {
 
         mFragments.add(OverviewFragment.newInstance());
         mFragments.add(BlockFragment.newInstance());
+        mFragments.add(TransactionFragment.newInstance());
         mFragments.add(TransferFragment.newInstance());
         mFragments.add(AccountFragment.newInstance());
 
@@ -84,6 +90,7 @@ public class BlockExplorerActivity extends CommonActivity {
                 .add(R.id.content, mFragments.get(FRAGMENT_OVERVIEW))
                 .add(R.id.content, mFragments.get(FRAGMENT_BLOCK))
                 .add(R.id.content, mFragments.get(FRAGMENT_TRANSACTION))
+                .add(R.id.content, mFragments.get(FRAGMENT_TRANSFER))
                 .add(R.id.content, mFragments.get(FRAGMENT_ACCOUNT))
                 .commit();
 
@@ -103,6 +110,7 @@ public class BlockExplorerActivity extends CommonActivity {
                         .show(mFragments.get(FRAGMENT_OVERVIEW))
                         .hide(mFragments.get(FRAGMENT_BLOCK))
                         .hide(mFragments.get(FRAGMENT_TRANSACTION))
+                        .hide(mFragments.get(FRAGMENT_TRANSFER))
                         .hide(mFragments.get(FRAGMENT_ACCOUNT))
                         .commit();
                 titleResId = R.string.bottom_navigation_menu_overview;
@@ -113,6 +121,7 @@ public class BlockExplorerActivity extends CommonActivity {
                         .hide(mFragments.get(FRAGMENT_OVERVIEW))
                         .show(mFragments.get(FRAGMENT_BLOCK))
                         .hide(mFragments.get(FRAGMENT_TRANSACTION))
+                        .hide(mFragments.get(FRAGMENT_TRANSFER))
                         .hide(mFragments.get(FRAGMENT_ACCOUNT))
                         .commit();
                 titleResId = R.string.bottom_navigation_menu_block;
@@ -123,6 +132,18 @@ public class BlockExplorerActivity extends CommonActivity {
                         .hide(mFragments.get(FRAGMENT_OVERVIEW))
                         .hide(mFragments.get(FRAGMENT_BLOCK))
                         .show(mFragments.get(FRAGMENT_TRANSACTION))
+                        .hide(mFragments.get(FRAGMENT_TRANSFER))
+                        .hide(mFragments.get(FRAGMENT_ACCOUNT))
+                        .commit();
+                titleResId = R.string.bottom_navigation_menu_transactions;
+                break;
+            case FRAGMENT_TRANSFER:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .hide(mFragments.get(FRAGMENT_OVERVIEW))
+                        .hide(mFragments.get(FRAGMENT_BLOCK))
+                        .hide(mFragments.get(FRAGMENT_TRANSACTION))
+                        .show(mFragments.get(FRAGMENT_TRANSFER))
                         .hide(mFragments.get(FRAGMENT_ACCOUNT))
                         .commit();
                 titleResId = R.string.bottom_navigation_menu_transfers;
@@ -133,6 +154,7 @@ public class BlockExplorerActivity extends CommonActivity {
                         .hide(mFragments.get(FRAGMENT_OVERVIEW))
                         .hide(mFragments.get(FRAGMENT_BLOCK))
                         .hide(mFragments.get(FRAGMENT_TRANSACTION))
+                        .hide(mFragments.get(FRAGMENT_TRANSFER))
                         .show(mFragments.get(FRAGMENT_ACCOUNT))
                         .commit();
                 titleResId = R.string.bottom_navigation_menu_account;

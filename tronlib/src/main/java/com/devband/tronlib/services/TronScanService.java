@@ -42,4 +42,7 @@ public interface TronScanService {
     Single<Transactions> getTransactions(@Query("start") int start, @Query("limit") int limit,
             @Query("sort") String sort, @Query("count") boolean count);
 
+    @GET("api/transaction")
+    Single<Transactions> getTransactions(@Query("address") String address, @Query("start") int start, @Query("limit") int limit,
+            @Query("sort") String sort, @Query("count") boolean count);
 }

@@ -112,10 +112,10 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
         mTransactionInText.setText(Constants.numberFormat.format(account.getTransactionIn()));
         mTransactionOutText.setText(Constants.numberFormat.format(account.getTransactionOut()));
 
-        if (!account.getAccount().getRepresentative().isEnabled()) {
-            mAccountTypeText.setText(getString(R.string.normal_text));
-        } else {
+        if (account.getAccount().getRepresentative().isEnabled()) {
             mAccountTypeText.setText(getString(R.string.representative_text));
+        } else {
+            mAccountTypeText.setText(getString(R.string.normal_text));
             ((AccountDetailActivity) getActivity()).removeRepresentativeMenu();
         }
 
