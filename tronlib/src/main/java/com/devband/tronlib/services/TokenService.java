@@ -12,13 +12,13 @@ import retrofit2.http.Query;
 public interface TokenService {
 
     @GET("api/token")
-    Single<Tokens> getTokens(@Query("start") int start, @Query("limit") int limit,
+    Single<Tokens> getTokens(@Query("start") long start, @Query("limit") int limit,
             @Query("sort") String sort, @Query("status") String status);
 
     @GET("api/token/{name}")
     Single<Token> getTokenDetail(@Path("name") String tokenName);
 
     @GET("api/token/{name}/address")
-    Single<TokenHolders> getTokenHolders(@Path("name") String tokenName, @Query("start") int start,
+    Single<TokenHolders> getTokenHolders(@Path("name") String tokenName, @Query("start") long start,
             @Query("limit") int limit, @Query("sort") String sort);
 }

@@ -16,7 +16,7 @@ public interface AccountService {
     Single<Account> getAccount(@Path("address") String address);
 
     @GET("api/account")
-    Single<TronAccounts> getAccounts(@Query("start") int start, @Query("limit") int limit,
+    Single<TronAccounts> getAccounts(@Query("start") long start, @Query("limit") int limit,
             @Query("sort") String sort);
 
     @GET("api/account")

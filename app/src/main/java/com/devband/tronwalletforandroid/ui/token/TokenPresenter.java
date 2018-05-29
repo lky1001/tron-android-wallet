@@ -42,7 +42,7 @@ public class TokenPresenter extends BasePresenter<TokenView> {
 
     }
 
-    public void loadItems(int startIndex, int pageSize) {
+    public void loadItems(long startIndex, int pageSize) {
         mView.showLoadingDialog();
 
         TronNetwork.getInstance().getTokens(startIndex, pageSize, "-name", "ico")

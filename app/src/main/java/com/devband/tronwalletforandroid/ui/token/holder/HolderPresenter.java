@@ -43,7 +43,7 @@ public class HolderPresenter extends BasePresenter<HolderView> {
 
     }
 
-    public void getTokenHolders(String tokenName, int startIndex, int pageSize) {
+    public void getTokenHolders(String tokenName, long startIndex, int pageSize) {
         mView.showLoadingDialog();
 
         TronNetwork.getInstance()

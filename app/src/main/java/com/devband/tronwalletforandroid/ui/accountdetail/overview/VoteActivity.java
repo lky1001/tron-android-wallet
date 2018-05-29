@@ -1,38 +1,39 @@
-package com.devband.tronwalletforandroid.ui.blockexplorer.account;
+package com.devband.tronwalletforandroid.ui.accountdetail.overview;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
-import com.devband.tronwalletforandroid.common.BaseFragment;
+import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
-import com.devband.tronwalletforandroid.ui.blockexplorer.adapter.TronAccountAdapter;
+import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
+import com.devband.tronwalletforandroid.ui.accountdetail.adapter.VoteAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by user on 2018. 5. 24..
- */
+public class VoteActivity extends CommonActivity implements VoteView {
 
-public class AccountFragment extends BaseFragment implements AccountView {
+    private String mAddress;
 
     private static final int PAGE_SIZE = 25;
 
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
     @BindView(R.id.recycler_view)
-    RecyclerView mAccountListView;
+    RecyclerView mListView;
 
     private LinearLayoutManager mLayoutManager;
     private AdapterView mAdapterView;
-    private TronAccountAdapter mTronAccountAdapter;
+    private VoteAdapter mAdapter;
 
     private long mStartIndex = 0;
 
@@ -40,36 +41,46 @@ public class AccountFragment extends BaseFragment implements AccountView {
 
     private boolean mIsLastPage;
 
-    public static BaseFragment newInstance() {
-        AccountFragment fragment = new AccountFragment();
-        return fragment;
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_account, container, false);
-        ButterKnife.bind(this, view);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mAddress = getIntent().getStringExtra(AccountDetailActivity.EXTRA_ADDRESS);
+
+        if (TextUtils.isEmpty(mAddress)) {
+            finish();
+        }
+
+        setContentView(R.layout.activity_account_votes);
+
+        ButterKnife.bind(this);
         initUi();
 
-        mPresenter = new AccountPresenter(this);
-        ((AccountPresenter) mPresenter).setAdapterDataModel(mTronAccountAdapter);
+        setSupportActionBar(mToolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(getString(R.string.vote_title));
+        }
+
+        mPresenter = new VotePresenter(this);
+        ((VotePresenter) mPresenter).setAdapterDataModel(mAdapter);
         mPresenter.onCreate();
 
-        return view;
+        ((VotePresenter) mPresenter).getVotes(mAddress, mStartIndex, PAGE_SIZE);
     }
 
     private void initUi() {
-        mTronAccountAdapter = new TronAccountAdapter(getActivity(), mOnItemClickListener);
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        mAdapter = new VoteAdapter(this, mOnItemClickListener);
+        mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        mAccountListView.setLayoutManager(mLayoutManager);
-        mAccountListView.addItemDecoration(new DividerItemDecoration(0));
-        mAccountListView.setAdapter(mTronAccountAdapter);
-        mAccountListView.addOnScrollListener(mRecyclerViewOnScrollListener);
+        mListView.setLayoutManager(mLayoutManager);
+        mListView.addItemDecoration(new DividerItemDecoration(0));
+        mListView.setAdapter(mAdapter);
+        mListView.addOnScrollListener(mRecyclerViewOnScrollListener);
 
-        mAdapterView = mTronAccountAdapter;
+        mAdapterView = mAdapter;
     }
 
     private RecyclerView.OnScrollListener mRecyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
@@ -90,7 +101,7 @@ public class AccountFragment extends BaseFragment implements AccountView {
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    ((AccountPresenter) mPresenter).getTronAccounts(mStartIndex, PAGE_SIZE);
+                    ((VotePresenter) mPresenter).getVotes(mAddress, mStartIndex, PAGE_SIZE);
                 }
             }
         }
@@ -99,16 +110,11 @@ public class AccountFragment extends BaseFragment implements AccountView {
     private View.OnClickListener mOnItemClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
+            //int pos = mListView.getChildLayoutPosition(v);
+            //Transaction item = mAdapter.getItem(pos);
+            // todo
         }
     };
-
-    @Override
-    protected void refresh() {
-        if (!mIsLastPage) {
-            ((AccountPresenter) mPresenter).getTronAccounts(mStartIndex, PAGE_SIZE);
-        }
-    }
 
     @Override
     public void finishLoading(long total) {
@@ -131,9 +137,8 @@ public class AccountFragment extends BaseFragment implements AccountView {
 
     @Override
     public void showServerError() {
-        mIsLoading = false;
         hideDialog();
-        Toast.makeText(getActivity(), getString(R.string.connection_error_msg),
+        Toast.makeText(this, getString(R.string.connection_error_msg),
                 Toast.LENGTH_SHORT).show();
     }
 }

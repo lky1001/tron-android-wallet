@@ -252,6 +252,6 @@
     <string name="view_votes_text">View Votes</string>
     <string name="contract_text">Contract :</string>
     <string name="unrecognized_text">Unrecognized</string>
-
     <string name="list_header_transfers">Transfers</string>
+    <string name="vote_title">Votes</string>
 </resources>

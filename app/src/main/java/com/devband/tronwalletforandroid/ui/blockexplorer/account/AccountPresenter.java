@@ -44,7 +44,7 @@ public class AccountPresenter extends BasePresenter<AccountView> {
 
     }
 
-    public void getTronAccounts(int startIndex, int pageSize) {
+    public void getTronAccounts(long startIndex, int pageSize) {
         mView.showLoadingDialog();
 
         TronNetwork.getInstance()

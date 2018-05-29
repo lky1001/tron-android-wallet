@@ -32,7 +32,7 @@ public class TokenActivity extends CommonActivity implements TokenView {
 
     private LinearLayoutManager mLayoutManager;
 
-    private int mStartIndex = 0;
+    private long mStartIndex = 0;
 
     private boolean mIsLoading;
 

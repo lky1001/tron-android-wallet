@@ -13,6 +13,6 @@ public interface VoteService {
     Single<Votes> getVoteCurrentCycle();
 
     @GET("api/vote")
-    Single<AccountVotes> getAccountVotes(@Query("voter") String voterAddress, @Query("start") int start,
+    Single<AccountVotes> getAccountVotes(@Query("voter") String voterAddress, @Query("start") long start,
             @Query("limit") int limit, @Query("sort") String sort);
 }

@@ -33,7 +33,7 @@ public class HolderFragment extends BaseFragment implements HolderView {
 
     private String mTokenName;
 
-    private int mStartIndex = 0;
+    private long mStartIndex = 0;
 
     private boolean mIsLoading;
 
