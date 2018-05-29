@@ -101,7 +101,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    ((TransferPresenter) mPresenter).getTransactions(mAddress, mStartIndex, PAGE_SIZE);
+                    ((TransferPresenter) mPresenter).getTransfers(mAddress, mStartIndex, PAGE_SIZE);
                 }
             }
         }
@@ -153,7 +153,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
     @Override
     protected void refresh() {
         if (!mIsLastPage) {
-            ((TransferPresenter) mPresenter).getTransactions(mAddress, mStartIndex, PAGE_SIZE);
+            ((TransferPresenter) mPresenter).getTransfers(mAddress, mStartIndex, PAGE_SIZE);
         }
     }
 

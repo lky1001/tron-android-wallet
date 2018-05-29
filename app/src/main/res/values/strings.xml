@@ -249,4 +249,6 @@
     <string name="representative_text">Representative</string>
     <string name="normal_text">Normal</string>
     <string name="view_votes_text">View Votes</string>
+    <string name="contract_text">Contract :</string>
+    <string name="unrecognized_text">Unrecognized</string>
 </resources>

@@ -8,16 +8,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.devband.tronlib.dto.Transaction;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
+import com.devband.tronwalletforandroid.common.Utils;
+
+import org.tron.protos.Protocol;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,9 +26,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTransactionAdapter.TransactionViewHolder>  implements AdapterDataModel<TransferInfo>, AdapterView {
+public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTransactionAdapter.TransactionViewHolder>  implements AdapterDataModel<Transaction>, AdapterView {
 
-    private List<TransferInfo> mList = new ArrayList<>();
+    private List<Transaction> mList = new ArrayList<>();
 
     private Context mContext;
 
@@ -42,7 +42,7 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
     @NonNull
     @Override
     public AccountTransactionAdapter.TransactionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_my_transfer, null);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_transaction, null);
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                 RecyclerView.LayoutParams.WRAP_CONTENT));
         v.setOnClickListener(mOnItemClickListener);
@@ -51,60 +51,18 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
 
     @Override
     public void onBindViewHolder(@NonNull AccountTransactionAdapter.TransactionViewHolder holder, int position) {
-        TransferInfo info = mList.get(position);
+        Transaction item = mList.get(position);
 
-        Date date = new Date(info.getTimestamp());
+        Date date = new Date(item.getTimestamp());
 
-        long amount = info.getAmount();
-
-        if (Constants.TRON_SYMBOL.equalsIgnoreCase(info.getTokenName())) {
-            amount = (long) (amount / Constants.ONE_TRX);
-        }
-
-        if (info.isSend()) {
-            holder.sendAddressText.setText(info.getTransferToAddress());
-            holder.sendAmountText.setText(Constants.tronBalanceFormat.format(amount) + " " + info.getTokenName());
-            holder.sendDateText.setText(Constants.sdf.format(date));
-
-            holder.sendLayout.setVisibility(View.VISIBLE);
-            holder.receiveLayout.setVisibility(View.GONE);
-
-            holder.copyToAddressView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    copyToClipboard(info.getTransferToAddress());
-                    Toast.makeText(mContext, mContext.getString(R.string.copy_to_address_msg),
-                            Toast.LENGTH_SHORT)
-                            .show();
-                }
-            });
-        } else {
-            holder.receiveAddressText.setText(info.getTransferFromAddress());
-            holder.receiveAmountText.setText(Constants.tronBalanceFormat.format(amount) + " " + info.getTokenName());
-            holder.receiveDateText.setText(Constants.sdf.format(date));
-
-            holder.sendLayout.setVisibility(View.GONE);
-            holder.receiveLayout.setVisibility(View.VISIBLE);
-
-            holder.copyFromAddressView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    copyToClipboard(info.getTransferFromAddress());
-                    Toast.makeText(mContext, mContext.getString(R.string.copy_from_address_msg),
-                            Toast.LENGTH_SHORT)
-                            .show();
-                }
-            });
-        }
+        holder.hashText.setText(item.getHash());
+        holder.blockNumberText.setText(Constants.numberFormat.format(item.getBlock()));
+        holder.addressText.setText(item.getOwnerAddress());
+        holder.createdText.setText(Constants.sdf.format(date));
+        holder.contractTypeText.setText(Utils.getContractTypeString(mContext, item.getContractType()));
     }
 
-    private void copyToClipboard(String content) {
-        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("", content);
-        clipboard.setPrimaryClip(clip);
-    }
-
-    public TransferInfo getItem(int pos) {
+    public Transaction getItem(int pos) {
         return mList.get(pos);
     }
 
@@ -113,19 +71,19 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
         return mList.size();
     }
 
-    public void refresh(List<TransferInfo> datas) {
+    public void refresh(List<Transaction> datas) {
         mList.clear();
         mList.addAll(datas);
         notifyDataSetChanged();
     }
 
     @Override
-    public void add(TransferInfo model) {
+    public void add(Transaction model) {
         mList.add(model);
     }
 
     @Override
-    public void addAll(List<TransferInfo> list) {
+    public void addAll(List<Transaction> list) {
         mList.addAll(list);
     }
 
@@ -135,7 +93,7 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
     }
 
     @Override
-    public TransferInfo getModel(int position) {
+    public Transaction getModel(int position) {
         return mList.get(position);
     }
 
@@ -156,35 +114,20 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
 
     public class TransactionViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.send_layout)
-        LinearLayout sendLayout;
+        @BindView(R.id.hash_text)
+        TextView hashText;
 
-        @BindView(R.id.receive_layout)
-        LinearLayout receiveLayout;
+        @BindView(R.id.block_number_text)
+        TextView blockNumberText;
 
-        @BindView(R.id.send_address_text)
-        TextView sendAddressText;
+        @BindView(R.id.address_text)
+        TextView addressText;
 
-        @BindView(R.id.receive_address_text)
-        TextView receiveAddressText;
+        @BindView(R.id.contract_type_text)
+        TextView contractTypeText;
 
-        @BindView(R.id.send_date_text)
-        TextView sendDateText;
-
-        @BindView(R.id.receive_date_text)
-        TextView receiveDateText;
-
-        @BindView(R.id.send_amount_text)
-        TextView sendAmountText;
-
-        @BindView(R.id.receive_amount_text)
-        TextView receiveAmountText;
-
-        @BindView(R.id.copy_from_address)
-        ImageView copyFromAddressView;
-
-        @BindView(R.id.copy_to_address)
-        ImageView copyToAddressView;
+        @BindView(R.id.created_text)
+        TextView createdText;
 
         public TransactionViewHolder(View itemView) {
             super(itemView);
