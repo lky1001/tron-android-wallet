@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingTop="4dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <FrameLayout
-        android:id="@+id/area_image_center"
+        android:id="@+id/area_represent_image"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="100dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -26,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/area_image_center"
+        app:layout_constraintTop_toBottomOf="@+id/area_represent_image"
         android:orientation="vertical"
         android:padding="5dp">
 

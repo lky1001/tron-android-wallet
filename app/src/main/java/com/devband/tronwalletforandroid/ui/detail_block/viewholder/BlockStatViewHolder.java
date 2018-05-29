@@ -1,10 +1,18 @@
 package com.devband.tronwalletforandroid.ui.detail_block.viewholder;
 
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.ui.detail_block.model.BlockStatModel;
 
@@ -17,7 +25,7 @@ import butterknife.ButterKnife;
 
 public class BlockStatViewHolder extends BaseViewHolder<BlockStatModel> {
 
-    @BindView(R.id.area_image_center)
+    @BindView(R.id.area_represent_image)
     View mAreaRepresent;
     @BindView(R.id.img_represent)
     ImageView mImgRepresent;
@@ -45,6 +53,26 @@ public class BlockStatViewHolder extends BaseViewHolder<BlockStatModel> {
             mAreaRepresent.setVisibility(View.GONE);
             return;
         }
+
+        Glide.with(itemView.getContext())
+                .load(imagePath)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        mImgRepresent.setVisibility(View.GONE);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        if (mImgRepresent.getVisibility() != View.VISIBLE) {
+                            mImgRepresent.setVisibility(View.VISIBLE);
+                        }
+                        Log.d("hanseon--", "BlockStatViewHolder - onResourceReady");
+                        return false;
+                    }
+                })
+                .into(mImgRepresent);
     }
 
     private void bindStatInfo(BlockStatModel model) {
