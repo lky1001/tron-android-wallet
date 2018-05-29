@@ -118,7 +118,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
                     .titleColorRes(android.R.color.black)
                     .contentColorRes(android.R.color.black)
                     .backgroundColorRes(android.R.color.white)
-                    .customView(R.layout.dialog_transaction, false)
+                    .customView(R.layout.dialog_transfer, false)
                     .positiveText(R.string.close_text);
 
             MaterialDialog dialog = builder.build();
