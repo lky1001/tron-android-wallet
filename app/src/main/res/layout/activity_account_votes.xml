@@ -15,6 +15,14 @@
         android:background="?attr/colorPrimary">
     </android.support.v7.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/no_votes_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:text="@string/no_votes_text" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"

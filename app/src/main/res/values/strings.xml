@@ -254,4 +254,5 @@
     <string name="unrecognized_text">Unrecognized</string>
     <string name="list_header_transfers">Transfers</string>
     <string name="vote_title">Votes</string>
+    <string name="no_votes_text">No Votes</string>
 </resources>

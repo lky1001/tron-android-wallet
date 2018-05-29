@@ -1,17 +1,23 @@
 package com.devband.tronwalletforandroid.ui.accountdetail.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.devband.tronlib.dto.AccountVote;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
+import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +51,27 @@ public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.VoteViewHolder
     @Override
     public void onBindViewHolder(@NonNull VoteViewHolder holder, int position) {
         AccountVote item = mList.get(position);
+
+        holder.urlText.setText(item.getCandidateUrl());
+
+        SpannableString content = new SpannableString(item.getCandidateAddress());
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+
+        holder.addressText.setText(content);
+
+        holder.addressText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, AccountDetailActivity.class);
+                intent.putExtra(AccountDetailActivity.EXTRA_ADDRESS, item.getCandidateAddress());
+                mContext.startActivity(intent);
+            }
+        });
+
+        holder.voteText.setText(Constants.numberFormat.format(item.getVotes()));
+        holder.votePercentText.setText(Constants.percentFormat.format((double) item.getVotes() / (double) item.getTotalVotes() * 100f) + "%");
+        holder.voteProgress.setMax((float) item.getTotalVotes());
+        holder.voteProgress.setProgress((float) item.getVotes());
     }
 
     public AccountVote getItem(int pos) {
@@ -98,6 +125,21 @@ public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.VoteViewHolder
     }
 
     public class VoteViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.representative_url_text)
+        TextView urlText;
+
+        @BindView(R.id.representative_address_text)
+        TextView addressText;
+
+        @BindView(R.id.your_vote_text)
+        TextView voteText;
+
+        @BindView(R.id.your_vote_percent_text)
+        TextView votePercentText;
+
+        @BindView(R.id.progress_votes)
+        RoundCornerProgressBar voteProgress;
 
         public VoteViewHolder(View itemView) {
             super(itemView);

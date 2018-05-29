@@ -49,6 +49,13 @@ public class VotePresenter extends BasePresenter<VoteView> {
 
         TronNetwork.getInstance().getAccountVotes(address, startIndex, pageSize, "-votes")
                 .observeOn(AndroidSchedulers.mainThread())
+                .map(accountVotes -> {
+                    for (AccountVote accountVote : accountVotes.getData()) {
+                        accountVote.setTotalVotes(accountVotes.getTotalVotes());
+                    }
+
+                    return accountVotes;
+                })
                 .subscribe(new SingleObserver<AccountVotes>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -58,7 +65,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
                     @Override
                     public void onSuccess(AccountVotes accountVotes) {
                         mAdapterDataModel.addAll(accountVotes.getData());
-                        mView.finishLoading(accountVotes.getTotal());
+                        mView.finishLoading(accountVotes.getTotalVotes(), accountVotes.getTotal());
                     }
 
                     @Override

@@ -7,11 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 import com.devband.tronwalletforandroid.ui.accountdetail.adapter.VoteAdapter;
@@ -27,6 +29,9 @@ public class VoteActivity extends CommonActivity implements VoteView {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+
+    @BindView(R.id.no_votes_text)
+    TextView mNoVotesText;
 
     @BindView(R.id.recycler_view)
     RecyclerView mListView;
@@ -117,11 +122,23 @@ public class VoteActivity extends CommonActivity implements VoteView {
     };
 
     @Override
-    public void finishLoading(long total) {
+    public void finishLoading(long totalVotes, long total) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(getString(R.string.vote_title) + " (" + Constants.numberFormat.format(totalVotes));
+        }
+
         mStartIndex += PAGE_SIZE;
 
         if (mStartIndex >= total) {
             mIsLastPage = true;
+        }
+
+        if (total == 0) {
+            mNoVotesText.setVisibility(View.VISIBLE);
+            mListView.setVisibility(View.GONE);
+        } else {
+            mNoVotesText.setVisibility(View.GONE);
+            mListView.setVisibility(View.VISIBLE);
         }
 
         mIsLoading = false;

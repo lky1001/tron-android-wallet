@@ -100,6 +100,10 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
     @Override
     public void finishLoading(@NonNull TronAccount account) {
+        if (!isAdded()) {
+            return;
+        }
+
         mAddressText.setText(account.getAccount().getAddress());
 
         if (!TextUtils.isEmpty(account.getAccount().getName())) {

@@ -29,4 +29,6 @@ public class AccountVote {
     private long voterAvailableVotes;
 
     private long votes;
+
+    private long totalVotes;
 }
