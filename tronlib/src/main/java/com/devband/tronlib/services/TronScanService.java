@@ -1,5 +1,6 @@
 package com.devband.tronlib.services;
 
+import com.devband.tronlib.dto.Block;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.Market;
 import com.devband.tronlib.dto.TransactionStats;
@@ -38,7 +39,10 @@ public interface TronScanService {
     Single<List<Market>> getMarket();
 
     @GET("api/block")
-    Single<Blocks> getBlock(@Query("sort") String sort, @Query("limit") int limit, @Query("start") long start);
+    Single<Blocks> getBlocks(@Query("sort") String sort, @Query("limit") int limit, @Query("start") long start);
+
+    @GET("api/block")
+    Single<Blocks> getBlock(@Query("sort") String sort, @Query("limit") int limit, @Query("number") long blockNumber);
 
     @GET("api/account/{address}/stats")
     Single<TransactionStats> getTransactionStats(@Path("address") String address);

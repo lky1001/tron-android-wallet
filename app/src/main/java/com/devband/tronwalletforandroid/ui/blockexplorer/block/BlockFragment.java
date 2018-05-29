@@ -16,7 +16,7 @@ import com.devband.tronlib.dto.Blocks;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.ui.blockexplorer.adapter.BlockAdapter;
-import com.devband.tronwalletforandroid.ui.detail_block.BlockDetailActivity;
+import com.devband.tronwalletforandroid.ui.blockdetail.BlockDetailActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,7 +64,7 @@ public class BlockFragment extends BaseFragment implements BlockView {
         Block model = mBlockAdapter.getItem(pos);
         if (model != null) {
             Intent intent = new Intent(BlockFragment.this.getContext(), BlockDetailActivity.class);
-            intent.putExtra(BlockDetailActivity.KEY_ADDRESS, model.getWitnessAddress());
+            intent.putExtra(BlockDetailActivity.EXTRA_BLOCK_NUMBER, model.getNumber());
             startActivity(intent);
         }
     };

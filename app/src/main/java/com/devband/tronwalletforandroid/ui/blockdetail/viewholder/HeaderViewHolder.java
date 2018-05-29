@@ -1,10 +1,10 @@
-package com.devband.tronwalletforandroid.ui.detail_block.viewholder;
+package com.devband.tronwalletforandroid.ui.blockdetail.viewholder;
 
 import android.view.View;
 import android.widget.TextView;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.ui.detail_block.model.HeaderModel;
+import com.devband.tronwalletforandroid.ui.blockdetail.model.HeaderModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

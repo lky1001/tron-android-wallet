@@ -3,6 +3,7 @@ package com.devband.tronlib;
 import com.devband.tronlib.dto.Account;
 import com.devband.tronlib.dto.AccountMedia;
 import com.devband.tronlib.dto.AccountVotes;
+import com.devband.tronlib.dto.Block;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.dto.Market;
@@ -97,7 +98,11 @@ public class TronNetwork {
     }
 
     public Single<Blocks> getBlocks(int limit, long start) {
-        return mTronScanService.getBlock("-number", limit, start);
+        return mTronScanService.getBlocks("-number", limit, start);
+    }
+
+    public Single<Blocks> getBlock(long blockNumber) {
+        return mTronScanService.getBlock("-number", 1, blockNumber);
     }
 
     public Single<Account> getAccount(String address) {

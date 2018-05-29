@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.detail_block;
+package com.devband.tronwalletforandroid.ui.blockdetail;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -6,12 +6,12 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.ui.detail_block.model.BaseModel;
-import com.devband.tronwalletforandroid.ui.detail_block.model.ViewType;
-import com.devband.tronwalletforandroid.ui.detail_block.viewholder.BaseViewHolder;
-import com.devband.tronwalletforandroid.ui.detail_block.viewholder.BlockStatViewHolder;
-import com.devband.tronwalletforandroid.ui.detail_block.viewholder.HeaderViewHolder;
-import com.devband.tronwalletforandroid.ui.detail_block.viewholder.TransferHistoryViewHolder;
+import com.devband.tronwalletforandroid.ui.blockdetail.model.BaseModel;
+import com.devband.tronwalletforandroid.ui.blockdetail.model.ViewType;
+import com.devband.tronwalletforandroid.ui.blockdetail.viewholder.BaseViewHolder;
+import com.devband.tronwalletforandroid.ui.blockdetail.viewholder.BlockStatViewHolder;
+import com.devband.tronwalletforandroid.ui.blockdetail.viewholder.HeaderViewHolder;
+import com.devband.tronwalletforandroid.ui.blockdetail.viewholder.TransferHistoryViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
