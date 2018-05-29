@@ -42,7 +42,7 @@ public class TransactionPresenter extends BasePresenter<TransactionView> {
 
     }
 
-    public void getTransactions(String address, int startIndex, int pageSize) {
+    public void getTransactions(String address, long startIndex, int pageSize) {
         mView.showLoadingDialog();
 
         TronNetwork.getInstance().getTransactions(address, startIndex, pageSize, "-timestamp", true)

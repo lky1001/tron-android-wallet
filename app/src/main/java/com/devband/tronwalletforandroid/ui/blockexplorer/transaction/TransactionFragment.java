@@ -30,7 +30,7 @@ public class TransactionFragment extends BaseFragment implements TransactionView
     private AdapterView mAdapterView;
     private AccountTransactionAdapter mAdapter;
 
-    private int mStartIndex = 0;
+    private long mStartIndex = 0;
 
     private boolean mIsLoading;
 

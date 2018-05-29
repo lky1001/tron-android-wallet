@@ -41,7 +41,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
     private AdapterView mAdapterView;
     private TransferAdapter mAdapter;
 
-    private int mStartIndex = 0;
+    private long mStartIndex = 0;
 
     private boolean mIsLoading;
 

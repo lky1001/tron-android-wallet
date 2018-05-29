@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.ui.accountdetail.overview;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -162,7 +163,10 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
     @OnClick(R.id.view_votes_button)
     public void onViewVotesClick() {
+        Intent intent = new Intent(getActivity(), VoteActivity.class);
+        intent.putExtra(AccountDetailActivity.EXTRA_ADDRESS, mAddress);
 
+        startActivity(intent);
     }
 }
 
