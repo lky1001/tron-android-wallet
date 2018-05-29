@@ -45,7 +45,7 @@ public class TransferPresenter extends BasePresenter<TransferView> {
 
     }
 
-    public void getTransactions(String address, int startIndex, int pageSize) {
+    public void getTransfers(String address, int startIndex, int pageSize) {
         mView.showLoadingDialog();
 
         TronNetwork.getInstance()

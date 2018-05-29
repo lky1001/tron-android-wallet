@@ -101,7 +101,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    ((TransferPresenter) mPresenter).getTransactions(mAddress, mStartIndex, PAGE_SIZE);
+                    ((TransferPresenter) mPresenter).getTransfers(mAddress, mStartIndex, PAGE_SIZE);
                 }
             }
         }
@@ -118,7 +118,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
                     .titleColorRes(android.R.color.black)
                     .contentColorRes(android.R.color.black)
                     .backgroundColorRes(android.R.color.white)
-                    .customView(R.layout.dialog_transaction, false)
+                    .customView(R.layout.dialog_transfer, false)
                     .positiveText(R.string.close_text);
 
             MaterialDialog dialog = builder.build();
@@ -153,7 +153,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
     @Override
     protected void refresh() {
         if (!mIsLastPage) {
-            ((TransferPresenter) mPresenter).getTransactions(mAddress, mStartIndex, PAGE_SIZE);
+            ((TransferPresenter) mPresenter).getTransfers(mAddress, mStartIndex, PAGE_SIZE);
         }
     }
 

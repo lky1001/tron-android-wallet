@@ -44,7 +44,7 @@ public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.Transa
     @NonNull
     @Override
     public TransactionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_my_transaction, null);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_my_transfer, null);
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                 RecyclerView.LayoutParams.WRAP_CONTENT));
         v.setOnClickListener(mOnItemClickListener);

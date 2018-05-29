@@ -21,4 +21,8 @@
     <string-array name="feedback_email_recipient">
         <item>dev@devband.com</item>
     </string-array>
+
+    <array name="contract_types">
+        <item>47.254.16.55:50051</item>
+    </array>
 </resources>
