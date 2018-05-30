@@ -76,8 +76,6 @@ public class HolderFragment extends BaseFragment implements HolderView {
         mPresenter = new HolderPresenter(this);
         ((HolderPresenter) mPresenter).setAdapterDataModel(mHolderAdapter);
         mPresenter.onCreate();
-
-        ((HolderPresenter) mPresenter).getTokenHolders(mTokenName, mStartIndex, PAGE_SIZE);
     }
 
     private RecyclerView.OnScrollListener mRecyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
@@ -113,11 +111,17 @@ public class HolderFragment extends BaseFragment implements HolderView {
 
     @Override
     protected void refresh() {
-        mAdapterView.refresh();
+        if (isAdded()) {
+            ((HolderPresenter) mPresenter).getTokenHolders(mTokenName, mStartIndex, PAGE_SIZE);
+        }
     }
 
     @Override
     public void finishLoading(long total) {
+        if (!isAdded()) {
+            return;
+        }
+
         mStartIndex += PAGE_SIZE;
 
         if (mStartIndex >= total) {

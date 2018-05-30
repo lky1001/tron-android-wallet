@@ -105,13 +105,16 @@ public class AccountFragment extends BaseFragment implements AccountView {
 
     @Override
     protected void refresh() {
-        if (!mIsLastPage) {
+        if (!mIsLastPage && isAdded()) {
             ((AccountPresenter) mPresenter).getTronAccounts(mStartIndex, PAGE_SIZE);
         }
     }
 
     @Override
     public void finishLoading(long total) {
+        if (!isAdded()) {
+            return;
+        }
         mStartIndex += PAGE_SIZE;
 
         if (mStartIndex >= total) {

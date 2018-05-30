@@ -83,19 +83,17 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        ((OverviewPresenter) mPresenter).loadTokenInfo(mTokenName);
-    }
-
-    @Override
     protected void refresh() {
-
+        if (isAdded()) {
+            ((OverviewPresenter) mPresenter).loadTokenInfo(mTokenName);
+        }
     }
 
     @Override
     public void tokenInfoLoadSuccess(@NonNull Token token) {
+        if (!isAdded()) {
+            return;
+        }
         mTokenNameText.setText(token.getName());
         mTokenDescText.setText(token.getDescription());
         mTokenWebsiteText.setText(token.getUrl());

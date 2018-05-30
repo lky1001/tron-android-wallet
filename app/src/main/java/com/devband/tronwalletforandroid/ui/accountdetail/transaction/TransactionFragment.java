@@ -132,7 +132,7 @@ public class TransactionFragment extends BaseFragment implements TransactionView
 
     @Override
     protected void refresh() {
-        if (!mIsLastPage) {
+        if (!mIsLastPage && isAdded()) {
             if (mBlock > 0L) {
                 ((TransactionPresenter) mPresenter).getTransactions(mBlock, mStartIndex, PAGE_SIZE);
             } else {
@@ -143,6 +143,9 @@ public class TransactionFragment extends BaseFragment implements TransactionView
 
     @Override
     public void finishLoading(long total) {
+        if (!isAdded()) {
+            return;
+        }
         mStartIndex += PAGE_SIZE;
 
         if (mStartIndex >= total) {

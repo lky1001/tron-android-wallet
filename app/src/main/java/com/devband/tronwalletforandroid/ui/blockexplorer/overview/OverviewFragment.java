@@ -216,16 +216,24 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
     @Override
     protected void refresh() {
-        ((OverviewPresenter) mPresenter).dataLoad();
+        if (isAdded()) {
+            ((OverviewPresenter) mPresenter).dataLoad();
+        }
     }
 
     @Override
     public void overviewBlockStatus(SystemStatus systemStatus) {
+        if (!isAdded()) {
+            return;
+        }
         mBlockHeightText.setText(Constants.numberFormat.format(systemStatus.getDatabase().getBlock()));
     }
 
     @Override
     public void overviewDataLoadSuccess(TopAddressAccounts topAddressAccounts) {
+        if (!isAdded()) {
+            return;
+        }
         hideDialog();
         setTopAddressData(topAddressAccounts.getData());
     }
@@ -246,6 +254,9 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
     }
 
     private void initLineChart(LineChart lineChart, List<Stat> stats) {
+        if (!isAdded()) {
+            return;
+        }
         List<Entry> yVals = new ArrayList<>();
 
         Map<Integer, String> x = new HashMap<>();

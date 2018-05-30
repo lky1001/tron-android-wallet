@@ -95,11 +95,17 @@ public class BlockFragment extends BaseFragment implements BlockView {
 
     @Override
     protected void refresh() {
-        ((BlockPresenter) mPresenter).loadBlockData();
+        if (isAdded()) {
+            ((BlockPresenter) mPresenter).loadBlockData();
+        }
     }
 
     @Override
     public void blockDataLoadSuccess(Blocks blocks, boolean added) {
+        if (!isAdded()) {
+            return;
+        }
+
         mDataLoading = false;
         hideDialog();
         if (added) {

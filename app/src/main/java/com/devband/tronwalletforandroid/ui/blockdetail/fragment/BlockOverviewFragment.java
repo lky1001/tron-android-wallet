@@ -90,6 +90,9 @@ public class BlockOverviewFragment extends BaseFragment implements BlockInfoView
 
     @Override
     public void finishLoading(@NonNull Block block) {
+        if (!isAdded()) {
+            return;
+        }
         hideDialog();
         if (block.isConfirmed()) {
             mTxtStatus.setText(R.string.confirmed);

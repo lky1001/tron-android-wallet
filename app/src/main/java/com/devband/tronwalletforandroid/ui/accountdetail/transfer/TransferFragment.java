@@ -167,7 +167,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
     @Override
     protected void refresh() {
-        if (!mIsLastPage) {
+        if (!mIsLastPage && isAdded()) {
             if (mBlock > 0L) {
                 ((TransferPresenter) mPresenter).getTransfers(mBlock, mStartIndex, PAGE_SIZE);
             } else {
@@ -178,7 +178,9 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
     @Override
     public void finishLoading(long total) {
-
+        if (!isAdded()) {
+            return;
+        }
         mStartIndex += PAGE_SIZE;
 
         if (mStartIndex >= total) {
