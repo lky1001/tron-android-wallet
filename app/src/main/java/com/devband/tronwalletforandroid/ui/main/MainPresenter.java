@@ -163,8 +163,23 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void createAccount(@NonNull String nickname) {
-        Tron.getInstance(mContext).createAccount(nickname);
-        mView.successCreateAccount();
+        Tron.getInstance(mContext).createAccount(nickname)
+                .subscribe(new SingleObserver<Boolean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean aBoolean) {
+                        mView.successCreateAccount();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.connectionError();
+                    }
+                });
     }
 
     public Single<List<AccountModel>> getAccountList() {

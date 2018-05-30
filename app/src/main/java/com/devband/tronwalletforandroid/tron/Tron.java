@@ -290,7 +290,8 @@ public class Tron {
 
     public Single<Boolean> createAccount(@NonNull String nickname) {
         return Single.fromCallable(() -> {
-            mAccountManager.createAccount(generateDefaultAccountName(nickname).blockingGet());
+            mAccountManager.createAccount(generateDefaultAccountName(nickname).blockingGet())
+                    .blockingGet();
             return true;
         });
     }

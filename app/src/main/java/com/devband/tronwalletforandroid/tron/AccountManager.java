@@ -489,10 +489,10 @@ public class AccountManager {
         return mAccountRepository.updateAccount(mLoginAccountModel);
     }
 
-    public void createAccount(@NonNull String nickname) {
+    public Single<Integer> createAccount(@NonNull String nickname) {
         this.mEcKey = new ECKey(Utils.getRandom());
 
-        createAddress(nickname, loadPassword(), mAesKey, false);
+        return createAddress(nickname, loadPassword(), mAesKey, false);
     }
 
     public Single<List<AccountModel>> getAccountList() {
