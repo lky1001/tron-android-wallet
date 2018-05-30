@@ -48,7 +48,6 @@ public class RepresentativeFragment extends BaseFragment implements Representati
         mAddress = getArguments().getString(AccountDetailActivity.EXTRA_ADDRESS);
 
         mPresenter = new RepresentativePresenter(this);
-        ((RepresentativePresenter) mPresenter).loadData(mAddress);
         return view;
     }
 
@@ -65,7 +64,9 @@ public class RepresentativeFragment extends BaseFragment implements Representati
 
     @Override
     protected void refresh() {
-
+        if (isAdded()) {
+            ((RepresentativePresenter) mPresenter).loadData(mAddress);
+        }
     }
 
     @Override
