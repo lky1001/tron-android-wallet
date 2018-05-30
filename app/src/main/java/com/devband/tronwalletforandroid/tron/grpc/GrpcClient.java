@@ -74,8 +74,7 @@ public class GrpcClient {
         return blockingStubFullNode.transferAsset(contract);
     }
 
-    public Transaction createParticipateAssetIssueTransaction(
-            Contract.ParticipateAssetIssueContract contract) {
+    public Transaction createParticipateAssetIssueTransaction(Contract.ParticipateAssetIssueContract contract) {
         return blockingStubFullNode.participateAssetIssue(contract);
     }
 

@@ -93,7 +93,6 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                 getSupportActionBar().setTitle(R.string.title_donations);
             }
 
-            // todo - developer tron address
             mInputAddress.setText(getString(R.string.donation_address_text));
             mInputAddress.setEnabled(false);
             mSendTrxBtn.setText(R.string.title_donations);

@@ -36,10 +36,13 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
 
     private View.OnClickListener mOnItemClickListener;
 
-    public TokenAdapter(Context context, View.OnClickListener onItemClickListener) {
+    private View.OnClickListener mOnParticipateClickListener;
+
+    public TokenAdapter(Context context, View.OnClickListener onItemClickListener, View.OnClickListener onParticipateClickListener) {
         this.mList = new ArrayList<>();
         this.mContext = context;
         this.mOnItemClickListener = onItemClickListener;
+        this.mOnParticipateClickListener = onParticipateClickListener;
     }
 
     @NonNull
@@ -93,15 +96,12 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
             holder.participateButton.setBackgroundResource(R.color.token_finished_button_color);
             holder.participateButton.setText(R.string.finished_btn_text);
             holder.participateButton.setEnabled(false);
+            holder.participateButton.setTag(null);
         } else {
             holder.participateButton.setBackgroundResource(R.color.token_participate_button_color);
             holder.participateButton.setText(R.string.participate_btn_text);
-            holder.participateButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(mContext, "Coming soon", Toast.LENGTH_SHORT).show();
-                }
-            });
+            holder.participateButton.setTag(item);
+            holder.participateButton.setOnClickListener(mOnParticipateClickListener);
         }
     }
 

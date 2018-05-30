@@ -319,6 +319,28 @@ public class Tron {
         return mTronManager.listNodes();
     }
 
+    public Single<Boolean> participateTokens(String tokenName, String issuerAddress, long amount) {
+        return Single.fromCallable(() -> {
+            byte[] toAddressBytes = AccountManager.decodeFromBase58Check(issuerAddress);
+
+            Contract.ParticipateAssetIssueContract participateAssetIssueContract = mAccountManager
+                    .participateAssetIssueContract(toAddressBytes, tokenName.getBytes(), amount);
+
+            return mTronManager.createParticipateAssetIssueTransaction(participateAssetIssueContract);
+        })
+        .flatMap(transactionSingle -> {
+            Protocol.Transaction transaction = transactionSingle.blockingGet();
+
+            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            // sign transaction
+            transaction = mAccountManager.signTransaction(transaction);
+            return mTronManager.broadcastTransaction(transaction);
+        });
+    }
+
     public Single<Boolean> voteWitness(Map<String, String> witness) {
         return Single.fromCallable(() -> {
             Contract.VoteWitnessContract voteWitnessContract = mAccountManager.createVoteWitnessContract(witness);

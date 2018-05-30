@@ -538,5 +538,22 @@ public class AccountManager {
 
         return builder.build();
     }
+
+    public Contract.ParticipateAssetIssueContract participateAssetIssueContract(byte[] to,
+            byte[] assertName, long amount) {
+        byte[] ownerAddress = mEcKey.getAddress();
+
+        Contract.ParticipateAssetIssueContract.Builder builder = Contract.ParticipateAssetIssueContract
+                .newBuilder();
+        ByteString bsTo = ByteString.copyFrom(to);
+        ByteString bsName = ByteString.copyFrom(assertName);
+        ByteString bsOwner = ByteString.copyFrom(ownerAddress);
+        builder.setToAddress(bsTo);
+        builder.setAssetName(bsName);
+        builder.setOwnerAddress(bsOwner);
+        builder.setAmount(amount);
+
+        return builder.build();
+    }
 }
 

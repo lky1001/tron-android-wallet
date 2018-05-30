@@ -82,6 +82,11 @@ class TronManager implements ITronManager {
     }
 
     @Override
+    public Single<Protocol.Transaction> createParticipateAssetIssueTransaction(Contract.ParticipateAssetIssueContract contract) {
+        return Single.fromCallable(() -> grpcClient.createParticipateAssetIssueTransaction(contract));
+    }
+
+    @Override
     public Single<Boolean> broadcastTransaction(Protocol.Transaction transaction) {
         return Single.fromCallable(() -> grpcClient.broadcastTransaction(transaction));
     }
