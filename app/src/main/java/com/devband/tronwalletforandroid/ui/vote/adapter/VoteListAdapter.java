@@ -31,11 +31,13 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
     private Context mContext;
 
     private View.OnClickListener mVoteClickListener;
+    private View.OnClickListener mViewClickListener;
 
-    public VoteListAdapter(Context context, View.OnClickListener voteClickListener) {
+    public VoteListAdapter(Context context, View.OnClickListener viewClickListener, View.OnClickListener voteClickListener) {
         this.mList = new ArrayList<>();
         this.mContext = context;
         this.mVoteClickListener = voteClickListener;
+        this.mViewClickListener = viewClickListener;
     }
 
     @NonNull
@@ -44,7 +46,7 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_vote, null);
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                 RecyclerView.LayoutParams.WRAP_CONTENT));
-//        v.setOnClickListener(mOnClickListener);
+        v.setOnClickListener(mViewClickListener);
         return new VoteViewHolder(v);
     }
 
@@ -102,6 +104,10 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
     @Override
     public int getItemCount() {
         return mList.size();
+    }
+
+    public VoteItem getItem(int position) {
+        return mList.get(position);
     }
 
     @Override

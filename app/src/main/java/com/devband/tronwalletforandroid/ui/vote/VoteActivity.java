@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.vote;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -21,6 +22,7 @@ import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
+import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 import com.devband.tronwalletforandroid.ui.vote.adapter.VoteListAdapter;
 import com.devband.tronwalletforandroid.ui.vote.dto.VoteItem;
 
@@ -97,7 +99,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
         mVoteListView.addItemDecoration(new DividerItemDecoration(0));
         mVoteListView.setNestedScrollingEnabled(false);
 
-        mVoteListAdapter = new VoteListAdapter(VoteActivity.this, mVoteClickListener);
+        mVoteListAdapter = new VoteListAdapter(VoteActivity.this, mViewClickListener, mVoteClickListener);
         mVoteListView.setAdapter(mVoteListAdapter);
         mAdapterView = mVoteListAdapter;
 
@@ -226,6 +228,14 @@ public class VoteActivity extends CommonActivity implements VoteView {
     public void onRetryClick() {
         ((VotePresenter) mPresenter).getRepresentativeList(mCheckMyVotes.isChecked());
     }
+
+    private View.OnClickListener mViewClickListener = view -> {
+        int pos = mVoteListView.getChildLayoutPosition(view);
+        VoteItem item = mVoteListAdapter.getItem(pos);
+        Intent intent = new Intent(view.getContext(), AccountDetailActivity.class);
+        intent.putExtra(AccountDetailActivity.EXTRA_ADDRESS, item.getAddress());
+        startActivity(intent);
+    };
 
     private View.OnClickListener mVoteClickListener = new View.OnClickListener() {
         @Override
