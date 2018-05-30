@@ -94,7 +94,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
             }
 
             // todo - developer tron address
-            //mInputAddress.setText(result);
+            mInputAddress.setText(getString(R.string.donation_address_text));
             mInputAddress.setEnabled(false);
             mSendTrxBtn.setText(R.string.title_donations);
             mQrCodeScanBtn.setVisibility(View.GONE);
@@ -183,7 +183,15 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
 
         if (result) {
             if (mFromDonations) {
-                // todo - thanks donations message
+                new MaterialDialog.Builder(SendTokenActivity.this)
+                        .title(R.string.donation_title_text)
+                        .titleColorRes(R.color.colorPrimary)
+                        .content(getString(R.string.thanks_msg))
+                        .positiveText(R.string.close_text)
+                        .onPositive((dialog, which) -> {
+                            dialog.dismiss();
+                            finishActivity();
+                        }).show();
             } else {
                 Toast.makeText(SendTokenActivity.this, getString(R.string.sending_token_success),
                         Toast.LENGTH_SHORT).show();
