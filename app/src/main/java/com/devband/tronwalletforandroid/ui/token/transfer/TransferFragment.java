@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.blockexplorer.transfer;
+package com.devband.tronwalletforandroid.ui.token.transfer;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
-import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 import com.devband.tronwalletforandroid.ui.blockexplorer.account.AccountPresenter;
 import com.devband.tronwalletforandroid.ui.blockexplorer.adapter.TransferAdapter;
+import com.devband.tronwalletforandroid.ui.token.TokenDetailActivity;
 
 import java.util.Date;
 
@@ -51,8 +51,14 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
     private long mBlock = 0L;
 
-    public static BaseFragment newInstance() {
+    private String mTokenName;
+
+    public static BaseFragment newInstance(@NonNull String tokenName) {
         TransferFragment fragment = new TransferFragment();
+        Bundle args = new Bundle(1);
+        args.putString(TokenDetailActivity.EXTRA_TOKEN_NAME, tokenName);
+
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -74,6 +80,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
         if (getArguments() != null) {
             mBlock = getArguments().getLong(EXTRA_BLOCK, 0L);
+            mTokenName = getArguments().getString(TokenDetailActivity.EXTRA_TOKEN_NAME, null);
         }
 
         mPresenter = new TransferPresenter(this);
@@ -114,11 +121,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    if (mBlock > 0L) {
-                        ((TransferPresenter) mPresenter).getTransfer(mBlock, mStartIndex, PAGE_SIZE);
-                    } else {
-                        ((TransferPresenter) mPresenter).getTransfer(mStartIndex, PAGE_SIZE);
-                    }
+                    ((TransferPresenter) mPresenter).getTransfer(mStartIndex, PAGE_SIZE, mTokenName);
                 }
             }
         }
@@ -170,11 +173,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
     @Override
     protected void refresh() {
         if (!mIsLastPage && isAdded()) {
-            if (mBlock > 0L) {
-                ((TransferPresenter) mPresenter).getTransfer(mBlock, mStartIndex, PAGE_SIZE);
-            } else {
-                ((TransferPresenter) mPresenter).getTransfer(mStartIndex, PAGE_SIZE);
-            }
+            ((TransferPresenter) mPresenter).getTransfer(mStartIndex, PAGE_SIZE, mTokenName);
         }
     }
 

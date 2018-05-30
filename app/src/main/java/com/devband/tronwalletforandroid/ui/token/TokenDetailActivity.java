@@ -11,7 +11,7 @@ import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.ui.token.holder.HolderFragment;
 import com.devband.tronwalletforandroid.ui.token.overview.OverviewFragment;
-import com.devband.tronwalletforandroid.ui.token.transaction.TransactionFragment;
+import com.devband.tronwalletforandroid.ui.token.transfer.TransferFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class TokenDetailActivity extends CommonActivity {
     public static final String EXTRA_TOKEN_NAME = "extra_token_name";
 
     private static final int FRAGMENT_OVERVIEW = 0;
-    private static final int FRAGMENT_TRANSACTION = 1;
+    private static final int FRAGMENT_TRANSFER = 1;
     private static final int FRAGMENT_HOLDER = 2;
 
     @BindView(R.id.toolbar)
@@ -63,13 +63,13 @@ public class TokenDetailActivity extends CommonActivity {
 
     private void initUi() {
         mFragments.add(OverviewFragment.newInstance(mTokenName));
-        mFragments.add(TransactionFragment.newInstance(mTokenName));
+        mFragments.add(TransferFragment.newInstance(mTokenName));
         mFragments.add(HolderFragment.newInstance(mTokenName));
 
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.content, mFragments.get(FRAGMENT_OVERVIEW))
-                .add(R.id.content, mFragments.get(FRAGMENT_TRANSACTION))
+                .add(R.id.content, mFragments.get(FRAGMENT_TRANSFER))
                 .add(R.id.content, mFragments.get(FRAGMENT_HOLDER))
                 .commit();
 
@@ -85,15 +85,15 @@ public class TokenDetailActivity extends CommonActivity {
                 getSupportFragmentManager()
                         .beginTransaction()
                         .show(mFragments.get(FRAGMENT_OVERVIEW))
-                        .hide(mFragments.get(FRAGMENT_TRANSACTION))
+                        .hide(mFragments.get(FRAGMENT_TRANSFER))
                         .hide(mFragments.get(FRAGMENT_HOLDER))
                         .commit();
                 break;
-            case FRAGMENT_TRANSACTION:
+            case FRAGMENT_TRANSFER:
                 getSupportFragmentManager()
                         .beginTransaction()
                         .hide(mFragments.get(FRAGMENT_OVERVIEW))
-                        .show(mFragments.get(FRAGMENT_TRANSACTION))
+                        .show(mFragments.get(FRAGMENT_TRANSFER))
                         .hide(mFragments.get(FRAGMENT_HOLDER))
                         .commit();
                 break;
@@ -101,7 +101,7 @@ public class TokenDetailActivity extends CommonActivity {
                 getSupportFragmentManager()
                         .beginTransaction()
                         .hide(mFragments.get(FRAGMENT_OVERVIEW))
-                        .hide(mFragments.get(FRAGMENT_TRANSACTION))
+                        .hide(mFragments.get(FRAGMENT_TRANSFER))
                         .show(mFragments.get(FRAGMENT_HOLDER))
                         .commit();
                 break;
@@ -115,7 +115,7 @@ public class TokenDetailActivity extends CommonActivity {
                 changeFragment(FRAGMENT_OVERVIEW);
                 return true;
             case R.id.bottom_navigation_transfer:
-                changeFragment(FRAGMENT_TRANSACTION);
+                changeFragment(FRAGMENT_TRANSFER);
                 return true;
             case R.id.bottom_navigation_holder:
                 changeFragment(FRAGMENT_HOLDER);
