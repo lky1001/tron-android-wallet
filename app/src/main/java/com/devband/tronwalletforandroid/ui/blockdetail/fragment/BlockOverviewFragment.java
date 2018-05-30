@@ -104,7 +104,7 @@ public class BlockOverviewFragment extends BaseFragment implements BlockInfoView
         mTxtTransaction.setText(block.getNrOfTrx() + "");
         mTxtParentHash.setText(block.getParentHash());
         mTxtWitnessAddress.setText(block.getWitnessAddress());
-        mTxtBlockSize.setText(Utils.getCommaNumber(block.getSize()));
+        mTxtBlockSize.setText(Utils.getCommaNumber(block.getSize()) + " " + getString(R.string.block_size_bytes));
     }
 
     @Override

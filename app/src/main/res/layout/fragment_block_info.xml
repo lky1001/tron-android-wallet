@@ -210,5 +210,10 @@
                 tools:text="35717e168ff6acfd96426c9e4a7726asdfasdfefb30edf3d70db" />
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/account_detail_border_color"/>
+
     </LinearLayout>
 </ScrollView>

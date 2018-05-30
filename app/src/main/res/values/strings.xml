@@ -273,4 +273,5 @@
     <string name="transactions_in_the_past_hour_text">Transactions in the past hour</string>
     <string name="confirmed">CONFIRMED</string>
     <string name="unconfirmed">UNCONFIRMED</string>
+    <string name="block_size_bytes">Bytes</string>
 </resources>
