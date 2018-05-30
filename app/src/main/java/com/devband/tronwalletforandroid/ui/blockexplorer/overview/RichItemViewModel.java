@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.blockexplorer.overview;
 
+import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.dto.RichData;
 import com.devband.tronlib.dto.RichInfo;
 import com.devband.tronlib.dto.RichTotal;
@@ -14,15 +15,18 @@ import lombok.Setter;
 @Getter
 public class RichItemViewModel {
     private String balanceRange;
+    private int addressCount;
     private float addressPercentage;
-    private long trx;
     private double coinPercentage;
-    private long coins;
+    private double coins;
+    private double usd;
 
-    public RichItemViewModel(RichTotal total, RichInfo richInfo) {
+    public RichItemViewModel(RichTotal total, RichInfo richInfo, CoinMarketCap coinMarketCap) {
         balanceRange = richInfo.getFrom() + "\n-\n" + richInfo.getTo();
-        addressPercentage = richInfo.getAccounts() / (float) total.getAccounts() * 100F;
-        coinPercentage = richInfo.getBalance() / total.getCoins() * 100L;
+        addressCount = richInfo.getAccounts();
+        addressPercentage = richInfo.getAccounts() / (float) total.getAccounts() * 100f;
         coins = richInfo.getBalance();
+        coinPercentage = richInfo.getBalance() / total.getCoins() * 100f;
+        usd = coins * Double.parseDouble(coinMarketCap.getPriceUsd());
     }
 }

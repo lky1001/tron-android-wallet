@@ -19,7 +19,7 @@ public class RichInfo {
     private int accounts;
 
     @JsonProperty("balance")
-    private long balance;
+    private double balance;
 
     @JsonProperty("from")
     private long from;

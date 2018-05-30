@@ -28,12 +28,36 @@ public class Utils {
         }
     }
 
+    public static String getUsdFormat(float number) {
+        return Constants.usdFormat.format(number);
+    }
+
+    public static String getUsdFormat(double number) {
+        return Constants.usdFormat.format(number);
+    }
+
     public static String getCommaNumber(int number) {
         return Constants.numberFormat.format(number);
     }
 
     public static String getCommaNumber(long number) {
         return Constants.numberFormat.format(number);
+    }
+
+    public static String getTrxFormat(double number) {
+        return Constants.tronBalanceFormat.format(number);
+    }
+
+    public static String getRealTrxFormat(long number) {
+        return Constants.tronBalanceFormat.format((double) number / Constants.ONE_TRX);
+    }
+
+    public static String getPercentFormat(float number) {
+        return Constants.percentFormat.format(number);
+    }
+
+    public static String getPercentFormat(double number) {
+        return Constants.percentFormat.format(number);
     }
 
     public static void setBlockDetailAction(Context context, TextView textView, long blockNum) {

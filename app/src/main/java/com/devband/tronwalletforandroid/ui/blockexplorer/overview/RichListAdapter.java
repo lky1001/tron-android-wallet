@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +34,12 @@ public class RichListAdapter extends RecyclerView.Adapter<RichListAdapter.RichVi
     @Override
     public void onBindViewHolder(@NonNull RichViewHolder holder, int position) {
         RichItemViewModel viewModel = mList.get(position);
-        holder.txtBalance.setText(viewModel.getBalanceRange());
-        holder.txtAddressPercentage.setText(viewModel.getAddressPercentage() + "%");
-        holder.txtTrx.setText(viewModel.getCoins() + " TRX");
-        holder.txtUsd.setText("---");
-        holder.txtCoinPercentage.setText(viewModel.getCoinPercentage() + "%");
+        holder.txtBalanceRange.setText(viewModel.getBalanceRange());
+        holder.txtAddressPercentage.setText(Utils.getCommaNumber(viewModel.getAddressCount())
+                + "(" + Utils.getPercentFormat(viewModel.getAddressPercentage()) + "%)");
+        holder.txtTrx.setText(Utils.getTrxFormat(viewModel.getCoins()) + " TRX ("
+                + Utils.getPercentFormat(viewModel.getCoinPercentage()) + "%)");
+        holder.txtUsd.setText(Utils.getUsdFormat(viewModel.getUsd()));
     }
 
     @Override
@@ -54,18 +56,16 @@ public class RichListAdapter extends RecyclerView.Adapter<RichListAdapter.RichVi
     public class RichViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.value_balnce)
-        TextView txtBalance;
-
+        TextView txtBalanceRange;
 
         @BindView(R.id.value_rich_address)
         TextView txtAddressPercentage;
+
         @BindView(R.id.contract_type_text)
         TextView txtTrx;
+
         @BindView(R.id.value_rich_usd)
         TextView txtUsd;
-        @BindView(R.id.value_rich_coin)
-        TextView txtCoinPercentage;
-
 
         public RichViewHolder(View itemView) {
             super(itemView);

@@ -95,32 +95,9 @@
                     android:layout_marginLeft="3dp"
                     tools:text="3,706,655,073.71 USD" />
             </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_rich_list_coins" />
-
-                <TextView
-                    android:id="@+id/value_rich_coin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
-                    tools:text="14.8329 %" />
-            </LinearLayout>
-
         </LinearLayout>
 
     </android.support.constraint.ConstraintLayout>
-
-
 
     <View
         android:layout_width="match_parent"

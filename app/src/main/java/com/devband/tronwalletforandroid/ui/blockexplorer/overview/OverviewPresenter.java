@@ -1,6 +1,7 @@
 package com.devband.tronwalletforandroid.ui.blockexplorer.overview;
 
 import com.devband.tronlib.TronNetwork;
+import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.dto.RichInfo;
 import com.devband.tronlib.dto.RichTotal;
 import com.devband.tronlib.dto.Stat;
@@ -102,10 +103,13 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
 
         TronNetwork.getInstance().getRichList()
                 .map(richData ->  {
+                    CoinMarketCap coinMarketCap = TronNetwork.getInstance()
+                            .getCoinInfo(Constants.TRON_COINMARKET_NAME).blockingGet().get(0);
+
                     List<RichItemViewModel> viewModels = new ArrayList<>();
                     RichTotal total = richData.getTotal();
                     for (RichInfo info : richData.getData()) {
-                        viewModels.add(new RichItemViewModel(total, info));
+                        viewModels.add(new RichItemViewModel(total, info, coinMarketCap));
                     }
                     return viewModels;
                 })
