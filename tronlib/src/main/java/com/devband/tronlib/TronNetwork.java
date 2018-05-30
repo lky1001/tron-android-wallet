@@ -25,6 +25,7 @@ import com.devband.tronlib.services.TronScanService;
 import com.devband.tronlib.services.VoteService;
 
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Single;
 
@@ -61,6 +62,10 @@ public class TronNetwork {
 
     public Single<Votes> getVoteCurrentCycle() {
         return mVoteService.getVoteCurrentCycle();
+    }
+
+    public Single<Map<String, Long>> getRemainNextCycle() {
+        return mVoteService.getRemainNextCycle();
     }
 
     public Single<List<CoinMarketCap>> getCoinInfo(String symbol) {

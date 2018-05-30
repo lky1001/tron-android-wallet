@@ -9,7 +9,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="192dp"
+        android:layout_height="210dp"
         android:background="?attr/colorPrimary"
         android:fitsSystemWindows="true">
 
@@ -44,7 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
-                    android:textSize="24sp"
+                    android:textSize="16sp"
                     android:layout_marginBottom="10dp"
                     android:text="@string/title_representative_list" />
                 <LinearLayout
@@ -56,7 +56,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:visibility="invisible"
                         android:text="@string/representative_count_text" />
                     <TextView
@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:textColor="@android:color/white"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:visibility="invisible"
                         tools:text="93" />
                 </LinearLayout>
@@ -78,7 +78,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:visibility="invisible"
                         android:text="@string/highest_votes_text" />
 
@@ -88,10 +88,28 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:textColor="@android:color/white"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:visibility="invisible"
                         tools:text="375,912,342,123 TRX" />
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/next_vote_cycle_title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    android:text="@string/next_vote_cycle_text" />
+
+                <TextView
+                    android:id="@+id/next_vote_cycle_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    tools:text="01:01:34" />
             </LinearLayout>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
