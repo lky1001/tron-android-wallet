@@ -10,8 +10,8 @@ import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.accountdetail.transaction.TransactionFragment;
-import com.devband.tronwalletforandroid.ui.accountdetail.transfer.TransferFragment;
 import com.devband.tronwalletforandroid.ui.blockdetail.fragment.BlockOverviewFragment;
+import com.devband.tronwalletforandroid.ui.blockexplorer.transfer.TransferFragment;
 
 import java.util.ArrayList;
 import java.util.List;

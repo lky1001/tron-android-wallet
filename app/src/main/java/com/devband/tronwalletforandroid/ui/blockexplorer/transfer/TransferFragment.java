@@ -19,6 +19,7 @@ import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
+import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 import com.devband.tronwalletforandroid.ui.blockexplorer.account.AccountPresenter;
 import com.devband.tronwalletforandroid.ui.blockexplorer.adapter.TransferAdapter;
 
@@ -33,6 +34,7 @@ import butterknife.ButterKnife;
 
 public class TransferFragment extends BaseFragment implements TransferView {
     private static final int PAGE_SIZE = 25;
+    private static final String EXTRA_BLOCK = "extra_block";
 
     @BindView(R.id.recycler_view)
     RecyclerView mListView;
@@ -47,8 +49,19 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
     private boolean mIsLastPage;
 
+    private long mBlock = 0L;
+
     public static BaseFragment newInstance() {
         TransferFragment fragment = new TransferFragment();
+        return fragment;
+    }
+
+    public static BaseFragment newInstance(@NonNull long block) {
+        TransferFragment fragment = new TransferFragment();
+        Bundle args = new Bundle(1);
+        args.putLong(EXTRA_BLOCK, block);
+
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -58,6 +71,10 @@ public class TransferFragment extends BaseFragment implements TransferView {
         View view = inflater.inflate(R.layout.fragment_transfer, container, false);
         ButterKnife.bind(this, view);
         initUi();
+
+        if (getArguments() != null) {
+            mBlock = getArguments().getLong(EXTRA_BLOCK, 0L);
+        }
 
         mPresenter = new TransferPresenter(this);
         ((TransferPresenter) mPresenter).setAdapterDataModel(mAdapter);
@@ -149,7 +166,11 @@ public class TransferFragment extends BaseFragment implements TransferView {
     @Override
     protected void refresh() {
         if (!mIsLastPage && isAdded()) {
-            ((TransferPresenter) mPresenter).getTransactions(mStartIndex, PAGE_SIZE);
+            if (mBlock > 0L) {
+                ((TransferPresenter) mPresenter).getTransfer(mBlock, mStartIndex, PAGE_SIZE);
+            } else {
+                ((TransferPresenter) mPresenter).getTransfer(mStartIndex, PAGE_SIZE);
+            }
         }
     }
 

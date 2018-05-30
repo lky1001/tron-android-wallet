@@ -29,7 +29,6 @@ import butterknife.ButterKnife;
 public class TransferFragment extends BaseFragment implements TransferView {
 
     private String mAddress;
-    private long mBlock;
 
     private static final int PAGE_SIZE = 25;
 
@@ -55,15 +54,6 @@ public class TransferFragment extends BaseFragment implements TransferView {
         return fragment;
     }
 
-    public static BaseFragment newInstance(@NonNull long block) {
-        TransferFragment fragment = new TransferFragment();
-        Bundle args = new Bundle(1);
-        args.putLong(AccountDetailActivity.EXTRA_BLOCK, block);
-
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -72,7 +62,6 @@ public class TransferFragment extends BaseFragment implements TransferView {
         initUi();
 
         mAddress = getArguments().getString(AccountDetailActivity.EXTRA_ADDRESS);
-        mBlock = getArguments().getLong(AccountDetailActivity.EXTRA_BLOCK, 0L);
 
         mPresenter = new TransferPresenter(this);
         ((TransferPresenter) mPresenter).setAdapterDataModel(mAdapter);
@@ -112,11 +101,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    if (mBlock > 0L) {
-                        ((TransferPresenter) mPresenter).getTransfers(mBlock, mStartIndex, PAGE_SIZE);
-                    } else {
-                        ((TransferPresenter) mPresenter).getTransfers(mAddress, mStartIndex, PAGE_SIZE);
-                    }
+                    ((TransferPresenter) mPresenter).getTransfers(mAddress, mStartIndex, PAGE_SIZE);
                 }
             }
         }
@@ -168,11 +153,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
     @Override
     protected void refresh() {
         if (!mIsLastPage && isAdded()) {
-            if (mBlock > 0L) {
-                ((TransferPresenter) mPresenter).getTransfers(mBlock, mStartIndex, PAGE_SIZE);
-            } else {
-                ((TransferPresenter) mPresenter).getTransfers(mAddress, mStartIndex, PAGE_SIZE);
-            }
+            ((TransferPresenter) mPresenter).getTransfers(mAddress, mStartIndex, PAGE_SIZE);
         }
     }
 
