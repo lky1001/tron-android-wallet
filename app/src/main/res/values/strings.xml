@@ -47,7 +47,7 @@
     <string name="send_trx_text">Send</string>
     <string name="invalid_address">Invalid Address</string>
     <string name="invalid_amount">Invalid Amount</string>
-    <string name="sending_token_failed">Sending token failed.</string>
+    <string name="sending_token_failed">Something went wrong while submitting the transaction</string>
     <string name="sending_token_success">Sending token success.</string>
     <string name="invalid_private_key">Invalid Private Key.</string>
     <string name="invalid_password_or_private_key">Invalid password or private key</string>
@@ -285,4 +285,5 @@
     <string name="donation_address_text">27ieRxudyi2mVSJh6ox4DBBxmBUjMFzxL35</string>
     <string name="thanks_msg">Thanks for your donation!</string>
     <string name="donation_title_text">Wow!</string>
+    <string name="send_token_failed_title_text">Warning</string>
 </resources>

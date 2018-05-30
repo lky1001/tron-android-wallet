@@ -197,8 +197,14 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                 finishActivity();
             }
         } else {
-            Toast.makeText(SendTokenActivity.this, getString(R.string.sending_token_failed),
-                    Toast.LENGTH_SHORT).show();
+            new MaterialDialog.Builder(SendTokenActivity.this)
+                    .title(R.string.send_token_failed_title_text)
+                    .titleColorRes(R.color.colorPrimary)
+                    .content(getString(R.string.sending_token_failed))
+                    .positiveText(R.string.close_text)
+                    .onPositive((dialog, which) -> {
+                        dialog.dismiss();
+                    }).show();
         }
     }
 
