@@ -268,4 +268,6 @@
     <string name="top_address_text">Top 10 Address Trx</string>
     <string name="avg_block_size_text">Average Block Size</string>
     <string name="name_title_text">Name :</string>
+    <string name="trx_transferred_in_the_past_hour_text">TRX transferred in the past hour</string>
+    <string name="transactions_in_the_past_hour_text">Transactions in the past hour</string>
 </resources>

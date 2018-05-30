@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.devband.tronlib.dto.BlockStats;
+import com.devband.tronlib.dto.Stat;
 import com.devband.tronlib.dto.SystemStatus;
 import com.devband.tronlib.dto.TopAddressAccount;
 import com.devband.tronlib.dto.TopAddressAccounts;
@@ -69,6 +69,12 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
     @BindView(R.id.account_pie_chart)
     PieChart mAccountPieChart;
 
+    @BindView(R.id.trx_transferred_in_the_past_hour_chart)
+    LineChart mTrxTransferredInThePastHourChart;
+
+    @BindView(R.id.transactions_in_the_past_hour_chart)
+    LineChart mTransactionsInThePastHourChart;
+
     @BindView(R.id.avg_block_size_line_chart)
     LineChart mAvgBlockSizeLineChart;
 
@@ -87,10 +93,6 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
         refresh();
         return view;
-    }
-
-    private void initAvgBlockSizeChart() {
-        //mAvgBlockSizeLineChart
     }
 
     private void initUi() {
@@ -216,7 +218,7 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
     }
 
     @Override
-    public void getBlockStatus(SystemStatus systemStatus) {
+    public void overviewBlockStatus(SystemStatus systemStatus) {
         mBlockHeightText.setText(Constants.numberFormat.format(systemStatus.getDatabase().getBlock()));
     }
 
@@ -227,17 +229,21 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
     }
 
     @Override
-    public void overviewTransferPastHour() {
-
+    public void overviewTransferPastHour(List<Stat> stats) {
+        initLineChart(mTrxTransferredInThePastHourChart, stats);
     }
 
     @Override
-    public void overviewTransactionPastHour() {
-
+    public void overviewTransactionPastHour(List<Stat> stats) {
+        initLineChart(mTransactionsInThePastHourChart, stats);
     }
 
     @Override
-    public void overviewAvgBlockSize(List<BlockStats> stats) {
+    public void overviewAvgBlockSize(List<Stat> stats) {
+        initLineChart(mAvgBlockSizeLineChart, stats);
+    }
+
+    private void initLineChart(LineChart lineChart, List<Stat> stats) {
         List<Entry> yVals = new ArrayList<>();
 
         Map<Integer, String> x = new HashMap<>();
@@ -251,14 +257,8 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
         LineDataSet set1;
 
-        // create a dataset and give it a type
-        set1 = new LineDataSet(yVals, "Avg Block Size");
+        set1 = new LineDataSet(yVals, getString(R.string.avg_block_size_text));
         set1.setFillAlpha(110);
-        // set1.setFillColor(Color.RED);
-
-        // set the line to be drawn like this "- - - - - -"
-        // set1.enableDashedLine(10f, 5f, 0f);
-        // set1.enableDashedHighlightLine(10f, 5f, 0f);
         set1.setColor(Color.BLACK);
         set1.setCircleColor(Color.BLACK);
         set1.setLineWidth(1f);
@@ -268,21 +268,20 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
         set1.setDrawFilled(true);
 
         List<ILineDataSet> dataSets = new ArrayList<>();
-        dataSets.add(set1); // add the datasets
+        dataSets.add(set1);
 
-        // create a data object with the datasets
         LineData data = new LineData(dataSets);
 
-        mAvgBlockSizeLineChart.getXAxis().setValueFormatter(new IAxisValueFormatter() {
+        lineChart.getXAxis().setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return x.get((int) value); // xVal is a string array
+                return x.get((int) value);
             }
         });
 
         // set data
-        mAvgBlockSizeLineChart.setData(data);
-        mAvgBlockSizeLineChart.invalidate();
+        lineChart.setData(data);
+        lineChart.invalidate();
     }
 
     @Override

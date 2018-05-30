@@ -85,6 +85,36 @@
                 android:gravity="center"
                 android:textSize="20sp"
                 android:textColor="@android:color/black"
+                android:text="@string/trx_transferred_in_the_past_hour_text" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/trx_transferred_in_the_past_hour_chart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:textColor="@android:color/black"
+                android:text="@string/transactions_in_the_past_hour_text" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/transactions_in_the_past_hour_chart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:textColor="@android:color/black"
                 android:text="@string/avg_block_size_text" />
 
             <com.github.mikephil.charting.charts.LineChart

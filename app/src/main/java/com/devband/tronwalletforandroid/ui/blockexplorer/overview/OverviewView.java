@@ -1,6 +1,6 @@
 package com.devband.tronwalletforandroid.ui.blockexplorer.overview;
 
-import com.devband.tronlib.dto.BlockStats;
+import com.devband.tronlib.dto.Stat;
 import com.devband.tronlib.dto.SystemStatus;
 import com.devband.tronlib.dto.TopAddressAccounts;
 import com.devband.tronwalletforandroid.ui.mvp.IView;
@@ -13,11 +13,11 @@ import java.util.List;
 
 public interface OverviewView extends IView {
 
-    void getBlockStatus(SystemStatus systemStatus);
+    void overviewBlockStatus(SystemStatus systemStatus);
     void overviewDataLoadSuccess(TopAddressAccounts topAddressAccounts);
-    void overviewTransferPastHour();
-    void overviewTransactionPastHour();
-    void overviewAvgBlockSize(List<BlockStats> stats);
+    void overviewTransferPastHour(List<Stat> stats);
+    void overviewTransactionPastHour(List<Stat> stats);
+    void overviewAvgBlockSize(List<Stat> stats);
     void showLoadingDialog();
     void showServerError();
 
