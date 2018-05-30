@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.CommonActivity;
-import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.accountdetail.transaction.TransactionFragment;
 import com.devband.tronwalletforandroid.ui.accountdetail.transfer.TransferFragment;
 import com.devband.tronwalletforandroid.ui.blockdetail.fragment.BlockOverviewFragment;
@@ -51,16 +51,16 @@ public class BlockDetailActivity extends CommonActivity implements DetailBlockVi
 
         setSupportActionBar(mToolbar);
 
-        mBlockNumber = getIntent().getLongExtra(EXTRA_BLOCK_NUMBER, 0l);
+        mBlockNumber = getIntent().getLongExtra(EXTRA_BLOCK_NUMBER, 0L);
 
-        if (mBlockNumber == 0l) {
+        if (mBlockNumber == 0L) {
             finishActivity();
             return;
         }
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(getString(R.string.block_title) + "(" + "#" + Constants.numberFormat.format(mBlockNumber) + ")");
+            getSupportActionBar().setTitle(getString(R.string.block_title) + " #" + Utils.getCommaNumber(mBlockNumber));
         }
 
         initUi();

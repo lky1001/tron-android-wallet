@@ -27,6 +27,8 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -272,15 +274,32 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
         LineData data = new LineData(dataSets);
 
-        lineChart.getXAxis().setValueFormatter(new IAxisValueFormatter() {
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(true);
+
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.setLabelCount(5, false);
+
+        YAxis rightAxis = lineChart.getAxisRight();
+        rightAxis.setLabelCount(5, false);
+        rightAxis.setDrawGridLines(false);
+
+        xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 return x.get((int) value);
             }
         });
 
+        lineChart.getDescription().setEnabled(false);
+        lineChart.setDrawGridBackground(false);
+
         // set data
         lineChart.setData(data);
+
+        lineChart.animateX(750);
         lineChart.invalidate();
     }
 

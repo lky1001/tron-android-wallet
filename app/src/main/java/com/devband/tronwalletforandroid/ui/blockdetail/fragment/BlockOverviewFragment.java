@@ -14,6 +14,7 @@ import com.devband.tronlib.dto.Block;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.blockdetail.BlockDetailActivity;
 
 import java.util.Date;
@@ -62,8 +63,8 @@ public class BlockOverviewFragment extends BaseFragment implements BlockInfoView
         View view = inflater.inflate(R.layout.fragment_block_info, container, false);
         ButterKnife.bind(this, view);
 
-        mBlockNumber = getArguments().getLong(BlockDetailActivity.EXTRA_BLOCK_NUMBER, 0l);
-        if (mBlockNumber == 0l) {
+        mBlockNumber = getArguments().getLong(BlockDetailActivity.EXTRA_BLOCK_NUMBER, 0L);
+        if (mBlockNumber == 0L) {
             getActivity().finish();
         }
 
@@ -98,12 +99,12 @@ public class BlockOverviewFragment extends BaseFragment implements BlockInfoView
             mTxtStatus.setTextColor(Color.parseColor("#FF0000"));
         }
         mTxtHash.setText(block.getHash());
-        mTxtBlockHeight.setText("#" + Constants.numberFormat.format(mBlockNumber));
+        mTxtBlockHeight.setText("#"+ Utils.getCommaNumber(mBlockNumber));
         mTxtTimestamp.setText(Constants.sdf.format(new Date(block.getTimestamp())));
         mTxtTransaction.setText(block.getNrOfTrx() + "");
         mTxtParentHash.setText(block.getParentHash());
         mTxtWitnessAddress.setText(block.getWitnessAddress());
-        mTxtBlockSize.setTag(block.getSize());
+        mTxtBlockSize.setText(Utils.getCommaNumber(block.getSize()));
     }
 
     @Override

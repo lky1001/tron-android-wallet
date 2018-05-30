@@ -21,4 +21,12 @@ public class Utils {
             return context.getString(R.string.unrecognized_text);
         }
     }
+
+    public static String getCommaNumber(int number) {
+        return Constants.numberFormat.format(number);
+    }
+
+    public static String getCommaNumber(long number) {
+        return Constants.numberFormat.format(number);
+    }
 }

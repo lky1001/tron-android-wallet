@@ -56,7 +56,7 @@ public class TransactionFragment extends BaseFragment implements TransactionView
     public static BaseFragment newInstance(@NonNull long block) {
         TransactionFragment fragment = new TransactionFragment();
         Bundle args = new Bundle(1);
-        args.putLong(AccountDetailActivity.EXTRA_ADDRESS, block);
+        args.putLong(AccountDetailActivity.EXTRA_BLOCK, block);
 
         fragment.setArguments(args);
         return fragment;
@@ -111,7 +111,7 @@ public class TransactionFragment extends BaseFragment implements TransactionView
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
 
-                    if (mBlock > 0l) {
+                    if (mBlock > 0L) {
                         ((TransactionPresenter) mPresenter).getTransactions(mBlock, mStartIndex, PAGE_SIZE);
                     } else {
                         ((TransactionPresenter) mPresenter).getTransactions(mAddress, mStartIndex, PAGE_SIZE);
@@ -133,7 +133,7 @@ public class TransactionFragment extends BaseFragment implements TransactionView
     @Override
     protected void refresh() {
         if (!mIsLastPage) {
-            if (mBlock > 0l) {
+            if (mBlock > 0L) {
                 ((TransactionPresenter) mPresenter).getTransactions(mBlock, mStartIndex, PAGE_SIZE);
             } else {
                 ((TransactionPresenter) mPresenter).getTransactions(mAddress, mStartIndex, PAGE_SIZE);

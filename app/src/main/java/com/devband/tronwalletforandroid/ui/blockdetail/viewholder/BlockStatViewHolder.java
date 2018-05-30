@@ -79,7 +79,7 @@ public class BlockStatViewHolder extends BaseViewHolder<BlockStatModel> {
         mTxtAddress.setText(model.getAddress());
         long in = model.getTransactionIn();
         long out = model.getTransactionOut();
-        mTxtStatsIn.setText(in <= 0l ? 0l + "" : in + "");
-        mTxtStatsOut.setText(out <= 0l ? 0l + "" : out + "");
+        mTxtStatsIn.setText(in <= 0L ? "0" : String.valueOf(in));
+        mTxtStatsOut.setText(out <= 0L ? "0" : String.valueOf(out) + "");
     }
 }

@@ -72,7 +72,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
         initUi();
 
         mAddress = getArguments().getString(AccountDetailActivity.EXTRA_ADDRESS);
-        mBlock = getArguments().getLong(AccountDetailActivity.EXTRA_BLOCK, 0l);
+        mBlock = getArguments().getLong(AccountDetailActivity.EXTRA_BLOCK, 0L);
 
         mPresenter = new TransferPresenter(this);
         ((TransferPresenter) mPresenter).setAdapterDataModel(mAdapter);
@@ -112,7 +112,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    if (mBlock > 0l) {
+                    if (mBlock > 0L) {
                         ((TransferPresenter) mPresenter).getTransfers(mBlock, mStartIndex, PAGE_SIZE);
                     } else {
                         ((TransferPresenter) mPresenter).getTransfers(mAddress, mStartIndex, PAGE_SIZE);
@@ -168,7 +168,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
     @Override
     protected void refresh() {
         if (!mIsLastPage) {
-            if (mBlock > 0l) {
+            if (mBlock > 0L) {
                 ((TransferPresenter) mPresenter).getTransfers(mBlock, mStartIndex, PAGE_SIZE);
             } else {
                 ((TransferPresenter) mPresenter).getTransfers(mAddress, mStartIndex, PAGE_SIZE);
