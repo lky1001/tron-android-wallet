@@ -21,6 +21,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.Transf
         Transfer item = mList.get(position);
 
         holder.hashText.setText("#" + item.getHash());
-        holder.blockNumberText.setText(Constants.numberFormat.format(item.getBlock()));
+        Utils.setBlockDetailAction(mContext, holder.blockNumberText, item.getBlock());
 
         if (!TextUtils.isEmpty(item.getTransferFromAddress())) {
             SpannableString fromAddressContent = new SpannableString(item.getTransferFromAddress());

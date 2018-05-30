@@ -64,7 +64,7 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
         Date date = new Date(item.getTimestamp());
 
         holder.hashText.setText(item.getHash());
-        holder.blockNumberText.setText(Constants.numberFormat.format(item.getBlock()));
+        Utils.setBlockDetailAction(mContext, holder.blockNumberText, item.getBlock());
 
         if (mViewAddressDetail) {
             SpannableString toAddressContent = new SpannableString(item.getOwnerAddress());
