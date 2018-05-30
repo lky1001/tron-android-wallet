@@ -1,10 +1,15 @@
 package com.devband.tronwalletforandroid.ui.blockexplorer.overview;
 
 import com.devband.tronlib.TronNetwork;
+import com.devband.tronlib.dto.RichInfo;
+import com.devband.tronlib.dto.RichTotal;
 import com.devband.tronlib.dto.Stat;
 import com.devband.tronlib.dto.TransferStats;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -40,7 +45,7 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
 
     }
 
-    void dataLoad() {
+    void chartDataLoad() {
         mView.showLoadingDialog();
 
         TronNetwork.getInstance().getTopAddressAccounts(13)
@@ -90,5 +95,24 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
 
                     }
                 });
+    }
+
+    void richListDataLoad() {
+        mView.showLoadingDialog();
+
+        TronNetwork.getInstance().getRichList()
+                .map(richData ->  {
+                    List<RichItemViewModel> viewModels = new ArrayList<>();
+                    RichTotal total = richData.getTotal();
+                    for (RichInfo info : richData.getData()) {
+                        viewModels.add(new RichItemViewModel(total, info));
+                    }
+                    return viewModels;
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        mView::richListLoadSuccess,
+                        t -> mView.showServerError()
+                );
     }
 }

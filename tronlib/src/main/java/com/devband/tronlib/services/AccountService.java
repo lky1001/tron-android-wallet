@@ -2,6 +2,7 @@ package com.devband.tronlib.services;
 
 import com.devband.tronlib.dto.Account;
 import com.devband.tronlib.dto.AccountMedia;
+import com.devband.tronlib.dto.RichData;
 import com.devband.tronlib.dto.TopAddressAccounts;
 import com.devband.tronlib.dto.TronAccounts;
 
@@ -25,4 +26,8 @@ public interface AccountService {
 
     @GET("api/account/{address}/media")
     Single<AccountMedia> getAccountMedia(@Path("address") String address);
+
+    @GET("api/account/richlist")
+    Single<RichData> getRichData();
+
 }

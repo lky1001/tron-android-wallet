@@ -275,4 +275,10 @@
     <string name="unconfirmed">UNCONFIRMED</string>
     <string name="block_size_bytes">Bytes</string>
     <string name="next_vote_cycle_text">Next Votecycle</string>
+    <string name="title_rich_list">Rich List</string>
+    <string name="title_rich_list_balance">Balance :</string>
+    <string name="title_rich_list_address">Address(%) :</string>
+    <string name="title_rich_list_trx">TRX :</string>
+    <string name="title_rich_list_usd">USD($) :</string>
+    <string name="title_rich_list_coins">Coins(%) :</string>
 </resources>

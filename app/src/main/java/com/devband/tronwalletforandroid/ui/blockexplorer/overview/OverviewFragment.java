@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.devband.tronlib.dto.RichData;
 import com.devband.tronlib.dto.Stat;
 import com.devband.tronlib.dto.SystemStatus;
 import com.devband.tronlib.dto.TopAddressAccount;
@@ -79,6 +82,11 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
     @BindView(R.id.avg_block_size_line_chart)
     LineChart mAvgBlockSizeLineChart;
+
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
+
+    private RichListAdapter mRichListAdapter;
 
     public static BaseFragment newInstance() {
         OverviewFragment fragment = new OverviewFragment();
@@ -145,6 +153,10 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
                 }
             }
         });
+
+        mRichListAdapter = new RichListAdapter();
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mRichListAdapter);
     }
 
     private void setTopAddressData(List<TopAddressAccount> data) {
@@ -217,7 +229,8 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
     @Override
     protected void refresh() {
         if (isAdded()) {
-            ((OverviewPresenter) mPresenter).dataLoad();
+            ((OverviewPresenter) mPresenter).chartDataLoad();
+            ((OverviewPresenter) mPresenter).richListDataLoad();
         }
     }
 
@@ -312,6 +325,14 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
         lineChart.animateX(750);
         lineChart.invalidate();
+    }
+
+    @Override
+    public void richListLoadSuccess(List<RichItemViewModel> viewModels) {
+        hideDialog();
+        if (mRichListAdapter != null) {
+            mRichListAdapter.refresh(viewModels);
+        }
     }
 
     @Override

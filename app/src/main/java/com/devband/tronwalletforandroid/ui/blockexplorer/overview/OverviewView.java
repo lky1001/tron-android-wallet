@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.blockexplorer.overview;
 
+import com.devband.tronlib.dto.RichData;
 import com.devband.tronlib.dto.Stat;
 import com.devband.tronlib.dto.SystemStatus;
 import com.devband.tronlib.dto.TopAddressAccounts;
@@ -18,6 +19,7 @@ public interface OverviewView extends IView {
     void overviewTransferPastHour(List<Stat> stats);
     void overviewTransactionPastHour(List<Stat> stats);
     void overviewAvgBlockSize(List<Stat> stats);
+    void richListLoadSuccess(List<RichItemViewModel> viewModels);
     void showLoadingDialog();
     void showServerError();
 
