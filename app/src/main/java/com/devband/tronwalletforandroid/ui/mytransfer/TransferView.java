@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface TransferView extends IView {
 
-    void transferDataLoadSuccess(List<TransferInfo> TransferInfos);
+    void transferDataLoadSuccess(long total);
 
     void showLoadingDialog();
 

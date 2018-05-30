@@ -83,6 +83,10 @@ public class TronNetwork {
         return mTronScanService.getTransfers(sort, hasCount, limit, start, tokenName);
     }
 
+    public Single<Transfers> getTransfersByAddress(String sort, boolean hasTotal, int limit, long start, String address) {
+        return mTronScanService.getTransfersByAddress(sort, hasTotal, limit, start, address);
+    }
+
     public Single<Transfers> getTransfers(String address, String symbol) {
         return mTronScanService.getTransfers(address, symbol);
     }

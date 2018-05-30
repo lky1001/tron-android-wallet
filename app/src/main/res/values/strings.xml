@@ -91,7 +91,7 @@
     <string name="title_donations">Donations</string>
     <string name="confirm_text">Confirm</string>
     <string name="send_token_title">Send Token</string>
-    <string name="send_token_warning_msg">Only enter valid TRON wallet address. Incorrect addresses can lead to TRX loss.</string>
+    <string name="send_token_warning_msg">Only enter valid TRON wallet address. Incorrect addresses can lead to token loss.</string>
     <string name="send_token_address_text">Address : </string>
     <string name="send_token_token_text">Token : </string>
     <string name="send_token_amount_text">Amount : </string>

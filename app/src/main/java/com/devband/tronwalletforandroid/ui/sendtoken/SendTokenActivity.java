@@ -172,7 +172,6 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                     } else {
                         showProgressDialog(null, getString(R.string.loading_msg));
                         ((SendTokenPresenter) mPresenter).transferAsset(password, address, mSelectedAsset.getName(), (long) finalAmountDouble);
-                        Toast.makeText(SendTokenActivity.this, "Coming soon.", Toast.LENGTH_SHORT).show();
                     }
                 }).show();
     }

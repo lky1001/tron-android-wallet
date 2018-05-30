@@ -13,7 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.devband.tronlib.dto.Transfer;
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.AdapterDataModel;
+import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
@@ -29,7 +32,7 @@ import butterknife.ButterKnife;
  * Created by user on 2018. 5. 17..
  */
 
-public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.TransactionViewHolder> {
+public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.TransactionViewHolder> implements AdapterDataModel<TransferInfo>, AdapterView {
 
     private List<TransferInfo> mList = new ArrayList<>();
 
@@ -119,6 +122,41 @@ public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.Transa
     public void refresh(List<TransferInfo> datas) {
         mList.clear();
         mList.addAll(datas);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void add(TransferInfo model) {
+        mList.add(model);
+    }
+
+    @Override
+    public void addAll(List<TransferInfo> list) {
+        mList.addAll(list);
+    }
+
+    @Override
+    public void remove(int position) {
+        mList.remove(position);
+    }
+
+    @Override
+    public TransferInfo getModel(int position) {
+        return mList.get(position);
+    }
+
+    @Override
+    public int getSize() {
+        return mList.size();
+    }
+
+    @Override
+    public void clear() {
+        mList.clear();
+    }
+
+    @Override
+    public void refresh() {
         notifyDataSetChanged();
     }
 

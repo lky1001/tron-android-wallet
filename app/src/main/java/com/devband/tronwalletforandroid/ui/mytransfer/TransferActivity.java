@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.mytransfer.adapter.TransferAdapter;
@@ -27,6 +28,7 @@ import butterknife.ButterKnife;
  */
 
 public class TransferActivity extends CommonActivity implements TransferView {
+    private static final int PAGE_SIZE = 25;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -34,6 +36,14 @@ public class TransferActivity extends CommonActivity implements TransferView {
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
+    private long mStartIndex = 0;
+
+    private boolean mIsLoading;
+
+    private boolean mIsLastPage;
+
+    private LinearLayoutManager mLayoutManager;
+    private AdapterView mAdapterView;
     private TransferAdapter mAdapter;
 
     @Override
@@ -46,7 +56,10 @@ public class TransferActivity extends CommonActivity implements TransferView {
         initUi();
 
         mPresenter = new TransferPresenter(this);
+        ((TransferPresenter) mPresenter).setAdapterDataModel(mAdapter);
         mPresenter.onCreate();
+
+        ((TransferPresenter) mPresenter).loadTransfer(mStartIndex, PAGE_SIZE);
     }
 
     private void initUi() {
@@ -58,9 +71,39 @@ public class TransferActivity extends CommonActivity implements TransferView {
         }
 
         mAdapter = new TransferAdapter(TransferActivity.this, mOnItemClickListener);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.addOnScrollListener(mRecyclerViewOnScrollListener);
+
         mRecyclerView.setAdapter(mAdapter);
+        mAdapterView = mAdapter;
     }
+
+    private RecyclerView.OnScrollListener mRecyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            int visibleItemCount = mLayoutManager.getChildCount();
+            int totalItemCount = mLayoutManager.getItemCount();
+            int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
+
+            if (!mIsLoading && !mIsLastPage) {
+                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                        && firstVisibleItemPosition >= 0) {
+                    mIsLoading = true;
+                    ((TransferPresenter) mPresenter).loadTransfer(mStartIndex, PAGE_SIZE);
+                }
+            }
+        }
+    };
 
     private View.OnClickListener mOnItemClickListener = new View.OnClickListener() {
 
@@ -107,16 +150,24 @@ public class TransferActivity extends CommonActivity implements TransferView {
     };
 
     @Override
-    public void transferDataLoadSuccess(List<TransferInfo> TransferInfos) {
+    public void transferDataLoadSuccess(long total) {
         if (isFinishing()) {
             return;
         }
-        hideDialog();
-        if (mAdapter != null) {
-            mAdapter.refresh(TransferInfos);
-            getSupportActionBar().setTitle(getString(R.string.title_transfer_text)
-                    + "(" + Constants.numberFormat.format(TransferInfos.size()) + ")");
+
+        mStartIndex += PAGE_SIZE;
+
+        if (mStartIndex >= total) {
+            mIsLastPage = true;
         }
+
+        mIsLoading = false;
+        mAdapterView.refresh();
+
+        getSupportActionBar().setTitle(getString(R.string.title_transfer_text)
+                + "(" + Constants.numberFormat.format(total) + ")");
+
+        hideDialog();
     }
 
     @Override
@@ -127,6 +178,7 @@ public class TransferActivity extends CommonActivity implements TransferView {
     @Override
     public void showServerError() {
         if (!isFinishing()) {
+            mIsLoading = false;
             hideDialog();
             Toast.makeText(TransferActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
         }

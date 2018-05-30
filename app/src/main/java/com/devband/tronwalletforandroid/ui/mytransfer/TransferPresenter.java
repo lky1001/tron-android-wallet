@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Transfer;
-import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
@@ -23,13 +23,19 @@ import io.reactivex.schedulers.Schedulers;
 
 public class TransferPresenter extends BasePresenter<TransferView> {
 
+    private AdapterDataModel<TransferInfo> mAdapterDataModel;
+
     public TransferPresenter(TransferView view) {
         super(view);
     }
 
+    public void setAdapterDataModel(AdapterDataModel<TransferInfo> adapterDataModel) {
+        this.mAdapterDataModel = adapterDataModel;
+    }
+
     @Override
     public void onCreate() {
-        loadTransaction();
+
     }
 
     @Override
@@ -47,12 +53,12 @@ public class TransferPresenter extends BasePresenter<TransferView> {
 
     }
 
-    private void loadTransaction() {
+    public void loadTransfer(long startIndex, int pageSize) {
         mView.showLoadingDialog();
 
         String address = Tron.getInstance(mContext).getLoginAddress();
 
-        TronNetwork.getInstance().getTransfers(address, Constants.TRON_SYMBOL)
+        TronNetwork.getInstance().getTransfersByAddress("-timestamp", true, pageSize, startIndex, address)
         .subscribeOn(Schedulers.io())
         .map(transactions -> {
             List<TransferInfo> infos = new ArrayList<>();
@@ -68,6 +74,7 @@ public class TransferPresenter extends BasePresenter<TransferView> {
                 info.setTransferFromAddress(t.getTransferFromAddress());
                 info.setTransferToAddress(t.getTransferToAddress());
                 info.setConfirmed(t.isConfirmed());
+                info.setTotal(transactions.getTotal());
                 infos.add(info);
             }
             return infos;
@@ -81,7 +88,8 @@ public class TransferPresenter extends BasePresenter<TransferView> {
 
             @Override
             public void onSuccess(List<TransferInfo> transactionInfos) {
-                mView.transferDataLoadSuccess(transactionInfos);
+                mAdapterDataModel.addAll(transactionInfos);
+                mView.transferDataLoadSuccess(transactionInfos.get(0).getTotal());
             }
 
             @Override

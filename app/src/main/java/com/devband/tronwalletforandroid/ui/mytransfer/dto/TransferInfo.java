@@ -20,4 +20,5 @@ public class TransferInfo {
     private long amount;
     private String tokenName;
     private boolean confirmed;
+    private long total;
 }
