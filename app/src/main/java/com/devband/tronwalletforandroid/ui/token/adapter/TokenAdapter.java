@@ -18,6 +18,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.common.Utils;
 import com.thefinestartist.finestwebview.FinestWebView;
 
 import java.util.ArrayList;
@@ -69,6 +70,7 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
         holder.tokenSalePercentText.setText(Constants.percentFormat.format(item.getPercentage()) + "%");
         holder.tokenSaleProgress.setMax(100f);
         holder.tokenSaleProgress.setProgress((float) item.getPercentage());
+        holder.tokenEndText.setText(mContext.getString(R.string.ends_text) + " " + Utils.getDateTimeWithTimezone(item.getEndTime()));
         holder.visitWebsiteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,6 +184,9 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
 
         @BindView(R.id.token_sale_percent_text)
         TextView tokenSalePercentText;
+
+        @BindView(R.id.token_end_text)
+        TextView tokenEndText;
 
         @BindView(R.id.progress_token_sales)
         RoundCornerProgressBar tokenSaleProgress;

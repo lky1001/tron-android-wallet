@@ -15,6 +15,7 @@ import com.devband.tronlib.dto.Token;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.token.TokenDetailActivity;
 import com.thefinestartist.finestwebview.FinestWebView;
 
@@ -100,7 +101,7 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
         mTokenDescText.setText(token.getDescription());
         mTokenWebsiteText.setText(token.getUrl());
         mTokenTotalSupplyText.setText(Constants.numberFormat.format(token.getTotalSupply()));
-        mTokenIssuerText.setText(token.getOwnerAddress());
+        Utils.setAccountDetailAction(getContext(), mTokenIssuerText, token.getOwnerAddress());
         mTokenHoldersText.setText(Constants.numberFormat.format(token.getNrOfTokenHolders()));
         mTokenTotalTransactionsText.setText(Constants.numberFormat.format(token.getTotalTransactions()));
 

@@ -15,6 +15,8 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Transfer {
 
+    private String id;
+
     @JsonProperty("transactionHash")
     private String hash;
 

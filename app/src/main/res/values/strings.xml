@@ -281,4 +281,8 @@
     <string name="title_rich_list_trx">TRX :</string>
     <string name="title_rich_list_usd">USD :</string>
     <string name="title_rich_list_coins">Coins :</string>
+    <string name="ends_text">ends</string>
+    <string name="donation_address_text">27ieRxudyi2mVSJh6ox4DBBxmBUjMFzxL35</string>
+    <string name="thanks_msg">Thanks for your donation!</string>
+    <string name="donation_title_text">Wow!</string>
 </resources>
