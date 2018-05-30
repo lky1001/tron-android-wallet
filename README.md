@@ -21,13 +21,14 @@ A Tron wallet for android.
 
 - Create wallet
 - Import wallet
-- Send tron
-- Receive tron
+- Send tron & token
+- Receive tron & token
 - My address QR code
 - My tron balance
 - My tokens
 - My transfer history
 - Vote representative
+- Block explorer
 - Token list
 - Node list
 - Representative list
@@ -35,8 +36,6 @@ A Tron wallet for android.
 
 ## TODO list
 
-- Block explorer
-- Send token
 - Participate token
 - Tron pay
 - BIP 32, 39, 44
