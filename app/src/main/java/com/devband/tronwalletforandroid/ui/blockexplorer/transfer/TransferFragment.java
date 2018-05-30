@@ -19,8 +19,6 @@ import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
-import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
-import com.devband.tronwalletforandroid.ui.blockexplorer.account.AccountPresenter;
 import com.devband.tronwalletforandroid.ui.blockexplorer.adapter.TransferAdapter;
 
 import java.util.Date;
@@ -114,7 +112,11 @@ public class TransferFragment extends BaseFragment implements TransferView {
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    ((AccountPresenter) mPresenter).getTronAccounts(mStartIndex, PAGE_SIZE);
+                    if (mBlock > 0L) {
+                        ((TransferPresenter) mPresenter).getTransfer(mBlock, mStartIndex, PAGE_SIZE);
+                    } else {
+                        ((TransferPresenter) mPresenter).getTransfer(mStartIndex, PAGE_SIZE);
+                    }
                 }
             }
         }
