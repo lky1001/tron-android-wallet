@@ -12,6 +12,8 @@ import com.devband.tronwalletforandroid.ui.blockdetail.BlockDetailActivity;
 
 import org.tron.protos.Protocol;
 
+import java.util.Date;
+
 public class Utils {
 
     public static String getContractTypeString(Context context, int contractType) {
@@ -26,6 +28,10 @@ public class Utils {
         } catch (Exception e) {
             return context.getString(R.string.unrecognized_text);
         }
+    }
+
+    public static String getDateTimeWithTimezone(long timestamp) {
+        return Constants.sdf.format(new Date(timestamp));
     }
 
     public static String getUsdFormat(float number) {

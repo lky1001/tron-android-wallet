@@ -101,7 +101,7 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
         mTokenDescText.setText(token.getDescription());
         mTokenWebsiteText.setText(token.getUrl());
         mTokenTotalSupplyText.setText(Constants.numberFormat.format(token.getTotalSupply()));
-        Utils.setAccountDetailAction(this, mTokenIssuerText, token.getOwnerAddress());
+        Utils.setAccountDetailAction(getContext(), mTokenIssuerText, token.getOwnerAddress());
         mTokenHoldersText.setText(Constants.numberFormat.format(token.getNrOfTokenHolders()));
         mTokenTotalTransactionsText.setText(Constants.numberFormat.format(token.getTotalTransactions()));
 

@@ -112,6 +112,20 @@
         android:layout_height="1dp"
         android:background="@color/my_account_border_color"/>
 
+        <TextView
+            android:id="@+id/token_end_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            tools:text="ends 2018-09-09 10:11:12 GMT+09:00" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/my_account_border_color"/>
+
     <Button
         android:id="@+id/btn_participate"
         android:layout_width="match_parent"

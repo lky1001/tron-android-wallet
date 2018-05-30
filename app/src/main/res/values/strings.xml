@@ -281,4 +281,5 @@
     <string name="title_rich_list_trx">TRX :</string>
     <string name="title_rich_list_usd">USD :</string>
     <string name="title_rich_list_coins">Coins :</string>
+    <string name="ends_text">ends</string>
 </resources>
