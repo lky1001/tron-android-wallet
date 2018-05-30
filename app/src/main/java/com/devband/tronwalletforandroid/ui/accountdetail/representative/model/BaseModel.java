@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.blockdetail.model;
+package com.devband.tronwalletforandroid.ui.accountdetail.representative.model;
 
 /**
  * Created by user on 2018. 5. 29..

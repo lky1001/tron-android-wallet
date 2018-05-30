@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.blockdetail.viewholder;
+package com.devband.tronwalletforandroid.ui.accountdetail.representative.viewholder;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
@@ -14,7 +14,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.ui.blockdetail.model.BlockStatModel;
+import com.devband.tronwalletforandroid.ui.accountdetail.representative.model.BlockStatModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -1,11 +1,11 @@
-package com.devband.tronwalletforandroid.ui.blockdetail.viewholder;
+package com.devband.tronwalletforandroid.ui.accountdetail.representative.viewholder;
 
 import android.view.View;
 import android.widget.TextView;
 
 import com.devband.tronlib.dto.Transfer;
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.ui.blockdetail.model.TransferHistoryModel;
+import com.devband.tronwalletforandroid.ui.accountdetail.representative.model.TransferHistoryModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

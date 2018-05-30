@@ -1,9 +1,9 @@
-package com.devband.tronwalletforandroid.ui.blockdetail.viewholder;
+package com.devband.tronwalletforandroid.ui.accountdetail.representative.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.devband.tronwalletforandroid.ui.blockdetail.model.BaseModel;
+import com.devband.tronwalletforandroid.ui.accountdetail.representative.model.BaseModel;
 
 /**
  * Created by user on 2018. 5. 29..

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="4dp"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <FrameLayout
         android:id="@+id/area_represent_image"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -37,9 +38,8 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
                 android:gravity="left"
                 android:text="Address"
                 android:textStyle="bold" />
@@ -47,10 +47,9 @@
             <TextView
                 android:id="@+id/txt_address_value"
                 tools:text="27WEvZPj4MTjgFVgftuZHwXDZ4GvERJ1EBT"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:layout_weight="7"
+                android:layout_marginLeft="7dp"
                 android:gravity="center_vertical|left" />
         </LinearLayout>
 
@@ -61,17 +60,15 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
                 android:gravity="left"
                 android:text="Transactions"
                 android:textStyle="bold" />
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="1dp"
-                android:layout_weight="7"
+                android:layout_marginLeft="3dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -102,4 +99,10 @@
         </LinearLayout>
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_border_color" />
+
+</LinearLayout>

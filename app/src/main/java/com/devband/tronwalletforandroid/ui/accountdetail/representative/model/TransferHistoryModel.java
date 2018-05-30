@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.blockdetail.model;
+package com.devband.tronwalletforandroid.ui.accountdetail.representative.model;
 
 import com.devband.tronlib.dto.Transfer;
 
