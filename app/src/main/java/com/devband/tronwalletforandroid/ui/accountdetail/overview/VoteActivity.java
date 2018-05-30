@@ -154,8 +154,10 @@ public class VoteActivity extends CommonActivity implements VoteView {
 
     @Override
     public void showServerError() {
-        hideDialog();
-        Toast.makeText(this, getString(R.string.connection_error_msg),
-                Toast.LENGTH_SHORT).show();
+        if (!isFinishing()) {
+            hideDialog();
+            Toast.makeText(this, getString(R.string.connection_error_msg),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }

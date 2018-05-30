@@ -108,6 +108,9 @@ public class TransferActivity extends CommonActivity implements TransferView {
 
     @Override
     public void transferDataLoadSuccess(List<TransferInfo> TransferInfos) {
+        if (isFinishing()) {
+            return;
+        }
         hideDialog();
         if (mAdapter != null) {
             mAdapter.refresh(TransferInfos);
@@ -123,7 +126,9 @@ public class TransferActivity extends CommonActivity implements TransferView {
 
     @Override
     public void showServerError() {
-        hideDialog();
-        Toast.makeText(TransferActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
+        if (!isFinishing()) {
+            hideDialog();
+            Toast.makeText(TransferActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
+        }
     }
 }

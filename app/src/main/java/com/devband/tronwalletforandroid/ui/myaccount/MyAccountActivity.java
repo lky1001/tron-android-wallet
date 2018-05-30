@@ -148,6 +148,9 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
     @Override
     public void displayAccountInfo(@NonNull String address, @NonNull TronAccount account) {
+        if (isFinishing()) {
+            return;
+        }
         mAccountBalance = (long) (account.getBalance() / Constants.ONE_TRX);
 
         if (TextUtils.isEmpty(account.getName())) {

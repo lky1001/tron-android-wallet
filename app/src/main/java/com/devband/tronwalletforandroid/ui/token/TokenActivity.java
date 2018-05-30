@@ -115,21 +115,25 @@ public class TokenActivity extends CommonActivity implements TokenView {
     @Override
     public void showServerError() {
         mIsLoading = false;
-        hideDialog();
-        Toast.makeText(TokenActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
+        if (!isFinishing()) {
+            hideDialog();
+            Toast.makeText(TokenActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void finishLoading(int total) {
-        mStartIndex += PAGE_SIZE;
+        if (!isFinishing()) {
+            mStartIndex += PAGE_SIZE;
 
-        if (mStartIndex >= total) {
-            mIsLastPage = true;
+            if (mStartIndex >= total) {
+                mIsLastPage = true;
+            }
+
+            mIsLoading = false;
+            mAdapterView.refresh();
+
+            hideDialog();
         }
-
-        mIsLoading = false;
-        mAdapterView.refresh();
-
-        hideDialog();
     }
 }

@@ -201,9 +201,11 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
     @Override
     public void showServerError() {
-        mIsLoading = false;
-        hideDialog();
-        Toast.makeText(getActivity(), getString(R.string.connection_error_msg),
-                Toast.LENGTH_SHORT).show();
+        if (isAdded()) {
+            mIsLoading = false;
+            hideDialog();
+            Toast.makeText(getActivity(), getString(R.string.connection_error_msg),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }
