@@ -79,6 +79,8 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
         mPresenter = new OverviewPresenter(this);
         mPresenter.onCreate();
 
+        ((OverviewPresenter) mPresenter).loadTokenInfo(mTokenName);
+        
         return view;
     }
 
