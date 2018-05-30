@@ -22,13 +22,8 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.common.Utils;
-import com.devband.tronwalletforandroid.tron.Tron;
-import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.token.adapter.TokenAdapter;
-import com.devband.tronwalletforandroid.ui.vote.VoteActivity;
-import com.devband.tronwalletforandroid.ui.vote.VotePresenter;
 
 import org.tron.protos.Protocol;
 
@@ -148,8 +143,12 @@ public class TokenActivity extends CommonActivity implements TokenView {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        long amountBalance = Long.parseLong(inputAmount.getText().toString());
-                        totalText.setText(Utils.getRealTrxFormat(amountBalance * item.getPrice()) + " " + Constants.TRON_SYMBOL);
+                        if (!TextUtils.isEmpty(inputAmount.getText().toString())) {
+                            long amountBalance = Long.parseLong(inputAmount.getText().toString());
+                            totalText.setText(Utils.getRealTrxFormat(amountBalance * item.getPrice()) + " " + Constants.TRON_SYMBOL);
+                        } else {
+                            totalText.setText("0 " + Constants.TRON_SYMBOL);
+                        }
                     }
 
                     @Override
@@ -172,7 +171,7 @@ public class TokenActivity extends CommonActivity implements TokenView {
                         }
 
                         String password = inputPassword.getText().toString();
-                        if (TextUtils.isEmpty(password) || !((VotePresenter) mPresenter).matchPassword(password)) {
+                        if (TextUtils.isEmpty(password) || !((TokenPresenter) mPresenter).matchPassword(password)) {
                             Toast.makeText(TokenActivity.this, getString(R.string.invalid_password),
                                     Toast.LENGTH_SHORT).show();
                             return;

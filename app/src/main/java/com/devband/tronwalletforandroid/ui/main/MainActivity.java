@@ -247,7 +247,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         mSideMenu.inflateMenu(R.menu.navigation_logged_in_menu);
     }
 
-    private void initAccountList(boolean isImported) {
+    private void initAccountList(boolean isCreateOrImport) {
         ((MainPresenter) mPresenter).getAccountList()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
@@ -260,7 +260,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             @Override
             public void onSuccess(List<AccountModel> accountModelList) {
                 initAccountList(accountModelList);
-                if (isImported) {
+                if (isCreateOrImport) {
                     mAccountSpinner.setSelection(mAccountAdapter.getCount() - 1);
                 }
             }
@@ -347,7 +347,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                             }
                             break;
                         }
-                    }
+                     }
+
+                     mAccountAdapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -522,7 +524,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     public void successCreateAccount() {
         hideDialog();
-        initAccountList(false);
+        initAccountList(true);
     }
 
     @Override
@@ -634,6 +636,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int pos, long id) {
             AccountModel accountModel = mAccountAdapter.getItem(pos);
             ((MainPresenter) mPresenter).changeLoginAccount(accountModel);
+            mMainTitleText.setText(accountModel.getName());
             mDrawer.closeDrawers();
             checkLoginState();
         }

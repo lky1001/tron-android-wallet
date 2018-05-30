@@ -1,9 +1,12 @@
 package com.devband.tronwalletforandroid.ui.token;
 
+import android.support.annotation.NonNull;
+
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Token;
 import com.devband.tronlib.dto.Tokens;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
+import com.devband.tronwalletforandroid.common.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
@@ -99,6 +102,10 @@ public class TokenPresenter extends BasePresenter<TokenView> {
 
             }
         });
+    }
+
+    public boolean matchPassword(@NonNull String password) {
+        return WalletAppManager.getInstance(mContext).login(password) == WalletAppManager.SUCCESS;
     }
 
     private class AccountInfo {
