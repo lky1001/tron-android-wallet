@@ -89,12 +89,15 @@ public class TransferPresenter extends BasePresenter<TransferView> {
             @Override
             public void onSuccess(List<TransferInfo> transactionInfos) {
                 mAdapterDataModel.addAll(transactionInfos);
-                mView.transferDataLoadSuccess(transactionInfos.get(0).getTotal());
+                long total = 0;
+                if (!transactionInfos.isEmpty()) {
+                    total = transactionInfos.get(0).getTotal();
+                }
+                mView.transferDataLoadSuccess(total);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.d("hanseon--", "onError : " + e.getMessage());
                 mView.showServerError();
             }
         });
