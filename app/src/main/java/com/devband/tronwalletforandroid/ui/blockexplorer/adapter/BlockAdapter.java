@@ -1,10 +1,7 @@
 package com.devband.tronwalletforandroid.ui.blockexplorer.adapter;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +11,7 @@ import com.devband.tronlib.dto.Block;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
+import com.devband.tronwalletforandroid.common.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,15 +48,7 @@ public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.BlockViewHol
         holder.txtNumber.setText("#" + Constants.numberFormat.format(block.getNumber()));
         holder.txtTransaction.setText(String.valueOf(block.getNrOfTrx()));
 
-        SpannableString content = new SpannableString(block.getWitnessAddress());
-        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-
-        holder.txtProducedBy.setText(content);
-        holder.txtProducedBy.setOnClickListener(view -> {
-            Intent intent = new Intent(view.getContext(), AccountDetailActivity.class);
-            intent.putExtra(AccountDetailActivity.EXTRA_ADDRESS, block.getWitnessAddress());
-            view.getContext().startActivity(intent);
-        });
+        Utils.setAccountDetailAction(holder.txtProducedBy.getContext(), holder.txtProducedBy, block.getWitnessAddress());
 
         Date date = new Date(block.getTimestamp());
         holder.txtTimestamp.setText(Constants.sdf.format(date));

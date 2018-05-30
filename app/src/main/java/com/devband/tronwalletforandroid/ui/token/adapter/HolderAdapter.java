@@ -14,6 +14,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.common.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,8 @@ public class HolderAdapter extends RecyclerView.Adapter<HolderAdapter.TokenHolde
     public void onBindViewHolder(@NonNull TokenHolderViewHolder holder, int position) {
         TokenHolder item = mList.get(position);
 
-        holder.holderAddressText.setText((position + 1) + ". " + item.getAddress());
+        holder.holderIdText.setText((position + 1) + ". ");
+        Utils.setAccountDetailAction(mContext, holder.holderAddressText, item.getAddress());
         holder.holderBalanceText.setText(Constants.numberFormat.format(item.getBalance()));
         holder.holderBalancePercentText.setText(Constants.percentFormat.format(item.getBalancePercent()) + "%");
         holder.holderBalanceProgress.setMax((float) item.getTotalSupply());
@@ -97,6 +99,9 @@ public class HolderAdapter extends RecyclerView.Adapter<HolderAdapter.TokenHolde
     }
 
     class TokenHolderViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.holder_address_id_text)
+        public TextView holderIdText;
 
         @BindView(R.id.holder_address_text)
         public TextView holderAddressText;

@@ -1,14 +1,8 @@
 package com.devband.tronwalletforandroid.ui.accountdetail.adapter;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +14,6 @@ import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.Utils;
-import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
-
-import org.tron.protos.Protocol;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,18 +58,7 @@ public class AccountTransactionAdapter extends RecyclerView.Adapter<AccountTrans
         Utils.setBlockDetailAction(mContext, holder.blockNumberText, item.getBlock());
 
         if (mViewAddressDetail) {
-            SpannableString toAddressContent = new SpannableString(item.getOwnerAddress());
-            toAddressContent.setSpan(new UnderlineSpan(), 0, toAddressContent.length(), 0);
-            holder.addressText.setText(toAddressContent);
-
-            holder.addressText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, AccountDetailActivity.class);
-                    intent.putExtra(AccountDetailActivity.EXTRA_ADDRESS, item.getOwnerAddress());
-                    mContext.startActivity(intent);
-                }
-            });
+            Utils.setAccountDetailAction(mContext, holder.addressText, item.getOwnerAddress());
         } else {
             holder.addressText.setText(item.getOwnerAddress());
         }

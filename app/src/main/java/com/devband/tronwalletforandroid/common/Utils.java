@@ -60,6 +60,18 @@ public class Utils {
         return Constants.percentFormat.format(number);
     }
 
+    public static void setAccountDetailAction(Context context, TextView textView, String address) {
+        SpannableString content = new SpannableString(address);
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+
+        textView.setText(content);
+        textView.setOnClickListener(view -> {
+            Intent intent = new Intent(view.getContext(), AccountDetailActivity.class);
+            intent.putExtra(AccountDetailActivity.EXTRA_ADDRESS, address);
+            context.startActivity(intent);
+        });
+    }
+
     public static void setBlockDetailAction(Context context, TextView textView, long blockNum) {
         SpannableString content = new SpannableString(Constants.numberFormat.format(blockNum));
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);

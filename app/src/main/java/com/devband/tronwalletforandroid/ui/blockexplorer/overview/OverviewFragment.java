@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.devband.tronlib.dto.RichData;
 import com.devband.tronlib.dto.Stat;
 import com.devband.tronlib.dto.SystemStatus;
 import com.devband.tronlib.dto.TopAddressAccount;

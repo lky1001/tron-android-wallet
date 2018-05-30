@@ -17,6 +17,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class AccountTransferAdapter extends RecyclerView.Adapter<AccountTransfer
         }
 
         if (info.isSend()) {
-            holder.sendAddressText.setText(info.getTransferToAddress());
+            Utils.setAccountDetailAction(mContext, holder.sendAddressText, info.getTransferToAddress());
             holder.sendAmountText.setText(Constants.tronBalanceFormat.format(amount) + " " + info.getTokenName());
             holder.sendDateText.setText(Constants.sdf.format(date));
 
@@ -79,7 +80,7 @@ public class AccountTransferAdapter extends RecyclerView.Adapter<AccountTransfer
                 }
             });
         } else {
-            holder.receiveAddressText.setText(info.getTransferFromAddress());
+            Utils.setAccountDetailAction(mContext, holder.receiveAddressText, info.getTransferFromAddress());
             holder.receiveAmountText.setText(Constants.tronBalanceFormat.format(amount) + " " + info.getTokenName());
             holder.receiveDateText.setText(Constants.sdf.format(date));
 

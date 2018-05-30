@@ -3,12 +3,9 @@ package com.devband.tronwalletforandroid.ui.blockexplorer.adapter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +19,6 @@ import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.Utils;
-import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,34 +59,12 @@ public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.Transf
         Utils.setBlockDetailAction(mContext, holder.blockNumberText, item.getBlock());
 
         if (!TextUtils.isEmpty(item.getTransferFromAddress())) {
-            SpannableString fromAddressContent = new SpannableString(item.getTransferFromAddress());
-            fromAddressContent.setSpan(new UnderlineSpan(), 0, fromAddressContent.length(), 0);
-            holder.fromAddressText.setText(fromAddressContent);
+            Utils.setAccountDetailAction(mContext, holder.fromAddressText, item.getTransferFromAddress());
         }
 
         if (!TextUtils.isEmpty(item.getTransferToAddress())) {
-            SpannableString toAddressContent = new SpannableString(item.getTransferToAddress());
-            toAddressContent.setSpan(new UnderlineSpan(), 0, toAddressContent.length(), 0);
-            holder.toAddressText.setText(toAddressContent);
+            Utils.setAccountDetailAction(mContext, holder.toAddressText, item.getTransferToAddress());
         }
-
-        holder.fromAddressText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, AccountDetailActivity.class);
-                intent.putExtra(AccountDetailActivity.EXTRA_ADDRESS, item.getTransferFromAddress());
-                mContext.startActivity(intent);
-            }
-        });
-
-        holder.toAddressText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, AccountDetailActivity.class);
-                intent.putExtra(AccountDetailActivity.EXTRA_ADDRESS, item.getTransferToAddress());
-                mContext.startActivity(intent);
-            }
-        });
 
         holder.copyToAddressView.setOnClickListener(new View.OnClickListener() {
             @Override
