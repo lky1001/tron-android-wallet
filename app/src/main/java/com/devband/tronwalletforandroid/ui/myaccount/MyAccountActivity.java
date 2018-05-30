@@ -148,7 +148,6 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
     @Override
     public void displayAccountInfo(@NonNull String address, @NonNull TronAccount account) {
-        Log.d("", address);
         mAccountBalance = (long) (account.getBalance() / Constants.ONE_TRX);
 
         if (TextUtils.isEmpty(account.getName())) {
@@ -262,7 +261,6 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                         if (!TextUtils.isEmpty(password) && ((MyAccountPresenter) mPresenter).matchPassword(password)) {
                             String privateKey = ((MyAccountPresenter) mPresenter).getLoginPrivateKey();
 
-                            Log.d("", privateKey);
                             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                             sharingIntent.setType("text/plain");
                             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, privateKey);

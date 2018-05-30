@@ -452,7 +452,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 .contentColorRes(R.color.colorAccent)
                 .backgroundColorRes(android.R.color.white)
                 .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
-                .input(getString(R.string.import_account_hint), "6320B00E038A6EA898227820866B9F1A0B69FFB5953AB388552861704F07ADC6", new MaterialDialog.InputCallback() {
+                .input(getString(R.string.import_account_hint), "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         dialog.dismiss();

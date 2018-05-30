@@ -79,7 +79,6 @@ public class SendTokenPresenter extends BasePresenter<SendTokenView> {
 
             @Override
             public void onSuccess(Boolean result) {
-                Log.i(SendTokenPresenter.class.getSimpleName(), "send result : " + result);
                 mView.sendTokenResult(result);
             }
 
@@ -109,7 +108,6 @@ public class SendTokenPresenter extends BasePresenter<SendTokenView> {
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        Log.i(SendTokenPresenter.class.getSimpleName(), "send result : " + result);
                         mView.sendTokenResult(result);
                     }
 
