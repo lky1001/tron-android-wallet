@@ -20,7 +20,7 @@ import java.util.List;
  * Created by user on 2018. 5. 29..
  */
 
-public class BlockDetailAdapter extends RecyclerView.Adapter<BaseViewHolder> {
+public class RepresentativeAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private List<BaseModel> mList = new ArrayList<>();
 

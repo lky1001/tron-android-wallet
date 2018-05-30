@@ -25,7 +25,7 @@ public class RepresentativeFragment extends BaseFragment implements Representati
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
-    private BlockDetailAdapter mAdapter;
+    private RepresentativeAdapter mAdapter;
 
     private String mAddress;
 
@@ -57,7 +57,7 @@ public class RepresentativeFragment extends BaseFragment implements Representati
     }
 
     private void initUi() {
-        mAdapter = new BlockDetailAdapter();
+        mAdapter = new RepresentativeAdapter();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
     }
