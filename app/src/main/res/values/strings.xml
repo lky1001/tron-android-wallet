@@ -238,6 +238,7 @@
     <string name="amout_text">Amout :</string>
     <string name="created_text">Created :</string>
     <string name="account_title">Account</string>
+    <string name="block_title">Block</string>
     <string name="bottom_navigation_menu_tokens">Tokens</string>
     <string name="bottom_navigation_menu_representative">Representative</string>
     <string name="account_address_text">Address :</string>
@@ -270,4 +271,6 @@
     <string name="name_title_text">Name :</string>
     <string name="trx_transferred_in_the_past_hour_text">TRX transferred in the past hour</string>
     <string name="transactions_in_the_past_hour_text">Transactions in the past hour</string>
+    <string name="confirmed">CONFIRMED</string>
+    <string name="unconfirmed">UNCONFIRMED</string>
 </resources>

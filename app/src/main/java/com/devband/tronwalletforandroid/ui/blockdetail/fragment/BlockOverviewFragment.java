@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.blockdetail.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,7 +13,10 @@ import android.widget.Toast;
 import com.devband.tronlib.dto.Block;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.BaseFragment;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.blockdetail.BlockDetailActivity;
+
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -86,10 +90,16 @@ public class BlockOverviewFragment extends BaseFragment implements BlockInfoView
     @Override
     public void finishLoading(@NonNull Block block) {
         hideDialog();
-        mTxtStatus.setText(block.isConfirmed() ? "CONFIRMED" : "UNCONFIRMED");
+        if (block.isConfirmed()) {
+            mTxtStatus.setText(R.string.confirmed);
+            mTxtStatus.setTextColor(Color.parseColor("#00FF80"));
+        } else {
+            mTxtStatus.setText(R.string.unconfirmed);
+            mTxtStatus.setTextColor(Color.parseColor("#FF0000"));
+        }
         mTxtHash.setText(block.getHash());
-        mTxtBlockHeight.setText(mBlockNumber + "");
-        mTxtTimestamp.setText(block.getTimestamp() + "");
+        mTxtBlockHeight.setText("#" + Constants.numberFormat.format(mBlockNumber));
+        mTxtTimestamp.setText(Constants.sdf.format(new Date(block.getTimestamp())));
         mTxtTransaction.setText(block.getNrOfTrx() + "");
         mTxtParentHash.setText(block.getParentHash());
         mTxtWitnessAddress.setText(block.getWitnessAddress());
