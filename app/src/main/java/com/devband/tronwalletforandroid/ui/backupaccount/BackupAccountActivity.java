@@ -76,7 +76,7 @@ public class BackupAccountActivity extends CommonActivity implements BackupAccou
                 .titleColorRes(R.color.colorAccent)
                 .content(R.string.backup_msg)
                 .positiveText(R.string.next_text)
-                .negativeText(R.string.cancen_text)
+                .negativeText(R.string.cancel_text)
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
                     showProgressDialog(null, getString(R.string.loading_msg));

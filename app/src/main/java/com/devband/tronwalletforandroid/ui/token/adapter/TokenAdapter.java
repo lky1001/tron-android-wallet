@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
@@ -84,7 +83,7 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
                         .contentColorRes(android.R.color.black)
                         .backgroundColorRes(android.R.color.white)
                         .positiveText(R.string.visit_site_text)
-                        .negativeText(R.string.cancen_text)
+                        .negativeText(R.string.cancel_text)
                         .onPositive((dialog, which) -> {
                             dialog.dismiss();
                             new FinestWebView.Builder(mContext).show(item.getUrl());

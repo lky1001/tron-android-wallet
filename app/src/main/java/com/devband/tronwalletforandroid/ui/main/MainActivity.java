@@ -524,6 +524,17 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     public void successCreateAccount() {
         hideDialog();
+        new MaterialDialog.Builder(MainActivity.this)
+                .title(getString(R.string.backup_title))
+                .content(getString(R.string.create_account_backup_msg))
+                .titleColorRes(R.color.colorAccent)
+                .contentColorRes(android.R.color.black)
+                .backgroundColorRes(android.R.color.white)
+                .positiveText(R.string.close_text)
+                .autoDismiss(true)
+                .build()
+                .show();
+
         initAccountList(true);
     }
 
@@ -584,6 +595,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 .titleColorRes(android.R.color.black)
                 .contentColorRes(android.R.color.black)
                 .backgroundColorRes(android.R.color.white)
+                .positiveText(R.string.close_text)
                 .autoDismiss(true)
                 .build()
                 .show();
@@ -646,4 +658,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
         }
     };
+
+    @OnClick(R.id.get_token_button)
+    public void onGetTokenClick() {
+        startActivity(TokenActivity.class);
+    }
 }

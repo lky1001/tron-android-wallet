@@ -66,7 +66,7 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
                         .contentColorRes(android.R.color.black)
                         .backgroundColorRes(android.R.color.white)
                         .positiveText(R.string.visit_site_text)
-                        .negativeText(R.string.cancen_text)
+                        .negativeText(R.string.cancel_text)
                         .onPositive((dialog, which) -> {
                             dialog.dismiss();
                             new FinestWebView.Builder(mContext).show(item.getUrl());

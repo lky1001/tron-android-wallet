@@ -188,7 +188,7 @@ public class TokenActivity extends CommonActivity implements TokenView {
                         // check trx balance
                         tokenAmount *= item.getPrice();
 
-                        if (tokenAmount > mLoginAccountTrx) {
+                        if (tokenAmount == 0 || tokenAmount > mLoginAccountTrx) {
                             Toast.makeText(TokenActivity.this, getString(R.string.invalid_amount),
                                     Toast.LENGTH_SHORT).show();
                             return;

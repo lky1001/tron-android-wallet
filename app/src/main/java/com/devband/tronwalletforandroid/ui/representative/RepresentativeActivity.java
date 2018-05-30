@@ -202,7 +202,7 @@ public class RepresentativeActivity extends CommonActivity implements Representa
                 .title(R.string.send_token_title)
                 .content(sb.toString())
                 .positiveText(R.string.confirm_text)
-                .negativeText(R.string.cancen_text)
+                .negativeText(R.string.cancel_text)
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
                     showProgressDialog(null, getString(R.string.loading_msg));

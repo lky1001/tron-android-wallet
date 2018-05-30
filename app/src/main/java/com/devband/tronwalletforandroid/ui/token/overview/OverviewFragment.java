@@ -120,7 +120,7 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
                         .contentColorRes(android.R.color.black)
                         .backgroundColorRes(android.R.color.white)
                         .positiveText(R.string.visit_site_text)
-                        .negativeText(R.string.cancen_text)
+                        .negativeText(R.string.cancel_text)
                         .onPositive((dialog, which) -> {
                             dialog.dismiss();
                             new FinestWebView.Builder(getActivity()).show(token.getUrl());

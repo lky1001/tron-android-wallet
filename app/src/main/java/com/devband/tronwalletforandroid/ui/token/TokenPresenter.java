@@ -84,7 +84,7 @@ public class TokenPresenter extends BasePresenter<TokenView> {
     public void participateToken(Token item, long tokenAmount) {
         mView.showLoadingDialog();
 
-        Tron.getInstance(mContext).participateTokens(item.getName(), item.getOwnerAddress(), item.getPrice() * tokenAmount)
+        Tron.getInstance(mContext).participateTokens(item.getName(), item.getOwnerAddress(), tokenAmount)
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new SingleObserver<Boolean>() {
             @Override
@@ -99,7 +99,7 @@ public class TokenPresenter extends BasePresenter<TokenView> {
 
             @Override
             public void onError(Throwable e) {
-
+                mView.showServerError();
             }
         });
     }

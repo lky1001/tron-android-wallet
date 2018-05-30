@@ -57,7 +57,8 @@
     <string name="password_error">Password must be at least 8.</string>
     <string name="backup_title">Warning</string>
     <string name="backup_msg">If you lose your private key, you will never be able to access your assets.\n(ex. uninstall tron wallet app or remove app data)\nAre you sure?</string>
-    <string name="cancen_text">Cancel</string>
+    <string name="create_account_backup_msg">If you lose your private key, you will never be able to access your assets.\n(ex. uninstall tron wallet app or remove app data).\nPlease backup your private key\nMy Account > export private key</string>
+    <string name="cancel_text">Cancel</string>
     <string name="register_wallet_error">Can not register wallet. Please try again.</string>
     <string name="copy_wallet_info">Copy Wallet Info</string>
     <string name="menu_torn_pay">Tron Pay</string>
@@ -78,7 +79,7 @@
     <string name="feedback_text">Question &amp; Feedback</string>
     <string name="my_tokens">My Tokens</string>
     <string name="no_tokens">No Tokens</string>
-    <string name="but_token_text">Buy Token</string>
+    <string name="get_token_text">Get Token</string>
     <string name="title_about_tron">About Tron</string>
     <string name="title_markets">Markets</string>
     <string name="title_rename_account">Rename</string>

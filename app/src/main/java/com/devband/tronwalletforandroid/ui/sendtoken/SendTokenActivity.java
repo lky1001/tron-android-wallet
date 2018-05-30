@@ -158,7 +158,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                 .title(R.string.send_token_title)
                 .content(sb.toString())
                 .positiveText(R.string.confirm_text)
-                .negativeText(R.string.cancen_text)
+                .negativeText(R.string.cancel_text)
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
                     String password = mInputPassword.getText().toString();

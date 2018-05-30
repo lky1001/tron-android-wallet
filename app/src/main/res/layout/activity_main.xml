@@ -222,12 +222,15 @@
                         android:textSize="20sp"
                         android:text="@string/no_tokens" />
                     <Button
+                        android:id="@+id/get_token_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@color/colorAccent"
-                        android:text="@string/but_token_text"
+                        android:layout_marginTop="15dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:background="@color/token_participate_button_color"
                         android:textColor="@android:color/white"
-                        android:visibility="gone" />
+                        android:text="@string/get_token_text" />
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
