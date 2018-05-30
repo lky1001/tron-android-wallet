@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.ui.accountdetail.representative.model.BlockStatModel;
@@ -56,10 +57,10 @@ public class BlockStatViewHolder extends BaseViewHolder<BlockStatModel> {
 
         Glide.with(itemView.getContext())
                 .load(imagePath)
+                .apply(new RequestOptions().placeholder(R.drawable.ic_default_image).error(R.drawable.ic_default_image))
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        mImgRepresent.setVisibility(View.GONE);
                         return true;
                     }
 
@@ -68,7 +69,6 @@ public class BlockStatViewHolder extends BaseViewHolder<BlockStatModel> {
                         if (mImgRepresent.getVisibility() != View.VISIBLE) {
                             mImgRepresent.setVisibility(View.VISIBLE);
                         }
-                        Log.d("hanseon--", "BlockStatViewHolder - onResourceReady");
                         return false;
                     }
                 })

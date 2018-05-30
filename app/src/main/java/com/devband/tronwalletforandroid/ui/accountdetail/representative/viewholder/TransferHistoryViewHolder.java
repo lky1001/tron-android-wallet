@@ -9,10 +9,12 @@ import android.widget.Toast;
 
 import com.devband.tronlib.dto.Transfer;
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.accountdetail.representative.model.TransferHistoryModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.internal.Util;
 
 /**
  * Created by user on 2018. 5. 29..
@@ -44,7 +46,7 @@ public class TransferHistoryViewHolder extends BaseViewHolder<TransferHistoryMod
         mTxtFromAddress.setText(transfer.getTransferFromAddress());
         mTxtToAddress.setText(transfer.getTransferToAddress());
 
-        StringBuilder sb = new StringBuilder(transfer.getAmount() + "")
+        StringBuilder sb = new StringBuilder(Utils.getRealTrxFormat(transfer.getAmount()) + "")
                 .append(" ").append(transfer.getTokenName());
         mTxtAmout.setText(sb.toString());
 
