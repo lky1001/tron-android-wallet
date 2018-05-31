@@ -286,4 +286,11 @@
     <string name="empty">Empty</string>
     <string name="empty_transfer">No Transfer</string>
     <string name="empty_transactions">No Transactions</string>
+    <string name="change_password">CHANGE PASSWORD</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="unmatched_current_password">Not matched current password</string>
+    <string name="not_equal_new_password">Not equal New Password between Confirm Password</string>
+    <string name="invalid_new_password">Invalid New Password</string>
 </resources>
