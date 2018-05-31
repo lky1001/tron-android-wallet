@@ -4,7 +4,7 @@ A Tron wallet for android.
 
 ## Screenshots
 <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-04-27-215149.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-05-24-012621.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-04-27-215251.png" width="250"><br/>
-<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-05-24-012711.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-05-24-012650.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-05-24-012740.png" width="250">
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-05-31-123858.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-05-24-012650.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-05-31-123843.png" width="250">
 
 ## Refrence
 - https://github.com/tronprotocol/wallet-cli
@@ -28,6 +28,7 @@ A Tron wallet for android.
 - My tokens
 - My transfer history
 - Vote representative
+- Participate token
 - Block explorer
 - Token list
 - Node list
@@ -36,6 +37,5 @@ A Tron wallet for android.
 
 ## TODO list
 
-- Participate token
 - Tron pay
 - BIP 32, 39, 44

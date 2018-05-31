@@ -209,7 +209,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_margin="5dp"
-                        android:background="@color/colorAccent"
+                        android:background="@color/copy_address_button_color"
                         android:textColor="@android:color/white"
                         android:text="@string/copy_address_text" />
 
