@@ -30,7 +30,7 @@ public class EmptyView extends LinearLayout {
         super(context, attrs, defStyleAttr);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Empty_View, defStyleAttr, 0);
-        int titleResId = a.getResourceId(R.styleable.Empty_View_title, R.string.empty);
+        int titleResId = a.getResourceId(R.styleable.Empty_View_empty_title, R.string.empty);
 
         initUi(context, titleResId);
     }

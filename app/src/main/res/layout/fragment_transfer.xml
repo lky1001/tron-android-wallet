@@ -16,6 +16,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="gone"
-        tron:title="@string/empty_transfer"/>
+        tron:empty_title="@string/empty_transfer"/>
 
 </FrameLayout>

@@ -2,7 +2,7 @@
 <resources>
 
     <declare-styleable name="Empty_View">
-        <attr name="title" format="reference"/>
+        <attr name="empty_title" format="reference"/>
     </declare-styleable>
 
 </resources>
