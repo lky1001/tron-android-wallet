@@ -140,7 +140,7 @@ public class RepresentativeActivity extends CommonActivity implements Representa
                         .contentColorRes(R.color.colorAccent)
                         .backgroundColorRes(android.R.color.white)
                         .inputType(InputType.TYPE_NUMBER_FLAG_DECIMAL)
-                        .input(getString(R.string.amount_text), "", new MaterialDialog.InputCallback() {
+                        .input(getString(R.string.vote_amount_text), "", new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
                                 dialog.dismiss();

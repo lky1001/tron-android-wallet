@@ -13,11 +13,7 @@
     <string name="navigation_drawer_open">open</string>
     <string name="navigation_drawer_close">close</string>
     <string name="navigation_header_title">Tron Wallet</string>
-    <string name="navigation_menu_create_account">Create Account</string>
-    <string name="navigation_menu_login">Login</string>
     <string name="navigation_menu_send">Send Token</string>
-    <string name="navigation_menu_export_private_key">Export Private Key</string>
-    <string name="navigation_menu_tron_pay">Tron Pay</string>
     <string name="address_text">Address</string>
     <string name="password_text">Password (must be at least 8)</string>
     <string name="private_key_text">Private Key</string>
@@ -35,14 +31,13 @@
     <string name="account_does_not_exist">Account does not exist. Create or import account.</string>
     <string name="login_success">Success login.</string>
     <string name="menu_address">Address</string>
-    <string name="or_text">OR</string>
     <string name="currency_text">TRX</string>
     <string name="price_text">USD</string>
     <string name="choice_share">Share Address</string>
     <string name="choice_share_account">Backup Account</string>
     <string name="choice_share_private_key">Export Private Key</string>
     <string name="menu_share">Share</string>
-    <string name="amount_text">Amount : </string>
+    <string name="vote_amount_text">Amount : </string>
     <string name="send_amount_text">Amount</string>
     <string name="send_trx_text">Send</string>
     <string name="invalid_address">Invalid Address</string>
@@ -50,8 +45,6 @@
     <string name="sending_token_failed">Something went wrong while submitting the transaction</string>
     <string name="sending_token_success">Sending token success.</string>
     <string name="invalid_private_key">Invalid Private Key.</string>
-    <string name="invalid_password_or_private_key">Invalid password or private key</string>
-    <string name="account_name_text">Account Nickname</string>
     <string name="loading_msg">Please wait..</string>
     <string name="next_text">Next</string>
     <string name="password_error">Password must be at least 8.</string>
@@ -61,7 +54,6 @@
     <string name="cancel_text">Cancel</string>
     <string name="register_wallet_error">Can not register wallet. Please try again.</string>
     <string name="copy_wallet_info">Copy Wallet Info</string>
-    <string name="menu_torn_pay">Tron Pay</string>
     <string name="navigation_menu_my_address">My Address</string>
     <string name="tron_price_title">Tron Price</string>
     <string name="navigation_menu_donations">Donations</string>
@@ -96,7 +88,6 @@
     <string name="send_token_address_text">Address : </string>
     <string name="send_token_token_text">Token : </string>
     <string name="send_token_amount_text">Amount : </string>
-
     <string name="title_create_account">New Account</string>
     <string name="navigation_menu_logout">Logout</string>
     <string name="import_account_hint">Your private key string here</string>
@@ -200,7 +191,6 @@
     <string name="received_text">RECEIVED</string>
     <string name="send_text">SEND</string>
     <string name="title_detail_block">Block Information</string>
-
     <string name="copy_to_address_msg">Copied to address.</string>
     <string name="copy_from_address_msg">Copied from address.</string>
     <string name="external_website_warning_msg">is not an official Tron site. Never enter your private key on an untrusted website.</string>
@@ -230,7 +220,6 @@
     <string name="end_date_text">End Date :</string>
     <string name="holders_text">Token Holders :</string>
     <string name="total_transfers_text">Total Transfers :</string>
-    <string name="number_text">Number</string>
     <string name="transfers_text">transfers</string>
     <string name="produced_by_text">Produced by</string>
     <string name="block_reward_text">Reward</string>
