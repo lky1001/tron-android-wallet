@@ -100,4 +100,16 @@ public class WalletAppManager {
 
         return wallet.isAgree();
     }
+
+    public boolean changePassword(@NonNull String originPassword, @NonNull String newPassword) {
+        WalletModel wallet = mWalletDao.loadWallet();
+
+        if (PasswordUtil.matches(originPassword, wallet.getPassword())) {
+            wallet.setPassword(PasswordUtil.getHashedPassword(newPassword));
+            mWalletDao.update(wallet);
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -189,4 +189,36 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
     public int getLoginAccountIndex() {
         return Tron.getInstance(mContext).getLoginAccount().getId();
     }
+
+    public void changePassword(@NonNull String originPassword, @NonNull String newPassword) {
+        mView.showLoadingDialog();
+
+        Single.fromCallable(() -> {
+            boolean result = WalletAppManager.getInstance(mContext).changePassword(originPassword, newPassword);
+
+            if (result) {
+                return Tron.getInstance(mContext).changePassword(newPassword);
+            }
+
+            return false;
+        })
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new SingleObserver<Boolean>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
+                mView.changePasswordResult(result);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.changePasswordResult(false);
+            }
+        });
+    }
 }

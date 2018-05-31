@@ -18,4 +18,6 @@ public interface MyAccountView extends IView {
     void successFreezeBalance();
 
     void unableToUnfreeze();
+
+    void changePasswordResult(boolean result);
 }

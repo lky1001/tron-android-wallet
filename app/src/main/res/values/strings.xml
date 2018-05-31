@@ -290,7 +290,9 @@
     <string name="current_password">Current Password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
-    <string name="unmatched_current_password">Not matched current password</string>
-    <string name="not_equal_new_password">Not equal New Password between Confirm Password</string>
-    <string name="invalid_new_password">Invalid New Password</string>
+    <string name="unmatched_current_password">Not matched current password.</string>
+    <string name="not_equal_new_password">Not equal New Password between Confirm Password.</string>
+    <string name="invalid_new_password">Password must be at least 8.</string>
+    <string name="change_password_success_msg">Password has been changed.</string>
+    <string name="change_password_fail_msg">Failed to change password. Please try again.</string>
 </resources>
