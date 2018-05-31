@@ -47,7 +47,7 @@
     <string name="invalid_private_key">올바르지 않은 프라이빗 키 입니다.</string>
     <string name="loading_msg">잠시만 기다려주세요..</string>
     <string name="next_text">다음</string>
-    <string name="password_error">비밀번호를 8자 이상이여야 합니다.</string>
+    <string name="password_error">비밀번호는 8자 이상이여야 합니다.</string>
     <string name="backup_title">경고</string>
     <string name="backup_msg">프라이빗 키를 잃어버리면, 다시는 자산에 접근할 수 없습니다.(예 : 앱 삭제, 앱 데이터 삭제 등)\n계속 하시겠습니까?</string>
     <string name="create_account_backup_msg">프라이빗 키를 잃어버리면, 다시는 자산에 접근할 수 없습니다.(예 : 앱 삭제, 앱 데이터 삭제 등)\n아래의 경로에서 프라이빗 키를 반드시 백업해 주시기 바랍니다.\n내 계정 > 프라이빗 키 내보내기</string>
@@ -291,7 +291,7 @@
     <string name="current_password">현재 비밀번호</string>
     <string name="new_password">새 비밀번호</string>
     <string name="confirm_new_password">새 비밀번호 확인</string>
-    <string name="unmatched_current_password">현재 비밀번호가 일치하지 않습니다</string>
+    <string name="unmatched_current_password">현재 비밀번호가 일치하지 않습니다.</string>
     <string name="not_equal_new_password">새로운 비밀번호가 일치하지 않습니다.</string>
-    <string name="invalid_new_password">새로운 비밀번호가 형식에 어긋납니다</string>
+    <string name="invalid_new_password">새로운 비밀번호는 8자 이상이여야 합니다.</string>
 </resources>

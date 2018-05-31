@@ -53,7 +53,7 @@ public class MoreActivity extends CommonActivity implements MoreView {
             getSupportActionBar().setTitle(R.string.title_more);
         }
 
-        mTronAppInfoText.setText("Tron Android Wallet\nApp Version : v" + BuildConfig.VERSION_NAME);
+        mTronAppInfoText.setText("Tron Wallet for Android\nApp Version : v" + BuildConfig.VERSION_NAME);
 
         mPresenter = new MorePresenter(this);
         mPresenter.onCreate();

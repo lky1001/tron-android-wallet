@@ -28,7 +28,6 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.AccountManager;
-import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
@@ -250,6 +249,17 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
         Toast.makeText(MyAccountActivity.this, getString(R.string.unable_to_unfreeze_msg), Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void changePasswordResult(boolean result) {
+        hideDialog();
+
+        if (result) {
+            Toast.makeText(MyAccountActivity.this, getString(R.string.change_password_success_msg), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(MyAccountActivity.this, getString(R.string.change_password_fail_msg), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @OnClick(R.id.btn_change_password)
     public void onChangePasswordClick() {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
@@ -286,7 +296,8 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                             return;
                         }
 
-
+                        dialog.dismiss();
+                        ((MyAccountPresenter) mPresenter).changePassword(currentPassword, confirmNewPassword);
                         Log.d("hanseon--", "positive : " + currentPassword + ", " + newPassword + "," + confirmNewPassword);
                     }
                 })

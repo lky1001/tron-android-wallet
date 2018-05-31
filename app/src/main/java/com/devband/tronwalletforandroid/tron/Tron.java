@@ -71,7 +71,7 @@ public class Tron {
         mFullNodeList = Arrays.asList(mContext.getResources().getStringArray(R.array.fullnode_ip_list));
         initTronNode();
 
-        mAccountManager = new AccountManager(AccountManager.ACCOUNT_LOCAL_DB, mContext);
+        mAccountManager = new AccountManager(AccountManager.PERSISTENT_LOCAL_DB, mContext);
     }
 
     public void initTronNode() {
@@ -108,7 +108,7 @@ public class Tron {
         }
 
         if (mAccountManager == null) {
-            mAccountManager = new AccountManager(AccountManager.ACCOUNT_LOCAL_DB, mContext);
+            mAccountManager = new AccountManager(AccountManager.PERSISTENT_LOCAL_DB, mContext);
         }
 
         if (!mAccountManager.login(password)) {
@@ -396,5 +396,9 @@ public class Tron {
             transaction = mAccountManager.signTransaction(transaction);
             return mTronManager.broadcastTransaction(transaction);
         });
+    }
+
+    public boolean changePassword(String newPassword) {
+        return mAccountManager.changePassword(newPassword);
     }
 }

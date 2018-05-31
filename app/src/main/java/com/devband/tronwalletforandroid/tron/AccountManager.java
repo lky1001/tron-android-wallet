@@ -40,8 +40,8 @@ public class AccountManager {
 
     private static final String LOG_TAG = AccountManager.class.getSimpleName();
 
-    public static final int ACCOUNT_LOCAL_DB = 1;
-    public static final int ACCOUNT_FILE = 2;
+    public static final int PERSISTENT_LOCAL_DB = 1;
+    public static final int PERSISTENT_FILE = 2;
 
     public static final int DEFAULT_ACCOUNT_INDEX = 1;
 
@@ -61,27 +61,27 @@ public class AccountManager {
 
     }
 
-    public AccountManager(int accountType, Context context) {
-        this(true, accountType, context);
+    public AccountManager(int persistentType, Context context) {
+        this(true, persistentType, context);
     }
 
     public AccountManager(boolean genEcKey, Context context) {
-        this(genEcKey, ACCOUNT_LOCAL_DB, context);
+        this(genEcKey, PERSISTENT_LOCAL_DB, context);
     }
 
-    public AccountManager(boolean genEcKey, int accountType, Context context) {
+    public AccountManager(boolean genEcKey, int persistentType, Context context) {
         if (genEcKey) {
             this.mEcKey = new ECKey(Utils.getRandom());
         }
 
-        initAccountRepository(accountType, context);
+        initAccountRepository(persistentType, context);
     }
 
     public AccountManager(String privateKey, Context context) {
-        this(privateKey, ACCOUNT_LOCAL_DB, context);
+        this(privateKey, PERSISTENT_LOCAL_DB, context);
     }
 
-    public AccountManager(String privateKey, int accountType, Context context) {
+    public AccountManager(String privateKey, int persistentType, Context context) {
         ECKey temKey = null;
         try {
             BigInteger priK = new BigInteger(privateKey, KEY_SIZE);
@@ -91,13 +91,13 @@ public class AccountManager {
         }
         this.mEcKey = temKey;
 
-        initAccountRepository(accountType, context);
+        initAccountRepository(persistentType, context);
     }
 
-    private void initAccountRepository(int accountType, Context context) {
-        if (accountType == ACCOUNT_LOCAL_DB) {
+    private void initAccountRepository(int persistentType, Context context) {
+        if (persistentType == PERSISTENT_LOCAL_DB) {
             mAccountRepository = new LocalDbRepository(context);
-        } else if (accountType == ACCOUNT_FILE) {
+        } else if (persistentType == PERSISTENT_FILE) {
             mAccountRepository = new FileRepository();
         }
     }
@@ -145,47 +145,29 @@ public class AccountManager {
         });
     }
 
-    public int store(@NonNull String password) {
-        if (this.mEcKey == null || this.mEcKey.getPrivKey() == null) {
-            return Tron.ERROR_PRIVATE_KEY;
-        }
-
-        byte[] pwd = getPassWord(password);
-        String pwdAsc = ByteArray.toHexString(pwd);
-        byte[] privKeyPlain = this.mEcKey.getPrivKeyBytes();
-        //System.out.println("privKey:" + ByteArray.toHexString(privKeyPlain));
-        //encrypted by password
-        byte[] aseKey = getEncKey(password);
-        byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, aseKey);
-        String privKeyStr = ByteArray.toHexString(privKeyEnced);
-        byte[] pubKeyBytes = this.mEcKey.getPubKey();
-        String pubKeyStr = ByteArray.toHexString(pubKeyBytes);
-
-        // todo - file save to external storage
-        File file = getAccountStorage();
-
-        if (file == null) {
-            return Tron.ERROR_ACCESS_STORAGE;
-        }
-        // SAVE PASSWORD
-        FileUtil.saveData(file, pwdAsc, false);//ofset:0 len:32
-        // SAVE PUBKEY
-        FileUtil.saveData(file, pubKeyStr, true);//ofset:32 len:130
-        // SAVE PRIKEY
-        FileUtil.saveData(file, privKeyStr, true);
-
-        return Tron.SUCCESS;
-    }
-
-    public boolean backUpAccountToStorage(String password) {
-        return true;
-    }
-
-    public boolean login(String password) {
+    public boolean login(@NonNull String password) {
         this.mAesKey = getEncKey(password);
         loadAccountByRepository(null);
         this.mLoginState = checkPassWord(password);
         return mLoginState;
+    }
+
+    public boolean changePassword(@NonNull String password) {
+        this.mAesKey = getEncKey(password);
+
+        byte[] pwd = getPassWord(password);
+        String pwdAsc = ByteArray.toHexString(pwd);
+
+        List<AccountModel> accountModels = mAccountRepository.loadAllAccounts().blockingGet();
+
+        for (AccountModel accountModel : accountModels) {
+            accountModel.setAccount(pwdAsc + accountModel.getAccount().substring(32, accountModel.getAccount().length()));
+            mAccountRepository.updateAccount(accountModel).blockingGet();
+        }
+
+        mLoginAccountModel.setAccount(pwdAsc + mLoginAccountModel.getAccount().substring(32, mLoginAccountModel.getAccount().length()));
+
+        return true;
     }
 
     private int loadAccountByRepository(@Nullable AccountModel accountModel) {
