@@ -283,4 +283,7 @@
     <string name="your_trx_text">내 TRX :</string>
     <string name="participate_token_success_msg">토큰 참여에 성공하였습니다.</string>
     <string name="participate_token_fail_msg">토큰 참여에 실패하였습니다. 잠시 후 다시 시도하세요</string>
+    <string name="empty">데이터가 없습니다</string>
+    <string name="empty_transfer">거래 데이터가 없습니다</string>
+    <string name="empty_transactions">트랜젝션 데이터가 없습니다</string>
 </resources>
