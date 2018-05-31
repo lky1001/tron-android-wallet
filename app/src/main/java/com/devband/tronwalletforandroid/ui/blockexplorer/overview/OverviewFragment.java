@@ -159,11 +159,18 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
     }
 
     private void setTopAddressData(List<TopAddressAccount> data) {
+        if (data == null || data.size() == 0) {
+            return;
+        }
         mAccountPieChart.setUsePercentValues(false);
-
         List<PieEntry> entries = new ArrayList<>();
 
-        for (int i=3; i<data.size(); i++) {
+        int start = 0;
+        if (data.size() >= 4) {
+            start = 3;
+        }
+
+        for (int i=start; i<data.size(); i++) {
             TopAddressAccount account = data.get(i);
             double balance = account.getBalance() / Constants.ONE_TRX;
             entries.add(new PieEntry((float) balance));
@@ -269,6 +276,11 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
         if (!isAdded()) {
             return;
         }
+
+        if (stats == null || stats.size() == 0) {
+            return;
+        }
+
         List<Entry> yVals = new ArrayList<>();
 
         Map<Integer, String> x = new HashMap<>();
