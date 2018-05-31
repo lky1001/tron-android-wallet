@@ -40,6 +40,9 @@ public class TokenActivity extends CommonActivity implements TokenView {
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
+    @BindView(R.id.empty_view)
+    View mEmptyView;
+
     private TokenAdapter mAdapter;
 
     private LinearLayoutManager mLayoutManager;
@@ -234,6 +237,9 @@ public class TokenActivity extends CommonActivity implements TokenView {
     @Override
     public void finishLoading(int total, Protocol.Account account) {
         if (!isFinishing()) {
+
+            boolean isFirstLoading = mStartIndex == 0;
+
             mStartIndex += PAGE_SIZE;
 
             mLoginAccountTrx = account.getBalance();
@@ -244,6 +250,19 @@ public class TokenActivity extends CommonActivity implements TokenView {
 
             mIsLoading = false;
             mAdapterView.refresh();
+
+            if (isFirstLoading && total == 0) {
+                mRecyclerView.setVisibility(View.GONE);
+                mEmptyView.setVisibility(View.VISIBLE);
+
+            } else {
+                if (mRecyclerView.getVisibility() != View.VISIBLE) {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                }
+                if (mEmptyView.getVisibility() == View.VISIBLE) {
+                    mEmptyView.setVisibility(View.GONE);
+                }
+            }
 
             hideDialog();
         }
