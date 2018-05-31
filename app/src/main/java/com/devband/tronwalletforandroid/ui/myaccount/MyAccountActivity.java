@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +21,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
+import com.devband.tronwalletforandroid.tron.AccountManager;
+import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
@@ -105,38 +109,38 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
     private void initAccountList() {
         ((MyAccountPresenter) mPresenter).getAccountList()
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new SingleObserver<List<AccountModel>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<List<AccountModel>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            }
-
-            @Override
-            public void onSuccess(List<AccountModel> accountModelList) {
-                mAccountAdapter = new ArrayAdapter<>(MyAccountActivity.this, android.R.layout.simple_spinner_item,
-                        accountModelList);
-
-                mAccountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                mAccountSpinner.setAdapter(mAccountAdapter);
-
-                for (int i = 0; i < accountModelList.size(); i++) {
-                    int id = ((MyAccountPresenter) mPresenter).getLoginAccountIndex();
-                    if (id == accountModelList.get(i).getId()) {
-                        mAccountSpinner.setSelection(i);
-                        break;
                     }
-                }
 
-                mAccountSpinner.setOnItemSelectedListener(mAccountItemSelectedListener);
-            }
+                    @Override
+                    public void onSuccess(List<AccountModel> accountModelList) {
+                        mAccountAdapter = new ArrayAdapter<>(MyAccountActivity.this, android.R.layout.simple_spinner_item,
+                                accountModelList);
 
-            @Override
-            public void onError(Throwable e) {
+                        mAccountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        mAccountSpinner.setAdapter(mAccountAdapter);
 
-            }
-        });
+                        for (int i = 0; i < accountModelList.size(); i++) {
+                            int id = ((MyAccountPresenter) mPresenter).getLoginAccountIndex();
+                            if (id == accountModelList.get(i).getId()) {
+                                mAccountSpinner.setSelection(i);
+                                break;
+                            }
+                        }
+
+                        mAccountSpinner.setOnItemSelectedListener(mAccountItemSelectedListener);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
     @Override
@@ -244,6 +248,57 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     public void unableToUnfreeze() {
         hideDialog();
         Toast.makeText(MyAccountActivity.this, getString(R.string.unable_to_unfreeze_msg), Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.btn_change_password)
+    public void onChangePasswordClick() {
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                .title(R.string.change_password)
+                .titleColorRes(R.color.colorAccent)
+                .contentColorRes(R.color.colorAccent)
+                .backgroundColorRes(android.R.color.white)
+                .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                .customView(R.layout.dialog_change_password, true)
+                .positiveText(R.string.confirm_text)
+                .negativeText(R.string.cancel_text)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String currentPassword = ((EditText) dialog.getCustomView().findViewById(R.id.current_password))
+                                .getText().toString();
+                        if (!((MyAccountPresenter) mPresenter).matchPassword(currentPassword)) {
+                            Toast.makeText(dialog.getContext(), R.string.unmatched_current_password, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        
+                        String newPassword = ((EditText) dialog.getCustomView().findViewById(R.id.new_password))
+                                .getText().toString();
+                        String confirmNewPassword = ((EditText) dialog.getCustomView().findViewById(R.id.confirm_new_password))
+                                .getText().toString();
+
+                        if (!TextUtils.equals(newPassword, confirmNewPassword)) {
+                            Toast.makeText(dialog.getContext(), R.string.not_equal_new_password, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        if (!AccountManager.passwordValid(newPassword)) {
+                            Toast.makeText(dialog.getContext(), R.string.invalid_new_password, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+
+                        Log.d("hanseon--", "positive : " + currentPassword + ", " + newPassword + "," + confirmNewPassword);
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Log.d("hanseon--", "negative");
+                    }
+                });
+
+        MaterialDialog dialog = builder.build();
+        dialog.show();
     }
 
     @OnClick(R.id.btn_export_private_key)
