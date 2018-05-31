@@ -574,6 +574,10 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     public void onPriceHelpImageClick() {
         StringBuilder sb = new StringBuilder();
 
+        if (mCoinMarketCapPriceInfo == null) {
+            return;
+        }
+
         Date updated = new Date(Long.parseLong(mCoinMarketCapPriceInfo.getLastUpdated()) * 1_000);
 
         sb.append("Price : ")
