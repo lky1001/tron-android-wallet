@@ -157,7 +157,7 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/main_sub_title_color"
                                 android:textSize="12sp"
-                                android:text="@string/entropy_text" />
+                                android:text="@string/bandwidth_text" />
 
                             <TextView
                                 android:id="@+id/login_bandwidth_text"

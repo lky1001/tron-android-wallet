@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,8 +61,8 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     @BindView(R.id.tron_power_text)
     TextView mTronPowerText;
 
-    @BindView(R.id.entropy_text)
-    TextView mEntropyText;
+    @BindView(R.id.bandwidth_text)
+    TextView mBandwidthText;
 
     @BindView(R.id.freeze_button)
     Button mFreezeButton;
@@ -161,7 +160,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
         mAddressText.setText(address);
         mBalanceText.setText(Constants.tronBalanceFormat.format(mAccountBalance) + " " + Constants.TRON_SYMBOL);
-        mEntropyText.setText(Constants.tronBalanceFormat.format(account.getBandwidth()));
+        mBandwidthText.setText(Constants.tronBalanceFormat.format(account.getBandwidth()));
         mTokensLayout.removeAllViews();
 
         if (!account.getAssetList().isEmpty()) {

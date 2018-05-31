@@ -145,7 +145,7 @@
     <string name="input_amount_text">Amount</string>
     <string name="freeze_confirm_text">I confirm to freeze TRX for at least of 3 days</string>
     <string name="donations_text">Donations</string>
-    <string name="entropy_text">ENTROPY</string>
+    <string name="bandwidth_text">BANDWIDTH</string>
     <string name="tron_power_text">TRON POWER</string>
     <string name="current_balance_text">CURRENT BALANCE</string>
     <string name="unable_to_unfreeze_msg">Unable to unfreeze TRX. This could be caused because the minimal freeze period hasn\'t been reached yet.</string>
@@ -166,6 +166,7 @@
     <string name="vote_address_text">Address :</string>
     <string name="invalid_vote">Invalid vote</string>
     <string name="tron_power_help_text">TRX can be frozen/locked to gain Tron Power and enable additional features. For example, with Tron Power you can vote for Super Representatives. Frozen tokens are "locked" for a period of 3 days. During this period the frozen TRX cannot be traded. After this period you can unfreeze the TRX and trade the tokens.</string>
+    <string name="bandwidth_help_text">All contracts consume bandwidth, including transfer, migration of asset, voting, freezing balance, etc. Inquiries do not consume bandwidth while for every contract about 100,000 bandwidths is consumed. If a new operation exceeds a given amount of time (10s) from the last contract, if does not consume any bandwidth.</string>
     <string name="navigation_menu_tokens">Tokens</string>
     <string name="navigation_menu_block_explorer">Block Explorer</string>
     <string name="string_select_email_app">Select Email App</string>
@@ -195,7 +196,7 @@
     <string name="title_tokens">Tokens</string>
     <string name="invalid_freeze_amount">No trx.</string>
     <string name="my_account_tron_power_title_text">Tron power :</string>
-    <string name="my_account_entropy_text">Entropy :</string>
+    <string name="my_account_bandwidth_text">Bandwidth :</string>
     <string name="received_text">RECEIVED</string>
     <string name="send_text">SEND</string>
     <string name="title_detail_block">Block Information</string>

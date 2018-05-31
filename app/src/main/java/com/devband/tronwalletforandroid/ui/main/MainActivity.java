@@ -489,11 +489,11 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         }
 
         double fz = frozenBalance / Constants.ONE_TRX;
-        double entropy = account.getBandwidth();
+        double bandwidth = account.getBandwidth();
 
         mLoginAccountBalanceText.setText(Constants.tronBalanceFormat.format(balance) + " " + getString(R.string.currency_text));
         mLoginFrozenBalanceText.setText(Constants.numberFormat.format(fz));
-        mLoginBandwidthText.setText(Constants.numberFormat.format(entropy));
+        mLoginBandwidthText.setText(Constants.numberFormat.format(bandwidth));
 
         mLoadingAccountInfo = false;
 
