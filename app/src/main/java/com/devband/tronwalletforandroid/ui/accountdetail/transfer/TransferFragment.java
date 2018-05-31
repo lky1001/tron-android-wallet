@@ -35,6 +35,9 @@ public class TransferFragment extends BaseFragment implements TransferView {
     @BindView(R.id.recycler_view)
     RecyclerView mListView;
 
+    @BindView(R.id.empty_view)
+    View mEmptyView;
+
     private LinearLayoutManager mLayoutManager;
     private AdapterView mAdapterView;
     private AccountTransferAdapter mAdapter;
@@ -162,6 +165,9 @@ public class TransferFragment extends BaseFragment implements TransferView {
         if (!isAdded()) {
             return;
         }
+
+        boolean isFirstLoading = mStartIndex == 0;
+
         mStartIndex += PAGE_SIZE;
 
         if (mStartIndex >= total) {
@@ -169,7 +175,21 @@ public class TransferFragment extends BaseFragment implements TransferView {
         }
 
         mIsLoading = false;
+
         mAdapterView.refresh();
+
+        if (isFirstLoading && total == 0) {
+            mListView.setVisibility(View.GONE);
+            mEmptyView.setVisibility(View.VISIBLE);
+
+        } else {
+            if (mListView.getVisibility() != View.VISIBLE) {
+                mListView.setVisibility(View.VISIBLE);
+            }
+            if (mEmptyView.getVisibility() == View.VISIBLE) {
+                mEmptyView.setVisibility(View.GONE);
+            }
+        }
 
         hideDialog();
     }

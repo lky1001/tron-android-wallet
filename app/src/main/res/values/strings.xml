@@ -283,4 +283,7 @@
     <string name="your_trx_text">Your trx :</string>
     <string name="participate_token_success_msg">Success to participate token</string>
     <string name="participate_token_fail_msg">Failed to participate token. Please try again</string>
+    <string name="empty">Empty</string>
+    <string name="empty_transfer">No Transfer</string>
+    <string name="empty_transactions">No Transactions</string>
 </resources>
