@@ -41,7 +41,7 @@ This app is a multifunctional Android wallet for the TRON network.
 <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-04-27-215213.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-04-27-215239.png" width="250">
 
 ### main check balance trx, tokens, tron power, bandwidth, change account name
-<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-112831" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-112851.png" width="250">
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-112831.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-112851.png" width="250">
 
 ### add new wallet or import wallet
 <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-05-31-210521.png" width="250">
