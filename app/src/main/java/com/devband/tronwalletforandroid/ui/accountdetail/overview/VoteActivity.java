@@ -124,7 +124,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
     @Override
     public void finishLoading(long totalVotes, long total) {
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(getString(R.string.vote_title) + " (" + Constants.numberFormat.format(totalVotes));
+            getSupportActionBar().setTitle(getString(R.string.vote_title) + " (" + Constants.numberFormat.format(totalVotes) + ")");
         }
 
         mStartIndex += PAGE_SIZE;

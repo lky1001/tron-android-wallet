@@ -28,4 +28,7 @@
     <color name="price_up_color">#029f2a</color>
     <color name="votes_button_color">#7c7b81</color>
     <color name="copy_address_button_color">#7c7b81</color>
+    <color name="confirm_text_color">#029f2a</color>
+    <color name="unconfirm_text_color">#c40b19</color>
+
 </resources>

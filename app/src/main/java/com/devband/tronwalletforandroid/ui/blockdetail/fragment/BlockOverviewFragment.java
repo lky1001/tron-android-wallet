@@ -96,10 +96,10 @@ public class BlockOverviewFragment extends BaseFragment implements BlockInfoView
         hideDialog();
         if (block.isConfirmed()) {
             mTxtStatus.setText(R.string.confirmed);
-            mTxtStatus.setTextColor(Color.parseColor("#00FF80"));
+            mTxtStatus.setTextColor(getResources().getColor(R.color.confirm_text_color));
         } else {
             mTxtStatus.setText(R.string.unconfirmed);
-            mTxtStatus.setTextColor(Color.parseColor("#FF0000"));
+            mTxtStatus.setTextColor(getResources().getColor(R.color.unconfirm_text_color));
         }
         mTxtHash.setText(block.getHash());
         mTxtBlockHeight.setText("#"+ Utils.getCommaNumber(mBlockNumber));
