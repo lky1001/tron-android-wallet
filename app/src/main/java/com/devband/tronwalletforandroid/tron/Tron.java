@@ -21,6 +21,7 @@ import org.tron.protos.Protocol;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import io.reactivex.Single;
 
@@ -44,6 +45,8 @@ public class Tron {
     private Context mContext;
 
     private List<String> mFullNodeList;
+
+    private List<String> mSolidityNodeList;
 
     private ITronManager mTronManager;
 
@@ -69,21 +72,37 @@ public class Tron {
 
     private void init() {
         mFullNodeList = Arrays.asList(mContext.getResources().getStringArray(R.array.fullnode_ip_list));
+        mSolidityNodeList = Arrays.asList(mContext.getResources().getStringArray(R.array.solidity_ip_list));
         initTronNode();
 
         mAccountManager = new AccountManager(AccountManager.PERSISTENT_LOCAL_DB, mContext);
     }
 
     public void initTronNode() {
+        Random random = new Random();
         // todo - fail over
+        int randomFullNode = random.nextInt(mFullNodeList.size());
+        int randomSolidityNode = random.nextInt(mSolidityNodeList.size());
 
         if (!TextUtils.isEmpty(CustomPreference.getInstance(mContext).getCustomFullNodeHost())) {
-            mTronManager = new TronManager(CustomPreference.getInstance(mContext).getCustomFullNodeHost());
+            mTronManager = new TronManager(CustomPreference.getInstance(mContext).getCustomFullNodeHost(),
+                    CustomPreference.getInstance(mContext).getCustomFullNodeHost());
         } else if (!mFullNodeList.isEmpty()) {
-            mTronManager = new TronManager(mFullNodeList.get(0));
+            mTronManager = new TronManager(mFullNodeList.get(randomFullNode), mSolidityNodeList.get(randomSolidityNode));
         } else {
             // exception
         }
+    }
+
+    public Single<Long> getBlockHeight() {
+        return mTronManager.getBlockHeight()
+                .map(block -> {
+                    if (block.hasBlockHeader()) {
+                        return block.getBlockHeader().getRawData().getNumber();
+                    } else {
+                        return 0L;
+                    }
+                });
     }
 
     public Single<Integer> registerAccount(@NonNull String nickname, @NonNull String password) {

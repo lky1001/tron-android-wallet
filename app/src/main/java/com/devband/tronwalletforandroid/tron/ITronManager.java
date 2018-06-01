@@ -40,4 +40,6 @@ public interface ITronManager {
     Single<Protocol.Transaction> createParticipateAssetIssueTransaction(Contract.ParticipateAssetIssueContract contract);
 
     Single<Boolean> broadcastTransaction(Protocol.Transaction transaction);
+
+    Single<Protocol.Block> getBlockHeight();
 }

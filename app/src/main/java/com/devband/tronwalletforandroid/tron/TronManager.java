@@ -12,8 +12,8 @@ class TronManager implements ITronManager {
 
     private GrpcClient grpcClient;
 
-    TronManager(String host) {
-        grpcClient = new GrpcClient(host, host);
+    TronManager(String fullNodeHost, String solidityNodeHost) {
+        grpcClient = new GrpcClient(fullNodeHost, solidityNodeHost);
     }
 
     @Override
@@ -89,5 +89,10 @@ class TronManager implements ITronManager {
     @Override
     public Single<Boolean> broadcastTransaction(Protocol.Transaction transaction) {
         return Single.fromCallable(() -> grpcClient.broadcastTransaction(transaction));
+    }
+
+    @Override
+    public Single<Protocol.Block> getBlockHeight() {
+        return Single.fromCallable(() -> grpcClient.getBlock(-1));
     }
 }
