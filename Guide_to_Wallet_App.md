@@ -51,3 +51,45 @@ This app is a multifunctional Android wallet for the TRON network.
 
 ### my account info, freeze, unfreeze trx
 <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-113118.png" width="250">
+
+### my address & qr code
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-04-27-215251.png" width="250">
+
+### send token
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-143920.png" width="250">
+
+### vote representative
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-143957.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144012.png" width="250">
+
+### vote list & participate & token details
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144032.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144041.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-151011.png" width="250">
+
+### block explorer overview
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144100.png" width="250">
+
+### block explorer block & detail
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144152.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-145419.png" width="250">
+
+### block explorer transaction & transfer
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144228.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144302.png" width="250">
+
+### block explorer account & detail
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144316.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144356.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144413.png" width="250">
+
+### about tron
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144443.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144507.png" width="250">
+
+### market info
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144655.png" width="250">
+
+### representative list
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144723.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144741.png" width="250">
+
+### external link, browser
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144755.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144816.png" width="250">
+
+### nodes
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144709.png" width="250">
+
+### using custom full node
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-06-01-144831.png" width="250">
