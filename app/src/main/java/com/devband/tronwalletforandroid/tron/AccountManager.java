@@ -336,9 +336,7 @@ public class AccountManager {
         if (addressBase58 == null || addressBase58.length() == 0) {
             return null;
         }
-        if (addressBase58.length() != Parameter.CommonConstant.BASE58CHECK_ADDRESS_SIZE) {
-            return null;
-        }
+
         byte[] address = decode58Check(addressBase58);
         if (!addressValid(address)) {
             return null;
@@ -488,8 +486,7 @@ public class AccountManager {
     public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey) {
         ECKey temKey = null;
         try {
-            BigInteger priK = new BigInteger(privateKey, KEY_SIZE);
-            temKey = ECKey.fromPrivate(priK);
+            temKey = ECKey.fromPrivate(ByteArray.fromHexString(privateKey));
         } catch (Exception ex) {
             ex.printStackTrace();
             Single.fromCallable(() -> Tron.ERROR_PRIVATE_KEY);
