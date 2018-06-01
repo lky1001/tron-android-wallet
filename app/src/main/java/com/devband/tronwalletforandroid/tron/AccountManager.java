@@ -372,7 +372,7 @@ public class AccountManager {
             return false;
         }
         byte preFixbyte = address[0];
-        if (preFixbyte != Parameter.CommonConstant.ADD_PRE_FIX_BYTE) {
+        if (preFixbyte != Parameter.CommonConstant.getAddressPrefix()) {
             return false;
         }
         //Other rule;
