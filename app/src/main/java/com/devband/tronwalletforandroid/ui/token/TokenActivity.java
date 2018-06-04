@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.ui.token;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -49,6 +50,9 @@ public class TokenActivity extends CommonActivity implements TokenView {
     @BindView(R.id.search_view)
     MaterialSearchView mSearchView;
 
+    @BindView(R.id.swipe_layout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
     private TokenAdapter mAdapter;
 
     private LinearLayoutManager mLayoutManager;
@@ -79,6 +83,8 @@ public class TokenActivity extends CommonActivity implements TokenView {
 
         mSearchView.setOnQueryTextListener(mOnQueryTextListener);
         mSearchView.setOnSearchViewListener(mOnSearchViewListener);
+
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
 
         mLayoutManager = new LinearLayoutManager(TokenActivity.this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -116,12 +122,28 @@ public class TokenActivity extends CommonActivity implements TokenView {
         }
     }
 
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+
+        @Override
+        public void onRefresh() {
+            mStartIndex = 0;
+            mIsLoading = true;
+            ((TokenPresenter) mPresenter).clearData();
+            mAdapterView.refresh();
+            mSwipeRefreshLayout.setRefreshing(true);
+            mSearchView.closeSearch();
+            ((TokenPresenter) mPresenter).loadItems(mStartIndex, PAGE_SIZE);
+        }
+    };
+
     private MaterialSearchView.OnQueryTextListener mOnQueryTextListener = new MaterialSearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
             mStartIndex = 0;
             mIsLoading = true;
             ((TokenPresenter) mPresenter).clearData();
+            mAdapterView.refresh();
+            mSearchView.closeSearch();
             if (!TextUtils.isEmpty(query)) {
                 ((TokenPresenter) mPresenter).findToken(query, mStartIndex, PAGE_SIZE);
             } else {
@@ -290,6 +312,7 @@ public class TokenActivity extends CommonActivity implements TokenView {
     public void showServerError() {
         mIsLoading = false;
         if (!isFinishing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
             hideDialog();
             Toast.makeText(TokenActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
         }
@@ -298,7 +321,7 @@ public class TokenActivity extends CommonActivity implements TokenView {
     @Override
     public void finishLoading(int total, Protocol.Account account) {
         if (!isFinishing()) {
-
+            mSwipeRefreshLayout.setRefreshing(false);
             boolean isFirstLoading = mStartIndex == 0;
 
             mStartIndex += PAGE_SIZE;

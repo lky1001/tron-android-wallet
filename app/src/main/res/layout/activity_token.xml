@@ -24,7 +24,8 @@
             android:layout_height="wrap_content" />
     </FrameLayout>
 
-    <FrameLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -46,7 +47,7 @@
             android:visibility="gone"
             tron:empty_title="@string/empty_tokens"/>
 
-    </FrameLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>>
 
 
 </android.support.constraint.ConstraintLayout>
