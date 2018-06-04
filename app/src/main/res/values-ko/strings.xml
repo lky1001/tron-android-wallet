@@ -156,8 +156,8 @@
     <string name="url_text">URL :</string>
     <string name="vote_address_text">주소 :</string>
     <string name="invalid_vote">유효한 투표수가 아닙니다.</string>
-    <string name="tron_power_help_text">TRX can be frozen/locked to gain Tron Power and enable additional features. For example, with Tron Power you can vote for Super Representatives. Frozen tokens are "locked" for a period of 3 days. During this period the frozen TRX cannot be traded. After this period you can unfreeze the TRX and trade the tokens.</string>
-    <string name="bandwidth_help_text">All contracts consume bandwidth, including transfer, migration of asset, voting, freezing balance, etc. Inquiries do not consume bandwidth while for every contract about 100,000 bandwidths is consumed. If a new operation exceeds a given amount of time (10s) from the last contract, if does not consume any bandwidth.</string>
+    <string name="tron_power_help_text">TRX는 Tron Power를 얻거나 추가 기능을 활성화 하기 위해 동결할 수 있습니다. 예를 들어 Tron Power로 당신은 대표자 선거에 투표할 수 있습니다. 동결된 토큰은 3일동안 "잠금" 상태가 됩니다. 동결 기간 동안 TRX는 거래될 수 없습니다. 동결 기간이 지나면 TRX를 해제할 수 있으며 토큰을 거래할 수 있습니다.</string>
+    <string name="bandwidth_help_text">전송, 자산 이전, 투표, 잔액 동결을 포함한 모든 거래는 bandwidth를 소비합니다. 모든 계약에 대해 100,000 bandwidth를 소비하는 동안에는 질의(inquiries)는 bandwidth를 소모하지 않습니다. 새로운 계약이 마지막 계약으로부터 일정 시간(약 10초)를 초과하면 bandwidth를 소모하지 않습니다.</string>
     <string name="navigation_menu_tokens">토큰</string>
     <string name="navigation_menu_block_explorer">블록 익스플로러</string>
     <string name="string_select_email_app">이메일 앱 선택</string>

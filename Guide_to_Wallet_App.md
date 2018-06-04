@@ -6,6 +6,8 @@ This app is a multifunctional Android wallet for the TRON network.
 
 ## Features
 
+- supports english, korean
+
 ### Create Wallet
 - encrypts private information with a password
 - creates a private/public key pair
