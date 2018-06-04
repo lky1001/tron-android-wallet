@@ -12,6 +12,8 @@ import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import org.tron.protos.Protocol;
 
+import java.net.URLEncoder;
+
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -47,6 +49,42 @@ public class TokenPresenter extends BasePresenter<TokenView> {
     @Override
     public void onDestroy() {
 
+    }
+
+    public void clearData() {
+        mAdapterDataModel.clear();
+    }
+
+    public void findToken(@NonNull String query, long startIndex, int pageSize) {
+        mView.showLoadingDialog();
+
+        Single.zip(Tron.getInstance(mContext).queryAccount(Tron.getInstance(mContext).getLoginAddress()),
+                TronNetwork.getInstance().findTokens("%" + query + "%", startIndex, pageSize, "-name"),
+                (account, tokens) -> {
+                    AccountInfo accountInfo = new AccountInfo();
+                    accountInfo.account = account;
+                    accountInfo.tokens = tokens;
+
+                    return accountInfo;
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<AccountInfo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(AccountInfo accountInfo) {
+                        mAdapterDataModel.addAll(accountInfo.tokens.getData());
+                        mView.finishLoading(accountInfo.tokens.getTotal(), accountInfo.account);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
     public void loadItems(long startIndex, int pageSize) {

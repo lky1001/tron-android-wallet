@@ -77,6 +77,9 @@ public class TokenActivity extends CommonActivity implements TokenView {
             getSupportActionBar().setTitle(R.string.title_tokens);
         }
 
+        mSearchView.setOnQueryTextListener(mOnQueryTextListener);
+        mSearchView.setOnSearchViewListener(mOnSearchViewListener);
+
         mLayoutManager = new LinearLayoutManager(TokenActivity.this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -112,6 +115,39 @@ public class TokenActivity extends CommonActivity implements TokenView {
             super.onBackPressed();
         }
     }
+
+    private MaterialSearchView.OnQueryTextListener mOnQueryTextListener = new MaterialSearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            mStartIndex = 0;
+            mIsLoading = true;
+            ((TokenPresenter) mPresenter).clearData();
+            if (!TextUtils.isEmpty(query)) {
+                ((TokenPresenter) mPresenter).findToken(query, mStartIndex, PAGE_SIZE);
+            } else {
+                ((TokenPresenter) mPresenter).loadItems(mStartIndex, PAGE_SIZE);
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String newText) {
+            return false;
+        }
+    };
+
+    private MaterialSearchView.SearchViewListener mOnSearchViewListener = new MaterialSearchView.SearchViewListener() {
+
+        @Override
+        public void onSearchViewShown() {
+
+        }
+
+        @Override
+        public void onSearchViewClosed() {
+
+        }
+    };
 
     private RecyclerView.OnScrollListener mRecyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
 
