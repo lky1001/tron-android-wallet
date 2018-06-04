@@ -115,6 +115,10 @@ public class TronNetwork {
         return mTokenService.getTokenHolders(tokenName, start, limit, sort);
     }
 
+    public Single<Tokens> findTokens(String query, long start, int limit, String sort) {
+        return mTokenService.findTokens(query, start, limit, sort);
+    }
+
     public Single<List<Market>> getMarkets() {
         return mTronScanService.getMarket();
     }

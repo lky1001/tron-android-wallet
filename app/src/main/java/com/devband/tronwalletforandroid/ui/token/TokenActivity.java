@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,6 +26,7 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.token.adapter.TokenAdapter;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import org.tron.protos.Protocol;
 
@@ -42,6 +45,9 @@ public class TokenActivity extends CommonActivity implements TokenView {
 
     @BindView(R.id.empty_view)
     View mEmptyView;
+
+    @BindView(R.id.search_view)
+    MaterialSearchView mSearchView;
 
     private TokenAdapter mAdapter;
 
@@ -86,6 +92,25 @@ public class TokenActivity extends CommonActivity implements TokenView {
 
         mIsLoading = true;
         ((TokenPresenter) mPresenter).loadItems(mStartIndex, PAGE_SIZE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.token_activity_menu, menu);
+
+        MenuItem item = menu.findItem(R.id.action_search_token);
+        mSearchView.setMenuItem(item);
+
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mSearchView.isSearchOpen()) {
+            mSearchView.closeSearch();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private RecyclerView.OnScrollListener mRecyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {

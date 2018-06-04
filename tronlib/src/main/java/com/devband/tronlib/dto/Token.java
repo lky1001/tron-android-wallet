@@ -18,6 +18,8 @@ public class Token {
 
     private String name;
 
+    private String abbr;
+
     private String description;
 
     private long startTime;
