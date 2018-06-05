@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
-import com.devband.tronwalletforandroid.common.WalletAppManager;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivity;
 
 import butterknife.BindView;

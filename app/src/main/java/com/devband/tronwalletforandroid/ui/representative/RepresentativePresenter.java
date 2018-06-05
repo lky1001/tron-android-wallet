@@ -2,7 +2,7 @@ package com.devband.tronwalletforandroid.ui.representative;
 
 import android.support.annotation.NonNull;
 
-import com.devband.tronwalletforandroid.common.WalletAppManager;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;

@@ -2,7 +2,7 @@ package com.devband.tronwalletforandroid.ui.intro;
 
 import android.annotation.SuppressLint;
 
-import com.devband.tronwalletforandroid.common.WalletAppManager;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import java.util.concurrent.TimeUnit;

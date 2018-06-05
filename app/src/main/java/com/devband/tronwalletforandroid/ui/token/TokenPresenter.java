@@ -6,13 +6,11 @@ import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Token;
 import com.devband.tronlib.dto.Tokens;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
-import com.devband.tronwalletforandroid.common.WalletAppManager;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import org.tron.protos.Protocol;
-
-import java.net.URLEncoder;
 
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;

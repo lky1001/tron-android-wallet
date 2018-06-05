@@ -2,7 +2,7 @@ package com.devband.tronwalletforandroid.ui.login;
 
 import android.support.annotation.Nullable;
 
-import com.devband.tronwalletforandroid.common.WalletAppManager;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 

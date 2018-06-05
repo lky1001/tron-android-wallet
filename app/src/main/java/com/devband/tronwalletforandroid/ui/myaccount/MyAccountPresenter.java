@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.devband.tronlib.dto.Account;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.common.WalletAppManager;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;

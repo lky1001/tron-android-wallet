@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.common;
+package com.devband.tronwalletforandroid.tron;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.database.dao.WalletDao;
 import com.devband.tronwalletforandroid.database.model.WalletModel;
-import com.devband.tronwalletforandroid.tron.PasswordUtil;
 
 import java.util.Calendar;
 
