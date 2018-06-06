@@ -2,6 +2,7 @@ package com.devband.tronwalletforandroid.ui.mytransfer;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +19,6 @@ import com.devband.tronwalletforandroid.ui.mytransfer.adapter.TransferAdapter;
 import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
 
 import java.util.Date;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +35,9 @@ public class TransferActivity extends CommonActivity implements TransferView {
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
+
+    @BindView(R.id.swipe_layout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     private long mStartIndex = 0;
 
@@ -79,7 +82,23 @@ public class TransferActivity extends CommonActivity implements TransferView {
 
         mRecyclerView.setAdapter(mAdapter);
         mAdapterView = mAdapter;
+
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
     }
+
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+
+        @Override
+        public void onRefresh() {
+            mStartIndex = 0;
+            mIsLoading = true;
+            ((TransferPresenter) mPresenter).clearData();
+            mAdapterView.refresh();
+            mSwipeRefreshLayout.setRefreshing(true);
+            ((TransferPresenter) mPresenter).loadTransfer(mStartIndex, PAGE_SIZE);
+        }
+    };
+
 
     private RecyclerView.OnScrollListener mRecyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
 
@@ -165,19 +184,23 @@ public class TransferActivity extends CommonActivity implements TransferView {
         mAdapterView.refresh();
 
         getSupportActionBar().setTitle(getString(R.string.title_transfer_text)
-                + "(" + Constants.numberFormat.format(total) + ")");
+                + " (" + Constants.numberFormat.format(total) + ")");
 
         hideDialog();
     }
 
     @Override
     public void showLoadingDialog() {
-        showProgressDialog(null, getString(R.string.loading_msg));
+        if (!isFinishing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            showProgressDialog(null, getString(R.string.loading_msg));
+        }
     }
 
     @Override
     public void showServerError() {
         if (!isFinishing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
             mIsLoading = false;
             hideDialog();
             Toast.makeText(TransferActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();

@@ -1,7 +1,5 @@
 package com.devband.tronwalletforandroid.ui.mytransfer;
 
-import android.util.Log;
-
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Transfer;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
@@ -103,4 +101,7 @@ public class TransferPresenter extends BasePresenter<TransferView> {
         });
     }
 
+    public void clearData() {
+        mAdapterDataModel.clear();
+    }
 }

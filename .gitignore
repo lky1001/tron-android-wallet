@@ -296,3 +296,4 @@ Temporary Items
 
 
 # End of https://www.gitignore.io/api/macos,android,intellij+all,androidstudio
+output.json
