@@ -2,6 +2,7 @@ package com.devband.tronwalletforandroid.ui.intro;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
@@ -44,6 +45,14 @@ public class IntroActivity extends CommonActivity implements IntroView {
             startActivity(BackupAccountActivity.class);
         }
         finishActivity();
+    }
+
+    @Override
+    public void showErrorMsg() {
+        if (!isFinishing()) {
+            Toast.makeText(IntroActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     @Override

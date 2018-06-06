@@ -1,11 +1,12 @@
 package com.devband.tronwalletforandroid.ui.intro;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
+import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
-
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -25,6 +26,25 @@ public class IntroPresenter extends BasePresenter<IntroView> {
     @Override
     public void onCreate() {
         Single.fromCallable(() -> {
+            int tryCnt = 0;
+
+            while (tryCnt < Constants.CONNECTION_RETRY) {
+                try {
+                    Tron.getInstance(mContext).initTronNode();
+                    long height = Tron.getInstance(mContext).getBlockHeight().blockingGet();
+                    Log.d(IntroPresenter.class.getSimpleName(), "block height : " + height);
+                    break;
+                } catch (Exception e) {
+                    if (tryCnt == Constants.CONNECTION_RETRY - 1) {
+                        throw e;
+                    }
+
+                    e.printStackTrace();
+                }
+
+                tryCnt++;
+            }
+
             if (WalletAppManager.getInstance(mContext).hasWallet()) {
                 if (WalletAppManager.getInstance(mContext).isAgree()) {
                     return SUCCESS;
@@ -36,7 +56,6 @@ public class IntroPresenter extends BasePresenter<IntroView> {
             }
         })
         .subscribeOn(Schedulers.io())
-        .delay(2, TimeUnit.SECONDS)
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(result -> {
             if (result == SUCCESS) {
@@ -47,7 +66,7 @@ public class IntroPresenter extends BasePresenter<IntroView> {
                 mView.startCreateAccountActivity();
             }
         }, e -> {
-            mView.startCreateAccountActivity();
+            mView.showErrorMsg();
         });
     }
 

@@ -9,4 +9,6 @@ interface IntroView extends IView {
     void startLoginActivity();
 
     void startBackupAccountActivity();
+
+    void showErrorMsg();
 }

@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.createwallet;
 
+import com.crashlytics.android.Crashlytics;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.Tron;
@@ -69,7 +70,7 @@ public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
             @Override
             public void onSuccess(Integer result) {
                 if (result == Tron.ERROR_INVALID_PASSWORD) {
-                    mView.registerWalletError();
+                    mView.passwordError();
                 } else if (result == Tron.ERROR) {
                     mView.passwordError();
                 } else {
@@ -79,6 +80,7 @@ public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.logException(e);
                 mView.registerWalletError();
             }
         });

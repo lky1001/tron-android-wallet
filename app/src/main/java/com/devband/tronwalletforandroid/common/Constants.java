@@ -24,4 +24,5 @@ public class Constants {
     public static final String TRON_COINMARKET_NAME = "tronix";
 
     public static final String SUPER_REPRESENTATIVE_TEAM_PAGE_URL = "https://tronscan.org/#/representative/";
+    public static final int CONNECTION_RETRY = 10;
 }
