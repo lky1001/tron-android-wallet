@@ -56,6 +56,13 @@ public class IntroActivity extends CommonActivity implements IntroView {
     }
 
     @Override
+    public void doesNotSupportAlgorithm() {
+        if (!isFinishing()) {
+            Toast.makeText(IntroActivity.this, getString(R.string.does_not_support_algorithm_msg), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         mIsBackClick = true;
 

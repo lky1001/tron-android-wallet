@@ -8,6 +8,8 @@ import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
+import java.security.NoSuchAlgorithmException;
+
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -16,7 +18,8 @@ public class IntroPresenter extends BasePresenter<IntroView> {
 
     private static final int NO_WALLET = 0;
     private static final int NOT_AGREE = 1;
-    private static final int SUCCESS = 2;
+    private static final int NO_SUCH_ALGORITHM = 2;
+    private static final int SUCCESS = 3;
 
     public IntroPresenter(IntroView view) {
         super(view);
@@ -35,6 +38,10 @@ public class IntroPresenter extends BasePresenter<IntroView> {
                     Log.d(IntroPresenter.class.getSimpleName(), "block height : " + height);
                     break;
                 } catch (Exception e) {
+                    if (e instanceof IllegalStateException || e instanceof NoSuchAlgorithmException) {
+                        return NO_SUCH_ALGORITHM;
+                    }
+
                     if (tryCnt == Constants.CONNECTION_RETRY - 1) {
                         throw e;
                     }
@@ -62,6 +69,8 @@ public class IntroPresenter extends BasePresenter<IntroView> {
                 mView.startLoginActivity();
             } else if (result == NOT_AGREE) {
                 mView.startBackupAccountActivity();
+            } else if (result == NO_SUCH_ALGORITHM) {
+                mView.doesNotSupportAlgorithm();
             } else if (result == NO_WALLET) {
                 mView.startCreateAccountActivity();
             }
