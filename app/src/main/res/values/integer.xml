@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="market_name_weight">3</integer>
+    <integer name="market_pair_weight">2</integer>
+    <integer name="market_volume_weight">6</integer>
+    <integer name="market_price_weight">2</integer>
+</resources>

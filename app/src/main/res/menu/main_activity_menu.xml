@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_address"
+        android:icon="@drawable/ic_qrcode_white"
+        android:orderInCategory="100"
+        android:title="@string/menu_address"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_create_account"
+        android:orderInCategory="100"
+        android:title="@string/menu_create_account"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_import_account"
+        android:orderInCategory="100"
+        android:title="@string/menu_import_account"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_refresh_account"
+        android:orderInCategory="100"
+        android:title="@string/menu_refresh_account"
+        android:icon="@drawable/ic_refresh"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_transaction_history"
+        android:orderInCategory="100"
+        android:title="@string/menu_transfer_history"
+        android:icon="@drawable/ic_history"
+        app:showAsAction="always" />
+</menu>

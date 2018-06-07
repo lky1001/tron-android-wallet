@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/margin_view"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/more_border_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="15dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/token_symbol_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/ic_tron" />
+
+        <TextView
+            android:id="@+id/token_name_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:textSize="22sp"
+            tools:text="DEVBAND" />
+
+        <ImageView
+            android:id="@+id/visit_website_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:background="@android:color/transparent"
+            android:tint="@color/more_border_color"
+            app:srcCompat="@drawable/ic_home" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/my_account_border_color"/>
+
+    <TextView
+        android:id="@+id/token_desc_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:textSize="18sp"
+        tools:text="A Social digital currency that allows people to send and receive digital currency on social networks to anyone in the world." />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/token_sale_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="100,000,000,000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:text="/" />
+
+        <TextView
+            android:id="@+id/token_supply_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:text="100,000,000,000" />
+
+        <TextView
+            android:id="@+id/token_sale_percent_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="10.00%" />
+    </LinearLayout>
+
+    <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
+        android:id="@+id/progress_token_sales"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight ="15dp"
+        android:layout_marginBottom="15dp"
+        app:rcRadius="3dp"
+        app:rcBackgroundPadding="1dp"
+        app:rcProgressColor="@color/colorPrimary"
+        app:rcSecondaryProgressColor="@color/colorPrimaryDark"
+        app:rcBackgroundColor="@color/more_border_color"
+        app:rcIconBackgroundColor="@color/more_border_color"
+        app:rcIconPadding="3dp"
+        app:rcIconSrc="@drawable/ic_thumb" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/my_account_border_color"/>
+
+        <TextView
+            android:id="@+id/token_end_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            tools:text="ends 2018-09-09 10:11:12 GMT+09:00" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/my_account_border_color"/>
+
+    <Button
+        android:id="@+id/btn_participate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="15dp"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/white"
+        android:text="@string/participate_btn_text" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/my_account_border_color"/>
+</LinearLayout>

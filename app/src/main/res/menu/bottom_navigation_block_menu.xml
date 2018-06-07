@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottom_navigation_overview"
+        android:title="@string/bottom_navigation_menu_overview"
+        android:icon="@drawable/ic_overview"/>
+
+    <item
+        android:id="@+id/bottom_navigation_block"
+        android:title="@string/bottom_navigation_menu_block"
+        android:icon="@drawable/ic_block"/>
+
+    <item
+        android:id="@+id/bottom_navigation_transaction"
+        android:title="@string/bottom_navigation_menu_transactions"
+        android:icon="@drawable/ic_transaction"/>
+
+    <item
+        android:id="@+id/bottom_navigation_transfer"
+        android:title="@string/bottom_navigation_menu_transfers"
+        android:icon="@drawable/ic_transfer"/>
+
+    <item
+        android:id="@+id/bottom_navigation_account"
+        android:title="@string/bottom_navigation_menu_account"
+        android:icon="@drawable/ic_account_group"/>
+</menu>

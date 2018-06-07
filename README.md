@@ -1,2 +1,57 @@
-# tron-android-wallet
-Tron wallet for android
+# Tron Wallet for android
+
+A Tron wallet for android.
+
+## Screenshots
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-04-27-215149.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-05-31-124706.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-04-27-215251.png" width="250"><br/>
+<img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-05-31-123858.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-05-31-123743.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-05-31-123843.png" width="250">
+
+## Refrence
+- https://github.com/tronprotocol/wallet-cli
+
+## Required.
+ - android 4.1
+ 
+## grpc and apk build with all flavors
+```
+./gradlew build
+
+# testnet addressformat 
+# app/build/outputs/apk/dev
+
+# mainnet addressformat 
+# app/build/outputs/apk/main
+```
+
+## build for testnet address format
+```
+./gradlew assembleDevDebug
+```
+
+## build for mainnet address format
+```
+./gradlew assembleMainDebug
+```
+
+## Features
+
+- Create wallet
+- Import wallet
+- Send tron & token
+- Receive tron & token
+- My address QR code
+- My tron balance
+- My tokens
+- My transfer history
+- Vote representative
+- Participate token
+- Block explorer
+- Token list
+- Node list
+- Representative list
+- Tron market listing & price
+
+## TODO list
+
+- Tron pay
+- BIP 32, 39, 44

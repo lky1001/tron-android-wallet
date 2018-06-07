@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#cf312e</color>
+    <color name="colorPrimaryDark">#c40b19</color>
+    <color name="colorAccent">#cf312e</color>
+
+    <color name="activity_intro_background">#cf312e</color>
+    <color name="activity_create_wallet_background">#ffffff</color>
+    <color name="activity_address_background">#ffffff</color>
+    <color name="navigation_header_need_signin_color">#ffffff</color>
+    <color name="more_background_color">#f3f3f3</color>
+    <color name="more_border_color">#e5e5e5</color>
+    <color name="more_text_color">#8b8b8b</color>
+    <color name="main_border_color">#e5e5e5</color>
+    <color name="main_my_token_color">#7c7b81</color>
+    <color name="my_account_background_color">#f3f3f3</color>
+    <color name="my_account_border_color">#e5e5e5</color>
+    <color name="freeze_button_color">#7c7b81</color>
+    <color name="main_sub_title_color">#aaffffff</color>
+    <color name="super_representative_background_color">#7c7b81</color>
+    <color name="token_participate_button_color">#0084ff</color>
+    <color name="token_finished_button_color">#8b8b8b</color>
+    <color name="copy_button_color">#8b8b8b</color>
+    <color name="bottom_navi_unselected">#8b8b8b</color>
+    <color name="vote_button_color">#8b8b8b</color>
+    <color name="token_detail_border_color">#e5e5e5</color>
+    <color name="account_detail_border_color">#e5e5e5</color>
+    <color name="price_up_color">#029f2a</color>
+    <color name="votes_button_color">#7c7b81</color>
+    <color name="copy_address_button_color">#7c7b81</color>
+    <color name="confirm_text_color">#029f2a</color>
+    <color name="unconfirm_text_color">#c40b19</color>
+
+</resources>
