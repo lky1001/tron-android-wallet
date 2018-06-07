@@ -11,4 +11,6 @@ interface IntroView extends IView {
     void startBackupAccountActivity();
 
     void showErrorMsg();
+
+    void doesNotSupportAlgorithm();
 }
