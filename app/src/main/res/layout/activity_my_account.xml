@@ -175,17 +175,6 @@
                     android:gravity="center"
                     tools:text="27g7bUKnpYVxB8UHdJB8QzA9qSKKhwX5eqs" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginBottom="25dp"
-                    android:layout_below="@+id/address_title_text"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:text="@string/test_net_warning_text" />
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"

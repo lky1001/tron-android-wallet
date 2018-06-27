@@ -11,28 +11,31 @@ option go_package = "github.com/tronprotocol/grpc-gateway/api";
 service Wallet {
 
   rpc GetAccount (Account) returns (Account) {
-  }
+  };
 
   rpc CreateTransaction (TransferContract) returns (Transaction) {
-  }
+  };
 
   rpc BroadcastTransaction (Transaction) returns (Return) {
-  }
+  };
 
   rpc UpdateAccount (AccountUpdateContract) returns (Transaction) {
-  }
+  };
 
   rpc VoteWitnessAccount (VoteWitnessContract) returns (Transaction) {
-  }
+  };
 
   rpc CreateAssetIssue (AssetIssueContract) returns (Transaction) {
-  }
+  };
 
   rpc UpdateWitness (WitnessUpdateContract) returns (Transaction) {
-  }
+  };
+
+  rpc CreateAccount (AccountCreateContract) returns (Transaction) {
+  };
 
   rpc CreateWitness (WitnessCreateContract) returns (Transaction) {
-  }
+  };
 
   rpc TransferAsset (TransferAssetContract) returns (Transaction) {
   }
@@ -86,9 +89,12 @@ service Wallet {
   }
 
   rpc ListWitnesses (EmptyMessage) returns (WitnessList) {
-  }
+  };
 
   rpc GetAssetIssueList (EmptyMessage) returns (AssetIssueList) {
+  }
+
+  rpc GetPaginatedAssetIssueList (PaginatedMessage) returns (AssetIssueList) {
   }
 
   rpc TotalTransaction (EmptyMessage) returns (NumberMessage) {
@@ -96,27 +102,37 @@ service Wallet {
 
   rpc GetNextMaintenanceTime (EmptyMessage) returns (NumberMessage) {
   }
+
+  //Warning: do not invoke this interface provided by others.
+  rpc GetTransactionSign (TransactionSign) returns (Transaction) {
+  };
+
+  //Warning: do not invoke this interface provided by others.
+  rpc CreateAdresss (BytesMessage) returns (BytesMessage) {
+  };
+
+  //Warning: do not invoke this interface provided by others.
+  rpc EasyTransfer (EasyTransferMessage) returns (EasyTransferResponse) {
+  };
+
+  //Warning: do not invoke this interface provided by others.
+  rpc GenerateAddress (EmptyMessage) returns (AddressPrKeyPairMessage){
+  }
 };
 
 
 service WalletSolidity {
 
   rpc GetAccount (Account) returns (Account) {
-  }
+  };
 
   rpc ListWitnesses (EmptyMessage) returns (WitnessList) {
-  }
+  };
 
   rpc GetAssetIssueList (EmptyMessage) returns (AssetIssueList) {
   }
 
-  rpc GetAssetIssueListByTimestamp (NumberMessage) returns (AssetIssueList) {
-  }
-
-  rpc GetAssetIssueByAccount (Account) returns (AssetIssueList) {
-  }
-
-  rpc GetAssetIssueByName (BytesMessage) returns (AssetIssueContract) {
+  rpc GetPaginatedAssetIssueList (PaginatedMessage) returns (AssetIssueList) {
   }
 
   rpc GetNowBlock (EmptyMessage) returns (Block) {
@@ -125,31 +141,23 @@ service WalletSolidity {
   rpc GetBlockByNum (NumberMessage) returns (Block) {
   }
 
-  //get transaction
-  rpc TotalTransaction (EmptyMessage) returns (NumberMessage) {
+  rpc GetTransactionById (BytesMessage) returns (Transaction) {
   }
 
-  rpc GetTransactionById (BytesMessage) returns (Transaction) {
+   rpc GetTransactionInfoById (BytesMessage) returns (TransactionInfo) {
+    }
+
+  //Warning: do not invoke this interface provided by others.
+  rpc GenerateAddress (EmptyMessage) returns (AddressPrKeyPairMessage){
   }
 };
 
 service WalletExtension {
-  rpc GetTransactionsByTimestamp (TimePaginatedMessage) returns (TransactionList) {
-  }
-
-  rpc GetTransactionsByTimestampCount (TimeMessage) returns (NumberMessage) {
-  }
 
   rpc GetTransactionsFromThis (AccountPaginated) returns (TransactionList) {
   }
 
   rpc GetTransactionsToThis (AccountPaginated) returns (TransactionList) {
-  }
-
-  rpc GetTransactionsFromThisCount (Account) returns (NumberMessage) {
-  }
-
-  rpc GetTransactionsToThisCount (Account) returns (NumberMessage) {
   }
 };
 
@@ -266,4 +274,27 @@ message AccountNetMessage {
   int64 NetLimit = 4;
   map<string, int64> assetNetUsed = 5;
   map<string, int64> assetNetLimit = 6;
+  int64 TotalNetLimit = 7;
+  int64 TotalNetWeight = 8;
+}
+
+message PaginatedMessage {
+  int64 offset = 1;
+  int64 limit = 2;
+}
+
+message EasyTransferMessage{
+  bytes passPhrase = 1;
+  bytes toAddress = 2;
+  int64 amount = 3;
+}
+
+message EasyTransferResponse{
+  Transaction transaction = 1;
+  Return result = 2;
+}
+
+message AddressPrKeyPairMessage {
+  string address = 1;
+  string privateKey = 2;
 }
