@@ -38,7 +38,7 @@
     <string name="choice_share_private_key">프라이빗 키 내보내기</string>
     <string name="menu_share">공유</string>
     <string name="vote_amount_text">투표 수 : </string>
-    <string name="send_amount_text">전송 수</string>
+    <string name="send_amount_text">전송 수량</string>
     <string name="send_trx_text">전송</string>
     <string name="invalid_address">올바르지 않은 주소입니다.</string>
     <string name="invalid_amount">올바르지 않은 수입니다.</string>
@@ -122,7 +122,6 @@
     <string name="navigation_menu_my_account">내 계정</string>
     <string name="title_my_account">내 계정</string>
     <string name="my_account_address_text">주소 :</string>
-    <string name="test_net_warning_text">(위 주소는 테스트넷입니다. 절대로 당신의 지갑이나 거래소에서 트론을 전송하지 마세요!)</string>
     <string name="account_text">계정</string>
     <string name="tokens_text">토큰</string>
     <string name="frozen_trx_text">TRX 동결</string>
@@ -273,11 +272,11 @@
     <string name="title_rich_list_usd">USD :</string>
     <string name="title_rich_list_coins">Coins :</string>
     <string name="ends_text">종료일</string>
-    <string name="donation_address_text">TMcHWoBx9BoRJUQuNkwotG5BtNTiCQn6Fq</string>
+    <string name="donation_address_text">TFAxJGumnEx4eqvYrF9YaSnuRoFAE2wXug</string>
     <string name="thanks_msg">기부해 주셔서 정말 감사드립니다!</string>
     <string name="donation_title_text">와우!</string>
     <string name="send_token_failed_title_text">경고</string>
-    <string name="participate_token_msg">구매할 수량을 입력하세요?</string>
+    <string name="participate_token_msg">구매할 수량을 입력하세요</string>
     <string name="token_price_text">토큰 가격 :</string>
     <string name="participate_confirm_text">토큰 구매에 동의합니다</string>
     <string name="your_trx_text">내 TRX :</string>

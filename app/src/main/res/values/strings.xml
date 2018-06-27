@@ -122,7 +122,6 @@
     <string name="navigation_menu_my_account">My Account</string>
     <string name="title_my_account">My Account</string>
     <string name="my_account_address_text">Address :</string>
-    <string name="test_net_warning_text">(Do not send TRX from your own wallet or exchange to the above account address of testnet!)</string>
     <string name="account_text">Account</string>
     <string name="tokens_text">Tokens</string>
     <string name="frozen_trx_text">Frozen TRX</string>
@@ -277,7 +276,6 @@
     <string name="thanks_msg">Thanks for your donation!</string>
     <string name="donation_title_text">Wow!</string>
     <string name="send_token_failed_title_text">Warning</string>
-    <string name="participate_token_msg">How much tokens do you want to buy?</string>
     <string name="token_price_text">Price :</string>
     <string name="participate_confirm_text">I confirm to buy tokens</string>
     <string name="your_trx_text">Your trx :</string>
