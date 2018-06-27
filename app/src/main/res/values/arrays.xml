@@ -1,31 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="fullnode.ip.list">
-        <item>47.254.16.55:50051</item>
-        <item>47.254.18.49:50051</item>
-        <item>18.188.111.53:50051</item>
-        <item>54.219.41.56:50051</item>
-        <item>35.169.113.187:50051</item>
-        <item>34.214.241.188:50051</item>
-        <item>47.254.146.147:50051</item>
-        <item>47.254.144.25:50051</item>
-        <item>47.91.246.252:50051</item>
-        <item>47.91.216.69:50051</item>
-        <item>39.106.220.120:50051</item>
+        <item>34.237.220.206:50051</item>
     </array>
 
     <array name="solidity.ip.list">
-        <item>47.254.16.55:50051</item>
-        <item>47.254.18.49:50051</item>
-        <item>18.188.111.53:50051</item>
-        <item>54.219.41.56:50051</item>
-        <item>35.169.113.187:50051</item>
-        <item>34.214.241.188:50051</item>
-        <item>47.254.146.147:50051</item>
-        <item>47.254.144.25:50051</item>
-        <item>47.91.246.252:50051</item>
-        <item>47.91.216.69:50051</item>
-        <item>39.106.220.120:50051</item>
+        <item>39.105.66.80:50051</item>
     </array>
 
     <string-array name="feedback_email_recipient">
