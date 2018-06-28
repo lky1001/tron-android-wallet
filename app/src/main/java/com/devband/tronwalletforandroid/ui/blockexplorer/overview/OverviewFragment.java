@@ -165,12 +165,7 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
         mAccountPieChart.setUsePercentValues(false);
         List<PieEntry> entries = new ArrayList<>();
 
-        int start = 0;
-        if (data.size() >= 4) {
-            start = 3;
-        }
-
-        for (int i=start; i<data.size(); i++) {
+        for (int i = 0; i < data.size(); i++) {
             TopAddressAccount account = data.get(i);
             double balance = account.getBalance() / Constants.ONE_TRX;
             entries.add(new PieEntry((float) balance));
