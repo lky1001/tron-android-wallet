@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://img.shields.io/badge/ANDROID-4.1%2B-orange.svg"></a>
+</p>
+
 # Tron Wallet for android
 
 A Tron wallet for android.
