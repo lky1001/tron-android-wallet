@@ -114,7 +114,6 @@ dependencies {
     // ui
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'com.github.medyo:android-about-page:1.2.4'
-    implementation 'com.github.clans:fab:1.6.4'
     implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
     implementation 'com.akexorcist:RoundCornerProgressBar:2.0.3'
     implementation 'com.thefinestartist:finestwebview:1.2.7'
@@ -168,8 +167,8 @@ dependencies {
 
     // test
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.powermock:powermock-module-junit4:1.6.2'
-    testImplementation 'org.powermock:powermock-api-mockito:1.6.2'
+    testImplementation 'org.powermock:powermock-module-junit4:1.6.4'
+    testImplementation 'org.powermock:powermock-api-mockito:1.6.4'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
