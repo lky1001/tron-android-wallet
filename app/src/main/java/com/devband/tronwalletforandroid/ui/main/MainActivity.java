@@ -44,14 +44,10 @@ import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
 import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.myaccount.MyAccountActivity;
-import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
-import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
+import com.devband.tronwalletforandroid.ui.mytransfer.TransferActivity;
 import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
 import com.devband.tronwalletforandroid.ui.token.TokenActivity;
-import com.devband.tronwalletforandroid.ui.mytransfer.TransferActivity;
 import com.devband.tronwalletforandroid.ui.vote.VoteActivity;
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -104,18 +100,11 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @BindView(R.id.edit_account_name_image)
     ImageView mEditAccountNameImage;
 
-    @BindView(R.id.fab_menu)
-    FloatingActionMenu mFloatingActionMenu;
-
     @BindView(R.id.no_token_layout)
     LinearLayout mNoTokenLayout;
 
     @BindView(R.id.my_token_listview)
     RecyclerView mMyTokenListView;
-
-    FloatingActionButton mFloatingActionMenuRequestCoin;
-
-    FloatingActionButton mFloatingActionMenuSendCoin;
 
     Spinner mAccountSpinner;
 
@@ -152,25 +141,6 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("");
         }
-
-        mFloatingActionMenuRequestCoin = (FloatingActionButton) mFloatingActionMenu.findViewById(R.id.fab_menu_request_coin);
-        mFloatingActionMenuSendCoin = (FloatingActionButton) mFloatingActionMenu.findViewById(R.id.fab_menu_send_coin);
-
-        mFloatingActionMenuRequestCoin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(RequestCoinActivity.class);
-            }
-        });
-
-        mFloatingActionMenuSendCoin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, QrScanActivity.class);
-                intent.putExtra(QrScanActivity.EXTRA_FROM_TRON_PAY_MENU, true);
-                startActivity(intent);
-            }
-        });
 
         mLayoutManager = new LinearLayoutManager(MainActivity.this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
