@@ -72,6 +72,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
     Button mRetryButton;
 
     private long mRemainVotePoint;
+    private long mTotalVotePoint;
 
     private LinearLayoutManager mLayoutManager;
     private AdapterView mAdapterView;
@@ -177,6 +178,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
                     .show();
         }
 
+        mTotalVotePoint = myVotePoint;
         mRemainVotePoint = myVotePoint - totalMyVotes;
 
         mTotalVotesText.setText(Constants.numberFormat.format(totalVotes));
@@ -276,7 +278,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
                             return;
                         }
 
-                        if (voteBalance <= 0 || voteBalance > mRemainVotePoint) {
+                        if (voteBalance <= 0 || voteBalance > mTotalVotePoint) {
                             Toast.makeText(VoteActivity.this, getString(R.string.invalid_vote),
                                     Toast.LENGTH_SHORT).show();
                             return;
