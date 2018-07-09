@@ -73,7 +73,7 @@ public class Tron {
     private void init() {
         mFullNodeList = Arrays.asList(mContext.getResources().getStringArray(R.array.fullnode_ip_list));
         mSolidityNodeList = Arrays.asList(mContext.getResources().getStringArray(R.array.solidity_ip_list));
-        //initTronNode();
+        initTronNode();
 
         mAccountManager = new AccountManager(AccountManager.PERSISTENT_LOCAL_DB, mContext);
     }
@@ -292,7 +292,10 @@ public class Tron {
     }
 
     public void logout() {
-        mAccountManager.logout();
+        if (mAccountManager != null) {
+            mAccountManager.logout();
+        }
+
         mAccountManager = null;
     }
 

@@ -229,11 +229,15 @@ public class TokenActivity extends CommonActivity implements TokenView {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (!TextUtils.isEmpty(inputAmount.getText().toString())) {
-                            long amountBalance = Long.parseLong(inputAmount.getText().toString());
-                            totalText.setText(Utils.getRealTrxFormat(amountBalance * item.getPrice()) + " " + Constants.TRON_SYMBOL);
-                        } else {
-                            totalText.setText("0 " + Constants.TRON_SYMBOL);
+                        try {
+                            if (!TextUtils.isEmpty(inputAmount.getText().toString())) {
+                                long amountBalance = Long.parseLong(inputAmount.getText().toString());
+                                totalText.setText(Utils.getRealTrxFormat(amountBalance * item.getPrice()) + " " + Constants.TRON_SYMBOL);
+                            } else {
+                                totalText.setText("0 " + Constants.TRON_SYMBOL);
+                            }
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
                         }
                     }
 

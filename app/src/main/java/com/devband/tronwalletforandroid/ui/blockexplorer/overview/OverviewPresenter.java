@@ -49,7 +49,7 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
     void chartDataLoad() {
         mView.showLoadingDialog();
 
-        TronNetwork.getInstance().getTopAddressAccounts(13)
+        TronNetwork.getInstance().getTopAddressAccounts(10)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mView::overviewDataLoadSuccess,

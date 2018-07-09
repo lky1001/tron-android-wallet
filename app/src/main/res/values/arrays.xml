@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="fullnode.ip.list">
+        <item>54.236.37.243:50051</item>
         <item>34.237.220.206:50051</item>
     </array>
 

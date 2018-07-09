@@ -1,6 +1,15 @@
+<p align="center">
+  <img src="https://img.shields.io/badge/VERSION-1.1-green.svg">
+  <img src="https://img.shields.io/badge/ANDROID-4.1%2B-orange.svg">
+  <img src="https://img.shields.io/badge/LICENSE-Apache--2.0-blue.svg">
+</p>
+
 # Tron Wallet for android
 
 A Tron wallet for android.
+
+## Download App in PlayStore
+<a href="https://play.google.com/store/apps/details?id=com.devband.tronwalletforandroid"><img src="https://raw.githubusercontent.com/hummatli/MAHAndroidUpdater/master/imgs/google-play-badge.png" height="90px"/></a>
 
 ## Screenshots
 <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-04-27-215149.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-05-31-124706.png" width="250"> <img src="https://github.com/lky1001/tron-android-wallet/blob/develop/screenshots/device-2018-04-27-215251.png" width="250"><br/>
