@@ -24,18 +24,6 @@ android {
         javaMaxHeapSize "8g"
     }
 
-    flavorDimensions 'mode'
-
-    productFlavors {
-        dev {
-            dimension 'mode'
-            buildConfigField "String", "NODE_TYPE", "\"testnet\""
-        }
-        main  {
-            dimension 'mode'
-            buildConfigField "String", "NODE_TYPE", "\"mainnet\""
-        }
-    }
     buildTypes {
         debug {
             minifyEnabled false

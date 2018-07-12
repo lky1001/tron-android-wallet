@@ -21,25 +21,9 @@ A Tron wallet for android.
 ## Required.
  - android 4.1
  
-## grpc and apk build with all flavors
+## build grpc and apk
 ```
-./gradlew build
-
-# testnet addressformat 
-# app/build/outputs/apk/dev
-
-# mainnet addressformat 
-# app/build/outputs/apk/main
-```
-
-## build for testnet address format
-```
-./gradlew assembleDevDebug
-```
-
-## build for mainnet address format
-```
-./gradlew assembleMainDebug
+./gradlew clean build
 ```
 
 ## Features
