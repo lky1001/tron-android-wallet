@@ -127,53 +127,63 @@
                     android:gravity="center"
                     tools:text="1,000,000,000" />
 
-                <TextView
-                    android:id="@+id/bandwidth_title_text"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="10dp"
                     android:layout_below="@+id/tron_power_title_text"
-                    android:textSize="14sp"
-                    android:gravity="center"
-                    android:text="@string/my_account_bandwidth_text" />
-
-                <TextView
-                    android:id="@+id/bandwidth_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/bandwidth_title_text"
-                    android:layout_alignBaseline="@+id/bandwidth_title_text"
-                    android:textSize="12sp"
-                    android:gravity="center"
-                    tools:text="1,000,000,000" />
-
-                <TextView
-                    android:id="@+id/address_title_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_below="@+id/bandwidth_text"
-                    android:textSize="14sp"
-                    android:gravity="center"
-                    android:text="@string/my_account_address_text" />
-
-                <TextView
-                    android:id="@+id/address_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_marginBottom="25dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/address_title_text"
-                    android:layout_alignBaseline="@+id/address_title_text"
-                    android:textSize="12sp"
-                    android:gravity="center"
-                    tools:text="27g7bUKnpYVxB8UHdJB8QzA9qSKKhwX5eqs" />
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/bandwidth_title_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="10dp"
+                            android:textSize="14sp"
+                            android:gravity="center"
+                            android:text="@string/my_account_bandwidth_text" />
+
+                        <TextView
+                            android:id="@+id/bandwidth_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginLeft="5dp"
+                            android:textSize="12sp"
+                            android:gravity="center"
+                            tools:text="1,000,000,000" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/address_title_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="10dp"
+                            android:textSize="14sp"
+                            android:text="@string/my_account_address_text" />
+
+                        <TextView
+                            android:id="@+id/address_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginLeft="5dp"
+                            android:textSize="12sp"
+                            tools:text="27g7bUKnpYVxB8UHdJB8QzA9qSKKhwX5eqs" />
+
+                    </LinearLayout>
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
