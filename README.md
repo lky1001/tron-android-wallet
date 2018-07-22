@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/VERSION-1.1.2-green.svg">
+  <img src="https://img.shields.io/badge/VERSION-1.1.3-green.svg">
   <img src="https://img.shields.io/badge/ANDROID-4.1%2B-orange.svg">
   <img src="https://img.shields.io/badge/LICENSE-Apache--2.0-blue.svg">
 </p>
@@ -21,25 +21,9 @@ A Tron wallet for android.
 ## Required.
  - android 4.1
  
-## grpc and apk build with all flavors
+## build grpc and apk
 ```
-./gradlew build
-
-# testnet addressformat 
-# app/build/outputs/apk/dev
-
-# mainnet addressformat 
-# app/build/outputs/apk/main
-```
-
-## build for testnet address format
-```
-./gradlew assembleDevDebug
-```
-
-## build for mainnet address format
-```
-./gradlew assembleMainDebug
+./gradlew clean build
 ```
 
 ## Features
@@ -62,5 +46,11 @@ A Tron wallet for android.
 
 ## TODO list
 
+- Fingerprint authorization
+- Pattern authorization
 - Tron pay
 - BIP 32, 39, 44
+
+## Q&A
+
+- [kakaotalk open chat](https://open.kakao.com/o/gUmVKPS)
