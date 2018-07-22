@@ -32,6 +32,8 @@ public class Token {
 
     private long issued;
 
+    private double issuedPercentage;
+
     private double percentage;
 
     private String ownerAddress;

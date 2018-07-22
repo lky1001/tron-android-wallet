@@ -69,9 +69,9 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
         holder.tokenDescText.setText(item.getDescription());
         holder.tokenSaleText.setText(Constants.numberFormat.format(item.getIssued()));
         holder.tokenSupplyText.setText(Constants.numberFormat.format(item.getTotalSupply()));
-        holder.tokenSalePercentText.setText(Constants.percentFormat.format(item.getPercentage()) + "%");
+        holder.tokenSalePercentText.setText(Constants.percentFormat.format(item.getIssuedPercentage()) + "%");
         holder.tokenSaleProgress.setMax(100f);
-        holder.tokenSaleProgress.setProgress((float) item.getPercentage());
+        holder.tokenSaleProgress.setProgress((float) item.getIssuedPercentage());
         holder.tokenEndText.setText(mContext.getString(R.string.ends_text) + " " + Utils.getDateTimeWithTimezone(item.getEndTime()));
         holder.visitWebsiteButton.setOnClickListener(new View.OnClickListener() {
             @Override
