@@ -152,6 +152,8 @@ dependencies {
         transitive = true;
     }
 
+    implementation 'com.github.marcoscgdev:FingerAuth:1.0.0'
+
     // test
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.powermock:powermock-module-junit4:1.6.4'

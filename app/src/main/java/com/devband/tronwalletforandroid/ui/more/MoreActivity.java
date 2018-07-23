@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,10 +26,17 @@ import com.devband.tronwalletforandroid.ui.node.NodeActivity;
 import com.devband.tronwalletforandroid.ui.opensource.OpenSourceActivity;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity;
 import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
+import com.marcoscg.fingerauth.FingerAuth;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Scheduler;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MoreActivity extends CommonActivity implements MoreView {
 
@@ -38,6 +47,9 @@ public class MoreActivity extends CommonActivity implements MoreView {
 
     @BindView(R.id.tron_app_info_text)
     TextView mTronAppInfoText;
+
+    @BindView(R.id.more_fingerprint_checkbox)
+    CheckBox mFingerprintAuthCheckBox;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +63,38 @@ public class MoreActivity extends CommonActivity implements MoreView {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.title_more);
+        }
+
+        boolean hasFingerprintSupport = FingerAuth.hasFingerprintSupport(this);
+
+        if (hasFingerprintSupport) {
+            Single.fromCallable(() -> CustomPreference.getInstance(this).getUseFingerprint())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<Boolean>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(Boolean useFingerprint) {
+                            mFingerprintAuthCheckBox.setChecked(useFingerprint);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+                    });
+
+            mFingerprintAuthCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                CustomPreference.getInstance(this).setUseFingerprint(isChecked);
+            });
+
+            mFingerprintAuthCheckBox.setEnabled(true);
+        } else {
+            mFingerprintAuthCheckBox.setEnabled(false);
         }
 
         mTronAppInfoText.setText("Tron Wallet for Android\nApp Version : v" + BuildConfig.VERSION_NAME);
