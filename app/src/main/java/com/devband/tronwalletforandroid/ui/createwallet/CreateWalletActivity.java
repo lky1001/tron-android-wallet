@@ -86,6 +86,11 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
         ((CreateWalletPresenter) mPresenter).createWallet(mInputPassword.getText().toString());
     }
 
+    @OnClick(R.id.btn_import_private_key)
+    public void onImportPrivateKey() {
+
+    }
+
     @Override
     public void createdWallet() {
         hideDialog();
