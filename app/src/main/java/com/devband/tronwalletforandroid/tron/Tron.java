@@ -105,6 +105,20 @@ public class Tron {
                 });
     }
 
+    public Single<Integer> registerAccount(@NonNull String nickname, @NonNull String privateKey, @NonNull String password) {
+        return Single.fromCallable(() -> {
+            if (!AccountManager.passwordValid(password)) {
+                return ERROR_INVALID_PASSWORD;
+            }
+
+            if (mAccountManager == null) {
+                mAccountManager = new AccountManager(true, mContext);
+            }
+
+            return mAccountManager.genAccount(generateDefaultAccountName(nickname), password).blockingGet();
+        });
+    }
+
     public Single<Integer> registerAccount(@NonNull String nickname, @NonNull String password) {
         return Single.fromCallable(() -> {
             if (!AccountManager.passwordValid(password)) {
