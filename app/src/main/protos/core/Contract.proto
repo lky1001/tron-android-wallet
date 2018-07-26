@@ -29,9 +29,15 @@ message AccountCreateContract {
   AccountType type = 3;
 }
 
-// update account name if the account has no name.
+// Update account name. Account name is not unique now.
 message AccountUpdateContract {
   bytes account_name = 1;
+  bytes owner_address = 2;
+}
+
+// Set account id if the account has no id. Account id is unique and case insensitive.
+message SetAccountIdContract {
+  bytes account_id = 1;
   bytes owner_address = 2;
 }
 
@@ -90,6 +96,7 @@ message AssetIssueContract {
   int32 num = 8;
   int64 start_time = 9;
   int64 end_time = 10;
+  int64 order = 11; // the order of tokens of the same name
   int32 vote_score = 16;
   bytes description = 20;
   bytes url = 21;
@@ -102,13 +109,8 @@ message AssetIssueContract {
 message ParticipateAssetIssueContract {
   bytes owner_address = 1;
   bytes to_address = 2;
-  bytes asset_name = 3; // the name of target asset
+  bytes asset_name = 3; // the namekey of target asset, include name and order
   int64 amount = 4; // the amount of drops
-}
-
-message DeployContract {
-  bytes owner_address = 1;
-  bytes script = 2;
 }
 
 message FreezeBalanceContract {
@@ -135,4 +137,32 @@ message UpdateAssetContract {
   bytes url = 3;
   int64 new_limit = 4;
   int64 new_public_limit = 5;
+}
+
+message ProposalCreateContract {
+  bytes owner_address = 1;
+  map<int64, int64> parameters = 2;
+}
+
+message ProposalApproveContract {
+  bytes owner_address = 1;
+  int64 proposal_id = 2;
+  bool is_add_approval = 3; // add or remove approval
+}
+
+message ProposalDeleteContract {
+  bytes owner_address = 1;
+  int64 proposal_id = 2;
+}
+
+message CreateSmartContract {
+  bytes owner_address = 1;
+  SmartContract new_contract = 2;
+}
+
+message TriggerSmartContract {
+  bytes owner_address = 1;
+  bytes contract_address = 2;
+  bytes call_value = 3;
+  bytes data = 4;
 }
