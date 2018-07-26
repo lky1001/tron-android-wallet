@@ -34,6 +34,10 @@
             android:theme="@style/WalletTheme" />
 
         <activity
+            android:name=".ui.importkey.ImportPrivateKeyActivity"
+            android:theme="@style/WalletTheme" />
+
+        <activity
             android:name=".ui.backupaccount.BackupAccountActivity"
             android:theme="@style/WalletTheme" />
 

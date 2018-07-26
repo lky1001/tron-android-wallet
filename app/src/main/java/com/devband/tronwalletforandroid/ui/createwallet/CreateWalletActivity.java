@@ -14,6 +14,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivity;
+import com.devband.tronwalletforandroid.ui.importkey.ImportPrivateKeyActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,7 +89,7 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
 
     @OnClick(R.id.btn_import_private_key)
     public void onImportPrivateKey() {
-
+        startActivity(ImportPrivateKeyActivity.class);
     }
 
     @Override
