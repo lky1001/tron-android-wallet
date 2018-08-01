@@ -496,6 +496,14 @@ public class AccountManager {
         return createAddress(nickname, loadPassword(), mAesKey, true);
     }
 
+    public static boolean priKeyValid(byte[] priKey) {
+        if (priKey.length != 32) {
+            return false;
+        }
+
+        return true;
+    }
+
     public Contract.VoteWitnessContract createVoteWitnessContract(Map<String, String> witness) {
         byte[] ownerAddress = mEcKey.getAddress();
 

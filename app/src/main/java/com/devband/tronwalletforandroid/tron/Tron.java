@@ -115,7 +115,7 @@ public class Tron {
                 mAccountManager = new AccountManager(true, mContext);
             }
 
-            return mAccountManager.genAccount(generateDefaultAccountName(nickname), password).blockingGet();
+            return mAccountManager.importAccount(generateDefaultAccountName(nickname), privateKey).blockingGet();
         });
     }
 
