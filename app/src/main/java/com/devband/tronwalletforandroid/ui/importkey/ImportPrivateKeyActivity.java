@@ -127,8 +127,7 @@ public class ImportPrivateKeyActivity extends CommonActivity implements ImportPr
         }
 
         showProgressDialog(null, getString(R.string.loading_msg));
-        ((ImportPrivateKeyPresenter) mPresenter).createWallet("6C066973837C8A17A64A2A52ECA12CC34FB142BDF4A3543208E845081191D4BB", mInputPassword.getText().toString());
-        //((ImportPrivateKeyPresenter) mPresenter).createWallet(mInputPrivateKey.getText().toString(), mInputPassword.getText().toString());
+        ((ImportPrivateKeyPresenter) mPresenter).createWallet(mInputPrivateKey.getText().toString(), mInputPassword.getText().toString());
     }
 
     @Override
