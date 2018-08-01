@@ -115,7 +115,7 @@ public class Tron {
                 mAccountManager = new AccountManager(true, mContext);
             }
 
-            return mAccountManager.importAccount(generateDefaultAccountName(nickname), privateKey).blockingGet();
+            return mAccountManager.importAccount(generateDefaultAccountName(nickname), privateKey, password, false).blockingGet();
         });
     }
 
@@ -135,7 +135,7 @@ public class Tron {
 
     public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey) {
         return Single.fromCallable(() -> {
-            return mAccountManager.importAccount(generateDefaultAccountName(nickname), privateKey).blockingGet();
+            return mAccountManager.importAccount(generateDefaultAccountName(nickname), privateKey, null, true).blockingGet();
         });
     }
 

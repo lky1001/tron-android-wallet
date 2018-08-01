@@ -14,6 +14,9 @@ import android.widget.Toast;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
+import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivity;
+import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
+import com.devband.tronwalletforandroid.ui.main.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +49,7 @@ public class ImportPrivateKeyActivity extends CommonActivity implements ImportPr
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_import_private_key);
 
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
@@ -123,6 +127,28 @@ public class ImportPrivateKeyActivity extends CommonActivity implements ImportPr
         }
 
         showProgressDialog(null, getString(R.string.loading_msg));
-        ((ImportPrivateKeyPresenter) mPresenter).createWallet(mInputPrivateKey.getText().toString(), mInputPassword.getText().toString());
+        ((ImportPrivateKeyPresenter) mPresenter).createWallet("6C066973837C8A17A64A2A52ECA12CC34FB142BDF4A3543208E845081191D4BB", mInputPassword.getText().toString());
+        //((ImportPrivateKeyPresenter) mPresenter).createWallet(mInputPrivateKey.getText().toString(), mInputPassword.getText().toString());
+    }
+
+    @Override
+    public void createdWallet() {
+        hideDialog();
+        startActivity(MainActivity.class);
+        finishActivity();
+    }
+
+    @Override
+    public void passwordError() {
+        hideDialog();
+        Toast.makeText(ImportPrivateKeyActivity.this, getString(R.string.password_error),
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void registerWalletError() {
+        hideDialog();
+        Toast.makeText(ImportPrivateKeyActivity.this, getString(R.string.register_wallet_error),
+                Toast.LENGTH_SHORT).show();
     }
 }

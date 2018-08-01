@@ -1,12 +1,15 @@
 package com.devband.tronwalletforandroid.ui.importkey;
 
+import com.crashlytics.android.Crashlytics;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import io.reactivex.Single;
+import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class ImportPrivateKeyPresenter extends BasePresenter<ImportPrivateKeyView> {
@@ -51,6 +54,7 @@ public class ImportPrivateKeyPresenter extends BasePresenter<ImportPrivateKeyVie
                     return result;
                 }
 
+                WalletAppManager.getInstance(mContext).agreeTerms(true);
                 return Tron.SUCCESS;
             } else if (result == WalletAppManager.ERROR) {
                 //mView.passwordError();
@@ -59,5 +63,28 @@ public class ImportPrivateKeyPresenter extends BasePresenter<ImportPrivateKeyVie
         })
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new SingleObserver<Integer>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(Integer result) {
+                if (result == Tron.ERROR_INVALID_PASSWORD) {
+                    mView.passwordError();
+                } else if (result == Tron.ERROR) {
+                    mView.passwordError();
+                } else {
+                    mView.createdWallet();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.logException(e);
+                mView.registerWalletError();
+            }
+        });
     }
 }

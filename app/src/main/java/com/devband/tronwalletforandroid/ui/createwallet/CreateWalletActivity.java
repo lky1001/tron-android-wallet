@@ -90,6 +90,7 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
     @OnClick(R.id.btn_import_private_key)
     public void onImportPrivateKey() {
         startActivity(ImportPrivateKeyActivity.class);
+        finishActivity();
     }
 
     @Override
