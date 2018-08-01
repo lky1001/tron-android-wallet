@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.devband.tronwalletforandroid.database.model.AccountModel;
@@ -483,7 +484,7 @@ public class AccountManager {
         loadAccountByRepository(accountModel);
     }
 
-    public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey) {
+    public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey, @Nullable String password, boolean imported) {
         ECKey temKey = null;
         try {
             temKey = ECKey.fromPrivate(ByteArray.fromHexString(privateKey));
@@ -493,7 +494,25 @@ public class AccountManager {
         }
         this.mEcKey = temKey;
 
-        return createAddress(nickname, loadPassword(), mAesKey, true);
+        if (TextUtils.isEmpty(password)) {
+            password = loadPassword();
+        } else {
+            //encrypted by password
+            mAesKey = getEncKey(password);
+
+            byte[] pwd = getPassWord(password);
+            password = ByteArray.toHexString(pwd);
+        }
+
+        return createAddress(nickname, password, mAesKey, imported);
+    }
+
+    public static boolean priKeyValid(byte[] priKey) {
+        if (priKey.length != 32) {
+            return false;
+        }
+
+        return true;
     }
 
     public Contract.VoteWitnessContract createVoteWitnessContract(Map<String, String> witness) {

@@ -296,4 +296,5 @@
     <string name="change_password_fail_msg">Failed to change password. Please try again.</string>
     <string name="menu_search_token">search token</string>
     <string name="does_not_support_algorithm_msg">Sorry, This device does not support security algorithm.</string>
+    <string name="import_private_key_text">Import Private Key</string>
 </resources>

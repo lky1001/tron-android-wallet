@@ -105,6 +105,20 @@ public class Tron {
                 });
     }
 
+    public Single<Integer> registerAccount(@NonNull String nickname, @NonNull String privateKey, @NonNull String password) {
+        return Single.fromCallable(() -> {
+            if (!AccountManager.passwordValid(password)) {
+                return ERROR_INVALID_PASSWORD;
+            }
+
+            if (mAccountManager == null) {
+                mAccountManager = new AccountManager(true, mContext);
+            }
+
+            return mAccountManager.importAccount(generateDefaultAccountName(nickname), privateKey, password, false).blockingGet();
+        });
+    }
+
     public Single<Integer> registerAccount(@NonNull String nickname, @NonNull String password) {
         return Single.fromCallable(() -> {
             if (!AccountManager.passwordValid(password)) {
@@ -121,7 +135,7 @@ public class Tron {
 
     public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey) {
         return Single.fromCallable(() -> {
-            return mAccountManager.importAccount(generateDefaultAccountName(nickname), privateKey).blockingGet();
+            return mAccountManager.importAccount(generateDefaultAccountName(nickname), privateKey, null, true).blockingGet();
         });
     }
 
