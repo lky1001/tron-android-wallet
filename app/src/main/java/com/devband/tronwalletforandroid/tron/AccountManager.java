@@ -497,11 +497,11 @@ public class AccountManager {
         if (TextUtils.isEmpty(password)) {
             password = loadPassword();
         } else {
-            byte[] pwd = getPassWord(password);
-            password = ByteArray.toHexString(pwd);
-
             //encrypted by password
             mAesKey = getEncKey(password);
+
+            byte[] pwd = getPassWord(password);
+            password = ByteArray.toHexString(pwd);
         }
 
         return createAddress(nickname, password, mAesKey, imported);
