@@ -14,9 +14,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="your_api_key_here" />
+
+
         <activity android:name=".ui.intro.IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,6 +34,10 @@
 
         <activity
             android:name=".ui.createwallet.CreateWalletActivity"
+            android:theme="@style/WalletTheme" />
+
+        <activity
+            android:name=".ui.importkey.ImportPrivateKeyActivity"
             android:theme="@style/WalletTheme" />
 
         <activity
