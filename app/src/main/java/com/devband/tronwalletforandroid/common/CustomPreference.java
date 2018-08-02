@@ -73,6 +73,15 @@ public class CustomPreference {
         return mSettings.fullNodeHost;
     }
 
+    public void setUseFingerprint(boolean isUse) {
+        mSettings.useFingerprint = isUse;
+        saveSettings();
+    }
+
+    public boolean getUseFingerprint() {
+        return mSettings.useFingerprint;
+    }
+
     public void saveSettings() {
         SharedPreferences pref = mContext.getSharedPreferences(CUSTOM_PREFERENCE, Activity.MODE_PRIVATE);
 
@@ -92,5 +101,6 @@ public class CustomPreference {
     public static class TronSettings {
 
         public String fullNodeHost;
+        public boolean useFingerprint;
     }
 }
