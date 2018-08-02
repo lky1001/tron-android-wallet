@@ -297,4 +297,11 @@
     <string name="menu_search_token">search token</string>
     <string name="does_not_support_algorithm_msg">Sorry, This device does not support security algorithm.</string>
     <string name="import_private_key_text">Import Private Key</string>
+    <string name="use_fingerprint_auth">Use Fingerprint Auth</string>
+    <string name="use_password_text">Use password</string>
+    <string name="invalid_fingerprint">Fingerprint not recognized. Try again</string>
+    <string name="fingerauth_dialog_description">Confirm fingerprint to login</string>
+    <string name="fingerauth_dialog_hint">Touch sensor</string>
+    <string name="fingerauth_dialog_not_recognized">Fingerprint not recognized. Try again</string>
+    <string name="fingerauth_dialog_success">Fingerprint recognized</string>
 </resources>

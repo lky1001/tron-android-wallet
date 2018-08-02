@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.login;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -8,9 +9,12 @@ import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.main.MainActivity;
+import com.marcoscg.fingerauth.FingerAuth;
+import com.marcoscg.fingerauth.FingerAuthDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +42,41 @@ public class LoginActivity extends CommonActivity implements LoginView {
 
         mPresenter = new LoginPresenter(this);
         mPresenter.onCreate();
+
+        boolean hasFingerprintSupport = FingerAuth.hasFingerprintSupport(this);
+        boolean useFingerprint = CustomPreference.getInstance(this).getUseFingerprint();
+
+        if (hasFingerprintSupport && useFingerprint) {
+            new FingerAuthDialog(this)
+                    .setTitle(getString(R.string.login_text))
+                    .setCancelable(false)
+                    .setMaxFailedCount(3)
+                    .setPositiveButton(getString(R.string.use_password_text), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // do something
+                        }
+                    })
+                    .setOnFingerAuthListener(new FingerAuth.OnFingerAuthListener() {
+                        @Override
+                        public void onSuccess() {
+                            loginResult(Tron.SUCCESS);
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            Toast.makeText(LoginActivity.this, getString(R.string.invalid_fingerprint),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError() {
+                            Toast.makeText(LoginActivity.this, getString(R.string.invalid_fingerprint),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .show();
+        }
     }
 
     @Override
