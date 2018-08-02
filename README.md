@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/VERSION-1.1.4-green.svg">
+  <img src="https://img.shields.io/badge/VERSION-1.2.0-green.svg">
   <img src="https://img.shields.io/badge/ANDROID-4.1%2B-orange.svg">
   <img src="https://img.shields.io/badge/LICENSE-Apache--2.0-blue.svg">
 </p>
@@ -43,11 +43,10 @@ A Tron wallet for android.
 - Node list
 - Representative list
 - Tron market listing & price
+- Fingerprint authorization
 
 ## TODO list
 
-- Fingerprint authorization
-- Pattern authorization
 - Tron pay
 - BIP 32, 39, 44
 
