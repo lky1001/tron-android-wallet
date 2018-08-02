@@ -103,6 +103,15 @@ public class MoreActivity extends CommonActivity implements MoreView {
         mPresenter.onCreate();
     }
 
+    @OnClick(R.id.more_fingerprint_button)
+    public void onFingerprintClick() {
+        boolean checked = mFingerprintAuthCheckBox.isChecked();
+
+        mFingerprintAuthCheckBox.setChecked(!checked);
+
+        CustomPreference.getInstance(this).setUseFingerprint(!checked);
+    }
+
     @OnClick(R.id.more_about_tron_button)
     public void onAboutTronClick() {
         startActivity(AboutActivity.class);
