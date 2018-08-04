@@ -304,4 +304,5 @@
     <string name="fingerauth_dialog_hint">Touch sensor</string>
     <string name="fingerauth_dialog_not_recognized">Fingerprint not recognized. Try again</string>
     <string name="fingerauth_dialog_success">Fingerprint recognized</string>
+    <string name="max_button_text">Max</string>
 </resources>
