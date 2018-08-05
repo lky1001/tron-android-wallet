@@ -13,4 +13,6 @@ public interface TokenView extends IView {
     void finishLoading(int total, Protocol.Account account);
 
     void participateTokenResult(boolean result);
+
+    void needLogin();
 }

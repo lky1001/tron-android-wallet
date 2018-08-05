@@ -1,6 +1,7 @@
 package com.devband.tronwalletforandroid.ui.token;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Token;
@@ -86,9 +87,16 @@ public class TokenPresenter extends BasePresenter<TokenView> {
     }
 
     public void loadItems(long startIndex, int pageSize) {
+        String acc = Tron.getInstance(mContext).getLoginAddress();
+
+        if (TextUtils.isEmpty(acc)) {
+            mView.needLogin();
+            return;
+        }
+
         mView.showLoadingDialog();
 
-        Single.zip(Tron.getInstance(mContext).queryAccount(Tron.getInstance(mContext).getLoginAddress()),
+        Single.zip(Tron.getInstance(mContext).queryAccount(acc),
                 TronNetwork.getInstance().getTokens(startIndex, pageSize, "-name", "ico"),
                 (account, tokens) -> {
                     AccountInfo accountInfo = new AccountInfo();
