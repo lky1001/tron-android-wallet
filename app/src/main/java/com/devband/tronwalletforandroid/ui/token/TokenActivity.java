@@ -368,4 +368,9 @@ public class TokenActivity extends CommonActivity implements TokenView {
             }
         }
     }
+
+    @Override
+    public void needLogin() {
+        finishActivity();
+    }
 }
