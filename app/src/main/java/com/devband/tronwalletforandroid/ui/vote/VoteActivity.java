@@ -8,7 +8,9 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,6 +24,7 @@ import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
+import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 import com.devband.tronwalletforandroid.ui.vote.adapter.VoteListAdapter;
 import com.devband.tronwalletforandroid.ui.vote.dto.VoteItem;
@@ -151,19 +154,30 @@ public class VoteActivity extends CommonActivity implements VoteView {
 
     @Override
     public void showLoadingDialog() {
+        if (isFinishing()) {
+            return;
+        }
         showProgressDialog(null, getString(R.string.loading_msg));
     }
 
     @Override
     public void showServerError() {
+        if (isFinishing()) {
+            return;
+        }
         mRetryButton.setVisibility(View.VISIBLE);
+        mVoteListView.setVisibility(View.GONE);
         hideDialog();
         Toast.makeText(VoteActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void displayVoteInfo(long totalVotes, long voteItemCount, long myVotePoint, long totalMyVotes) {
+        if (isFinishing()) {
+            return;
+        }
         mRetryButton.setVisibility(View.GONE);
+        mVoteListView.setVisibility(View.VISIBLE);
 
         if (myVotePoint == 0) {
             new MaterialDialog.Builder(VoteActivity.this)
@@ -198,18 +212,32 @@ public class VoteActivity extends CommonActivity implements VoteView {
 
     @Override
     public void successVote() {
+        if (isFinishing()) {
+            return;
+        }
         hideDialog();
         ((VotePresenter) mPresenter).getRepresentativeList(mCheckMyVotes.isChecked());
     }
 
     @Override
     public void refreshList() {
+        if (isFinishing()) {
+            return;
+        }
         mVoteListView.post(new Runnable() {
             @Override
             public void run() {
                 mAdapterView.refresh();
             }
         });
+    }
+
+    @Override
+    public void showInvalidVoteError() {
+        if (!isFinishing()) {
+            Toast.makeText(VoteActivity.this, getString(R.string.invalid_vote),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick(R.id.votes_remaining_layout)
@@ -260,10 +288,85 @@ public class VoteActivity extends CommonActivity implements VoteView {
                 CheckBox agreeVoteCheckBox = (CheckBox) dialog.getCustomView().findViewById(R.id.agree_vote);
                 EditText inputVote = (EditText) dialog.getCustomView().findViewById(R.id.input_vote);
                 EditText inputPassword = (EditText) dialog.getCustomView().findViewById(R.id.input_password);
+                Button maxButton = (Button) dialog.getCustomView().findViewById(R.id.max_button);
+                TextView msgText = (TextView) dialog.getCustomView().findViewById(R.id.voting_warning_text);
 
-                inputVote.setText(String.valueOf(item.getMyVoteCount()));
+                String formatNumber = Utils.getCommaNumber(item.getMyVoteCount());
+
+                inputVote.setText(formatNumber);
+                inputVote.setSelection(formatNumber.length());
                 voteUrlText.setText(item.getUrl());
                 voteAddressText.setText(item.getAddress());
+
+                long otherVote = mTotalVotePoint - item.getMyVoteCount() - mRemainVotePoint;
+
+
+                inputVote.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (TextUtils.isEmpty(s)) {
+                            inputVote.setText("0");
+                            inputVote.setSelection(1);
+                            return;
+                        }
+
+                        long voteBalance = 0;
+
+                        try {
+                            voteBalance = Long.parseLong(s.toString().replaceAll(",", ""));
+                        } catch (NumberFormatException e) {
+                            return;
+                        }
+
+                        msgText.setVisibility(View.INVISIBLE);
+
+                        // least 1
+                        if (voteBalance == 0 && otherVote == 0) {
+                            msgText.setText(getString(R.string.warning_vote_least_one));
+                            msgText.setVisibility(View.VISIBLE);
+                            return;
+                        }
+
+                        // warning over total
+                        if (voteBalance > mTotalVotePoint) {
+                            inputVote.setText(String.valueOf(mTotalVotePoint));
+                            voteBalance = mTotalVotePoint;
+                        }
+
+                        // warning cancel other vote
+                        if (voteBalance > (item.getMyVoteCount() + mRemainVotePoint)) {
+                            msgText.setText(getString(R.string.warning_cancel_other_votes));
+                            msgText.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        inputVote.removeTextChangedListener(this);
+
+                        if (TextUtils.isEmpty(s)) {
+                            inputVote.setText("0");
+                            inputVote.setSelection(1);
+                            inputVote.addTextChangedListener(this);
+                            return;
+                        }
+
+                        String number = s.toString().replaceAll(",", "");
+
+                        String formatNumber = Utils.getCommaNumber(Long.parseLong(number));
+
+                        inputVote.setText(formatNumber);
+
+                        inputVote.setSelection(formatNumber.length());
+
+                        inputVote.addTextChangedListener(this);
+                    }
+                });
 
                 voteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -271,14 +374,21 @@ public class VoteActivity extends CommonActivity implements VoteView {
                         long voteBalance = 0;
 
                         try {
-                            voteBalance = Long.parseLong(inputVote.getText().toString());
+                            String number = inputVote.getText().toString().replaceAll(",", "");
+                            voteBalance = Long.parseLong(number);
                         } catch (NumberFormatException e) {
                             Toast.makeText(VoteActivity.this, getString(R.string.invalid_vote),
                                     Toast.LENGTH_SHORT).show();
                             return;
                         }
 
-                        if (voteBalance <= 0 || voteBalance > mTotalVotePoint) {
+                        if (voteBalance > mTotalVotePoint) {
+                            Toast.makeText(VoteActivity.this, getString(R.string.invalid_vote),
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        if (voteBalance == 0 && otherVote == 0) {
                             Toast.makeText(VoteActivity.this, getString(R.string.invalid_vote),
                                     Toast.LENGTH_SHORT).show();
                             return;
@@ -300,7 +410,19 @@ public class VoteActivity extends CommonActivity implements VoteView {
                         }
 
                         dialog.dismiss();
-                        ((VotePresenter) mPresenter).voteRepresentative(item.getAddress(), voteBalance);
+
+                        if (voteBalance > (item.getMyVoteCount() + mRemainVotePoint)) {
+                            ((VotePresenter) mPresenter).voteRepresentative(item.getAddress(), voteBalance, false);
+                        } else {
+                            ((VotePresenter) mPresenter).voteRepresentative(item.getAddress(), voteBalance, true);
+                        }
+                    }
+                });
+
+                maxButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        inputVote.setText(String.valueOf(mTotalVotePoint));
                     }
                 });
 

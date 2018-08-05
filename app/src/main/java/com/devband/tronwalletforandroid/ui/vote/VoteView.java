@@ -13,4 +13,6 @@ public interface VoteView extends IView {
     void successVote();
 
     void refreshList();
+
+    void showInvalidVoteError();
 }

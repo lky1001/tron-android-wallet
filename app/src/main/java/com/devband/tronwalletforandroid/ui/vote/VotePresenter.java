@@ -175,19 +175,33 @@ public class VotePresenter extends BasePresenter<VoteView> {
         return WalletAppManager.getInstance(mContext).login(password) == WalletAppManager.SUCCESS;
     }
 
-    public void voteRepresentative(String address, long vote) {
+    public void voteRepresentative(String address, long vote, boolean includeOtherVotes) {
         mView.showLoadingDialog();
 
         Single.fromCallable(() -> {
             Map<String, String> witness = new HashMap<>();
 
-            for (int i = 0; i < mMyVotes.size(); i++) {
-                VoteItem voteItem = mMyVotes.get(i);
+            long totalVote = 0;
 
-                witness.put(voteItem.getAddress(), String.valueOf(voteItem.getMyVoteCount()));
+            if (includeOtherVotes) {
+                for (int i = 0; i < mMyVotes.size(); i++) {
+                    VoteItem voteItem = mMyVotes.get(i);
+
+                    if (!address.equalsIgnoreCase(voteItem.getAddress())) {
+                        witness.put(voteItem.getAddress(), String.valueOf(voteItem.getMyVoteCount()));
+                        totalVote += voteItem.getMyVoteCount();
+                    }
+                }
             }
 
-            witness.put(address, String.valueOf(vote));
+            if (vote != 0) {
+                witness.put(address, String.valueOf(vote));
+                totalVote += vote;
+            }
+
+            if (totalVote < 1) {
+                throw new IllegalStateException();
+            }
 
             return Tron.getInstance(mContext).voteWitness(witness).blockingGet();
         })
@@ -211,7 +225,12 @@ public class VotePresenter extends BasePresenter<VoteView> {
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
-                mView.showServerError();
+
+                if (e instanceof IllegalStateException) {
+                    mView.showInvalidVoteError();
+                } else {
+                    mView.showServerError();
+                }
             }
         });
     }
