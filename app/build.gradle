@@ -9,8 +9,8 @@ android {
         applicationId "com.devband.tronwalletforandroid"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 8
-        versionName "1.2.1"
+        versionCode 9
+        versionName "1.2.2"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
