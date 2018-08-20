@@ -8,7 +8,6 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
 import com.devband.tronwalletforandroid.database.model.AccountModel;
-import com.devband.tronwalletforandroid.database.model.WalletModel;
 
 import java.util.List;
 
