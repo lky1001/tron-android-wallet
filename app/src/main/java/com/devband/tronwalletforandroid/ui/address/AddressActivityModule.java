@@ -1,7 +1,6 @@
 package com.devband.tronwalletforandroid.ui.address;
 
 import com.devband.tronwalletforandroid.tron.Tron;
-import com.devband.tronwalletforandroid.tron.WalletAppManager;
 
 import dagger.Binds;
 import dagger.Module;

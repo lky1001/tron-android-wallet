@@ -11,14 +11,19 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
 import com.devband.tronwalletforandroid.ui.main.MainActivity;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class BackupAccountActivity extends CommonActivity implements BackupAccountView {
+public class BackupAccountActivity extends TempDaggerAppCompatActivity implements BackupAccountView {
+
+    @Inject
+    BackupAccountPresenter mBackupAccountPresenter;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -44,8 +49,7 @@ public class BackupAccountActivity extends CommonActivity implements BackupAccou
             getSupportActionBar().setTitle(R.string.title_backup_account);
         }
 
-        mPresenter = new BackupAccountPresenter(this);
-        mPresenter.onCreate();
+        mBackupAccountPresenter.onCreate();
     }
 
     @OnClick(R.id.btn_copy_wallet_info)
@@ -80,7 +84,7 @@ public class BackupAccountActivity extends CommonActivity implements BackupAccou
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
                     showProgressDialog(null, getString(R.string.loading_msg));
-                    ((BackupAccountPresenter) mPresenter).agreeTerms(true);
+                    mBackupAccountPresenter.agreeTerms(true);
                 }).show();
     }
 
