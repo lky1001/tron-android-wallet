@@ -6,6 +6,7 @@ import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
+import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -14,8 +15,18 @@ import io.reactivex.schedulers.Schedulers;
 
 public class LoginPresenter extends BasePresenter<LoginView> {
 
-    public LoginPresenter(LoginView view) {
+    private Tron mTron;
+    private WalletAppManager mWalletAppManager;
+    private Scheduler mProcessScheduler;
+    private Scheduler mObserverScheduler;
+
+    public LoginPresenter(LoginView view, Tron tron, WalletAppManager walletAppManager,
+            Scheduler processScheduler, Scheduler observerScheduler) {
         super(view);
+        this.mTron = tron;
+        this.mWalletAppManager = walletAppManager;
+        this.mProcessScheduler = processScheduler;
+        this.mObserverScheduler = observerScheduler;
     }
 
     @Override
@@ -40,10 +51,10 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
     public void loginWallet(@Nullable String password) {
         Single.fromCallable(() -> {
-            int result = WalletAppManager.getInstance(mContext).login(password);
+            int result = mWalletAppManager.login(password);
 
             if (result == WalletAppManager.SUCCESS) {
-                int res = Tron.getInstance(mContext).login(password);
+                int res = mTron.login(password);
                 if (res != Tron.SUCCESS) {
                     return WalletAppManager.ERROR;
                 }
@@ -51,8 +62,8 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
             return result;
         })
-        .subscribeOn(Schedulers.computation())
-        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(mProcessScheduler)
+        .observeOn(mObserverScheduler)
         .subscribe(new SingleObserver<Integer>() {
             @Override
             public void onSubscribe(Disposable d) {

@@ -2,7 +2,6 @@ package com.devband.tronwalletforandroid.tron.repository;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.database.dao.AccountDao;

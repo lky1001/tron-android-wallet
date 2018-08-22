@@ -28,7 +28,7 @@ public interface TronScanService {
 
     @GET("api/transfer")
     Single<Transfers> getTransfersByAddress(@Query("sort") String sort, @Query("count") boolean hasCount, @Query("limit") int limit,
-        @Query("start") long start, @Query("address") String address);
+            @Query("start") long start, @Query("address") String address);
 
     @GET("api/transfer")
     Single<Transfers> getTransfers(@Query("address") String address, @Query("token") String token);
@@ -77,7 +77,7 @@ public interface TronScanService {
 
     @GET("api/transaction")
     Single<Transactions> getTransactions(@Query("sort") String sort, @Query("count") boolean count,
-                                         @Query("limit") int limit, @Query("start") long start, @Query("block") long block);
+            @Query("limit") int limit, @Query("start") long start, @Query("block") long block);
 
     @GET("api/transfer/stats")
     Single<TransferStats> getTransferStats(@Query("groupby") String groupBy, @Query("interval") String interval);

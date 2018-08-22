@@ -15,14 +15,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
 import com.devband.tronwalletforandroid.tron.Tron;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AddressActivity extends CommonActivity implements AddressView {
+public class AddressActivity extends TempDaggerAppCompatActivity implements AddressView {
+
+    @Inject
+    AddressPresenter mAddressPresenter;
 
     @BindView(R.id.toolbar)
     public Toolbar mToolbar;
@@ -49,14 +54,13 @@ public class AddressActivity extends CommonActivity implements AddressView {
             getSupportActionBar().setTitle(R.string.title_my_address);
         }
 
-        mPresenter = new AddressPresenter(this);
-        mPresenter.onCreate();
+        mAddressPresenter.onCreate();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.onResume();
+        mAddressPresenter.onResume();
     }
 
     @Override

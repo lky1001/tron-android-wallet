@@ -6,11 +6,17 @@ import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
 import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivity;
 import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 
-public class IntroActivity extends CommonActivity implements IntroView {
+import javax.inject.Inject;
+
+public class IntroActivity extends TempDaggerAppCompatActivity implements IntroView {
+
+    @Inject
+    IntroPresenter mIntroPresenter;
 
     private boolean mIsBackClick = false;
 
@@ -19,8 +25,7 @@ public class IntroActivity extends CommonActivity implements IntroView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
-        mPresenter = new IntroPresenter(this);
-        mPresenter.onCreate();
+        mIntroPresenter.onCreate();
     }
 
     @Override

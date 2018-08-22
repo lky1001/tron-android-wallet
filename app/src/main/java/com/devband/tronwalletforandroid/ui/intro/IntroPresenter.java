@@ -10,6 +10,7 @@ import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import java.security.NoSuchAlgorithmException;
 
+import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -21,8 +22,18 @@ public class IntroPresenter extends BasePresenter<IntroView> {
     private static final int NO_SUCH_ALGORITHM = 2;
     private static final int SUCCESS = 3;
 
-    public IntroPresenter(IntroView view) {
+    private Tron mTron;
+    private WalletAppManager mWalletAppManager;
+    private Scheduler mProcessScheduler;
+    private Scheduler mObserverScheduler;
+
+    public IntroPresenter(IntroView view, Tron tron, WalletAppManager walletAppManager,
+            Scheduler processScheduler, Scheduler observerScheduler) {
         super(view);
+        this.mTron = tron;
+        this.mWalletAppManager = walletAppManager;
+        this.mProcessScheduler = processScheduler;
+        this.mObserverScheduler = observerScheduler;
     }
 
     @SuppressLint("CheckResult")
@@ -33,8 +44,8 @@ public class IntroPresenter extends BasePresenter<IntroView> {
 
             while (tryCnt < Constants.CONNECTION_RETRY) {
                 try {
-                    Tron.getInstance(mContext).initTronNode();
-                    long height = Tron.getInstance(mContext).getBlockHeight().blockingGet();
+                    mTron.initTronNode();
+                    long height = mTron.getBlockHeight().blockingGet();
                     Log.d(IntroPresenter.class.getSimpleName(), "block height : " + height);
                     break;
                 } catch (Exception e) {
@@ -52,8 +63,8 @@ public class IntroPresenter extends BasePresenter<IntroView> {
                 tryCnt++;
             }
 
-            if (WalletAppManager.getInstance(mContext).hasWallet()) {
-                if (WalletAppManager.getInstance(mContext).isAgree()) {
+            if (mWalletAppManager.hasWallet()) {
+                if (mWalletAppManager.isAgree()) {
                     return SUCCESS;
                 } else {
                     return NOT_AGREE;
@@ -62,8 +73,8 @@ public class IntroPresenter extends BasePresenter<IntroView> {
                 return NO_WALLET;
             }
         })
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(mProcessScheduler)
+        .observeOn(mObserverScheduler)
         .subscribe(result -> {
             if (result == SUCCESS) {
                 mView.startLoginActivity();

@@ -53,12 +53,6 @@ public class ExampleUnitTest {
 
         when(context.getResources().getStringArray(R.array.fullnode_ip_list))
                 .thenReturn(new String[] {"47.91.216.69:50051"});
-
-        PowerMockito.when(FileUtil.saveData(directory, "3b3ac61c48c8dbc7f37df7fb23f47473", false))
-                .thenAnswer(invocation -> {
-                    System.out.println(invocation.getArgumentAt(1, String.class));
-                    return true;
-                });
     }
 
     @Test

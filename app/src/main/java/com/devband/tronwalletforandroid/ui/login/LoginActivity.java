@@ -10,17 +10,25 @@ import android.widget.Toast;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.CustomPreference;
+import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.main.MainActivity;
 import com.marcoscg.fingerauth.FingerAuth;
 import com.marcoscg.fingerauth.FingerAuthDialog;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
-public class LoginActivity extends CommonActivity implements LoginView {
+public class LoginActivity extends TempDaggerAppCompatActivity implements LoginView {
+
+    @Inject
+    LoginPresenter mLoginPresenter;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -40,8 +48,7 @@ public class LoginActivity extends CommonActivity implements LoginView {
             getSupportActionBar().setTitle(R.string.title_login);
         }
 
-        mPresenter = new LoginPresenter(this);
-        mPresenter.onCreate();
+        mLoginPresenter.onCreate();
 
         boolean hasFingerprintSupport = FingerAuth.hasFingerprintSupport(this);
         boolean useFingerprint = CustomPreference.getInstance(this).getUseFingerprint();
@@ -90,7 +97,7 @@ public class LoginActivity extends CommonActivity implements LoginView {
         String password = mInputPassword.getText().toString();
 
         showProgressDialog("", getString(R.string.loading_msg));
-        ((LoginPresenter) mPresenter).loginWallet(password);
+        mLoginPresenter.loginWallet(password);
     }
 
     @Override
