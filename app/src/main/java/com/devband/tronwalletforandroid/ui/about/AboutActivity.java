@@ -11,10 +11,13 @@ import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
 import com.thefinestartist.finestwebview.FinestWebView;
 
 import java.util.Date;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +28,10 @@ import io.reactivex.schedulers.Schedulers;
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 
-public class AboutActivity extends CommonActivity {
+public class AboutActivity extends TempDaggerAppCompatActivity {
+
+    @Inject
+    TronNetwork mTronNetwork;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -47,7 +53,7 @@ public class AboutActivity extends CommonActivity {
             getSupportActionBar().setTitle(R.string.title_about_tron);
         }
 
-        TronNetwork.getInstance().getCoinInfo(Constants.TRON_COINMARKET_NAME)
+        mTronNetwork.getCoinInfo(Constants.TRON_COINMARKET_NAME)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<List<CoinMarketCap>>() {

@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.di;
 
+import com.devband.tronwalletforandroid.ui.about.AboutActivity;
 import com.devband.tronwalletforandroid.ui.intro.IntroActivity;
 import com.devband.tronwalletforandroid.ui.intro.IntroActivityModule;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
@@ -19,4 +20,8 @@ public abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = { LoginActivityModule.class })
     abstract LoginActivity bindLoginActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector
+    abstract AboutActivity bindAboutActivity();
 }

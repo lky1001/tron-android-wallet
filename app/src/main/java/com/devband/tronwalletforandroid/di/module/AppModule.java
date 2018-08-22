@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.di.module;
 import android.app.Application;
 import android.content.Context;
 
+import com.devband.tronlib.TronNetwork;
 import com.devband.tronwalletforandroid.di.ApplicationContext;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
@@ -24,6 +25,12 @@ public abstract class AppModule {
     @Singleton
     static Tron provideTron(@ApplicationContext Context context) {
         return Tron.getInstance(context);
+    }
+
+    @Provides
+    @Singleton
+    static TronNetwork provideTronNetwork() {
+        return TronNetwork.getInstance();
     }
 
     @Provides

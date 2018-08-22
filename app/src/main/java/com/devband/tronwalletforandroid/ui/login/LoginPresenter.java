@@ -21,12 +21,12 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     private Scheduler mObserverScheduler;
 
     public LoginPresenter(LoginView view, Tron tron, WalletAppManager walletAppManager,
-            Scheduler io, Scheduler scheduler) {
+            Scheduler processScheduler, Scheduler observerScheduler) {
         super(view);
         this.mTron = tron;
         this.mWalletAppManager = walletAppManager;
-        this.mProcessScheduler = io;
-        this.mObserverScheduler = scheduler;
+        this.mProcessScheduler = processScheduler;
+        this.mObserverScheduler = observerScheduler;
     }
 
     @Override
