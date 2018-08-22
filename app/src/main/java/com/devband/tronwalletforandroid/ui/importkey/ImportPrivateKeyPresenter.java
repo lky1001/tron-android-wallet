@@ -6,6 +6,7 @@ import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
+import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -14,8 +15,18 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ImportPrivateKeyPresenter extends BasePresenter<ImportPrivateKeyView> {
 
-    public ImportPrivateKeyPresenter(ImportPrivateKeyView view) {
+    private Tron mTron;
+    private WalletAppManager mWalletAppManager;
+    private Scheduler mProcessScheduler;
+    private Scheduler mObserverScheduler;
+
+    public ImportPrivateKeyPresenter(ImportPrivateKeyView view, Tron tron, WalletAppManager walletAppManager,
+            Scheduler processScheduler, Scheduler observerScheduler) {
         super(view);
+        this.mTron = tron;
+        this.mWalletAppManager = walletAppManager;
+        this.mProcessScheduler = processScheduler;
+        this.mObserverScheduler = observerScheduler;
     }
 
     @Override
@@ -40,29 +51,29 @@ public class ImportPrivateKeyPresenter extends BasePresenter<ImportPrivateKeyVie
 
     public void createWallet(String privateKey, String password) {
         Single.fromCallable(() -> {
-            int result = WalletAppManager.getInstance(mContext).createWallet(password);
+            int result = mWalletAppManager.createWallet(password);
 
             if (result == WalletAppManager.SUCCESS) {
-                result = Tron.getInstance(mContext).registerAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey, password).blockingGet();
+                result = mTron.registerAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey, password).blockingGet();
                 if (result != Tron.SUCCESS) {
                     return result;
                 }
 
-                result = Tron.getInstance(mContext).login(password);
+                result = mTron.login(password);
 
                 if (result != Tron.SUCCESS) {
                     return result;
                 }
 
-                WalletAppManager.getInstance(mContext).agreeTerms(true);
+                mWalletAppManager.agreeTerms(true);
                 return Tron.SUCCESS;
             } else if (result == WalletAppManager.ERROR) {
                 //mView.passwordError();
             }
             return result;
         })
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(mProcessScheduler)
+        .observeOn(mObserverScheduler)
         .subscribe(new SingleObserver<Integer>() {
             @Override
             public void onSubscribe(Disposable d) {
