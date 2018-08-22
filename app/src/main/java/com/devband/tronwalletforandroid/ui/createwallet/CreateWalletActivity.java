@@ -12,15 +12,21 @@ import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivity;
 import com.devband.tronwalletforandroid.ui.importkey.ImportPrivateKeyActivity;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CreateWalletActivity extends CommonActivity implements CreateWalletView {
+public class CreateWalletActivity extends TempDaggerAppCompatActivity implements CreateWalletView {
+
+    @Inject
+    CreateWalletPresenter mCreateWalletPresenter;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -49,8 +55,7 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
             getSupportActionBar().setTitle(R.string.title_create_wallet);
         }
 
-        mPresenter = new CreateWalletPresenter(this);
-        mPresenter.onCreate();
+        mCreateWalletPresenter.onCreate();
 
         mInputPassword.addTextChangedListener(new TextWatcher() {
             @Override
@@ -84,7 +89,7 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
         }
 
         showProgressDialog(null, getString(R.string.loading_msg));
-        ((CreateWalletPresenter) mPresenter).createWallet(mInputPassword.getText().toString());
+        mCreateWalletPresenter.createWallet(mInputPassword.getText().toString());
     }
 
     @OnClick(R.id.btn_import_private_key)

@@ -10,7 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 @Module
-public abstract class BackupAccountModule {
+public abstract class BackupAccountActivityModule {
 
     @Binds
     public abstract BackupAccountView view(BackupAccountActivity backupAccountActivity);

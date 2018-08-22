@@ -6,6 +6,7 @@ import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
+import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -14,8 +15,18 @@ import io.reactivex.schedulers.Schedulers;
 
 public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
 
-    public CreateWalletPresenter(CreateWalletView view) {
+    private Tron mTron;
+    private WalletAppManager mWalletAppManager;
+    private Scheduler mProcessScheduler;
+    private Scheduler mObserverScheduler;
+
+    public CreateWalletPresenter(CreateWalletView view, Tron tron, WalletAppManager walletAppManager,
+            Scheduler processScheduler, Scheduler observerScheduler) {
         super(view);
+        this.mTron = tron;
+        this.mWalletAppManager = walletAppManager;
+        this.mProcessScheduler = processScheduler;
+        this.mObserverScheduler = observerScheduler;
     }
 
     @Override
@@ -39,15 +50,15 @@ public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
 
     public void createWallet(String password) {
         Single.fromCallable(() -> {
-            int result = WalletAppManager.getInstance(mContext).createWallet(password);
+            int result = mWalletAppManager.createWallet(password);
 
             if (result == WalletAppManager.SUCCESS) {
-                result = Tron.getInstance(mContext).registerAccount(Constants.PREFIX_ACCOUNT_NAME, password).blockingGet();
+                result = mTron.registerAccount(Constants.PREFIX_ACCOUNT_NAME, password).blockingGet();
                 if (result != Tron.SUCCESS) {
                     return result;
                 }
 
-                result = Tron.getInstance(mContext).login(password);
+                result = mTron.login(password);
 
                 if (result != Tron.SUCCESS) {
                     return result;
@@ -55,12 +66,13 @@ public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
 
                 return Tron.SUCCESS;
             } else if (result == WalletAppManager.ERROR) {
-                mView.passwordError();
+                return Tron.ERROR;
             }
+
             return result;
         })
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(mProcessScheduler)
+        .observeOn(mObserverScheduler)
         .subscribe(new SingleObserver<Integer>() {
             @Override
             public void onSubscribe(Disposable d) {
