@@ -21,6 +21,7 @@ import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -30,9 +31,18 @@ import io.reactivex.schedulers.Schedulers;
 public class MainPresenter extends BasePresenter<MainView> {
 
     private AdapterDataModel<Asset> mAdapterDataModel;
+    private Tron mTron;
+    private TronNetwork mTronNetwork;
+    private Scheduler mProcessScheduler;
+    private Scheduler mObserverScheduler;
 
-    public MainPresenter(MainView view) {
+    public MainPresenter(MainView view, Tron tron, TronNetwork tronNetwork,
+            Scheduler processScheduler, Scheduler observerScheduler) {
         super(view);
+        this.mTron = tron;
+        this.mTronNetwork = tronNetwork;
+        this.mProcessScheduler = processScheduler;
+        this.mObserverScheduler = observerScheduler;
     }
 
     public void setAdapterDataModel(AdapterDataModel<Asset> adapterDataModel) {
@@ -60,12 +70,11 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public boolean isLogin() {
-        return Tron.getInstance(mContext).isLogin();
+        return mTron.isLogin();
     }
 
     public void getMyAccountInfo() {
-        Tron.getInstance(mContext).getAccount(Tron.getInstance(mContext).getLoginAddress())
-        .subscribeOn(Schedulers.io())
+        mTron.getAccount(mTron.getLoginAddress())
         .map((account -> {
             List<Frozen> frozenList = new ArrayList<>();
 
@@ -96,7 +105,8 @@ public class MainPresenter extends BasePresenter<MainView> {
                     .frozenList(frozenList)
                     .build();
         }))
-        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(mProcessScheduler)
+        .observeOn(mObserverScheduler)
         .subscribe(new SingleObserver<TronAccount>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -124,76 +134,76 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void getTronMarketInfo() {
-        TronNetwork.getInstance().getCoinInfo(Constants.TRON_COINMARKET_NAME)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<List<CoinMarketCap>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        mTronNetwork.getCoinInfo(Constants.TRON_COINMARKET_NAME)
+        .subscribeOn(mProcessScheduler)
+        .observeOn(mObserverScheduler)
+        .subscribe(new SingleObserver<List<CoinMarketCap>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
-                    }
+            }
 
-                    @Override
-                    public void onSuccess(List<CoinMarketCap> coinMarketCaps) {
-                        if (coinMarketCaps.size() > 0) {
-                            mView.setTronMarketInfo(coinMarketCaps.get(0));
-                        }
-                    }
+            @Override
+            public void onSuccess(List<CoinMarketCap> coinMarketCaps) {
+                if (coinMarketCaps.size() > 0) {
+                    mView.setTronMarketInfo(coinMarketCaps.get(0));
+                }
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
+            @Override
+            public void onError(Throwable e) {
 
-                    }
-                });
+            }
+        });
     }
 
     public boolean logout() {
-        Tron.getInstance(mContext).logout();
+        mTron.logout();
 
         return true;
     }
 
     @Nullable
     public AccountModel getLoginAccount() {
-        return Tron.getInstance(mContext).getLoginAccount();
+        return mTron.getLoginAccount();
     }
 
     public Single<Boolean> changeLoginAccountName(@NonNull String accountName) {
-        return Tron.getInstance(mContext).changeLoginAccountName(accountName);
+        return mTron.changeLoginAccountName(accountName);
     }
 
     public void createAccount(@NonNull String nickname) {
-        Tron.getInstance(mContext).createAccount(nickname)
-                .subscribe(new SingleObserver<Boolean>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        mTron.createAccount(nickname)
+        .subscribe(new SingleObserver<Boolean>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
-                    }
+            }
 
-                    @Override
-                    public void onSuccess(Boolean aBoolean) {
-                        mView.successCreateAccount();
-                    }
+            @Override
+            public void onSuccess(Boolean aBoolean) {
+                mView.successCreateAccount();
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.connectionError();
-                    }
-                });
+            @Override
+            public void onError(Throwable e) {
+                mView.connectionError();
+            }
+        });
     }
 
     public Single<List<AccountModel>> getAccountList() {
-        return Tron.getInstance(mContext).getAccountList();
+        return mTron.getAccountList();
     }
 
     public void changeLoginAccount(@NonNull AccountModel accountModel) {
-        Tron.getInstance(mContext).changeLoginAccount(accountModel);
+        mTron.changeLoginAccount(accountModel);
     }
 
     public void importAccount(@NonNull String nickname, @NonNull String privateKey) {
-        Tron.getInstance(mContext).importAccount(nickname, privateKey)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+        mTron.importAccount(nickname, privateKey)
+        .subscribeOn(mProcessScheduler)
+        .observeOn(mObserverScheduler)
         .subscribe(new SingleObserver<Integer>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -219,6 +229,6 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public int getLoginAccountIndex() {
-        return Tron.getInstance(mContext).getLoginAccount().getId();
+        return mTron.getLoginAccount().getId();
     }
 }

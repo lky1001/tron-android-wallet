@@ -35,6 +35,7 @@ import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
+import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.blockexplorer.BlockExplorerActivity;
@@ -53,6 +54,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -62,7 +65,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends CommonActivity implements MainView, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends TempDaggerAppCompatActivity implements MainView, NavigationView.OnNavigationItemSelectedListener {
+
+    @Inject
+    MainPresenter mMainPresenter;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -152,9 +158,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         mMyTokenListView.setAdapter(mMyTokenListAdapter);
         mAdapterView = mMyTokenListAdapter;
 
-        mPresenter = new MainPresenter(this);
-        ((MainPresenter) mPresenter).setAdapterDataModel(mMyTokenListAdapter);
-        mPresenter.onCreate();
+        mMainPresenter.setAdapterDataModel(mMyTokenListAdapter);
+        mMainPresenter.onCreate();
 
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
@@ -218,7 +223,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     }
 
     private void initAccountList(boolean isCreateOrImport) {
-        ((MainPresenter) mPresenter).getAccountList()
+        mMainPresenter.getAccountList()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new SingleObserver<List<AccountModel>>() {
@@ -263,12 +268,12 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             return;
         }
 
-        if (((MainPresenter) mPresenter).isLogin()) {
+        if (mMainPresenter.isLogin()) {
             mLoadingAccountInfo = true;
             // get account info
-            ((MainPresenter) mPresenter).getMyAccountInfo();
+            mMainPresenter.getMyAccountInfo();
 
-            Single.fromCallable(() -> ((MainPresenter) mPresenter).getLoginAccount())
+            Single.fromCallable(() -> mMainPresenter.getLoginAccount())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new SingleObserver<AccountModel>() {
@@ -294,7 +299,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 }
             });
 
-            ((MainPresenter) mPresenter).getAccountList()
+            mMainPresenter.getAccountList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new SingleObserver<List<AccountModel>>() {
@@ -305,7 +310,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
                 @Override
                 public void onSuccess(List<AccountModel> accountModelList) {
-                    int id = ((MainPresenter) mPresenter).getLoginAccountIndex();
+                    int id = mMainPresenter.getLoginAccountIndex();
 
                     int size = accountModelList.size();
 
@@ -408,13 +413,13 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     }
 
     public void logout() {
-        ((MainPresenter) mPresenter).logout();
+        mMainPresenter.logout();
         checkLoginState();
     }
 
     private void createAccount() {
         showProgressDialog(null, getString(R.string.loading_msg));
-        ((MainPresenter) mPresenter).createAccount(Constants.PREFIX_ACCOUNT_NAME);
+        mMainPresenter.createAccount(Constants.PREFIX_ACCOUNT_NAME);
     }
 
     private void importAccount() {
@@ -431,7 +436,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                         String privateKey = input.toString();
 
                         if (!TextUtils.isEmpty(privateKey)) {
-                            ((MainPresenter) mPresenter).importAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey);
+                            mMainPresenter.importAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey);
                         }
                     }
                 }).show();
@@ -467,7 +472,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
         mLoadingAccountInfo = false;
 
-        ((MainPresenter) mPresenter).getTronMarketInfo();
+        mMainPresenter.getTronMarketInfo();
     }
 
     @SuppressLint("SetTextI18n")
@@ -590,7 +595,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                         String accountName = input.toString();
 
                         if (!TextUtils.isEmpty(accountName)) {
-                            ((MainPresenter) mPresenter).changeLoginAccountName(accountName)
+                            mMainPresenter.changeLoginAccountName(accountName)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new SingleObserver<Boolean>() {
@@ -621,7 +626,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         @Override
         public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int pos, long id) {
             AccountModel accountModel = mAccountAdapter.getItem(pos);
-            ((MainPresenter) mPresenter).changeLoginAccount(accountModel);
+            mMainPresenter.changeLoginAccount(accountModel);
             mMainTitleText.setText(accountModel.getName());
             mDrawer.closeDrawers();
             checkLoginState();
