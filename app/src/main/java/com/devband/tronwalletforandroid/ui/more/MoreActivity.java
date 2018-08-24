@@ -19,6 +19,7 @@ import com.devband.tronwalletforandroid.BuildConfig;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.CustomPreference;
+import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.about.AboutActivity;
 import com.devband.tronwalletforandroid.ui.market.MarketActivity;
@@ -27,6 +28,8 @@ import com.devband.tronwalletforandroid.ui.opensource.OpenSourceActivity;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity;
 import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
 import com.marcoscg.fingerauth.FingerAuth;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +41,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class MoreActivity extends CommonActivity implements MoreView {
+public class MoreActivity extends TempDaggerAppCompatActivity implements MoreView {
+
+    @Inject
+    MorePresenter mMorePresenter;
 
     public static final String EXTRA_FROM_DONATIONS = "from_donations";
 
@@ -99,8 +105,7 @@ public class MoreActivity extends CommonActivity implements MoreView {
 
         mTronAppInfoText.setText("Tron Wallet for Android\nApp Version : v" + BuildConfig.VERSION_NAME);
 
-        mPresenter = new MorePresenter(this);
-        mPresenter.onCreate();
+        mMorePresenter.onCreate();
     }
 
     @OnClick(R.id.more_fingerprint_button)
