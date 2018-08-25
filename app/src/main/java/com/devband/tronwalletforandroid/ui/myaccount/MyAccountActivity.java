@@ -150,7 +150,7 @@ public class MyAccountActivity extends TempDaggerAppCompatActivity implements My
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.onResume();
+        mMyAccountPresenter.onResume();
     }
 
     @Override

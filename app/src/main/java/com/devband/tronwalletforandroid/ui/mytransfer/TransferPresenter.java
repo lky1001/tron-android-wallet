@@ -10,6 +10,7 @@ import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -22,9 +23,18 @@ import io.reactivex.schedulers.Schedulers;
 public class TransferPresenter extends BasePresenter<TransferView> {
 
     private AdapterDataModel<TransferInfo> mAdapterDataModel;
+    private Tron mTron;
+    private TronNetwork mTronNetwork;
+    private Scheduler mProcessScheduler;
+    private Scheduler mObserverScheduler;
 
-    public TransferPresenter(TransferView view) {
+    public TransferPresenter(TransferView view, Tron tron, TronNetwork tronNetwork,
+            Scheduler processScheduler, Scheduler observerScheduler) {
         super(view);
+        this.mTron = tron;
+        this.mTronNetwork = tronNetwork;
+        this.mProcessScheduler = processScheduler;
+        this.mObserverScheduler = observerScheduler;
     }
 
     public void setAdapterDataModel(AdapterDataModel<TransferInfo> adapterDataModel) {
@@ -54,10 +64,9 @@ public class TransferPresenter extends BasePresenter<TransferView> {
     public void loadTransfer(long startIndex, int pageSize) {
         mView.showLoadingDialog();
 
-        String address = Tron.getInstance(mContext).getLoginAddress();
+        String address = mTron.getLoginAddress();
 
-        TronNetwork.getInstance().getTransfersByAddress("-timestamp", true, pageSize, startIndex, address)
-        .subscribeOn(Schedulers.io())
+        mTronNetwork.getTransfersByAddress("-timestamp", true, pageSize, startIndex, address)
         .map(transactions -> {
             List<TransferInfo> infos = new ArrayList<>();
 
@@ -77,7 +86,8 @@ public class TransferPresenter extends BasePresenter<TransferView> {
             }
             return infos;
         })
-        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(mProcessScheduler)
+        .observeOn(mObserverScheduler)
         .subscribe(new SingleObserver<List<TransferInfo>>() {
             @Override
             public void onSubscribe(Disposable d) {
