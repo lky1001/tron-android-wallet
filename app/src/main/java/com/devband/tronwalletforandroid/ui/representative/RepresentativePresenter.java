@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.ui.representative;
 import android.support.annotation.NonNull;
 
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
@@ -17,7 +18,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 
@@ -26,16 +26,14 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
     private AdapterDataModel<Representative> mAdapterDataModel;
     private Tron mTron;
     private WalletAppManager mWalletAppManager;
-    private Scheduler mProcessScheduler;
-    private Scheduler mObserverScheduler;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
     public RepresentativePresenter(RepresentativeView view, Tron tron, WalletAppManager walletAppManager,
-            Scheduler processScheduler, Scheduler observerScheduler) {
+            RxJavaSchedulers rxJavaSchedulers) {
         super(view);
         this.mTron = tron;
         this.mWalletAppManager = walletAppManager;
-        this.mProcessScheduler = processScheduler;
-        this.mObserverScheduler = observerScheduler;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     public void setAdapterDataModel(AdapterDataModel<Representative> adapterDataModel) {
@@ -99,8 +97,8 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
                     .highestVotes(highestVotes)
                     .build();
         })
-        .subscribeOn(mProcessScheduler)
-        .observeOn(mObserverScheduler)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<RepresentativeList>() {
             @Override
             public void onSubscribe(Disposable d) {

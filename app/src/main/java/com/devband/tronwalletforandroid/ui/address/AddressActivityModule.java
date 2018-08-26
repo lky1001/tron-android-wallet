@@ -1,12 +1,11 @@
 package com.devband.tronwalletforandroid.ui.address;
 
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 @Module
 public abstract class AddressActivityModule {
@@ -15,7 +14,8 @@ public abstract class AddressActivityModule {
     public abstract AddressView view(AddressActivity addressActivity);
 
     @Provides
-    static AddressPresenter provideAddressPresenter(AddressView addressView, Tron tron) {
-        return new AddressPresenter(addressView, tron, Schedulers.io(), AndroidSchedulers.mainThread());
+    static AddressPresenter provideAddressPresenter(AddressView addressView, Tron tron,
+            RxJavaSchedulers rxJavaSchedulers) {
+        return new AddressPresenter(addressView, tron, rxJavaSchedulers);
     }
 }

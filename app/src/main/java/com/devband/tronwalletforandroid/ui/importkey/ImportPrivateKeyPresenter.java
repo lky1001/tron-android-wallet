@@ -2,31 +2,27 @@ package com.devband.tronwalletforandroid.ui.importkey;
 
 import com.crashlytics.android.Crashlytics;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class ImportPrivateKeyPresenter extends BasePresenter<ImportPrivateKeyView> {
 
     private Tron mTron;
     private WalletAppManager mWalletAppManager;
-    private Scheduler mProcessScheduler;
-    private Scheduler mObserverScheduler;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
     public ImportPrivateKeyPresenter(ImportPrivateKeyView view, Tron tron, WalletAppManager walletAppManager,
-            Scheduler processScheduler, Scheduler observerScheduler) {
+            RxJavaSchedulers rxJavaSchedulers) {
         super(view);
         this.mTron = tron;
         this.mWalletAppManager = walletAppManager;
-        this.mProcessScheduler = processScheduler;
-        this.mObserverScheduler = observerScheduler;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     @Override
@@ -72,8 +68,8 @@ public class ImportPrivateKeyPresenter extends BasePresenter<ImportPrivateKeyVie
             }
             return result;
         })
-        .subscribeOn(mProcessScheduler)
-        .observeOn(mObserverScheduler)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Integer>() {
             @Override
             public void onSubscribe(Disposable d) {

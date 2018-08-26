@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.ui.mytransfer;
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Transfer;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
@@ -10,11 +11,8 @@ import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by user on 2018. 5. 17..
@@ -25,16 +23,14 @@ public class TransferPresenter extends BasePresenter<TransferView> {
     private AdapterDataModel<TransferInfo> mAdapterDataModel;
     private Tron mTron;
     private TronNetwork mTronNetwork;
-    private Scheduler mProcessScheduler;
-    private Scheduler mObserverScheduler;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
     public TransferPresenter(TransferView view, Tron tron, TronNetwork tronNetwork,
-            Scheduler processScheduler, Scheduler observerScheduler) {
+            RxJavaSchedulers rxJavaSchedulers) {
         super(view);
         this.mTron = tron;
         this.mTronNetwork = tronNetwork;
-        this.mProcessScheduler = processScheduler;
-        this.mObserverScheduler = observerScheduler;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     public void setAdapterDataModel(AdapterDataModel<TransferInfo> adapterDataModel) {
@@ -84,10 +80,11 @@ public class TransferPresenter extends BasePresenter<TransferView> {
                 info.setTotal(transactions.getTotal());
                 infos.add(info);
             }
+
             return infos;
         })
-        .subscribeOn(mProcessScheduler)
-        .observeOn(mObserverScheduler)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers .getMainThread())
         .subscribe(new SingleObserver<List<TransferInfo>>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -97,10 +94,13 @@ public class TransferPresenter extends BasePresenter<TransferView> {
             @Override
             public void onSuccess(List<TransferInfo> transactionInfos) {
                 mAdapterDataModel.addAll(transactionInfos);
+
                 long total = 0;
+
                 if (!transactionInfos.isEmpty()) {
                     total = transactionInfos.get(0).getTotal();
                 }
+
                 mView.transferDataLoadSuccess(total);
             }
 

@@ -1,10 +1,10 @@
 package com.devband.tronwalletforandroid.ui.backupaccount;
 
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
@@ -13,16 +13,14 @@ public class BackupAccountPresenter extends BasePresenter<BackupAccountView> {
 
     private Tron mTron;
     private WalletAppManager mWalletAppManager;
-    private Scheduler mProcessScheduler;
-    private Scheduler mObserverScheduler;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
     public BackupAccountPresenter(BackupAccountView view, Tron tron, WalletAppManager walletAppManager,
-            Scheduler processScheduler, Scheduler observerScheduler) {
+            RxJavaSchedulers rxJavaSchedulers) {
         super(view);
         this.mTron = tron;
         this.mWalletAppManager = walletAppManager;
-        this.mProcessScheduler = processScheduler;
-        this.mObserverScheduler = observerScheduler;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     @Override
@@ -53,8 +51,8 @@ public class BackupAccountPresenter extends BasePresenter<BackupAccountView> {
             mWalletAppManager.agreeTerms(true);
             return true;
         })
-        .subscribeOn(mProcessScheduler)
-        .observeOn(mObserverScheduler)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {
             @Override
             public void onSubscribe(Disposable d) {

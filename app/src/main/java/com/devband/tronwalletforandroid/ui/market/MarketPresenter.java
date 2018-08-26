@@ -1,9 +1,8 @@
 package com.devband.tronwalletforandroid.ui.market;
 
 import com.devband.tronlib.TronNetwork;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
-
-import io.reactivex.Scheduler;
 
 /**
  * Created by user on 2018. 5. 24..
@@ -12,15 +11,12 @@ import io.reactivex.Scheduler;
 public class MarketPresenter extends BasePresenter<MarketView> {
 
     private TronNetwork mTronNetwork;
-    private Scheduler mProcessScheduler;
-    private Scheduler mObserverScheduler;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
-    public MarketPresenter(MarketView view, TronNetwork tronNetwork,
-            Scheduler processScheduler, Scheduler observerScheduler) {
+    public MarketPresenter(MarketView view, TronNetwork tronNetwork, RxJavaSchedulers rxJavaSchedulers) {
         super(view);
         this.mTronNetwork = tronNetwork;
-        this.mProcessScheduler = processScheduler;
-        this.mObserverScheduler = observerScheduler;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     @Override
@@ -48,8 +44,8 @@ public class MarketPresenter extends BasePresenter<MarketView> {
 
         this.mTronNetwork
         .getMarkets()
-        .subscribeOn(mProcessScheduler)
-        .observeOn(mObserverScheduler)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(
                 markets -> mView.marketDataLoadSuccess(markets),
                 t -> mView.showServerError()

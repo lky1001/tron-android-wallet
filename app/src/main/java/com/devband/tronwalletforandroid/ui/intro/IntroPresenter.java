@@ -4,16 +4,14 @@ import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import java.security.NoSuchAlgorithmException;
 
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class IntroPresenter extends BasePresenter<IntroView> {
 
@@ -24,16 +22,14 @@ public class IntroPresenter extends BasePresenter<IntroView> {
 
     private Tron mTron;
     private WalletAppManager mWalletAppManager;
-    private Scheduler mProcessScheduler;
-    private Scheduler mObserverScheduler;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
     public IntroPresenter(IntroView view, Tron tron, WalletAppManager walletAppManager,
-            Scheduler processScheduler, Scheduler observerScheduler) {
+            RxJavaSchedulers rxJavaSchedulers) {
         super(view);
         this.mTron = tron;
         this.mWalletAppManager = walletAppManager;
-        this.mProcessScheduler = processScheduler;
-        this.mObserverScheduler = observerScheduler;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     @SuppressLint("CheckResult")
@@ -73,8 +69,8 @@ public class IntroPresenter extends BasePresenter<IntroView> {
                 return NO_WALLET;
             }
         })
-        .subscribeOn(mProcessScheduler)
-        .observeOn(mObserverScheduler)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(result -> {
             if (result == SUCCESS) {
                 mView.startLoginActivity();

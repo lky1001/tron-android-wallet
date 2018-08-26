@@ -9,40 +9,34 @@ import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
 import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
-import org.tron.protos.Protocol;
-
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenter extends BasePresenter<MainView> {
 
     private AdapterDataModel<Asset> mAdapterDataModel;
     private Tron mTron;
     private TronNetwork mTronNetwork;
-    private Scheduler mProcessScheduler;
-    private Scheduler mObserverScheduler;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
     public MainPresenter(MainView view, Tron tron, TronNetwork tronNetwork,
-            Scheduler processScheduler, Scheduler observerScheduler) {
+            RxJavaSchedulers rxJavaSchedulers) {
         super(view);
         this.mTron = tron;
         this.mTronNetwork = tronNetwork;
-        this.mProcessScheduler = processScheduler;
-        this.mObserverScheduler = observerScheduler;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     public void setAdapterDataModel(AdapterDataModel<Asset> adapterDataModel) {
@@ -105,8 +99,8 @@ public class MainPresenter extends BasePresenter<MainView> {
                     .frozenList(frozenList)
                     .build();
         }))
-        .subscribeOn(mProcessScheduler)
-        .observeOn(mObserverScheduler)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<TronAccount>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -135,8 +129,8 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void getTronMarketInfo() {
         mTronNetwork.getCoinInfo(Constants.TRON_COINMARKET_NAME)
-        .subscribeOn(mProcessScheduler)
-        .observeOn(mObserverScheduler)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<List<CoinMarketCap>>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -202,8 +196,8 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void importAccount(@NonNull String nickname, @NonNull String privateKey) {
         mTron.importAccount(nickname, privateKey)
-        .subscribeOn(mProcessScheduler)
-        .observeOn(mObserverScheduler)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Integer>() {
             @Override
             public void onSubscribe(Disposable d) {

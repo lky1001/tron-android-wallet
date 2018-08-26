@@ -1,13 +1,12 @@
 package com.devband.tronwalletforandroid.ui.myaccount;
 
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 @Module
 public abstract class MyAccountActivityModule {
@@ -17,7 +16,7 @@ public abstract class MyAccountActivityModule {
 
     @Provides
     static MyAccountPresenter provideMyAccountPresenter(MyAccountView myAccountView, Tron tron,
-            WalletAppManager walletAppManager) {
-        return new MyAccountPresenter(myAccountView, tron, walletAppManager, Schedulers.io(), AndroidSchedulers.mainThread());
+            WalletAppManager walletAppManager, RxJavaSchedulers rxJavaSchedulers) {
+        return new MyAccountPresenter(myAccountView, tron, walletAppManager, rxJavaSchedulers);
     }
 }

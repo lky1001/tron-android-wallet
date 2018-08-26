@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.devband.tronlib.dto.Account;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
@@ -16,7 +17,6 @@ import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
@@ -25,16 +25,14 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
     private Tron mTron;
     private WalletAppManager mWalletAppManager;
-    private Scheduler mProcessScheduler;
-    private Scheduler mObserverScheduler;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
     public MyAccountPresenter(MyAccountView view, Tron tron, WalletAppManager walletAppManager,
-            Scheduler processScheduler, Scheduler observerScheduler) {
+            RxJavaSchedulers rxJavaSchedulers) {
         super(view);
         this.mTron = tron;
         this.mWalletAppManager = walletAppManager;
-        this.mProcessScheduler = processScheduler;
-        this.mObserverScheduler = observerScheduler;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     @Override
@@ -97,8 +95,8 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
                     .frozenList(frozenList)
                     .build();
         }))
-        .subscribeOn(mProcessScheduler)
-        .observeOn(mObserverScheduler)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<TronAccount>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -139,8 +137,8 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         mView.showLoadingDialog();
 
         mTron.freezeBalance(freezeBalance, Constants.FREEZE_DURATION)
-        .subscribeOn(mProcessScheduler)
-        .observeOn(mObserverScheduler)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -166,9 +164,10 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
     public void unfreezeBalance() {
         mView.showLoadingDialog();
+
         mTron.unfreezeBalance()
-        .subscribeOn(mProcessScheduler)
-        .observeOn(mObserverScheduler)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -211,8 +210,8 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
             return false;
         })
-        .subscribeOn(mProcessScheduler)
-        .observeOn(mObserverScheduler)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {
             @Override
             public void onSubscribe(Disposable d) {

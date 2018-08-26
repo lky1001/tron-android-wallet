@@ -1,13 +1,12 @@
 package com.devband.tronwalletforandroid.ui.backupaccount;
 
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 @Module
 public abstract class BackupAccountActivityModule {
@@ -17,8 +16,8 @@ public abstract class BackupAccountActivityModule {
 
     @Provides
     static BackupAccountPresenter provideBackupAccountPresenter(BackupAccountView backupAccountView,
-            Tron tron, WalletAppManager walletAppManager) {
+            Tron tron, WalletAppManager walletAppManager, RxJavaSchedulers rxJavaSchedulers) {
         return new BackupAccountPresenter(backupAccountView, tron, walletAppManager,
-                Schedulers.io(), AndroidSchedulers.mainThread());
+                rxJavaSchedulers);
     }
 }
