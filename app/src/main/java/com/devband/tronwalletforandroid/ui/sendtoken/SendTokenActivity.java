@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
+import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
@@ -35,7 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SendTokenActivity extends TempDaggerAppCompatActivity implements SendTokenView {
+public class SendTokenActivity extends CommonActivity implements SendTokenView {
 
     @Inject
     SendTokenPresenter mSendTokenPresenter;

@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.devband.tronlib.dto.Market;
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
+import com.devband.tronwalletforandroid.common.CommonActivity;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
  * Created by user on 2018. 5. 24..
  */
 
-public class MarketActivity extends TempDaggerAppCompatActivity implements MarketView {
+public class MarketActivity extends CommonActivity implements MarketView {
 
     @Inject
     MarketPresenter mMarketPresenter;

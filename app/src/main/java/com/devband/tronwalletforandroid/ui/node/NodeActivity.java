@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
+import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.ui.node.adapter.NodeListAdapter;
 
 import javax.inject.Inject;
@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NodeActivity extends TempDaggerAppCompatActivity implements NodeView {
+public class NodeActivity extends CommonActivity implements NodeView {
 
     @Inject
     NodePresenter mNodePresenter;

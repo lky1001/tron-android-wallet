@@ -17,9 +17,9 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
+import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
-import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
 import com.devband.tronwalletforandroid.ui.representative.adapter.RepresentativeListAdapter;
 import com.devband.tronwalletforandroid.ui.representative.dto.Representative;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
@@ -30,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RepresentativeActivity extends TempDaggerAppCompatActivity implements RepresentativeView {
+public class RepresentativeActivity extends CommonActivity implements RepresentativeView {
 
     @Inject
     RepresentativePresenter mRepresentativePresenter;

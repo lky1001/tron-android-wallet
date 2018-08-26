@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,14 +19,13 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.intro.IntroActivity;
-import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class CommonActivity extends AppCompatActivity {
+import dagger.android.support.DaggerAppCompatActivity;
 
-    protected BasePresenter mPresenter;
+public class CommonActivity extends DaggerAppCompatActivity {
 
     protected MaterialDialog mMaterialDialog;
 

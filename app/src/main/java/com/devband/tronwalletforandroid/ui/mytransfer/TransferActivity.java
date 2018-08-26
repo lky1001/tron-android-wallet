@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
+import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
 import com.devband.tronwalletforandroid.ui.mytransfer.adapter.TransferAdapter;
 import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
 
@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  * Created by user on 2018. 5. 17..
  */
 
-public class TransferActivity extends TempDaggerAppCompatActivity implements TransferView {
+public class TransferActivity extends CommonActivity implements TransferView {
     private static final int PAGE_SIZE = 25;
 
     @Inject

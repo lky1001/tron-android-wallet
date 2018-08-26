@@ -10,9 +10,8 @@ import android.widget.Toast;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.CustomPreference;
-import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
-import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.Tron;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.main.MainActivity;
 import com.marcoscg.fingerauth.FingerAuth;
 import com.marcoscg.fingerauth.FingerAuthDialog;
@@ -22,10 +21,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
-public class LoginActivity extends TempDaggerAppCompatActivity implements LoginView {
+public class LoginActivity extends CommonActivity implements LoginView {
 
     @Inject
     LoginPresenter mLoginPresenter;

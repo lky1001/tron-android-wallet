@@ -11,7 +11,6 @@ import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
 import com.thefinestartist.finestwebview.FinestWebView;
 
 import java.util.Date;
@@ -28,7 +27,7 @@ import io.reactivex.schedulers.Schedulers;
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 
-public class AboutActivity extends TempDaggerAppCompatActivity {
+public class AboutActivity extends CommonActivity {
 
     @Inject
     TronNetwork mTronNetwork;

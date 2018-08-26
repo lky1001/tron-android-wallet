@@ -6,14 +6,13 @@ import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
-import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
 import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivity;
 import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 
 import javax.inject.Inject;
 
-public class IntroActivity extends TempDaggerAppCompatActivity implements IntroView {
+public class IntroActivity extends CommonActivity implements IntroView {
 
     @Inject
     IntroPresenter mIntroPresenter;

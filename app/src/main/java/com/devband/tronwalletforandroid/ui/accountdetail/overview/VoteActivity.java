@@ -45,6 +45,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
     private boolean mIsLoading;
 
     private boolean mIsLastPage;
+    private VotePresenter mPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,10 +70,10 @@ public class VoteActivity extends CommonActivity implements VoteView {
         }
 
         mPresenter = new VotePresenter(this);
-        ((VotePresenter) mPresenter).setAdapterDataModel(mAdapter);
+        mPresenter.setAdapterDataModel(mAdapter);
         mPresenter.onCreate();
 
-        ((VotePresenter) mPresenter).getVotes(mAddress, mStartIndex, PAGE_SIZE);
+        mPresenter.getVotes(mAddress, mStartIndex, PAGE_SIZE);
     }
 
     private void initUi() {
@@ -106,7 +107,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    ((VotePresenter) mPresenter).getVotes(mAddress, mStartIndex, PAGE_SIZE);
+                    mPresenter.getVotes(mAddress, mStartIndex, PAGE_SIZE);
                 }
             }
         }

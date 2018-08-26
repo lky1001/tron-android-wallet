@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
+import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.main.MainActivity;
 
@@ -22,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ImportPrivateKeyActivity extends TempDaggerAppCompatActivity implements ImportPrivateKeyView {
+public class ImportPrivateKeyActivity extends CommonActivity implements ImportPrivateKeyView {
 
     @Inject
     ImportPrivateKeyPresenter mImportPrivateKeyPresenter;

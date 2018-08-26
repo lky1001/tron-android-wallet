@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
+import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.ui.main.MainActivity;
 
 import javax.inject.Inject;
@@ -20,7 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class BackupAccountActivity extends TempDaggerAppCompatActivity implements BackupAccountView {
+public class BackupAccountActivity extends CommonActivity implements BackupAccountView {
 
     @Inject
     BackupAccountPresenter mBackupAccountPresenter;
