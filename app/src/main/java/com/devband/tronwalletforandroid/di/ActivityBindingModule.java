@@ -43,6 +43,7 @@ import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
 import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivityModule;
 import com.devband.tronwalletforandroid.ui.token.TokenActivity;
 import com.devband.tronwalletforandroid.ui.token.TokenActivityModule;
+import com.devband.tronwalletforandroid.ui.token.TokenDetailActivity;
 import com.devband.tronwalletforandroid.ui.vote.VoteActivity;
 import com.devband.tronwalletforandroid.ui.vote.VoteActivityModule;
 
@@ -155,4 +156,8 @@ public abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector
     abstract RequestCoinActivity bindRequestCoinActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector
+    abstract TokenDetailActivity bindTokenDetailActivity();
 }
