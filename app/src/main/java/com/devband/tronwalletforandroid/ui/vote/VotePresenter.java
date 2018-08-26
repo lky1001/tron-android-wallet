@@ -6,9 +6,10 @@ import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Representative;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.tron.WalletAppManager;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.tron.Tron;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 import com.devband.tronwalletforandroid.ui.vote.dto.VoteItem;
 import com.devband.tronwalletforandroid.ui.vote.dto.VoteItemList;
@@ -24,9 +25,7 @@ import java.util.Map;
 
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class VotePresenter extends BasePresenter<VoteView> {
 
@@ -35,9 +34,18 @@ public class VotePresenter extends BasePresenter<VoteView> {
     private List<VoteItem> mAllVotes;
 
     private List<VoteItem> mMyVotes;
+    private Tron mTron;
+    private TronNetwork mTronNetwork;
+    private WalletAppManager mWalletAppManager;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
-    public VotePresenter(VoteView view) {
+    public VotePresenter(VoteView view, Tron tron, TronNetwork tronNetwork, WalletAppManager walletAppManager,
+            RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTron = tron;
+        this.mTronNetwork = tronNetwork;
+        this.mWalletAppManager = walletAppManager;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     public void setAdapterDataModel(AdapterDataModel<VoteItem> adapterDataModel) {
@@ -67,7 +75,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
     public void getRepresentativeList(boolean isMyVotes) {
         mView.showLoadingDialog();
 
-        TronNetwork.getInstance().getVoteCurrentCycle()
+        mTronNetwork.getVoteCurrentCycle()
         .map(votes -> {
             List<VoteItem> representatives = new ArrayList<>();
 
@@ -75,7 +83,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
 
             long totalMyVotes = 0;
 
-            Protocol.Account myAccount = Tron.getInstance(mContext).queryAccount(Tron.getInstance(mContext).getLoginAddress()).blockingGet();
+            Protocol.Account myAccount = mTron.queryAccount(mTron.getLoginAddress()).blockingGet();
 
             for (int i = 0; i < cnt; i++) {
                 Representative representative = votes.getVotesList().get(i);
@@ -137,8 +145,8 @@ public class VotePresenter extends BasePresenter<VoteView> {
                     .myVotePoint(myVotePoint)
                     .build();
         })
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<VoteItemList>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -172,7 +180,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
     }
 
     public boolean matchPassword(@NonNull String password) {
-        return WalletAppManager.getInstance(mContext).login(password) == WalletAppManager.SUCCESS;
+        return mWalletAppManager.login(password) == WalletAppManager.SUCCESS;
     }
 
     public void voteRepresentative(String address, long vote, boolean includeOtherVotes) {
@@ -203,10 +211,10 @@ public class VotePresenter extends BasePresenter<VoteView> {
                 throw new IllegalStateException();
             }
 
-            return Tron.getInstance(mContext).voteWitness(witness).blockingGet();
+            return mTron.voteWitness(witness).blockingGet();
         })
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {
             @Override
             public void onSubscribe(Disposable d) {

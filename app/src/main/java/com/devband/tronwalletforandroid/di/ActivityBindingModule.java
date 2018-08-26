@@ -1,6 +1,8 @@
 package com.devband.tronwalletforandroid.di;
 
 import com.devband.tronwalletforandroid.ui.about.AboutActivity;
+import com.devband.tronwalletforandroid.ui.address.AddressActivity;
+import com.devband.tronwalletforandroid.ui.address.AddressActivityModule;
 import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivity;
 import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivityModule;
 import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
@@ -27,6 +29,8 @@ import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivityModule;
 import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
 import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivityModule;
+import com.devband.tronwalletforandroid.ui.vote.VoteActivity;
+import com.devband.tronwalletforandroid.ui.vote.VoteActivityModule;
 
 import dagger.Module;
 import dagger.android.AndroidInjectionModule;
@@ -46,6 +50,10 @@ public abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector
     abstract AboutActivity bindAboutActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = { AddressActivityModule.class })
+    abstract AddressActivity bindAddressActivity();
 
     @ActivityScoped
     @ContributesAndroidInjector(modules = { BackupAccountActivityModule.class })
@@ -90,4 +98,8 @@ public abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = { SendTokenActivityModule.class })
     abstract SendTokenActivity bindSendTokenActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = { VoteActivityModule.class })
+    abstract VoteActivity bindVoteActivity();
 }
