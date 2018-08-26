@@ -3,29 +3,31 @@ package com.devband.tronwalletforandroid.ui.accountdetail.transaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.devband.tronlib.dto.Transaction;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
-import com.devband.tronwalletforandroid.common.BaseFragment;
-import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.common.CommonFragment;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 import com.devband.tronwalletforandroid.ui.accountdetail.adapter.AccountTransactionAdapter;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TransactionFragment extends BaseFragment implements TransactionView {
+public class TransactionFragment extends CommonFragment implements TransactionView {
 
+    @Inject
+    TransactionPresenter mTransactionPresenter;
+    
     private String mAddress;
     private long mBlock;
 
@@ -47,7 +49,7 @@ public class TransactionFragment extends BaseFragment implements TransactionView
 
     private boolean mIsLastPage;
 
-    public static BaseFragment newInstance(@NonNull String address) {
+    public static Fragment newInstance(@NonNull String address) {
         TransactionFragment fragment = new TransactionFragment();
         Bundle args = new Bundle(1);
         args.putString(AccountDetailActivity.EXTRA_ADDRESS, address);
@@ -56,7 +58,7 @@ public class TransactionFragment extends BaseFragment implements TransactionView
         return fragment;
     }
 
-    public static BaseFragment newInstance(@NonNull long block) {
+    public static Fragment newInstance(@NonNull long block) {
         TransactionFragment fragment = new TransactionFragment();
         Bundle args = new Bundle(1);
         args.putLong(AccountDetailActivity.EXTRA_BLOCK, block);
@@ -75,9 +77,8 @@ public class TransactionFragment extends BaseFragment implements TransactionView
         mAddress = getArguments().getString(AccountDetailActivity.EXTRA_ADDRESS);
         mBlock = getArguments().getLong(AccountDetailActivity.EXTRA_BLOCK, 0L);
 
-        mPresenter = new TransactionPresenter(this);
-        ((TransactionPresenter) mPresenter).setAdapterDataModel(mAdapter);
-        mPresenter.onCreate();
+        mTransactionPresenter.setAdapterDataModel(mAdapter);
+        mTransactionPresenter.onCreate();
 
         return view;
     }
@@ -115,9 +116,9 @@ public class TransactionFragment extends BaseFragment implements TransactionView
                     mIsLoading = true;
 
                     if (mBlock > 0L) {
-                        ((TransactionPresenter) mPresenter).getTransactions(mBlock, mStartIndex, PAGE_SIZE);
+                        mTransactionPresenter.getTransactions(mBlock, mStartIndex, PAGE_SIZE);
                     } else {
-                        ((TransactionPresenter) mPresenter).getTransactions(mAddress, mStartIndex, PAGE_SIZE);
+                        mTransactionPresenter.getTransactions(mAddress, mStartIndex, PAGE_SIZE);
                     }
                 }
             }
@@ -137,9 +138,9 @@ public class TransactionFragment extends BaseFragment implements TransactionView
     protected void refresh() {
         if (!mIsLastPage && isAdded()) {
             if (mBlock > 0L) {
-                ((TransactionPresenter) mPresenter).getTransactions(mBlock, mStartIndex, PAGE_SIZE);
+                mTransactionPresenter.getTransactions(mBlock, mStartIndex, PAGE_SIZE);
             } else {
-                ((TransactionPresenter) mPresenter).getTransactions(mAddress, mStartIndex, PAGE_SIZE);
+                mTransactionPresenter.getTransactions(mAddress, mStartIndex, PAGE_SIZE);
             }
         }
     }

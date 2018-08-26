@@ -1,10 +1,17 @@
 package com.devband.tronwalletforandroid.di;
 
 import com.devband.tronwalletforandroid.ui.about.AboutActivity;
+import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
+import com.devband.tronwalletforandroid.ui.accountdetail.overview.OverviewModule;
+import com.devband.tronwalletforandroid.ui.accountdetail.representative.RepresentativeModule;
+import com.devband.tronwalletforandroid.ui.accountdetail.transaction.TransactionModule;
+import com.devband.tronwalletforandroid.ui.accountdetail.transfer.TransferModule;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.address.AddressActivityModule;
 import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivity;
 import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivityModule;
+import com.devband.tronwalletforandroid.ui.blockdetail.BlockDetailActivity;
+import com.devband.tronwalletforandroid.ui.blockexplorer.BlockExplorerActivity;
 import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
 import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivityModule;
 import com.devband.tronwalletforandroid.ui.importkey.ImportPrivateKeyActivity;
@@ -25,8 +32,10 @@ import com.devband.tronwalletforandroid.ui.mytransfer.MyTransferActivityModule;
 import com.devband.tronwalletforandroid.ui.mytransfer.TransferActivity;
 import com.devband.tronwalletforandroid.ui.node.NodeActivity;
 import com.devband.tronwalletforandroid.ui.node.NodeActivityModule;
+import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivityModule;
+import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
 import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
 import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivityModule;
 import com.devband.tronwalletforandroid.ui.token.TokenActivity;
@@ -108,4 +117,29 @@ public abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = { VoteActivityModule.class })
     abstract VoteActivity bindVoteActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = {
+            OverviewModule.class,
+            TransactionModule.class,
+            TransferModule.class,
+            RepresentativeModule.class
+    })
+    abstract AccountDetailActivity bindAccountDetailActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector
+    abstract BlockExplorerActivity bindBlockExplorerActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector
+    abstract BlockDetailActivity bindBlockDetailActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector
+    abstract QrScanActivity bindQrScanActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector
+    abstract RequestCoinActivity bindRequestCoinActivity();
 }

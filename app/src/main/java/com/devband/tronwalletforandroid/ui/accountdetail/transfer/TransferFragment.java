@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.ui.accountdetail.transfer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +15,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
-import com.devband.tronwalletforandroid.common.BaseFragment;
+import com.devband.tronwalletforandroid.common.CommonFragment;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
@@ -23,11 +24,16 @@ import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
 
 import java.util.Date;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TransferFragment extends BaseFragment implements TransferView {
+public class TransferFragment extends CommonFragment implements TransferView {
 
+    @Inject
+    TransferPresenter mTransferPresenter;
+    
     private String mAddress;
 
     private static final int PAGE_SIZE = 25;
@@ -48,7 +54,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
     private boolean mIsLastPage;
 
-    public static BaseFragment newInstance(@NonNull String address) {
+    public static Fragment newInstance(@NonNull String address) {
         TransferFragment fragment = new TransferFragment();
         Bundle args = new Bundle(1);
         args.putString(AccountDetailActivity.EXTRA_ADDRESS, address);
@@ -66,9 +72,8 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
         mAddress = getArguments().getString(AccountDetailActivity.EXTRA_ADDRESS);
 
-        mPresenter = new TransferPresenter(this);
-        ((TransferPresenter) mPresenter).setAdapterDataModel(mAdapter);
-        mPresenter.onCreate();
+        mTransferPresenter.setAdapterDataModel(mAdapter);
+        mTransferPresenter.onCreate();
 
         return view;
     }
@@ -104,7 +109,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    ((TransferPresenter) mPresenter).getTransfers(mAddress, mStartIndex, PAGE_SIZE);
+                    mTransferPresenter.getTransfers(mAddress, mStartIndex, PAGE_SIZE);
                 }
             }
         }
@@ -156,7 +161,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
     @Override
     protected void refresh() {
         if (!mIsLastPage && isAdded()) {
-            ((TransferPresenter) mPresenter).getTransfers(mAddress, mStartIndex, PAGE_SIZE);
+            mTransferPresenter.getTransfers(mAddress, mStartIndex, PAGE_SIZE);
         }
     }
 

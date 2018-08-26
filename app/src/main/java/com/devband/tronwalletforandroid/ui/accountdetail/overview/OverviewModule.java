@@ -9,6 +9,6 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class OverviewModule {
 
     @FragmentScoped
-    @ContributesAndroidInjector(modules = {.class})
+    @ContributesAndroidInjector(modules = {OverviewFragmentModule.class})
     public abstract OverviewFragment contributeOverviewFragment();
 }

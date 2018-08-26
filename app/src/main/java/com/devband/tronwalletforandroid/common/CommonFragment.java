@@ -13,7 +13,7 @@ import dagger.android.support.DaggerFragment;
  * Created by user on 2018. 5. 25..
  */
 
-public abstract class TempBaseFragment extends DaggerFragment {
+public abstract class CommonFragment extends DaggerFragment {
 
     protected MaterialDialog mMaterialDialog;
 

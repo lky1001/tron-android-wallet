@@ -4,18 +4,22 @@ import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Transaction;
 import com.devband.tronlib.dto.Transactions;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 public class TransactionPresenter extends BasePresenter<TransactionView> {
 
     private AdapterDataModel<Transaction> mAdapterDataModel;
+    private TronNetwork mTronNetwork;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
-    public TransactionPresenter(TransactionView view) {
+    public TransactionPresenter(TransactionView view, TronNetwork tronNetwork, RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTronNetwork = tronNetwork;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     public void setAdapterDataModel(AdapterDataModel<Transaction> adapterDataModel) {
@@ -44,48 +48,50 @@ public class TransactionPresenter extends BasePresenter<TransactionView> {
 
     public void getTransactions(long block, long startIndex, int pageSize) {
         mView.showLoadingDialog();
-        TronNetwork.getInstance().getTransactions(block, startIndex, pageSize, "-timestamp", true)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Transactions>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        mTronNetwork.getTransactions(block, startIndex, pageSize, "-timestamp", true)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
+        .subscribe(new SingleObserver<Transactions>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
-                    }
+            }
 
-                    @Override
-                    public void onSuccess(Transactions transactions) {
-                        mAdapterDataModel.addAll(transactions.getData());
-                        mView.finishLoading(transactions.getTotal());
-                    }
+            @Override
+            public void onSuccess(Transactions transactions) {
+                mAdapterDataModel.addAll(transactions.getData());
+                mView.finishLoading(transactions.getTotal());
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.showServerError();
-                    }
-                });
+            @Override
+            public void onError(Throwable e) {
+                mView.showServerError();
+            }
+        });
     }
 
     public void getTransactions(String address, long startIndex, int pageSize) {
         mView.showLoadingDialog();
 
-        TronNetwork.getInstance().getTransactions(address, startIndex, pageSize, "-timestamp", true)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Transactions>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        mTronNetwork.getTransactions(address, startIndex, pageSize, "-timestamp", true)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
+        .subscribe(new SingleObserver<Transactions>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
-                    }
+            }
 
-                    @Override
-                    public void onSuccess(Transactions transactions) {
-                        mAdapterDataModel.addAll(transactions.getData());
-                        mView.finishLoading(transactions.getTotal());
-                    }
+            @Override
+            public void onSuccess(Transactions transactions) {
+                mAdapterDataModel.addAll(transactions.getData());
+                mView.finishLoading(transactions.getTotal());
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.showServerError();
-                    }
-                });
+            @Override
+            public void onError(Throwable e) {
+                mView.showServerError();
+            }
+        });
     }
 }

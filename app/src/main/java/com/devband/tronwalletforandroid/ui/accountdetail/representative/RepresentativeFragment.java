@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.ui.accountdetail.representative;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,16 +12,21 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.BaseFragment;
+import com.devband.tronwalletforandroid.common.CommonFragment;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 import com.devband.tronwalletforandroid.ui.accountdetail.representative.model.BaseModel;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RepresentativeFragment extends BaseFragment implements RepresentativeView {
+public class RepresentativeFragment extends CommonFragment implements RepresentativeView {
+
+    @Inject
+    RepresentativePresenter mRepresentativePresenter;
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -29,7 +35,7 @@ public class RepresentativeFragment extends BaseFragment implements Representati
 
     private String mAddress;
 
-    public static BaseFragment newInstance(@NonNull String address) {
+    public static Fragment newInstance(@NonNull String address) {
         RepresentativeFragment fragment = new RepresentativeFragment();
         Bundle args = new Bundle(1);
         args.putString(AccountDetailActivity.EXTRA_ADDRESS, address);
@@ -47,7 +53,6 @@ public class RepresentativeFragment extends BaseFragment implements Representati
 
         mAddress = getArguments().getString(AccountDetailActivity.EXTRA_ADDRESS);
 
-        mPresenter = new RepresentativePresenter(this);
         return view;
     }
 
@@ -65,7 +70,7 @@ public class RepresentativeFragment extends BaseFragment implements Representati
     @Override
     protected void refresh() {
         if (isAdded()) {
-            ((RepresentativePresenter) mPresenter).loadData(mAddress);
+            mRepresentativePresenter.loadData(mAddress);
         }
     }
 
