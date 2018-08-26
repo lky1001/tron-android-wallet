@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
@@ -29,11 +29,16 @@ import org.tron.protos.Protocol;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SendTokenActivity extends CommonActivity implements SendTokenView {
+public class SendTokenActivity extends TempDaggerAppCompatActivity implements SendTokenView {
+
+    @Inject
+    SendTokenPresenter mSendTokenPresenter;
 
     private static final int CAMERA_PERMISSION_REQ = 9929;
     public static final int QR_SCAN_ADDRESS = 3321;
@@ -99,15 +104,14 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
             mQrCodeScanBtn.setVisibility(View.GONE);
         }
 
-        mPresenter = new SendTokenPresenter(this);
-        mPresenter.onCreate();
+        mSendTokenPresenter.onCreate();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         showProgressDialog(null, getString(R.string.loading_msg));
-        mPresenter.onResume();
+        mSendTokenPresenter.onResume();
     }
 
     @OnClick(R.id.btn_send_trx)
@@ -167,10 +171,10 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                         long amount = (long) (finalAmountDouble * Constants.ONE_TRX);
 
                         showProgressDialog(null, getString(R.string.loading_msg));
-                        ((SendTokenPresenter) mPresenter).sendTron(password, address, amount);
+                        mSendTokenPresenter.sendTron(password, address, amount);
                     } else {
                         showProgressDialog(null, getString(R.string.loading_msg));
-                        ((SendTokenPresenter) mPresenter).transferAsset(password, address, mSelectedAsset.getName(), (long) finalAmountDouble);
+                        mSendTokenPresenter.transferAsset(password, address, mSelectedAsset.getName(), (long) finalAmountDouble);
                     }
                 }).show();
     }

@@ -5,6 +5,8 @@ import android.content.Context;
 
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronwalletforandroid.di.ApplicationContext;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulersImpl;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 
@@ -37,5 +39,11 @@ public abstract class AppModule {
     @Singleton
     static WalletAppManager provideWalletAppManager(@ApplicationContext Context context) {
         return WalletAppManager.getInstance(context);
+    }
+
+    @Provides
+    @Singleton
+    static RxJavaSchedulers provideRxJavaSchedulers() {
+        return new RxJavaSchedulersImpl();
     }
 }

@@ -25,6 +25,8 @@ import com.devband.tronwalletforandroid.ui.node.NodeActivity;
 import com.devband.tronwalletforandroid.ui.node.NodeActivityModule;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivityModule;
+import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
+import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivityModule;
 
 import dagger.Module;
 import dagger.android.AndroidInjectionModule;
@@ -84,4 +86,8 @@ public abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = { RepresentativeActivityModule.class })
     abstract RepresentativeActivity bindRepresentativeActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = { SendTokenActivityModule.class })
+    abstract SendTokenActivity bindSendTokenActivity();
 }
