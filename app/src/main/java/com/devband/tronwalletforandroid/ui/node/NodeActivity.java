@@ -13,14 +13,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.TempDaggerAppCompatActivity;
 import com.devband.tronwalletforandroid.ui.node.adapter.NodeListAdapter;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NodeActivity extends CommonActivity implements NodeView {
+public class NodeActivity extends TempDaggerAppCompatActivity implements NodeView {
 
+    @Inject
+    NodePresenter mNodePresenter;
+    
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.toolbar_layout)
@@ -88,15 +93,14 @@ public class NodeActivity extends CommonActivity implements NodeView {
         });
 
 
-        mPresenter = new NodePresenter(this);
-        ((NodePresenter) mPresenter).setAdapterDataModel(nodeListAdapter);
+        mNodePresenter.setAdapterDataModel(nodeListAdapter);
 
         initNodeList();
     }
 
     private void initNodeList() {
         showProgressDialog(null, getString(R.string.loading_msg));
-        ((NodePresenter) mPresenter).getTronNodeList();
+        mNodePresenter.getTronNodeList();
     }
 
     @Override

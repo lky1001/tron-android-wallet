@@ -6,17 +6,22 @@ import com.devband.tronwalletforandroid.ui.node.adapter.AdapterImmutableDataMode
 
 import org.tron.api.GrpcAPI;
 
+import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class NodePresenter extends BasePresenter<NodeView> {
 
     private AdapterImmutableDataModel<GrpcAPI.NodeList,GrpcAPI.Node> adapterDataModel;
+    private Tron mTron;
+    private Scheduler mProcessScheduler;
+    private Scheduler mObserverScheduler;
 
-    public NodePresenter(NodeView view) {
+    public NodePresenter(NodeView view, Tron tron, Scheduler processScheduler, Scheduler observerScheduler) {
         super(view);
+        this.mTron = tron;
+        this.mProcessScheduler = processScheduler;
+        this.mObserverScheduler = observerScheduler;
     }
 
     @Override
@@ -45,26 +50,26 @@ public class NodePresenter extends BasePresenter<NodeView> {
 
 
     public void getTronNodeList(){
-        Tron.getInstance(mContext).getNodeList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<GrpcAPI.NodeList>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        mTron.getNodeList()
+        .subscribeOn(mProcessScheduler)
+        .observeOn(mObserverScheduler)
+        .subscribe(new SingleObserver<GrpcAPI.NodeList>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
-                    }
+            }
 
-                    @Override
-                    public void onSuccess(GrpcAPI.NodeList nodeList) {
-                        adapterDataModel.setModelList(nodeList);
-                        mView.displayNodeList(nodeList.getNodesCount());
-                    }
+            @Override
+            public void onSuccess(GrpcAPI.NodeList nodeList) {
+                adapterDataModel.setModelList(nodeList);
+                mView.displayNodeList(nodeList.getNodesCount());
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.errorNodeList();
-                        adapterDataModel.clear();
-                    }
-                });
+            @Override
+            public void onError(Throwable e) {
+                mView.errorNodeList();
+                adapterDataModel.clear();
+            }
+        });
     }
 }
