@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.ui.blockexplorer.account;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,9 +13,11 @@ import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
-import com.devband.tronwalletforandroid.common.BaseFragment;
+import com.devband.tronwalletforandroid.common.CommonFragment;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.blockexplorer.adapter.TronAccountAdapter;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,10 +26,13 @@ import butterknife.ButterKnife;
  * Created by user on 2018. 5. 24..
  */
 
-public class AccountFragment extends BaseFragment implements AccountView {
+public class AccountFragment extends CommonFragment implements AccountView {
 
     private static final int PAGE_SIZE = 25;
 
+    @Inject
+    AccountPresenter mAccountPresenter;
+    
     @BindView(R.id.recycler_view)
     RecyclerView mAccountListView;
 
@@ -40,7 +46,7 @@ public class AccountFragment extends BaseFragment implements AccountView {
 
     private boolean mIsLastPage;
 
-    public static BaseFragment newInstance() {
+    public static Fragment newInstance() {
         AccountFragment fragment = new AccountFragment();
         return fragment;
     }
@@ -52,9 +58,8 @@ public class AccountFragment extends BaseFragment implements AccountView {
         ButterKnife.bind(this, view);
         initUi();
 
-        mPresenter = new AccountPresenter(this);
-        ((AccountPresenter) mPresenter).setAdapterDataModel(mTronAccountAdapter);
-        mPresenter.onCreate();
+        mAccountPresenter.setAdapterDataModel(mTronAccountAdapter);
+        mAccountPresenter.onCreate();
 
         return view;
     }
@@ -90,7 +95,7 @@ public class AccountFragment extends BaseFragment implements AccountView {
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    ((AccountPresenter) mPresenter).getTronAccounts(mStartIndex, PAGE_SIZE);
+                    mAccountPresenter.getTronAccounts(mStartIndex, PAGE_SIZE);
                 }
             }
         }
@@ -106,7 +111,7 @@ public class AccountFragment extends BaseFragment implements AccountView {
     @Override
     protected void refresh() {
         if (!mIsLastPage && isAdded()) {
-            ((AccountPresenter) mPresenter).getTronAccounts(mStartIndex, PAGE_SIZE);
+            mAccountPresenter.getTronAccounts(mStartIndex, PAGE_SIZE);
         }
     }
 

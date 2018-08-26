@@ -3,10 +3,10 @@ package com.devband.tronwalletforandroid.ui.blockexplorer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.ui.blockexplorer.account.AccountFragment;
 import com.devband.tronwalletforandroid.ui.blockexplorer.block.BlockFragment;
@@ -38,7 +38,7 @@ public class BlockExplorerActivity extends CommonActivity {
     @BindView(R.id.navigation)
     BottomNavigationView mBottomNavigationView;
 
-    private List<BaseFragment> mFragments = new ArrayList<>();
+    private List<Fragment> mFragments = new ArrayList<>();
 
     private BottomNavigationView.OnNavigationItemSelectedListener
             mOnNavigationItemSelectedListener = (item) -> {

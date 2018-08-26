@@ -6,18 +6,22 @@ import com.devband.tronlib.dto.TronAccount;
 import com.devband.tronlib.dto.TronAccounts;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 public class AccountPresenter extends BasePresenter<AccountView> {
 
     private AdapterDataModel<TronAccount> mAdapterDataModel;
+    private TronNetwork mTronNetwork;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
-    public AccountPresenter(AccountView view) {
+    public AccountPresenter(AccountView view, TronNetwork tronNetwork, RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTronNetwork = tronNetwork;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     public void setAdapterDataModel(AdapterDataModel<TronAccount> adapterDataModel) {
@@ -47,7 +51,7 @@ public class AccountPresenter extends BasePresenter<AccountView> {
     public void getTronAccounts(long startIndex, int pageSize) {
         mView.showLoadingDialog();
 
-        TronNetwork.getInstance()
+        mTronNetwork
                 .getAccounts(startIndex, pageSize, "-balance")
                 .map(tronAccounts -> {
                     CoinMarketCap coinMarketCap = TronNetwork.getInstance().getCoinInfo(Constants.TRON_COINMARKET_NAME).blockingGet().get(0);
@@ -60,7 +64,8 @@ public class AccountPresenter extends BasePresenter<AccountView> {
 
                     return tronAccounts;
                 })
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(mRxJavaSchedulers.getIo())
+                .observeOn(mRxJavaSchedulers.getMainThread())
                 .subscribe(new SingleObserver<TronAccounts>() {
                     @Override
                     public void onSubscribe(Disposable d) {

@@ -3,10 +3,8 @@ package com.devband.tronwalletforandroid.ui.blockexplorer.block;
 import android.util.Log;
 
 import com.devband.tronlib.TronNetwork;
-import com.devband.tronlib.dto.Blocks;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by user on 2018. 5. 25..
@@ -17,9 +15,13 @@ public class BlockPresenter extends BasePresenter<BlockView> {
     private static final int DEFAULT_LIMIT = 15;
     private int mLimit = DEFAULT_LIMIT;
     private int mStart = 0;
+    private TronNetwork mTronNetwork;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
-    public BlockPresenter(BlockView view) {
+    public BlockPresenter(BlockView view, TronNetwork tronNetwork, RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTronNetwork = tronNetwork;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     @Override
@@ -45,8 +47,9 @@ public class BlockPresenter extends BasePresenter<BlockView> {
     public void loadBlockData() {
         mView.showLoadingDialog();
 
-        TronNetwork.getInstance().getBlocks(mLimit, mStart)
-                .observeOn(AndroidSchedulers.mainThread())
+        mTronNetwork.getBlocks(mLimit, mStart)
+                .subscribeOn(mRxJavaSchedulers.getIo())
+                .observeOn(mRxJavaSchedulers.getMainThread())
                 .subscribe(
                         blocks -> {
                             mView.blockDataLoadSuccess(blocks, mStart != 0);

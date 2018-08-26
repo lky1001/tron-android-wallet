@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,9 +15,11 @@ import android.widget.Toast;
 import com.devband.tronlib.dto.Block;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.BaseFragment;
-import com.devband.tronwalletforandroid.ui.blockexplorer.adapter.BlockAdapter;
+import com.devband.tronwalletforandroid.common.CommonFragment;
 import com.devband.tronwalletforandroid.ui.blockdetail.BlockDetailActivity;
+import com.devband.tronwalletforandroid.ui.blockexplorer.adapter.BlockAdapter;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +28,10 @@ import butterknife.ButterKnife;
  * Created by user on 2018. 5. 24..
  */
 
-public class BlockFragment extends BaseFragment implements BlockView {
+public class BlockFragment extends CommonFragment implements BlockView {
+
+    @Inject
+    BlockPresenter mBlockPresenter;
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -53,7 +59,7 @@ public class BlockFragment extends BaseFragment implements BlockView {
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mDataLoading = true;
-                    ((BlockPresenter) mPresenter).loadBlockData();
+                    mBlockPresenter.loadBlockData();
                 }
             }
         }
@@ -69,7 +75,7 @@ public class BlockFragment extends BaseFragment implements BlockView {
         }
     };
 
-    public static BaseFragment newInstance() {
+    public static Fragment newInstance() {
         BlockFragment fragment = new BlockFragment();
         return fragment;
     }
@@ -80,7 +86,7 @@ public class BlockFragment extends BaseFragment implements BlockView {
         View view = inflater.inflate(R.layout.fragment_block, container, false);
         ButterKnife.bind(this, view);
         initUi();
-        mPresenter = new BlockPresenter(this);
+
         return view;
     }
 
@@ -96,7 +102,7 @@ public class BlockFragment extends BaseFragment implements BlockView {
     @Override
     protected void refresh() {
         if (isAdded()) {
-            ((BlockPresenter) mPresenter).loadBlockData();
+            mBlockPresenter.loadBlockData();
         }
     }
 

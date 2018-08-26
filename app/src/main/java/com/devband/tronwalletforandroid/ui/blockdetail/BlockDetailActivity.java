@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
  * Created by user on 2018. 5. 28..
  */
 
-public class BlockDetailActivity extends CommonActivity implements DetailBlockView {
+public class BlockDetailActivity extends CommonActivity {
 
     public static final String EXTRA_BLOCK_NUMBER = "extra_block_number";
 

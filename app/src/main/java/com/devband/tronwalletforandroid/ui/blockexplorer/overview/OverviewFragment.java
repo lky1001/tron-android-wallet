@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
@@ -24,7 +25,7 @@ import com.devband.tronlib.dto.SystemStatus;
 import com.devband.tronlib.dto.TopAddressAccount;
 import com.devband.tronlib.dto.TopAddressAccounts;
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.BaseFragment;
+import com.devband.tronwalletforandroid.common.CommonFragment;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -49,6 +50,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -56,7 +59,10 @@ import butterknife.ButterKnife;
  * Created by user on 2018. 5. 25..
  */
 
-public class OverviewFragment extends BaseFragment implements OverviewView {
+public class OverviewFragment extends CommonFragment implements OverviewView {
+
+    @Inject
+    OverviewPresenter mOverviewPresenter;
 
     @BindView(R.id.appbar_layout)
     public AppBarLayout mAppBarLayout;
@@ -87,7 +93,7 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
     private RichListAdapter mRichListAdapter;
 
-    public static BaseFragment newInstance() {
+    public static Fragment newInstance() {
         OverviewFragment fragment = new OverviewFragment();
         return fragment;
     }
@@ -98,7 +104,6 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
         ButterKnife.bind(this, view);
         initUi();
-        mPresenter = new OverviewPresenter(this);
 
         refresh();
         return view;
@@ -230,8 +235,8 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
     @Override
     protected void refresh() {
         if (isAdded()) {
-            ((OverviewPresenter) mPresenter).chartDataLoad();
-            ((OverviewPresenter) mPresenter).richListDataLoad();
+            mOverviewPresenter.chartDataLoad();
+            mOverviewPresenter.richListDataLoad();
         }
     }
 
