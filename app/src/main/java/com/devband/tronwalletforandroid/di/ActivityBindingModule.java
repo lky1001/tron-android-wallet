@@ -11,6 +11,7 @@ import com.devband.tronwalletforandroid.ui.address.AddressActivityModule;
 import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivity;
 import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivityModule;
 import com.devband.tronwalletforandroid.ui.blockdetail.BlockDetailActivity;
+import com.devband.tronwalletforandroid.ui.blockdetail.fragment.BlockInfoModule;
 import com.devband.tronwalletforandroid.ui.blockexplorer.BlockExplorerActivity;
 import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
 import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivityModule;
@@ -132,7 +133,11 @@ public abstract class ActivityBindingModule {
     abstract BlockExplorerActivity bindBlockExplorerActivity();
 
     @ActivityScoped
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = {
+            BlockInfoModule.class,
+            TransactionModule.class,
+            TransferModule.class
+    })
     abstract BlockDetailActivity bindBlockDetailActivity();
 
     @ActivityScoped

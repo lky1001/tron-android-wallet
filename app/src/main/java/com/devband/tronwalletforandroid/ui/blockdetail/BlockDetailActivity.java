@@ -10,7 +10,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.accountdetail.transaction.TransactionFragment;
-import com.devband.tronwalletforandroid.ui.blockdetail.fragment.BlockOverviewFragment;
+import com.devband.tronwalletforandroid.ui.blockdetail.fragment.BlockInfoFragment;
 import com.devband.tronwalletforandroid.ui.blockexplorer.transfer.TransferFragment;
 
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class BlockDetailActivity extends CommonActivity implements DetailBlockVi
     };
 
     private void initUi() {
-        mFragments.add(BlockOverviewFragment.newInstance(mBlockNumber));
+        mFragments.add(BlockInfoFragment.newInstance(mBlockNumber));
         mFragments.add(TransactionFragment.newInstance(mBlockNumber));
         mFragments.add(TransferFragment.newInstance(mBlockNumber));
 
