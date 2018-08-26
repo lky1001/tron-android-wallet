@@ -77,7 +77,7 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
                         .build());
             }
 
-            TransactionStats transactionStats = TronNetwork.getInstance().getTransactionStats(address).blockingGet();
+            TransactionStats transactionStats = mTronNetwork.getTransactionStats(address).blockingGet();
 
             return TronAccount.builder()
                     .balance(account.getBalance())
