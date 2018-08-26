@@ -23,6 +23,8 @@ import com.devband.tronwalletforandroid.ui.mytransfer.MyTransferActivityModule;
 import com.devband.tronwalletforandroid.ui.mytransfer.TransferActivity;
 import com.devband.tronwalletforandroid.ui.node.NodeActivity;
 import com.devband.tronwalletforandroid.ui.node.NodeActivityModule;
+import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity;
+import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivityModule;
 
 import dagger.Module;
 import dagger.android.AndroidInjectionModule;
@@ -78,4 +80,8 @@ public abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = { NodeActivityModule.class })
     abstract NodeActivity bindNodeActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = { RepresentativeActivityModule.class })
+    abstract RepresentativeActivity bindRepresentativeActivity();
 }
