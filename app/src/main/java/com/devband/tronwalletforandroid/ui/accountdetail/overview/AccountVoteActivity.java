@@ -18,10 +18,15 @@ import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 import com.devband.tronwalletforandroid.ui.accountdetail.adapter.VoteAdapter;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class VoteActivity extends CommonActivity implements VoteView {
+public class AccountVoteActivity extends CommonActivity implements AccountVoteView {
+
+    @Inject
+    AccountVotePresenter mAccountVotePresenter;
 
     private String mAddress;
 
@@ -45,7 +50,6 @@ public class VoteActivity extends CommonActivity implements VoteView {
     private boolean mIsLoading;
 
     private boolean mIsLastPage;
-    private VotePresenter mPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,11 +73,10 @@ public class VoteActivity extends CommonActivity implements VoteView {
             getSupportActionBar().setTitle(getString(R.string.vote_title));
         }
 
-        mPresenter = new VotePresenter(this);
-        mPresenter.setAdapterDataModel(mAdapter);
-        mPresenter.onCreate();
+        mAccountVotePresenter.setAdapterDataModel(mAdapter);
+        mAccountVotePresenter.onCreate();
 
-        mPresenter.getVotes(mAddress, mStartIndex, PAGE_SIZE);
+        mAccountVotePresenter.getVotes(mAddress, mStartIndex, PAGE_SIZE);
     }
 
     private void initUi() {
@@ -107,7 +110,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    mPresenter.getVotes(mAddress, mStartIndex, PAGE_SIZE);
+                    mAccountVotePresenter.getVotes(mAddress, mStartIndex, PAGE_SIZE);
                 }
             }
         }

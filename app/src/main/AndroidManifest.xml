@@ -120,7 +120,7 @@
             android:theme="@style/WalletTheme" />
 
         <activity
-            android:name=".ui.accountdetail.overview.VoteActivity"
+            android:name=".ui.accountdetail.overview.AccountVoteActivity"
             android:theme="@style/WalletTheme" />
 
         <activity

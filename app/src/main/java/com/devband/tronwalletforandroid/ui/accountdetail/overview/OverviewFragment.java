@@ -178,7 +178,7 @@ public class OverviewFragment extends CommonFragment implements OverviewView {
 
     @OnClick(R.id.view_votes_button)
     public void onViewVotesClick() {
-        Intent intent = new Intent(getActivity(), VoteActivity.class);
+        Intent intent = new Intent(getActivity(), AccountVoteActivity.class);
         intent.putExtra(AccountDetailActivity.EXTRA_ADDRESS, mAddress);
 
         startActivity(intent);

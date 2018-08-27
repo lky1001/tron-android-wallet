@@ -2,6 +2,8 @@ package com.devband.tronwalletforandroid.di;
 
 import com.devband.tronwalletforandroid.ui.about.AboutActivity;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
+import com.devband.tronwalletforandroid.ui.accountdetail.overview.AccountVoteActivity;
+import com.devband.tronwalletforandroid.ui.accountdetail.overview.AccountVoteActivityModule;
 import com.devband.tronwalletforandroid.ui.accountdetail.overview.OverviewModule;
 import com.devband.tronwalletforandroid.ui.accountdetail.representative.RepresentativeModule;
 import com.devband.tronwalletforandroid.ui.accountdetail.transaction.TransactionModule;
@@ -130,6 +132,10 @@ public abstract class ActivityBindingModule {
             RepresentativeModule.class
     })
     abstract AccountDetailActivity bindAccountDetailActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = {AccountVoteActivityModule.class})
+    abstract AccountVoteActivity bindAccountVoteActivity();
 
     @ActivityScoped
     @ContributesAndroidInjector(modules = {

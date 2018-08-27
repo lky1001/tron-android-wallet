@@ -6,18 +6,22 @@ import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.AccountVote;
 import com.devband.tronlib.dto.AccountVotes;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
-public class VotePresenter extends BasePresenter<VoteView> {
+public class AccountVotePresenter extends BasePresenter<AccountVoteView> {
 
     private AdapterDataModel<AccountVote> mAdapterDataModel;
+    private TronNetwork mTronNetwork;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
-    public VotePresenter(VoteView view) {
+    public AccountVotePresenter(AccountVoteView view, TronNetwork tronNetwork, RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTronNetwork = tronNetwork;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     public void setAdapterDataModel(AdapterDataModel<AccountVote> adapterDataModel) {
@@ -47,8 +51,8 @@ public class VotePresenter extends BasePresenter<VoteView> {
     public void getVotes(@NonNull String address, long startIndex, int pageSize) {
         mView.showLoadingDialog();
 
-        TronNetwork.getInstance().getAccountVotes(address, startIndex, pageSize, "-votes")
-                .observeOn(AndroidSchedulers.mainThread())
+        mTronNetwork.getAccountVotes(address, startIndex, pageSize, "-votes")
+                .observeOn(mRxJavaSchedulers.getIo())
                 .map(accountVotes -> {
                     for (AccountVote accountVote : accountVotes.getData()) {
                         accountVote.setTotalVotes(accountVotes.getTotalVotes());
