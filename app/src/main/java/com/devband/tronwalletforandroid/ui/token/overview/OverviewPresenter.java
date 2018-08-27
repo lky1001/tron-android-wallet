@@ -4,17 +4,22 @@ import android.support.annotation.NonNull;
 
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Token;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 public class OverviewPresenter extends BasePresenter<OverviewView> {
 
 
-    public OverviewPresenter(OverviewView view) {
+    private TronNetwork mTronNetwork;
+    private RxJavaSchedulers mRxJavaSchedulers;
+
+    public OverviewPresenter(OverviewView view, TronNetwork tronNetwork, RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTronNetwork = tronNetwork;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     @Override
@@ -40,9 +45,9 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
     public void loadTokenInfo(@NonNull String tokenName) {
         mView.showLoadingDialog();
 
-        TronNetwork.getInstance()
+        mTronNetwork
                 .getTokenDetail(tokenName)
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(mRxJavaSchedulers.getMainThread())
                 .subscribe(new SingleObserver<Token>() {
                     @Override
                     public void onSubscribe(Disposable d) {

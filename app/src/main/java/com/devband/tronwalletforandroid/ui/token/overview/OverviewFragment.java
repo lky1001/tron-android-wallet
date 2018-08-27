@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.ui.token.overview;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronlib.dto.Token;
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.BaseFragment;
+import com.devband.tronwalletforandroid.common.CommonFragment;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.token.TokenDetailActivity;
@@ -23,20 +24,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class OverviewFragment extends BaseFragment implements OverviewView {
+public class OverviewFragment extends CommonFragment implements OverviewView {
 
-    public static BaseFragment newInstance(@NonNull String tokenName) {
-        OverviewFragment fragment = new OverviewFragment();
-        Bundle args = new Bundle(1);
-        args.putString(TokenDetailActivity.EXTRA_TOKEN_NAME, tokenName);
-
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Inject
+    OverviewPresenter mOverviewPresenter;
+    
     @BindView(R.id.token_name_text)
     TextView mTokenNameText;
 
@@ -69,6 +66,15 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
     private String mTokenName;
 
+    public static Fragment newInstance(@NonNull String tokenName) {
+        OverviewFragment fragment = new OverviewFragment();
+        Bundle args = new Bundle(1);
+        args.putString(TokenDetailActivity.EXTRA_TOKEN_NAME, tokenName);
+
+        fragment.setArguments(args);
+        return fragment;
+    }
+    
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,10 +83,9 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
         mTokenName = getArguments().getString(TokenDetailActivity.EXTRA_TOKEN_NAME);
 
-        mPresenter = new OverviewPresenter(this);
-        mPresenter.onCreate();
+        mOverviewPresenter.onCreate();
 
-        ((OverviewPresenter) mPresenter).loadTokenInfo(mTokenName);
+        mOverviewPresenter.loadTokenInfo(mTokenName);
         
         return view;
     }
@@ -88,7 +93,7 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
     @Override
     protected void refresh() {
         if (isAdded()) {
-            ((OverviewPresenter) mPresenter).loadTokenInfo(mTokenName);
+            mOverviewPresenter.loadTokenInfo(mTokenName);
         }
     }
 

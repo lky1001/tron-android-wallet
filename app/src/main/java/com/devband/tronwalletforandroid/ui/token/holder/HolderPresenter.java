@@ -5,18 +5,22 @@ import com.devband.tronlib.dto.Token;
 import com.devband.tronlib.dto.TokenHolder;
 import com.devband.tronlib.dto.TokenHolders;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 public class HolderPresenter extends BasePresenter<HolderView> {
 
     private AdapterDataModel<TokenHolder>  mAdapterDataModel;
+    private TronNetwork mTronNetwork;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
-    public HolderPresenter(HolderView view) {
+    public HolderPresenter(HolderView view, TronNetwork tronNetwork, RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTronNetwork = tronNetwork;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     public void setAdapterDataModel(AdapterDataModel<TokenHolder> adapterDataModel) {
@@ -46,7 +50,7 @@ public class HolderPresenter extends BasePresenter<HolderView> {
     public void getTokenHolders(String tokenName, long startIndex, int pageSize) {
         mView.showLoadingDialog();
 
-        TronNetwork.getInstance()
+        mTronNetwork
                 .getTokenHolders(tokenName, startIndex, pageSize, "-balance")
                 .map((tokenHolders -> {
                     Token token = TronNetwork.getInstance().getTokenDetail(tokenName).blockingGet();
@@ -58,7 +62,7 @@ public class HolderPresenter extends BasePresenter<HolderView> {
 
                     return tokenHolders;
                 }))
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(mRxJavaSchedulers.getMainThread())
                 .subscribe(new SingleObserver<TokenHolders>() {
                     @Override
                     public void onSubscribe(Disposable d) {

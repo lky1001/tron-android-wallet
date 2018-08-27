@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.ui.token.transfer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -16,14 +17,15 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronlib.dto.Transfer;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
-import com.devband.tronwalletforandroid.common.BaseFragment;
+import com.devband.tronwalletforandroid.common.CommonFragment;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
-import com.devband.tronwalletforandroid.ui.blockexplorer.account.AccountPresenter;
 import com.devband.tronwalletforandroid.ui.blockexplorer.adapter.TransferAdapter;
 import com.devband.tronwalletforandroid.ui.token.TokenDetailActivity;
 
 import java.util.Date;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,10 +34,14 @@ import butterknife.ButterKnife;
  * Created by user on 2018. 5. 24..
  */
 
-public class TransferFragment extends BaseFragment implements TransferView {
+public class TransferFragment extends CommonFragment implements TransferView {
+    
     private static final int PAGE_SIZE = 25;
     private static final String EXTRA_BLOCK = "extra_block";
 
+    @Inject
+    TransferPresenter mTransferPresenter;
+    
     @BindView(R.id.recycler_view)
     RecyclerView mListView;
 
@@ -53,7 +59,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
     private String mTokenName;
 
-    public static BaseFragment newInstance(@NonNull String tokenName) {
+    public static Fragment newInstance(@NonNull String tokenName) {
         TransferFragment fragment = new TransferFragment();
         Bundle args = new Bundle(1);
         args.putString(TokenDetailActivity.EXTRA_TOKEN_NAME, tokenName);
@@ -62,7 +68,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
         return fragment;
     }
 
-    public static BaseFragment newInstance(@NonNull long block) {
+    public static Fragment newInstance(@NonNull long block) {
         TransferFragment fragment = new TransferFragment();
         Bundle args = new Bundle(1);
         args.putLong(EXTRA_BLOCK, block);
@@ -83,9 +89,8 @@ public class TransferFragment extends BaseFragment implements TransferView {
             mTokenName = getArguments().getString(TokenDetailActivity.EXTRA_TOKEN_NAME, null);
         }
 
-        mPresenter = new TransferPresenter(this);
-        ((TransferPresenter) mPresenter).setAdapterDataModel(mAdapter);
-        mPresenter.onCreate();
+        mTransferPresenter.setAdapterDataModel(mAdapter);
+        mTransferPresenter.onCreate();
 
         return view;
     }
@@ -121,7 +126,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    ((TransferPresenter) mPresenter).getTransfer(mStartIndex, PAGE_SIZE, mTokenName);
+                    mTransferPresenter.getTransfer(mStartIndex, PAGE_SIZE, mTokenName);
                 }
             }
         }
@@ -173,7 +178,7 @@ public class TransferFragment extends BaseFragment implements TransferView {
     @Override
     protected void refresh() {
         if (!mIsLastPage && isAdded()) {
-            ((TransferPresenter) mPresenter).getTransfer(mStartIndex, PAGE_SIZE, mTokenName);
+            mTransferPresenter.getTransfer(mStartIndex, PAGE_SIZE, mTokenName);
         }
     }
 
