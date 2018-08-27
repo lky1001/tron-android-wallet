@@ -43,6 +43,12 @@ public class MoreActivity extends CommonActivity implements MoreView {
     @Inject
     MorePresenter mMorePresenter;
 
+    @Inject
+    Tron mTron;
+
+    @Inject
+    CustomPreference mCustomPreference;
+
     public static final String EXTRA_FROM_DONATIONS = "from_donations";
 
     @BindView(R.id.toolbar)
@@ -71,7 +77,7 @@ public class MoreActivity extends CommonActivity implements MoreView {
         boolean hasFingerprintSupport = FingerAuth.hasFingerprintSupport(this);
 
         if (hasFingerprintSupport) {
-            Single.fromCallable(() -> CustomPreference.getInstance(this).getUseFingerprint())
+            Single.fromCallable(() -> mCustomPreference.getUseFingerprint())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new SingleObserver<Boolean>() {
@@ -92,7 +98,7 @@ public class MoreActivity extends CommonActivity implements MoreView {
                     });
 
             mFingerprintAuthCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                CustomPreference.getInstance(this).setUseFingerprint(isChecked);
+                mCustomPreference.setUseFingerprint(isChecked);
             });
 
             mFingerprintAuthCheckBox.setEnabled(true);
@@ -111,7 +117,7 @@ public class MoreActivity extends CommonActivity implements MoreView {
 
         mFingerprintAuthCheckBox.setChecked(!checked);
 
-        CustomPreference.getInstance(this).setUseFingerprint(!checked);
+        mCustomPreference.setUseFingerprint(!checked);
     }
 
     @OnClick(R.id.more_about_tron_button)
@@ -181,7 +187,7 @@ public class MoreActivity extends CommonActivity implements MoreView {
         EditText inputHost = (EditText) dialog.getCustomView().findViewById(R.id.input_host);
         EditText inputPort = (EditText) dialog.getCustomView().findViewById(R.id.input_port);
 
-        String savedHost = CustomPreference.getInstance(this).getCustomFullNodeHost();
+        String savedHost = mCustomPreference.getCustomFullNodeHost();
 
         if (!TextUtils.isEmpty(savedHost)) {
             String[] tmp = savedHost.split(":");
@@ -198,16 +204,16 @@ public class MoreActivity extends CommonActivity implements MoreView {
                 String port = inputPort.getText().toString();
 
                 if (!TextUtils.isEmpty(host) && !TextUtils.isEmpty(port)) {
-                    CustomPreference.getInstance(MoreActivity.this).setCustomFullNodeHost(host + ":" + port);
+                    mCustomPreference.setCustomFullNodeHost(host + ":" + port);
                 } else if (TextUtils.isEmpty(host) && TextUtils.isEmpty(port)) {
-                    CustomPreference.getInstance(MoreActivity.this).setCustomFullNodeHost("");
+                    mCustomPreference.setCustomFullNodeHost("");
                 } else {
                     Toast.makeText(MoreActivity.this, getString(R.string.invalid_host),
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Tron.getInstance(MoreActivity.this).initTronNode();
+                mTron.initTronNode();
                 dialog.dismiss();
             }
         });

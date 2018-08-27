@@ -27,6 +27,9 @@ public class LoginActivity extends CommonActivity implements LoginView {
     @Inject
     LoginPresenter mLoginPresenter;
 
+    @Inject
+    CustomPreference mCustomPreference;
+
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
@@ -48,7 +51,7 @@ public class LoginActivity extends CommonActivity implements LoginView {
         mLoginPresenter.onCreate();
 
         boolean hasFingerprintSupport = FingerAuth.hasFingerprintSupport(this);
-        boolean useFingerprint = CustomPreference.getInstance(this).getUseFingerprint();
+        boolean useFingerprint = mCustomPreference.getUseFingerprint();
 
         if (hasFingerprintSupport && useFingerprint) {
             new FingerAuthDialog(this)

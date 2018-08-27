@@ -54,7 +54,7 @@ public class AccountPresenter extends BasePresenter<AccountView> {
         mTronNetwork
                 .getAccounts(startIndex, pageSize, "-balance")
                 .map(tronAccounts -> {
-                    CoinMarketCap coinMarketCap = TronNetwork.getInstance().getCoinInfo(Constants.TRON_COINMARKET_NAME).blockingGet().get(0);
+                    CoinMarketCap coinMarketCap = mTronNetwork.getCoinInfo(Constants.TRON_COINMARKET_NAME).blockingGet().get(0);
 
                     for (TronAccount tronAccount : tronAccounts.getData()) {
                         tronAccount.setTotalSupply((long) Double.parseDouble(coinMarketCap.getTotalSupply()));

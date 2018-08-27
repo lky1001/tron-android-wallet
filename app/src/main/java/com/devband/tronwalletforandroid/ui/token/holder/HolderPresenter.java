@@ -53,7 +53,7 @@ public class HolderPresenter extends BasePresenter<HolderView> {
         mTronNetwork
                 .getTokenHolders(tokenName, startIndex, pageSize, "-balance")
                 .map((tokenHolders -> {
-                    Token token = TronNetwork.getInstance().getTokenDetail(tokenName).blockingGet();
+                    Token token = mTronNetwork.getTokenDetail(tokenName).blockingGet();
 
                     for (TokenHolder tokenHolder : tokenHolders.getData()) {
                         tokenHolder.setTotalSupply(token.getTotalSupply());

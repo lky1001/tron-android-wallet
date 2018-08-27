@@ -3,7 +3,15 @@ package com.devband.tronwalletforandroid.di.module;
 import android.app.Application;
 import android.content.Context;
 
+import com.devband.tronlib.Hosts;
+import com.devband.tronlib.ServiceBuilder;
 import com.devband.tronlib.TronNetwork;
+import com.devband.tronlib.services.AccountService;
+import com.devband.tronlib.services.CoinMarketCapService;
+import com.devband.tronlib.services.TokenService;
+import com.devband.tronlib.services.TronScanService;
+import com.devband.tronlib.services.VoteService;
+import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.di.ApplicationContext;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulersImpl;
@@ -25,14 +33,65 @@ public abstract class AppModule {
 
     @Provides
     @Singleton
-    static Tron provideTron(@ApplicationContext Context context) {
-        return Tron.getInstance(context);
+    static CustomPreference provideCustomPreference(@ApplicationContext Context context) {
+        CustomPreference customPreference = new CustomPreference(context);
+
+        return customPreference;
+    }
+
+
+    @Provides
+    @Singleton
+    static VoteService provideVoteService() {
+        return ServiceBuilder.createService(VoteService.class, Hosts.TRONSCAN_API);
     }
 
     @Provides
     @Singleton
-    static TronNetwork provideTronNetwork() {
-        return TronNetwork.getInstance();
+    static CoinMarketCapService provideCoinMarketCapService() {
+        return ServiceBuilder.createService(CoinMarketCapService.class, Hosts.TRONSCAN_API);
+    }
+
+    @Provides
+    @Singleton
+    static TronScanService provideTronScanService() {
+        return ServiceBuilder.createService(TronScanService.class, Hosts.TRONSCAN_API);
+    }
+
+    @Provides
+    @Singleton
+    static TokenService provideTokenService() {
+        return ServiceBuilder.createService(TokenService.class, Hosts.TRONSCAN_API);
+    }
+
+    @Provides
+    @Singleton
+    static AccountService provideAccountService() {
+        return ServiceBuilder.createService(AccountService.class, Hosts.TRONSCAN_API);
+    }
+
+    @Provides
+    @Singleton
+    static TronNetwork provideTronNetwork(VoteService voteService, CoinMarketCapService coinMarketCapService,
+            TronScanService tronScanService, TokenService tokenService, AccountService accountService) {
+        TronNetwork tronNetwork = new TronNetwork();
+
+        tronNetwork.setVoteService(voteService);
+        tronNetwork.setCoinMarketCapService(coinMarketCapService);
+        tronNetwork.setTronScanService(tronScanService);
+        tronNetwork.setTokenService(tokenService);
+        tronNetwork.setAccountService(accountService);
+
+        return tronNetwork;
+    }
+
+    @Provides
+    @Singleton
+    static Tron provideTron(@ApplicationContext Context context, TronNetwork tronNetwork,
+            CustomPreference customPreference) {
+        Tron tron = new Tron(context, tronNetwork, customPreference);
+
+        return tron;
     }
 
     @Provides

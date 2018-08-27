@@ -40,9 +40,9 @@ public class Tron {
     public static final int MIN_PASSWORD_LENGTH = 8;
     public static final int PRIVATE_KEY_SIZE = 64;
 
-    private static Tron instance;
-
     private Context mContext;
+    private TronNetwork mTronNetwork;
+    private CustomPreference mCustomPreference;
 
     private List<String> mFullNodeList;
 
@@ -52,21 +52,10 @@ public class Tron {
 
     private AccountManager mAccountManager;
 
-    public static synchronized Tron getInstance(@NonNull Context context) {
-        if (instance == null) {
-            synchronized (Tron.class) {
-                if (instance == null) {
-                    instance = new Tron(context);
-                }
-            }
-        }
-        return instance;
-    }
-
-    private Tron() {}
-
-    private Tron(Context context) {
+    public Tron(Context context, TronNetwork tronNetwork, CustomPreference customPreference) {
         this.mContext = context;
+        this.mTronNetwork = tronNetwork;
+        this.mCustomPreference = customPreference;
         init();
     }
 
@@ -84,9 +73,9 @@ public class Tron {
         int randomFullNode = random.nextInt(mFullNodeList.size());
         int randomSolidityNode = random.nextInt(mSolidityNodeList.size());
 
-        if (!TextUtils.isEmpty(CustomPreference.getInstance(mContext).getCustomFullNodeHost())) {
-            mTronManager = new TronManager(CustomPreference.getInstance(mContext).getCustomFullNodeHost(),
-                    CustomPreference.getInstance(mContext).getCustomFullNodeHost());
+        if (!TextUtils.isEmpty(mCustomPreference.getCustomFullNodeHost())) {
+            mTronManager = new TronManager(mCustomPreference.getCustomFullNodeHost(),
+                    mCustomPreference.getCustomFullNodeHost());
         } else if (!mFullNodeList.isEmpty()) {
             mTronManager = new TronManager(mFullNodeList.get(randomFullNode), mSolidityNodeList.get(randomSolidityNode));
         } else {
@@ -190,7 +179,7 @@ public class Tron {
     }
 
     public Single<Account> getAccount(@NonNull String address) {
-        return TronNetwork.getInstance().getAccount(address);
+        return mTronNetwork.getAccount(address);
     }
 
     public Single<Protocol.Account> queryAccount(@NonNull String address) {

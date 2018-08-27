@@ -3,11 +3,11 @@ package com.devband.tronlib;
 import com.devband.tronlib.dto.Account;
 import com.devband.tronlib.dto.AccountMedia;
 import com.devband.tronlib.dto.AccountVotes;
-import com.devband.tronlib.dto.RichData;
-import com.devband.tronlib.dto.Stat;
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.dto.Market;
+import com.devband.tronlib.dto.RichData;
+import com.devband.tronlib.dto.Stat;
 import com.devband.tronlib.dto.SystemStatus;
 import com.devband.tronlib.dto.Token;
 import com.devband.tronlib.dto.TokenHolders;
@@ -34,31 +34,30 @@ public class TronNetwork {
 
     //https://github.com/grpc-ecosystem/grpc-gateway/blob/master/runtime/errors.go#L15
 
-    private static TronNetwork instance;
-
     private VoteService mVoteService;
     private CoinMarketCapService mCoinMarketCapService;
     private TronScanService mTronScanService;
     private TokenService mTokenService;
     private AccountService mAccountService;
 
-    public static synchronized TronNetwork getInstance() {
-        if (instance == null) {
-            synchronized (TronNetwork.class) {
-                if (instance == null) {
-                    instance = new TronNetwork();
-                }
-            }
-        }
-        return instance;
+    public void setVoteService(VoteService voteService) {
+        this.mVoteService = voteService;
     }
 
-    private TronNetwork() {
-        mVoteService = ServiceBuilder.createService(VoteService.class, Hosts.TRONSCAN_API);
-        mCoinMarketCapService = ServiceBuilder.createService(CoinMarketCapService.class, Hosts.COINMARKETCAP_API);
-        mTronScanService = ServiceBuilder.createService(TronScanService.class, Hosts.TRONSCAN_API);
-        mTokenService = ServiceBuilder.createService(TokenService.class, Hosts.TRONSCAN_API);
-        mAccountService = ServiceBuilder.createService(AccountService.class, Hosts.TRONSCAN_API);
+    public void setCoinMarketCapService(CoinMarketCapService coinMarketCapService) {
+        this.mCoinMarketCapService = coinMarketCapService;
+    }
+
+    public void setTronScanService(TronScanService tronScanService) {
+        this.mTronScanService = tronScanService;
+    }
+
+    public void setTokenService(TokenService tokenService) {
+        this.mTokenService = tokenService;
+    }
+
+    public void setAccountService(AccountService accountService) {
+        this.mAccountService = accountService;
     }
 
     public Single<Votes> getVoteCurrentCycle() {
