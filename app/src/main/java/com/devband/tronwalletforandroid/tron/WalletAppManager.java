@@ -17,28 +17,13 @@ public class WalletAppManager {
     public static final int SUCCESS = 1;
     public static final int ERROR = -1;
 
-    private static WalletAppManager instance;
-
     private Context mContext;
 
     private boolean mIsLogin;
 
     private WalletDao mWalletDao;
 
-    public static synchronized WalletAppManager getInstance(@NonNull Context context) {
-        if (instance == null) {
-            synchronized (WalletAppManager.class) {
-                if (instance == null) {
-                    instance = new WalletAppManager(context);
-                }
-            }
-        }
-        return instance;
-    }
-
-    private WalletAppManager() {}
-
-    private WalletAppManager(@NonNull Context context) {
+    public WalletAppManager(@NonNull Context context) {
         this.mContext = context;
         init();
     }

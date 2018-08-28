@@ -97,7 +97,7 @@ public abstract class AppModule {
     @Provides
     @Singleton
     static WalletAppManager provideWalletAppManager(@ApplicationContext Context context) {
-        return WalletAppManager.getInstance(context);
+        return new WalletAppManager(context);
     }
 
     @Provides

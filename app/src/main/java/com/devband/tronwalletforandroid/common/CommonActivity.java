@@ -55,13 +55,6 @@ public class CommonActivity extends DaggerAppCompatActivity {
         return true;
     }
 
-    protected void checkLogin() {
-        if (!WalletAppManager.getInstance(CommonActivity.this).isLogin()) {
-            startActivity(IntroActivity.class);
-            finishActivity();
-        }
-    }
-
     @Override
     protected void onDestroy() {
         hideDialog();
