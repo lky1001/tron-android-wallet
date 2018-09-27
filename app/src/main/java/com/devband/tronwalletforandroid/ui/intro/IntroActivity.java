@@ -67,6 +67,14 @@ public class IntroActivity extends CommonActivity implements IntroView {
     }
 
     @Override
+    public void connectionError() {
+        if (!isFinishing()) {
+            Toast.makeText(IntroActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
+            startLoginActivity();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         mIsBackClick = true;
 

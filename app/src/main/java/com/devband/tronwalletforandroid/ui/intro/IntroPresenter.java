@@ -18,7 +18,8 @@ public class IntroPresenter extends BasePresenter<IntroView> {
     private static final int NO_WALLET = 0;
     private static final int NOT_AGREE = 1;
     private static final int NO_SUCH_ALGORITHM = 2;
-    private static final int SUCCESS = 3;
+    private static final int CONNECTION_ERROR = 3;
+    private static final int SUCCESS = 4;
 
     private Tron mTron;
     private WalletAppManager mWalletAppManager;
@@ -50,7 +51,7 @@ public class IntroPresenter extends BasePresenter<IntroView> {
                     }
 
                     if (tryCnt == Constants.CONNECTION_RETRY - 1) {
-                        throw e;
+                        return CONNECTION_ERROR;
                     }
 
                     e.printStackTrace();
@@ -78,6 +79,16 @@ public class IntroPresenter extends BasePresenter<IntroView> {
                 mView.startBackupAccountActivity();
             } else if (result == NO_SUCH_ALGORITHM) {
                 mView.doesNotSupportAlgorithm();
+            } else if (result == CONNECTION_ERROR) {
+                if (mWalletAppManager.hasWallet()) {
+                    if (mWalletAppManager.isAgree()) {
+                        mView.connectionError();
+                    } else {
+                        mView.showErrorMsg();
+                    }
+                } else {
+                    mView.showErrorMsg();
+                }
             } else if (result == NO_WALLET) {
                 mView.startCreateAccountActivity();
             }
