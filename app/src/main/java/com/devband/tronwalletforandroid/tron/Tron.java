@@ -52,11 +52,19 @@ public class Tron {
 
     private AccountManager mAccountManager;
 
+    private boolean mFailConnectNode;
+
     public Tron(Context context, TronNetwork tronNetwork, CustomPreference customPreference) {
         this.mContext = context;
         this.mTronNetwork = tronNetwork;
         this.mCustomPreference = customPreference;
         init();
+    }
+
+    public void setFailConnectNode(boolean failCustomNode) {
+        if (!TextUtils.isEmpty(mCustomPreference.getCustomFullNodeHost())) {
+            this.mFailConnectNode = failCustomNode;
+        }
     }
 
     private void init() {
@@ -68,15 +76,18 @@ public class Tron {
     }
 
     public void initTronNode() {
-        Random random = new Random();
-        // todo - fail over
-        int randomFullNode = random.nextInt(mFullNodeList.size());
-        int randomSolidityNode = random.nextInt(mSolidityNodeList.size());
-
-        if (!TextUtils.isEmpty(mCustomPreference.getCustomFullNodeHost())) {
-            mTronManager = new TronManager(mCustomPreference.getCustomFullNodeHost(),
-                    mCustomPreference.getCustomFullNodeHost());
+        if (!TextUtils.isEmpty(mCustomPreference.getCustomFullNodeHost()) && !mFailConnectNode) {
+            try {
+                mTronManager = new TronManager(mCustomPreference.getCustomFullNodeHost(),
+                        mCustomPreference.getCustomFullNodeHost());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else if (!mFullNodeList.isEmpty()) {
+            Random random = new Random();
+            int randomFullNode = random.nextInt(mFullNodeList.size());
+            int randomSolidityNode = random.nextInt(mSolidityNodeList.size());
+
             mTronManager = new TronManager(mFullNodeList.get(randomFullNode), mSolidityNodeList.get(randomSolidityNode));
         } else {
             // exception

@@ -213,7 +213,14 @@ public class MoreActivity extends CommonActivity implements MoreView {
                     return;
                 }
 
-                mTron.initTronNode();
+                try {
+                    mTron.initTronNode();
+                } catch (Exception e) {
+                    mCustomPreference.setCustomFullNodeHost("");
+                    Toast.makeText(MoreActivity.this, getString(R.string.invalid_host),
+                            Toast.LENGTH_SHORT).show();
+                }
+
                 dialog.dismiss();
             }
         });
