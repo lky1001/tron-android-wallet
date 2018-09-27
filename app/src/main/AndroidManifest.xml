@@ -18,7 +18,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="your_api_key_here" />
+            android:value="068249ab59e95265413fc9f8ae65b498539360f9" />
 
         <activity android:name=".ui.intro.IntroActivity">
             <intent-filter>

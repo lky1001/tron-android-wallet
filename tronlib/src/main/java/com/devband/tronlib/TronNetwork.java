@@ -19,6 +19,7 @@ import com.devband.tronlib.dto.TransferStats;
 import com.devband.tronlib.dto.Transfers;
 import com.devband.tronlib.dto.TronAccounts;
 import com.devband.tronlib.dto.Votes;
+import com.devband.tronlib.dto.Witnesses;
 import com.devband.tronlib.services.AccountService;
 import com.devband.tronlib.services.CoinMarketCapService;
 import com.devband.tronlib.services.TokenService;
@@ -60,8 +61,8 @@ public class TronNetwork {
         this.mAccountService = accountService;
     }
 
-    public Single<Votes> getVoteCurrentCycle() {
-        return mVoteService.getVoteCurrentCycle();
+    public Single<Witnesses> getVoteWitnesses() {
+        return mVoteService.getVoteWitnesses();
     }
 
     public Single<Map<String, Long>> getRemainNextCycle() {
