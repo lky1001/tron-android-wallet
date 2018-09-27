@@ -20,6 +20,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
@@ -112,6 +113,11 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
         super.onResume();
         showProgressDialog(null, getString(R.string.loading_msg));
         mSendTokenPresenter.onResume();
+    }
+
+    @OnClick(R.id.max_button)
+    public void onMaxBtnClick() {
+        mInputAmount.setText(Utils.getTrxFormat(mSelectedAsset.getBalance()));
     }
 
     @OnClick(R.id.btn_send_trx)
@@ -310,6 +316,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
         @Override
         public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int pos, long id) {
             mSelectedAsset = mTokenAdapter.getItem(pos);
+            mInputAmount.setText("");
         }
 
         @Override
