@@ -25,4 +25,5 @@ public class Constants {
 
     public static final String SUPER_REPRESENTATIVE_TEAM_PAGE_URL = "https://tronscan.org/#/representative/";
     public static final int CONNECTION_RETRY = 10;
+    public static final long GRPC_TIME_OUT_IN_MS = 2 * 1000;
 }

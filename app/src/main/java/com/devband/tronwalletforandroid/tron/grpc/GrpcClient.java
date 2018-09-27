@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.tron.grpc;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.devband.tronwalletforandroid.common.Constants;
 import com.google.protobuf.ByteString;
 
 import org.tron.api.GrpcAPI;
@@ -97,7 +98,7 @@ public class GrpcClient {
 
     public Block getBlock(long blockNum) {
         if (blockNum < 0) {
-            return blockingStubFullNode.getNowBlock(EmptyMessage.newBuilder().build());
+            return blockingStubFullNode.withDeadlineAfter(Constants.GRPC_TIME_OUT_IN_MS, TimeUnit.MILLISECONDS).getNowBlock(EmptyMessage.newBuilder().build());
         }
         NumberMessage.Builder builder = NumberMessage.newBuilder();
         builder.setNum(blockNum);
