@@ -22,29 +22,14 @@ public class CustomPreference {
     private static final String PREFERENCE_SETTINGS = "preference_settings";
 
     private final String LOG_TAG = CustomPreference.class.getSimpleName();
-    private static volatile CustomPreference mInstance;
 
     private Context mContext;
 
     private TronSettings mSettings;
 
-    private CustomPreference() {}
-
-    private CustomPreference(Context context) {
+    public CustomPreference(Context context) {
         mContext = context;
         loadSettings();
-    }
-
-    public static CustomPreference getInstance(Context context) {
-        if (mInstance == null) {
-            synchronized (CustomPreference.class) {
-                if (mInstance == null) {
-                    mInstance = new CustomPreference(context);
-                }
-            }
-        }
-
-        return mInstance;
     }
 
     private void loadSettings() {

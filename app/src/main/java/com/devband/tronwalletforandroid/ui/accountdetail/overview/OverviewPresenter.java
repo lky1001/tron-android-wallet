@@ -6,6 +6,7 @@ import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Account;
 import com.devband.tronlib.dto.TransactionStats;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
 import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
@@ -16,13 +17,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 public class OverviewPresenter extends BasePresenter<OverviewView> {
 
-    public OverviewPresenter(OverviewView view) {
+    private TronNetwork mTronNetwork;
+    private RxJavaSchedulers mRxJavaSchedulers;
+
+    public OverviewPresenter(OverviewView view, TronNetwork tronNetwork, RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTronNetwork = tronNetwork;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     @Override
@@ -48,65 +53,66 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
     public void getAccount(@NonNull String address) {
         mView.showLoadingDialog();
 
-        TronNetwork.getInstance().getAccount(address)
-                .map((account -> {
-                    List<Frozen> frozenList = new ArrayList<>();
+        mTronNetwork.getAccount(address)
+        .map((account -> {
+            List<Frozen> frozenList = new ArrayList<>();
 
-                    for (Account.FrozenTrx frozen : account.getFrozen().getBalances()) {
-                        frozenList.add(Frozen.builder()
-                                .frozenBalance(frozen.getAmount())
-                                .expireTime(frozen.getExpires())
-                                .build());
-                    }
+            for (Account.FrozenTrx frozen : account.getFrozen().getBalances()) {
+                frozenList.add(Frozen.builder()
+                        .frozenBalance(frozen.getAmount())
+                        .expireTime(frozen.getExpires())
+                        .build());
+            }
 
-                    List<Asset> assetList = new ArrayList<>();
+            List<Asset> assetList = new ArrayList<>();
 
-                    for (Account.Balance balance : account.getTokenBalances()) {
-                        if (Constants.TRON_SYMBOL.equalsIgnoreCase(balance.getName())) {
-                            continue;
-                        }
+            for (Account.Balance balance : account.getTokenBalances()) {
+                if (Constants.TRON_SYMBOL.equalsIgnoreCase(balance.getName())) {
+                    continue;
+                }
 
-                        assetList.add(Asset.builder()
-                                .name(balance.getName())
-                                .balance(balance.getBalance())
-                                .build());
-                    }
+                assetList.add(Asset.builder()
+                        .name(balance.getName())
+                        .balance(balance.getBalance())
+                        .build());
+            }
 
-                    TransactionStats transactionStats = TronNetwork.getInstance().getTransactionStats(address).blockingGet();
+            TransactionStats transactionStats = mTronNetwork.getTransactionStats(address).blockingGet();
 
-                    return TronAccount.builder()
-                            .balance(account.getBalance())
-                            .bandwidth(account.getBandwidth().getNetRemaining())
-                            .assetList(assetList)
-                            .frozenList(frozenList)
-                            .transactions(transactionStats.getTransactions())
-                            .transactionIn(transactionStats.getTransactionsIn())
-                            .transactionOut(transactionStats.getTransactionsOut())
-                            .account(account)
-                            .build();
-                }))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<TronAccount>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+            return TronAccount.builder()
+                    .balance(account.getBalance())
+                    .bandwidth(account.getBandwidth().getNetRemaining())
+                    .assetList(assetList)
+                    .frozenList(frozenList)
+                    .transactions(transactionStats.getTransactions())
+                    .transactionIn(transactionStats.getTransactionsIn())
+                    .transactionOut(transactionStats.getTransactionsOut())
+                    .account(account)
+                    .build();
+        }))
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
+        .subscribe(new SingleObserver<TronAccount>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
-                    }
+            }
 
-                    @Override
-                    public void onSuccess(TronAccount account) {
-                        mView.finishLoading(account);
-                    }
+            @Override
+            public void onSuccess(TronAccount account) {
+                mView.finishLoading(account);
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        // todo - error msg
-                        if (e instanceof ConnectException) {
-                            // internet error
-                        }
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                // todo - error msg
+                if (e instanceof ConnectException) {
+                    // internet error
+                }
 
-                        mView.showServerError();
-                    }
-                });
+                mView.showServerError();
+            }
+        });
     }
 }

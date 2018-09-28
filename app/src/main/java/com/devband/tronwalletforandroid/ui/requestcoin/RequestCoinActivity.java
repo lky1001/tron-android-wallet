@@ -17,6 +17,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.glxn.qrgen.android.QRCode;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -27,6 +29,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class RequestCoinActivity extends CommonActivity {
+
+    @Inject
+    Tron mTron;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -72,7 +77,7 @@ public class RequestCoinActivity extends CommonActivity {
             double cnt = Double.parseDouble(amount);
 
             PayInfo payInfo = new PayInfo();
-            payInfo.address = Tron.getInstance(RequestCoinActivity.this).getLoginAddress();
+            payInfo.address = mTron.getLoginAddress();
             payInfo.amount = cnt;
 
             ObjectMapper objectMapper = new ObjectMapper();

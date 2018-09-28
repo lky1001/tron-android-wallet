@@ -24,12 +24,17 @@ import com.devband.tronwalletforandroid.ui.representative.adapter.Representative
 import com.devband.tronwalletforandroid.ui.representative.dto.Representative;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class RepresentativeActivity extends CommonActivity implements RepresentativeView {
 
+    @Inject
+    RepresentativePresenter mRepresentativePresenter;
+    
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
@@ -122,9 +127,8 @@ public class RepresentativeActivity extends CommonActivity implements Representa
             }
         });
 
-        mPresenter = new RepresentativePresenter(this);
-        ((RepresentativePresenter) mPresenter).setAdapterDataModel(mRepresentativeListAdapter);
-        mPresenter.onCreate();
+        mRepresentativePresenter.setAdapterDataModel(mRepresentativeListAdapter);
+        mRepresentativePresenter.onCreate();
     }
 
     private View.OnClickListener mOnListItemClickListener = new View.OnClickListener() {
@@ -177,7 +181,7 @@ public class RepresentativeActivity extends CommonActivity implements Representa
                         dialog.dismiss();
                         String password = input.toString();
 
-                        if (!TextUtils.isEmpty(password) && ((RepresentativePresenter) mPresenter).matchPassword(password)) {
+                        if (!TextUtils.isEmpty(password) && mRepresentativePresenter.matchPassword(password)) {
                             confirmVote(item, amount);
                         } else {
                             Toast.makeText(RepresentativeActivity.this, getString(R.string.invalid_password),
@@ -237,6 +241,6 @@ public class RepresentativeActivity extends CommonActivity implements Representa
 
     @OnClick(R.id.retry_button)
     public void onRetryClick() {
-        ((RepresentativePresenter) mPresenter).getRepresentativeList();
+        mRepresentativePresenter.getRepresentativeList();
     }
 }

@@ -7,13 +7,13 @@ import com.devband.tronlib.dto.RichTotal;
 import com.devband.tronlib.dto.Stat;
 import com.devband.tronlib.dto.TransferStats;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -22,8 +22,13 @@ import io.reactivex.disposables.Disposable;
 
 public class OverviewPresenter extends BasePresenter<OverviewView> {
 
-    public OverviewPresenter(OverviewView view) {
+    private TronNetwork mTronNetwork;
+    private RxJavaSchedulers mRxJavaSchedulers;
+
+    public OverviewPresenter(OverviewView view, TronNetwork tronNetwork, RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTronNetwork = tronNetwork;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     @Override
@@ -49,29 +54,29 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
     void chartDataLoad() {
         mView.showLoadingDialog();
 
-        TronNetwork.getInstance().getTopAddressAccounts(10)
-                .observeOn(AndroidSchedulers.mainThread())
+        mTronNetwork.getTopAddressAccounts(10)
+                .observeOn(mRxJavaSchedulers.getMainThread())
                 .subscribe(
                         mView::overviewDataLoadSuccess,
                         t -> mView.showServerError()
                 );
 
-        TronNetwork.getInstance().getAvgBlockSize()
-                .observeOn(AndroidSchedulers.mainThread())
+        mTronNetwork.getAvgBlockSize()
+                .observeOn(mRxJavaSchedulers.getMainThread())
                 .subscribe(
                         mView::overviewAvgBlockSize,
                         t -> mView.showServerError()
                 );
 
-        TronNetwork.getInstance().getSystemStatus()
-                .observeOn(AndroidSchedulers.mainThread())
+        mTronNetwork.getSystemStatus()
+                .observeOn(mRxJavaSchedulers.getMainThread())
                 .subscribe(
                         mView::overviewBlockStatus,
                         t -> mView.showServerError()
                 );
 
-        TronNetwork.getInstance().getTransferStats()
-                .observeOn(AndroidSchedulers.mainThread())
+        mTronNetwork.getTransferStats()
+                .observeOn(mRxJavaSchedulers.getMainThread())
                 .map(transferStats -> {
                     for (Stat stat : transferStats.getValue()) {
                         stat.setValue((long) (stat.getValue() / Constants.ONE_TRX));
@@ -101,9 +106,9 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
     void richListDataLoad() {
         mView.showLoadingDialog();
 
-        TronNetwork.getInstance().getRichList()
+        mTronNetwork.getRichList()
                 .map(richData ->  {
-                    CoinMarketCap coinMarketCap = TronNetwork.getInstance()
+                    CoinMarketCap coinMarketCap = mTronNetwork
                             .getCoinInfo(Constants.TRON_COINMARKET_NAME).blockingGet().get(0);
 
                     List<RichItemViewModel> viewModels = new ArrayList<>();
@@ -113,7 +118,7 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
                     }
                     return viewModels;
                 })
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(mRxJavaSchedulers.getMainThread())
                 .subscribe(
                         mView::richListLoadSuccess,
                         t -> mView.showServerError()

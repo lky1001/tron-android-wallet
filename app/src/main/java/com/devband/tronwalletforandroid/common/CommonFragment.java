@@ -2,22 +2,20 @@ package com.devband.tronwalletforandroid.common;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
+
+import dagger.android.support.DaggerFragment;
 
 /**
  * Created by user on 2018. 5. 25..
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class CommonFragment extends DaggerFragment {
 
-    protected BasePresenter mPresenter;
     protected MaterialDialog mMaterialDialog;
-
 
     protected abstract void refresh();
 

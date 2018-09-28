@@ -3,11 +3,11 @@ package com.devband.tronwalletforandroid.ui.accountdetail;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.ui.accountdetail.overview.OverviewFragment;
 import com.devband.tronwalletforandroid.ui.accountdetail.representative.RepresentativeFragment;
@@ -38,7 +38,7 @@ public class AccountDetailActivity extends CommonActivity {
 
     private String mAddress;
 
-    private List<BaseFragment> mFragments = new ArrayList<>();
+    private List<Fragment> mFragments = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

@@ -20,6 +20,8 @@ import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
 
 import java.util.Date;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -29,6 +31,9 @@ import butterknife.ButterKnife;
 
 public class TransferActivity extends CommonActivity implements TransferView {
     private static final int PAGE_SIZE = 25;
+
+    @Inject
+    TransferPresenter mTransferPresenter;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -58,11 +63,10 @@ public class TransferActivity extends CommonActivity implements TransferView {
 
         initUi();
 
-        mPresenter = new TransferPresenter(this);
-        ((TransferPresenter) mPresenter).setAdapterDataModel(mAdapter);
-        mPresenter.onCreate();
+        mTransferPresenter.setAdapterDataModel(mAdapter);
+        mTransferPresenter.onCreate();
 
-        ((TransferPresenter) mPresenter).loadTransfer(mStartIndex, PAGE_SIZE);
+        mTransferPresenter.loadTransfer(mStartIndex, PAGE_SIZE);
     }
 
     private void initUi() {
@@ -92,10 +96,10 @@ public class TransferActivity extends CommonActivity implements TransferView {
         public void onRefresh() {
             mStartIndex = 0;
             mIsLoading = true;
-            ((TransferPresenter) mPresenter).clearData();
+            mTransferPresenter.clearData();
             mAdapterView.refresh();
             mSwipeRefreshLayout.setRefreshing(true);
-            ((TransferPresenter) mPresenter).loadTransfer(mStartIndex, PAGE_SIZE);
+            mTransferPresenter.loadTransfer(mStartIndex, PAGE_SIZE);
         }
     };
 
@@ -118,7 +122,7 @@ public class TransferActivity extends CommonActivity implements TransferView {
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    ((TransferPresenter) mPresenter).loadTransfer(mStartIndex, PAGE_SIZE);
+                    mTransferPresenter.loadTransfer(mStartIndex, PAGE_SIZE);
                 }
             }
         }

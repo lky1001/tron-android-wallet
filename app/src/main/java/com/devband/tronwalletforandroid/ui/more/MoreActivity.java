@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,8 +16,8 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.BuildConfig;
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.CustomPreference;
+import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.about.AboutActivity;
 import com.devband.tronwalletforandroid.ui.market.MarketActivity;
@@ -28,10 +27,11 @@ import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity
 import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
 import com.marcoscg.fingerauth.FingerAuth;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -39,6 +39,15 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class MoreActivity extends CommonActivity implements MoreView {
+
+    @Inject
+    MorePresenter mMorePresenter;
+
+    @Inject
+    Tron mTron;
+
+    @Inject
+    CustomPreference mCustomPreference;
 
     public static final String EXTRA_FROM_DONATIONS = "from_donations";
 
@@ -68,7 +77,7 @@ public class MoreActivity extends CommonActivity implements MoreView {
         boolean hasFingerprintSupport = FingerAuth.hasFingerprintSupport(this);
 
         if (hasFingerprintSupport) {
-            Single.fromCallable(() -> CustomPreference.getInstance(this).getUseFingerprint())
+            Single.fromCallable(() -> mCustomPreference.getUseFingerprint())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new SingleObserver<Boolean>() {
@@ -89,7 +98,7 @@ public class MoreActivity extends CommonActivity implements MoreView {
                     });
 
             mFingerprintAuthCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                CustomPreference.getInstance(this).setUseFingerprint(isChecked);
+                mCustomPreference.setUseFingerprint(isChecked);
             });
 
             mFingerprintAuthCheckBox.setEnabled(true);
@@ -99,8 +108,7 @@ public class MoreActivity extends CommonActivity implements MoreView {
 
         mTronAppInfoText.setText("Tron Wallet for Android\nApp Version : v" + BuildConfig.VERSION_NAME);
 
-        mPresenter = new MorePresenter(this);
-        mPresenter.onCreate();
+        mMorePresenter.onCreate();
     }
 
     @OnClick(R.id.more_fingerprint_button)
@@ -109,7 +117,7 @@ public class MoreActivity extends CommonActivity implements MoreView {
 
         mFingerprintAuthCheckBox.setChecked(!checked);
 
-        CustomPreference.getInstance(this).setUseFingerprint(!checked);
+        mCustomPreference.setUseFingerprint(!checked);
     }
 
     @OnClick(R.id.more_about_tron_button)
@@ -179,7 +187,7 @@ public class MoreActivity extends CommonActivity implements MoreView {
         EditText inputHost = (EditText) dialog.getCustomView().findViewById(R.id.input_host);
         EditText inputPort = (EditText) dialog.getCustomView().findViewById(R.id.input_port);
 
-        String savedHost = CustomPreference.getInstance(this).getCustomFullNodeHost();
+        String savedHost = mCustomPreference.getCustomFullNodeHost();
 
         if (!TextUtils.isEmpty(savedHost)) {
             String[] tmp = savedHost.split(":");
@@ -196,16 +204,23 @@ public class MoreActivity extends CommonActivity implements MoreView {
                 String port = inputPort.getText().toString();
 
                 if (!TextUtils.isEmpty(host) && !TextUtils.isEmpty(port)) {
-                    CustomPreference.getInstance(MoreActivity.this).setCustomFullNodeHost(host + ":" + port);
+                    mCustomPreference.setCustomFullNodeHost(host + ":" + port);
                 } else if (TextUtils.isEmpty(host) && TextUtils.isEmpty(port)) {
-                    CustomPreference.getInstance(MoreActivity.this).setCustomFullNodeHost("");
+                    mCustomPreference.setCustomFullNodeHost("");
                 } else {
                     Toast.makeText(MoreActivity.this, getString(R.string.invalid_host),
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Tron.getInstance(MoreActivity.this).initTronNode();
+                try {
+                    mTron.initTronNode();
+                } catch (Exception e) {
+                    mCustomPreference.setCustomFullNodeHost("");
+                    Toast.makeText(MoreActivity.this, getString(R.string.invalid_host),
+                            Toast.LENGTH_SHORT).show();
+                }
+
                 dialog.dismiss();
             }
         });

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
@@ -11,18 +12,25 @@ import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 import java.security.NoSuchAlgorithmException;
 
 import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class IntroPresenter extends BasePresenter<IntroView> {
 
     private static final int NO_WALLET = 0;
     private static final int NOT_AGREE = 1;
     private static final int NO_SUCH_ALGORITHM = 2;
-    private static final int SUCCESS = 3;
+    private static final int CONNECTION_ERROR = 3;
+    private static final int SUCCESS = 4;
 
-    public IntroPresenter(IntroView view) {
+    private Tron mTron;
+    private WalletAppManager mWalletAppManager;
+    private RxJavaSchedulers mRxJavaSchedulers;
+
+    public IntroPresenter(IntroView view, Tron tron, WalletAppManager walletAppManager,
+            RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTron = tron;
+        this.mWalletAppManager = walletAppManager;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     @SuppressLint("CheckResult")
@@ -33,8 +41,8 @@ public class IntroPresenter extends BasePresenter<IntroView> {
 
             while (tryCnt < Constants.CONNECTION_RETRY) {
                 try {
-                    Tron.getInstance(mContext).initTronNode();
-                    long height = Tron.getInstance(mContext).getBlockHeight().blockingGet();
+                    mTron.initTronNode();
+                    long height = mTron.getBlockHeight().blockingGet();
                     Log.d(IntroPresenter.class.getSimpleName(), "block height : " + height);
                     break;
                 } catch (Exception e) {
@@ -43,17 +51,18 @@ public class IntroPresenter extends BasePresenter<IntroView> {
                     }
 
                     if (tryCnt == Constants.CONNECTION_RETRY - 1) {
-                        throw e;
+                        return CONNECTION_ERROR;
                     }
 
+                    mTron.setFailConnectNode(true);
                     e.printStackTrace();
                 }
 
                 tryCnt++;
             }
 
-            if (WalletAppManager.getInstance(mContext).hasWallet()) {
-                if (WalletAppManager.getInstance(mContext).isAgree()) {
+            if (mWalletAppManager.hasWallet()) {
+                if (mWalletAppManager.isAgree()) {
                     return SUCCESS;
                 } else {
                     return NOT_AGREE;
@@ -62,8 +71,8 @@ public class IntroPresenter extends BasePresenter<IntroView> {
                 return NO_WALLET;
             }
         })
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(result -> {
             if (result == SUCCESS) {
                 mView.startLoginActivity();
@@ -71,6 +80,16 @@ public class IntroPresenter extends BasePresenter<IntroView> {
                 mView.startBackupAccountActivity();
             } else if (result == NO_SUCH_ALGORITHM) {
                 mView.doesNotSupportAlgorithm();
+            } else if (result == CONNECTION_ERROR) {
+                if (mWalletAppManager.hasWallet()) {
+                    if (mWalletAppManager.isAgree()) {
+                        mView.connectionError();
+                    } else {
+                        mView.showErrorMsg();
+                    }
+                } else {
+                    mView.showErrorMsg();
+                }
             } else if (result == NO_WALLET) {
                 mView.startCreateAccountActivity();
             }

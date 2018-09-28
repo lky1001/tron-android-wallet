@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -18,26 +19,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.BaseFragment;
+import com.devband.tronwalletforandroid.common.CommonFragment;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class OverviewFragment extends BaseFragment implements OverviewView {
+public class OverviewFragment extends CommonFragment implements OverviewView {
 
-    public static BaseFragment newInstance(@NonNull String address) {
-        OverviewFragment fragment = new OverviewFragment();
-        Bundle args = new Bundle(1);
-        args.putString(AccountDetailActivity.EXTRA_ADDRESS, address);
-
-        fragment.setArguments(args);
-        return fragment;
-    }
+    @Inject
+    OverviewPresenter mOverviewPresenter;
 
     @BindView(R.id.address_text)
     TextView mAddressText;
@@ -65,6 +62,15 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
     private String mAddress;
 
+    public static Fragment newInstance(@NonNull String address) {
+        OverviewFragment fragment = new OverviewFragment();
+        Bundle args = new Bundle(1);
+        args.putString(AccountDetailActivity.EXTRA_ADDRESS, address);
+
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,10 +79,9 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
         mAddress = getArguments().getString(AccountDetailActivity.EXTRA_ADDRESS);
 
-        mPresenter = new OverviewPresenter(this);
-        mPresenter.onCreate();
+        mOverviewPresenter.onCreate();
 
-        ((OverviewPresenter) mPresenter).getAccount(mAddress);
+        mOverviewPresenter.getAccount(mAddress);
 
         return view;
     }
@@ -84,7 +89,7 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
     @Override
     protected void refresh() {
         if (isAdded()) {
-            ((OverviewPresenter) mPresenter).getAccount(mAddress);
+            mOverviewPresenter.getAccount(mAddress);
         }
     }
 
@@ -173,7 +178,7 @@ public class OverviewFragment extends BaseFragment implements OverviewView {
 
     @OnClick(R.id.view_votes_button)
     public void onViewVotesClick() {
-        Intent intent = new Intent(getActivity(), VoteActivity.class);
+        Intent intent = new Intent(getActivity(), AccountVoteActivity.class);
         intent.putExtra(AccountDetailActivity.EXTRA_ADDRESS, mAddress);
 
         startActivity(intent);

@@ -18,11 +18,19 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.tron.Tron;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AddressActivity extends CommonActivity implements AddressView {
+
+    @Inject
+    AddressPresenter mAddressPresenter;
+
+    @Inject
+    Tron mTron;
 
     @BindView(R.id.toolbar)
     public Toolbar mToolbar;
@@ -49,14 +57,13 @@ public class AddressActivity extends CommonActivity implements AddressView {
             getSupportActionBar().setTitle(R.string.title_my_address);
         }
 
-        mPresenter = new AddressPresenter(this);
-        mPresenter.onCreate();
+        mAddressPresenter.onCreate();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.onResume();
+        mAddressPresenter.onResume();
     }
 
     @Override
@@ -102,7 +109,7 @@ public class AddressActivity extends CommonActivity implements AddressView {
     }
 
     private void shareMyAddress() {
-        String address = Tron.getInstance(AddressActivity.this).getLoginAddress();
+        String address = mTron.getLoginAddress();
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, address);

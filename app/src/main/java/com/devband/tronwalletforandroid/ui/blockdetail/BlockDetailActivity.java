@@ -3,14 +3,14 @@ package com.devband.tronwalletforandroid.ui.blockdetail;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.BaseFragment;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.accountdetail.transaction.TransactionFragment;
-import com.devband.tronwalletforandroid.ui.blockdetail.fragment.BlockOverviewFragment;
+import com.devband.tronwalletforandroid.ui.blockdetail.fragment.BlockInfoFragment;
 import com.devband.tronwalletforandroid.ui.blockexplorer.transfer.TransferFragment;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
  * Created by user on 2018. 5. 28..
  */
 
-public class BlockDetailActivity extends CommonActivity implements DetailBlockView {
+public class BlockDetailActivity extends CommonActivity {
 
     public static final String EXTRA_BLOCK_NUMBER = "extra_block_number";
 
@@ -39,7 +39,7 @@ public class BlockDetailActivity extends CommonActivity implements DetailBlockVi
 
     private long mBlockNumber;
 
-    private List<BaseFragment> mFragments = new ArrayList<>();
+    private List<Fragment> mFragments = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,7 +83,7 @@ public class BlockDetailActivity extends CommonActivity implements DetailBlockVi
     };
 
     private void initUi() {
-        mFragments.add(BlockOverviewFragment.newInstance(mBlockNumber));
+        mFragments.add(BlockInfoFragment.newInstance(mBlockNumber));
         mFragments.add(TransactionFragment.newInstance(mBlockNumber));
         mFragments.add(TransferFragment.newInstance(mBlockNumber));
 

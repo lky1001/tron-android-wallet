@@ -1,9 +1,9 @@
 package com.devband.tronwalletforandroid.ui.blockdetail.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,24 +12,22 @@ import android.widget.Toast;
 
 import com.devband.tronlib.dto.Block;
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.BaseFragment;
+import com.devband.tronwalletforandroid.common.CommonFragment;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.blockdetail.BlockDetailActivity;
 
 import java.util.Date;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BlockOverviewFragment extends BaseFragment implements BlockInfoView {
-    public static BaseFragment newInstance(@NonNull long blockNumber) {
-        BlockOverviewFragment fragment = new BlockOverviewFragment();
-        Bundle args = new Bundle(1);
-        args.putLong(BlockDetailActivity.EXTRA_BLOCK_NUMBER, blockNumber);
-        fragment.setArguments(args);
-        return fragment;
-    }
+public class BlockInfoFragment extends CommonFragment implements BlockInfoView {
+
+    @Inject
+    BlockInfoPresenter mBlockInfoPresenter;
 
     @BindView(R.id.txt_status)
     TextView mTxtStatus;
@@ -57,6 +55,14 @@ public class BlockOverviewFragment extends BaseFragment implements BlockInfoView
 
     private long mBlockNumber;
 
+    public static Fragment newInstance(@NonNull long blockNumber) {
+        BlockInfoFragment fragment = new BlockInfoFragment();
+        Bundle args = new Bundle(1);
+        args.putLong(BlockDetailActivity.EXTRA_BLOCK_NUMBER, blockNumber);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -68,10 +74,8 @@ public class BlockOverviewFragment extends BaseFragment implements BlockInfoView
             getActivity().finish();
         }
 
-        mPresenter = new BlockInfoPresenter(this);
-        mPresenter.onCreate();
-
-        ((BlockInfoPresenter) mPresenter).getBlock(mBlockNumber);
+        mBlockInfoPresenter.onCreate();
+        mBlockInfoPresenter.getBlock(mBlockNumber);
 
         return view;
     }

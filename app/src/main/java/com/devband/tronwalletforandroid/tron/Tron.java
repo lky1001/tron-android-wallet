@@ -40,9 +40,9 @@ public class Tron {
     public static final int MIN_PASSWORD_LENGTH = 8;
     public static final int PRIVATE_KEY_SIZE = 64;
 
-    private static Tron instance;
-
     private Context mContext;
+    private TronNetwork mTronNetwork;
+    private CustomPreference mCustomPreference;
 
     private List<String> mFullNodeList;
 
@@ -52,22 +52,19 @@ public class Tron {
 
     private AccountManager mAccountManager;
 
-    public static synchronized Tron getInstance(@NonNull Context context) {
-        if (instance == null) {
-            synchronized (Tron.class) {
-                if (instance == null) {
-                    instance = new Tron(context);
-                }
-            }
-        }
-        return instance;
+    private boolean mFailConnectNode;
+
+    public Tron(Context context, TronNetwork tronNetwork, CustomPreference customPreference) {
+        this.mContext = context;
+        this.mTronNetwork = tronNetwork;
+        this.mCustomPreference = customPreference;
+        init();
     }
 
-    private Tron() {}
-
-    private Tron(Context context) {
-        this.mContext = context;
-        init();
+    public void setFailConnectNode(boolean failCustomNode) {
+        if (!TextUtils.isEmpty(mCustomPreference.getCustomFullNodeHost())) {
+            this.mFailConnectNode = failCustomNode;
+        }
     }
 
     private void init() {
@@ -79,15 +76,18 @@ public class Tron {
     }
 
     public void initTronNode() {
-        Random random = new Random();
-        // todo - fail over
-        int randomFullNode = random.nextInt(mFullNodeList.size());
-        int randomSolidityNode = random.nextInt(mSolidityNodeList.size());
-
-        if (!TextUtils.isEmpty(CustomPreference.getInstance(mContext).getCustomFullNodeHost())) {
-            mTronManager = new TronManager(CustomPreference.getInstance(mContext).getCustomFullNodeHost(),
-                    CustomPreference.getInstance(mContext).getCustomFullNodeHost());
+        if (!TextUtils.isEmpty(mCustomPreference.getCustomFullNodeHost()) && !mFailConnectNode) {
+            try {
+                mTronManager = new TronManager(mCustomPreference.getCustomFullNodeHost(),
+                        mCustomPreference.getCustomFullNodeHost());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else if (!mFullNodeList.isEmpty()) {
+            Random random = new Random();
+            int randomFullNode = random.nextInt(mFullNodeList.size());
+            int randomSolidityNode = random.nextInt(mSolidityNodeList.size());
+
             mTronManager = new TronManager(mFullNodeList.get(randomFullNode), mSolidityNodeList.get(randomSolidityNode));
         } else {
             // exception
@@ -115,8 +115,23 @@ public class Tron {
                 mAccountManager = new AccountManager(true, mContext);
             }
 
-            return mAccountManager.importAccount(generateDefaultAccountName(nickname), privateKey, password, false).blockingGet();
+            return SUCCESS;
+        })
+        .flatMap(result -> {
+            if (result == SUCCESS) {
+                return generateDefaultAccountName(nickname);
+            } else {
+                return null;
+            }
+        })
+        .flatMap(name -> {
+            if (name != null) {
+                return mAccountManager.importAccount(name, privateKey, password, false);
+            }
+
+            return Single.just(ERROR_INVALID_PASSWORD);
         });
+
     }
 
     public Single<Integer> registerAccount(@NonNull String nickname, @NonNull String password) {
@@ -129,14 +144,29 @@ public class Tron {
                 mAccountManager = new AccountManager(true, mContext);
             }
 
-            return mAccountManager.genAccount(generateDefaultAccountName(nickname), password).blockingGet();
+            return SUCCESS;
+        })
+        .flatMap(result -> {
+            if (result == SUCCESS) {
+                return generateDefaultAccountName(nickname);
+            } else {
+                return null;
+            }
+        })
+        .flatMap(name -> {
+            if (name != null) {
+                return mAccountManager.genAccount(name, password);
+            }
+
+            return Single.just(ERROR_INVALID_PASSWORD);
         });
     }
 
     public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey) {
-        return Single.fromCallable(() -> {
-            return mAccountManager.importAccount(generateDefaultAccountName(nickname), privateKey, null, true).blockingGet();
-        });
+        return generateDefaultAccountName(nickname)
+            .flatMap(name -> {
+                return mAccountManager.importAccount(name, privateKey, null, true);
+            });
     }
 
     public int login(String password) {
@@ -190,7 +220,7 @@ public class Tron {
     }
 
     public Single<Account> getAccount(@NonNull String address) {
-        return TronNetwork.getInstance().getAccount(address);
+        return mTronNetwork.getAccount(address);
     }
 
     public Single<Protocol.Account> queryAccount(@NonNull String address) {
@@ -243,9 +273,8 @@ public class Tron {
 
             return mTronManager.createTransaction(contract);
         })
-        .flatMap(transactionSingle -> {
-            Protocol.Transaction transaction = transactionSingle.blockingGet();
-
+        .flatMap(transactionSingle -> transactionSingle)
+        .flatMap(transaction -> {
             if (transaction == null || transaction.getRawData().getContractCount() == 0) {
                 throw new RuntimeException();
             }
@@ -272,9 +301,8 @@ public class Tron {
 
             return mTronManager.createTransferAssetTransaction(contract);
         })
-        .flatMap(transactionSingle -> {
-            Protocol.Transaction transaction = transactionSingle.blockingGet();
-
+        .flatMap(transactionSingle -> transactionSingle)
+        .flatMap(transaction -> {
             if (transaction == null || transaction.getRawData().getContractCount() == 0) {
                 throw new RuntimeException();
             }
@@ -314,9 +342,14 @@ public class Tron {
     }
 
     public Single<Boolean> hasAccount() {
-        return Single.fromCallable(() -> {
-            return mAccountManager.getAccountCount().blockingGet() > 0;
-        });
+        return mAccountManager.getAccountCount()
+                .flatMap(count -> {
+                    if (count > 0) {
+                        return Single.just(true);
+                    } else {
+                        return Single.just(false);
+                    }
+                });
     }
 
     @Nullable
@@ -329,11 +362,17 @@ public class Tron {
     }
 
     public Single<Boolean> createAccount(@NonNull String nickname) {
-        return Single.fromCallable(() -> {
-            mAccountManager.createAccount(generateDefaultAccountName(nickname))
-                    .blockingGet();
-            return true;
-        });
+        return generateDefaultAccountName(nickname)
+                .flatMap(name -> {
+                    return mAccountManager.createAccount(name);
+                })
+                .flatMap(result -> {
+                    if (result == Tron.SUCCESS) {
+                        return Single.just(true);
+                    } else {
+                        return Single.just(false);
+                    }
+                });
     }
 
     public Single<List<AccountModel>> getAccountList() {
@@ -344,9 +383,11 @@ public class Tron {
         mAccountManager.changeLoginAccount(accountModel);
     }
 
-    private String generateDefaultAccountName(String prefix) {
-        int cnt = mAccountManager.getAccountCount().blockingGet();
-        return prefix + (++cnt);
+    private Single<String> generateDefaultAccountName(String prefix) {
+        return mAccountManager.getAccountCount()
+                .flatMap(cnt -> {
+                    return Single.just(prefix + (++cnt));
+                });
     }
 
     public Single<GrpcAPI.WitnessList> getWitnessList() {
@@ -366,9 +407,8 @@ public class Tron {
 
             return mTronManager.createParticipateAssetIssueTransaction(participateAssetIssueContract);
         })
-        .flatMap(transactionSingle -> {
-            Protocol.Transaction transaction = transactionSingle.blockingGet();
-
+        .flatMap(transactionSingle -> transactionSingle)
+        .flatMap(transaction -> {
             if (transaction == null || transaction.getRawData().getContractCount() == 0) {
                 throw new RuntimeException();
             }
@@ -385,9 +425,8 @@ public class Tron {
 
             return mTronManager.createTransaction(voteWitnessContract);
         })
-        .flatMap(transactionSingle -> {
-            Protocol.Transaction transaction = transactionSingle.blockingGet();
-
+        .flatMap(transactionSingle -> transactionSingle)
+        .flatMap(transaction -> {
             if (transaction == null || transaction.getRawData().getContractCount() == 0) {
                 throw new RuntimeException();
             }
@@ -404,9 +443,8 @@ public class Tron {
 
             return mTronManager.createTransaction(freezeBalanceContract);
         })
-        .flatMap(transactionSingle -> {
-            Protocol.Transaction transaction = transactionSingle.blockingGet();
-
+        .flatMap(transactionSingle -> transactionSingle)
+        .flatMap(transaction -> {
             if (transaction == null || transaction.getRawData().getContractCount() == 0) {
                 throw new RuntimeException();
             }
@@ -423,9 +461,8 @@ public class Tron {
 
             return mTronManager.createTransaction(unfreezeBalanceContract);
         })
-        .flatMap(transactionSingle -> {
-            Protocol.Transaction transaction = transactionSingle.blockingGet();
-
+        .flatMap(transactionSingle -> transactionSingle)
+        .flatMap(transaction -> {
             if (transaction == null || transaction.getRawData().getContractCount() == 0) {
                 throw new RuntimeException();
             }

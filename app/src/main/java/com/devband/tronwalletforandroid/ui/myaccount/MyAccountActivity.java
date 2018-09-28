@@ -36,6 +36,8 @@ import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -45,6 +47,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class MyAccountActivity extends CommonActivity implements MyAccountView {
+
+    @Inject
+    MyAccountPresenter mMyAccountPresenter;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -100,14 +105,13 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
             getSupportActionBar().setTitle(R.string.title_my_account);
         }
 
-        mPresenter = new MyAccountPresenter(this);
-        mPresenter.onCreate();
+        mMyAccountPresenter.onCreate();
 
         initAccountList();
     }
 
     private void initAccountList() {
-        ((MyAccountPresenter) mPresenter).getAccountList()
+        mMyAccountPresenter.getAccountList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<List<AccountModel>>() {
@@ -125,7 +129,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                         mAccountSpinner.setAdapter(mAccountAdapter);
 
                         for (int i = 0; i < accountModelList.size(); i++) {
-                            int id = ((MyAccountPresenter) mPresenter).getLoginAccountIndex();
+                            int id = mMyAccountPresenter.getLoginAccountIndex();
                             if (id == accountModelList.get(i).getId()) {
                                 mAccountSpinner.setSelection(i);
                                 break;
@@ -145,7 +149,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.onResume();
+        mMyAccountPresenter.onResume();
     }
 
     @Override
@@ -240,7 +244,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
     @Override
     public void successFreezeBalance() {
-        ((MyAccountPresenter) mPresenter).getAccountAccountInfo();
+        mMyAccountPresenter.getAccountAccountInfo();
     }
 
     @Override
@@ -276,7 +280,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         String currentPassword = ((EditText) dialog.getCustomView().findViewById(R.id.current_password))
                                 .getText().toString();
-                        if (!((MyAccountPresenter) mPresenter).matchPassword(currentPassword)) {
+                        if (!mMyAccountPresenter.matchPassword(currentPassword)) {
                             Toast.makeText(dialog.getContext(), R.string.unmatched_current_password, Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -297,7 +301,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                         }
 
                         dialog.dismiss();
-                        ((MyAccountPresenter) mPresenter).changePassword(currentPassword, confirmNewPassword);
+                        mMyAccountPresenter.changePassword(currentPassword, confirmNewPassword);
                         Log.d("hanseon--", "positive : " + currentPassword + ", " + newPassword + "," + confirmNewPassword);
                     }
                 })
@@ -326,8 +330,8 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                         dialog.dismiss();
                         String password = input.toString();
 
-                        if (!TextUtils.isEmpty(password) && ((MyAccountPresenter) mPresenter).matchPassword(password)) {
-                            String privateKey = ((MyAccountPresenter) mPresenter).getLoginPrivateKey();
+                        if (!TextUtils.isEmpty(password) && mMyAccountPresenter.matchPassword(password)) {
+                            String privateKey = mMyAccountPresenter.getLoginPrivateKey();
 
                             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                             sharingIntent.setType("text/plain");
@@ -391,7 +395,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                 }
 
                 String password = inputPassword.getText().toString();
-                if (TextUtils.isEmpty(password) || !((MyAccountPresenter) mPresenter).matchPassword(password)) {
+                if (TextUtils.isEmpty(password) || !mMyAccountPresenter.matchPassword(password)) {
                     Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password),
                             Toast.LENGTH_SHORT).show();
                     return;
@@ -406,7 +410,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                 }
 
                 dialog.dismiss();
-                ((MyAccountPresenter) mPresenter).freezeBalance((long) (freezeBalance * Constants.ONE_TRX));
+                mMyAccountPresenter.freezeBalance((long) (freezeBalance * Constants.ONE_TRX));
             }
         });
 
@@ -427,8 +431,8 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                         dialog.dismiss();
                         String password = input.toString();
 
-                        if (!TextUtils.isEmpty(password) && ((MyAccountPresenter) mPresenter).matchPassword(password)) {
-                            ((MyAccountPresenter) mPresenter).unfreezeBalance();
+                        if (!TextUtils.isEmpty(password) && mMyAccountPresenter.matchPassword(password)) {
+                            mMyAccountPresenter.unfreezeBalance();
                         } else {
                             Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password),
                                     Toast.LENGTH_SHORT).show();
@@ -458,8 +462,8 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
         @Override
         public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int pos, long id) {
             AccountModel accountModel = mAccountAdapter.getItem(pos);
-            ((MyAccountPresenter) mPresenter).changeLoginAccount(accountModel);
-            ((MyAccountPresenter) mPresenter).getAccountAccountInfo();
+            mMyAccountPresenter.changeLoginAccount(accountModel);
+            mMyAccountPresenter.getAccountAccountInfo();
         }
 
         @Override

@@ -1,25 +1,32 @@
 package com.devband.tronwalletforandroid.ui.backupaccount;
 
-import com.devband.tronwalletforandroid.tron.WalletAppManager;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class BackupAccountPresenter extends BasePresenter<BackupAccountView> {
 
-    public BackupAccountPresenter(BackupAccountView view) {
+    private Tron mTron;
+    private WalletAppManager mWalletAppManager;
+    private RxJavaSchedulers mRxJavaSchedulers;
+
+    public BackupAccountPresenter(BackupAccountView view, Tron tron, WalletAppManager walletAppManager,
+            RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTron = tron;
+        this.mWalletAppManager = walletAppManager;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     @Override
     public void onCreate() {
-        String address = Tron.getInstance(mContext).getLoginAddress();
-        String privateKey = Tron.getInstance(mContext).getLoginPrivateKey();
+        String address = mTron.getLoginAddress();
+        String privateKey = mTron.getLoginPrivateKey();
 
         mView.displayAccountInfo(address, privateKey);
     }
@@ -41,11 +48,11 @@ public class BackupAccountPresenter extends BasePresenter<BackupAccountView> {
 
     public void agreeTerms(boolean isAgree) {
         Single.fromCallable(() -> {
-            WalletAppManager.getInstance(mContext).agreeTerms(true);
+            mWalletAppManager.agreeTerms(true);
             return true;
         })
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {
             @Override
             public void onSubscribe(Disposable d) {

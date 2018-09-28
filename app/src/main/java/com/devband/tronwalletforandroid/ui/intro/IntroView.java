@@ -13,4 +13,6 @@ interface IntroView extends IView {
     void showErrorMsg();
 
     void doesNotSupportAlgorithm();
+
+    void connectionError();
 }

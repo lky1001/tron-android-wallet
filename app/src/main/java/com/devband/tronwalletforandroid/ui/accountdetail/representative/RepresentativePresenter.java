@@ -3,6 +3,7 @@ package com.devband.tronwalletforandroid.ui.accountdetail.representative;
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Transfer;
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.accountdetail.representative.model.BaseModel;
 import com.devband.tronwalletforandroid.ui.accountdetail.representative.model.BlockStatModel;
 import com.devband.tronwalletforandroid.ui.accountdetail.representative.model.HeaderModel;
@@ -13,13 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
 
-    public RepresentativePresenter(RepresentativeView view) {
+    private TronNetwork mTronNetwork;
+    private RxJavaSchedulers mRxJavaSchedulers;
+
+    public RepresentativePresenter(RepresentativeView view, TronNetwork tronNetwork, RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTronNetwork = tronNetwork;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     @Override
@@ -63,8 +67,8 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
                     }
                     return viewModels;
                 })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(mRxJavaSchedulers.getIo())
+                .observeOn(mRxJavaSchedulers.getMainThread())
                 .subscribe(
                         viewModels -> {
                             if (mView != null) {
@@ -80,8 +84,8 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
 
     private Single<BlockStatModel> loadBlockStat(String address) {
         return Single.zip(
-                TronNetwork.getInstance().getAccountMedia(address),
-                TronNetwork.getInstance().getTransactionStats(address),
+                mTronNetwork.getAccountMedia(address),
+                mTronNetwork.getTransactionStats(address),
                 (accountMedia, transactionStats) ->
                         new BlockStatModel(
                                 address,
@@ -93,7 +97,7 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
     }
 
     private Single<List<Transfer>> loadTransferHistory(String address) {
-        return TronNetwork.getInstance().getTransfers(0, 25, "-timestamp", true, address)
+        return mTronNetwork.getTransfers(0, 25, "-timestamp", true, address)
                 .map(value -> value.getData());
     }
 }

@@ -2,10 +2,11 @@ package com.devband.tronwalletforandroid.ui.representative;
 
 import android.support.annotation.NonNull;
 
-import com.devband.tronwalletforandroid.tron.WalletAppManager;
+import com.devband.tronwalletforandroid.common.AdapterDataModel;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.tron.Tron;
-import com.devband.tronwalletforandroid.common.AdapterDataModel;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 import com.devband.tronwalletforandroid.ui.representative.dto.Representative;
 import com.devband.tronwalletforandroid.ui.representative.dto.RepresentativeList;
@@ -17,18 +18,22 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import io.reactivex.Single;
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
 
     private AdapterDataModel<Representative> mAdapterDataModel;
+    private Tron mTron;
+    private WalletAppManager mWalletAppManager;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
-    public RepresentativePresenter(RepresentativeView view) {
+    public RepresentativePresenter(RepresentativeView view, Tron tron, WalletAppManager walletAppManager,
+            RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTron = tron;
+        this.mWalletAppManager = walletAppManager;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     public void setAdapterDataModel(AdapterDataModel<Representative> adapterDataModel) {
@@ -57,7 +62,7 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
     }
 
     public void getRepresentativeList() {
-        Single.fromCallable(() -> Tron.getInstance(mContext).getWitnessList().blockingGet())
+        mTron.getWitnessList()
         .map(witnessList -> {
             List<Representative> representatives = new ArrayList<>();
 
@@ -92,8 +97,8 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
                     .highestVotes(highestVotes)
                     .build();
         })
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<RepresentativeList>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -114,7 +119,7 @@ public class RepresentativePresenter extends BasePresenter<RepresentativeView> {
     }
 
     public boolean matchPassword(@NonNull String password) {
-        return WalletAppManager.getInstance(mContext).login(password) == WalletAppManager.SUCCESS;
+        return mWalletAppManager.login(password) == WalletAppManager.SUCCESS;
     }
 
     class Descending implements Comparator<Representative> {

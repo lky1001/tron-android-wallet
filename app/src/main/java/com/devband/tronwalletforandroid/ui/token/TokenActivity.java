@@ -23,13 +23,15 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronlib.dto.Token;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
-import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.token.adapter.TokenAdapter;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import org.tron.protos.Protocol;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +39,9 @@ import butterknife.ButterKnife;
 public class TokenActivity extends CommonActivity implements TokenView {
 
     private static final int PAGE_SIZE = 25;
+    
+    @Inject
+    TokenPresenter mTokenPresenter;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -95,12 +100,11 @@ public class TokenActivity extends CommonActivity implements TokenView {
         mRecyclerView.addOnScrollListener(mRecyclerViewOnScrollListener);
         mAdapterView = mAdapter;
 
-        mPresenter = new TokenPresenter(this);
-        ((TokenPresenter) mPresenter).setAdapterDataModel(mAdapter);
-        mPresenter.onCreate();
+        mTokenPresenter.setAdapterDataModel(mAdapter);
+        mTokenPresenter.onCreate();
 
         mIsLoading = true;
-        ((TokenPresenter) mPresenter).loadItems(mStartIndex, PAGE_SIZE);
+        mTokenPresenter.loadItems(mStartIndex, PAGE_SIZE);
     }
 
     @Override
@@ -128,11 +132,11 @@ public class TokenActivity extends CommonActivity implements TokenView {
         public void onRefresh() {
             mStartIndex = 0;
             mIsLoading = true;
-            ((TokenPresenter) mPresenter).clearData();
+            mTokenPresenter.clearData();
             mAdapterView.refresh();
             mSwipeRefreshLayout.setRefreshing(true);
             mSearchView.closeSearch();
-            ((TokenPresenter) mPresenter).loadItems(mStartIndex, PAGE_SIZE);
+            mTokenPresenter.loadItems(mStartIndex, PAGE_SIZE);
         }
     };
 
@@ -141,13 +145,13 @@ public class TokenActivity extends CommonActivity implements TokenView {
         public boolean onQueryTextSubmit(String query) {
             mStartIndex = 0;
             mIsLoading = true;
-            ((TokenPresenter) mPresenter).clearData();
+            mTokenPresenter.clearData();
             mAdapterView.refresh();
             mSearchView.closeSearch();
             if (!TextUtils.isEmpty(query)) {
-                ((TokenPresenter) mPresenter).findToken(query, mStartIndex, PAGE_SIZE);
+                mTokenPresenter.findToken(query, mStartIndex, PAGE_SIZE);
             } else {
-                ((TokenPresenter) mPresenter).loadItems(mStartIndex, PAGE_SIZE);
+                mTokenPresenter.loadItems(mStartIndex, PAGE_SIZE);
             }
             return true;
         }
@@ -189,7 +193,7 @@ public class TokenActivity extends CommonActivity implements TokenView {
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0) {
                     mIsLoading = true;
-                    ((TokenPresenter) mPresenter).loadItems(mStartIndex, PAGE_SIZE);
+                    mTokenPresenter.loadItems(mStartIndex, PAGE_SIZE);
                 }
             }
         }
@@ -261,7 +265,7 @@ public class TokenActivity extends CommonActivity implements TokenView {
                         }
 
                         String password = inputPassword.getText().toString();
-                        if (TextUtils.isEmpty(password) || !((TokenPresenter) mPresenter).matchPassword(password)) {
+                        if (TextUtils.isEmpty(password) || !mTokenPresenter.matchPassword(password)) {
                             Toast.makeText(TokenActivity.this, getString(R.string.invalid_password),
                                     Toast.LENGTH_SHORT).show();
                             return;
@@ -286,7 +290,7 @@ public class TokenActivity extends CommonActivity implements TokenView {
 
                         dialog.dismiss();
 
-                        ((TokenPresenter) mPresenter).participateToken(item, tokenAmount);
+                        mTokenPresenter.participateToken(item, tokenAmount);
                     }
                 });
 

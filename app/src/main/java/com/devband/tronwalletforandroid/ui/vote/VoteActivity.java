@@ -21,13 +21,15 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
-import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
+import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.accountdetail.AccountDetailActivity;
 import com.devband.tronwalletforandroid.ui.vote.adapter.VoteListAdapter;
 import com.devband.tronwalletforandroid.ui.vote.dto.VoteItem;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +37,9 @@ import butterknife.OnClick;
 
 public class VoteActivity extends CommonActivity implements VoteView {
 
+    @Inject
+    VotePresenter mVotePresenter;
+    
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
@@ -143,13 +148,12 @@ public class VoteActivity extends CommonActivity implements VoteView {
         mCheckMyVotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((VotePresenter) mPresenter).showOnlyMyVotes(mCheckMyVotes.isChecked());
+                mVotePresenter.showOnlyMyVotes(mCheckMyVotes.isChecked());
             }
         });
 
-        mPresenter = new VotePresenter(this);
-        ((VotePresenter) mPresenter).setAdapterDataModel(mVoteListAdapter);
-        mPresenter.onCreate();
+        mVotePresenter.setAdapterDataModel(mVoteListAdapter);
+        mVotePresenter.onCreate();
     }
 
     @Override
@@ -216,7 +220,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
             return;
         }
         hideDialog();
-        ((VotePresenter) mPresenter).getRepresentativeList(mCheckMyVotes.isChecked());
+        mVotePresenter.getRepresentativeList(mCheckMyVotes.isChecked());
     }
 
     @Override
@@ -256,7 +260,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
 
     @OnClick(R.id.retry_button)
     public void onRetryClick() {
-        ((VotePresenter) mPresenter).getRepresentativeList(mCheckMyVotes.isChecked());
+        mVotePresenter.getRepresentativeList(mCheckMyVotes.isChecked());
     }
 
     private View.OnClickListener mViewClickListener = view -> {
@@ -395,7 +399,7 @@ public class VoteActivity extends CommonActivity implements VoteView {
                         }
 
                         String password = inputPassword.getText().toString();
-                        if (TextUtils.isEmpty(password) || !((VotePresenter) mPresenter).matchPassword(password)) {
+                        if (TextUtils.isEmpty(password) || !mVotePresenter.matchPassword(password)) {
                             Toast.makeText(VoteActivity.this, getString(R.string.invalid_password),
                                     Toast.LENGTH_SHORT).show();
                             return;
@@ -412,9 +416,9 @@ public class VoteActivity extends CommonActivity implements VoteView {
                         dialog.dismiss();
 
                         if (voteBalance > (item.getMyVoteCount() + mRemainVotePoint)) {
-                            ((VotePresenter) mPresenter).voteRepresentative(item.getAddress(), voteBalance, false);
+                            mVotePresenter.voteRepresentative(item.getAddress(), voteBalance, false);
                         } else {
-                            ((VotePresenter) mPresenter).voteRepresentative(item.getAddress(), voteBalance, true);
+                            mVotePresenter.voteRepresentative(item.getAddress(), voteBalance, true);
                         }
                     }
                 });

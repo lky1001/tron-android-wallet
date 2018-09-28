@@ -16,6 +16,8 @@ import com.thefinestartist.finestwebview.FinestWebView;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.SingleObserver;
@@ -26,6 +28,9 @@ import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 
 public class AboutActivity extends CommonActivity {
+
+    @Inject
+    TronNetwork mTronNetwork;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -47,7 +52,7 @@ public class AboutActivity extends CommonActivity {
             getSupportActionBar().setTitle(R.string.title_about_tron);
         }
 
-        TronNetwork.getInstance().getCoinInfo(Constants.TRON_COINMARKET_NAME)
+        mTronNetwork.getCoinInfo(Constants.TRON_COINMARKET_NAME)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<List<CoinMarketCap>>() {

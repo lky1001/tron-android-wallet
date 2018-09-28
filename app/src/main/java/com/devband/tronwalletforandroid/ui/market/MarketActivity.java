@@ -13,6 +13,8 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -21,6 +23,9 @@ import butterknife.ButterKnife;
  */
 
 public class MarketActivity extends CommonActivity implements MarketView {
+
+    @Inject
+    MarketPresenter mMarketPresenter;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -39,8 +44,7 @@ public class MarketActivity extends CommonActivity implements MarketView {
 
         initUi();
 
-        mPresenter = new MarketPresenter(this);
-        mPresenter.onCreate();
+        mMarketPresenter.onCreate();
     }
 
     private void initUi() {

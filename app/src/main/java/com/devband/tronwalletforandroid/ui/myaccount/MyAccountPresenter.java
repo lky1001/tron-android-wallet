@@ -4,9 +4,10 @@ import android.support.annotation.NonNull;
 
 import com.devband.tronlib.dto.Account;
 import com.devband.tronwalletforandroid.common.Constants;
-import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
 import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
@@ -18,14 +19,20 @@ import java.util.List;
 
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
-    public MyAccountPresenter(MyAccountView view) {
+    private Tron mTron;
+    private WalletAppManager mWalletAppManager;
+    private RxJavaSchedulers mRxJavaSchedulers;
+
+    public MyAccountPresenter(MyAccountView view, Tron tron, WalletAppManager walletAppManager,
+            RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTron = tron;
+        this.mWalletAppManager = walletAppManager;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     @Override
@@ -48,90 +55,90 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
     }
 
     public Single<List<AccountModel>> getAccountList() {
-        return Tron.getInstance(mContext).getAccountList();
+        return mTron.getAccountList();
     }
 
     public void getAccountAccountInfo() {
-        final String address = Tron.getInstance(mContext).getLoginAddress();
+        final String address = mTron.getLoginAddress();
 
         mView.showLoadingDialog();
 
-        Tron.getInstance(mContext).getAccount(Tron.getInstance(mContext).getLoginAddress())
-                .subscribeOn(Schedulers.io())
-                .map((account -> {
-                    List<Frozen> frozenList = new ArrayList<>();
+        mTron.getAccount(mTron.getLoginAddress())
+        .map((account -> {
+            List<Frozen> frozenList = new ArrayList<>();
 
-                    for (Account.FrozenTrx frozen : account.getFrozen().getBalances()) {
-                        frozenList.add(Frozen.builder()
-                                .frozenBalance(frozen.getAmount())
-                                .expireTime(frozen.getExpires())
-                                .build());
-                    }
+            for (Account.FrozenTrx frozen : account.getFrozen().getBalances()) {
+                frozenList.add(Frozen.builder()
+                        .frozenBalance(frozen.getAmount())
+                        .expireTime(frozen.getExpires())
+                        .build());
+            }
 
-                    List<Asset> assetList = new ArrayList<>();
+            List<Asset> assetList = new ArrayList<>();
 
-                    for (Account.Balance balance : account.getTokenBalances()) {
-                        if (Constants.TRON_SYMBOL.equalsIgnoreCase(balance.getName())) {
-                            continue;
-                        }
+            for (Account.Balance balance : account.getTokenBalances()) {
+                if (Constants.TRON_SYMBOL.equalsIgnoreCase(balance.getName())) {
+                    continue;
+                }
 
-                        assetList.add(Asset.builder()
-                                .name(balance.getName())
-                                .balance(balance.getBalance())
-                                .build());
-                    }
+                assetList.add(Asset.builder()
+                        .name(balance.getName())
+                        .balance(balance.getBalance())
+                        .build());
+            }
 
-                    return TronAccount.builder()
-                            .name(account.getName())
-                            .balance(account.getBalance())
-                            .bandwidth(account.getBandwidth().getNetRemaining())
-                            .assetList(assetList)
-                            .frozenList(frozenList)
-                            .build();
-                }))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<TronAccount>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+            return TronAccount.builder()
+                    .name(account.getName())
+                    .balance(account.getBalance())
+                    .bandwidth(account.getBandwidth().getNetRemaining())
+                    .assetList(assetList)
+                    .frozenList(frozenList)
+                    .build();
+        }))
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
+        .subscribe(new SingleObserver<TronAccount>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
-                    }
+            }
 
-                    @Override
-                    public void onSuccess(TronAccount account) {
-                        mView.displayAccountInfo(address, account);
-                    }
+            @Override
+            public void onSuccess(TronAccount account) {
+                mView.displayAccountInfo(address, account);
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        // todo - error msg
-                        if (e instanceof ConnectException) {
-                            // internet error
-                        }
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                // todo - error msg
+                if (e instanceof ConnectException) {
+                    // internet error
+                }
 
-                        mView.showServerError();
-                    }
-                });
+                mView.showServerError();
+            }
+        });
     }
 
     public boolean matchPassword(@NonNull String password) {
-        return WalletAppManager.getInstance(mContext).login(password) == WalletAppManager.SUCCESS;
+        return mWalletAppManager.login(password) == WalletAppManager.SUCCESS;
     }
 
     public String getLoginPrivateKey() {
-        return Tron.getInstance(mContext).getLoginPrivateKey();
+        return mTron.getLoginPrivateKey();
     }
 
     public void changeLoginAccount(@NonNull AccountModel accountModel) {
-        Tron.getInstance(mContext).changeLoginAccount(accountModel);
+        mTron.changeLoginAccount(accountModel);
     }
 
     public void freezeBalance(long freezeBalance) {
         mView.showLoadingDialog();
 
-        Tron.getInstance(mContext).freezeBalance(freezeBalance, Constants.FREEZE_DURATION)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+        mTron.freezeBalance(freezeBalance, Constants.FREEZE_DURATION)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -157,9 +164,10 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
     public void unfreezeBalance() {
         mView.showLoadingDialog();
-        Tron.getInstance(mContext).unfreezeBalance()
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+
+        mTron.unfreezeBalance()
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -187,23 +195,23 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
     }
 
     public int getLoginAccountIndex() {
-        return Tron.getInstance(mContext).getLoginAccount().getId();
+        return mTron.getLoginAccount().getId();
     }
 
     public void changePassword(@NonNull String originPassword, @NonNull String newPassword) {
         mView.showLoadingDialog();
 
         Single.fromCallable(() -> {
-            boolean result = WalletAppManager.getInstance(mContext).changePassword(originPassword, newPassword);
+            boolean result = mWalletAppManager.changePassword(originPassword, newPassword);
 
             if (result) {
-                return Tron.getInstance(mContext).changePassword(newPassword);
+                return mTron.changePassword(newPassword);
             }
 
             return false;
         })
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {
             @Override
             public void onSubscribe(Disposable d) {

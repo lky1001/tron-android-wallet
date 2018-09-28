@@ -10,7 +10,12 @@ import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivity;
 import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 
+import javax.inject.Inject;
+
 public class IntroActivity extends CommonActivity implements IntroView {
+
+    @Inject
+    IntroPresenter mIntroPresenter;
 
     private boolean mIsBackClick = false;
 
@@ -19,8 +24,7 @@ public class IntroActivity extends CommonActivity implements IntroView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
-        mPresenter = new IntroPresenter(this);
-        mPresenter.onCreate();
+        mIntroPresenter.onCreate();
     }
 
     @Override
@@ -59,6 +63,14 @@ public class IntroActivity extends CommonActivity implements IntroView {
     public void doesNotSupportAlgorithm() {
         if (!isFinishing()) {
             Toast.makeText(IntroActivity.this, getString(R.string.does_not_support_algorithm_msg), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void connectionError() {
+        if (!isFinishing()) {
+            Toast.makeText(IntroActivity.this, getString(R.string.connection_error_msg), Toast.LENGTH_SHORT).show();
+            startLoginActivity();
         }
     }
 

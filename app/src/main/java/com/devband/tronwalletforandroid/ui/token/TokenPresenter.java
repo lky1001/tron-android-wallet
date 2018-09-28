@@ -7,23 +7,32 @@ import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Token;
 import com.devband.tronlib.dto.Tokens;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
-import com.devband.tronwalletforandroid.tron.WalletAppManager;
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import org.tron.protos.Protocol;
 
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 public class TokenPresenter extends BasePresenter<TokenView> {
 
     private AdapterDataModel<Token> mAdapterDataModel;
+    private Tron mTron;
+    private TronNetwork mTronNetwork;
+    private WalletAppManager mWalletAppManager;
+    private RxJavaSchedulers mRxJavaSchedulers;
 
-    public TokenPresenter(TokenView view) {
+    public TokenPresenter(TokenView view, Tron tron, TronNetwork tronNetwork, WalletAppManager walletAppManager,
+            RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTron = tron;
+        this.mTronNetwork = tronNetwork;
+        this.mWalletAppManager = walletAppManager;
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     public void setAdapterDataModel(AdapterDataModel<Token> adapterDataModel) {
@@ -57,8 +66,7 @@ public class TokenPresenter extends BasePresenter<TokenView> {
     public void findToken(@NonNull String query, long startIndex, int pageSize) {
         mView.showLoadingDialog();
 
-        Single.zip(Tron.getInstance(mContext).queryAccount(Tron.getInstance(mContext).getLoginAddress()),
-                TronNetwork.getInstance().findTokens("%" + query + "%", startIndex, pageSize, "-name"),
+        Single.zip(mTron.queryAccount(mTron.getLoginAddress()), mTronNetwork.findTokens("%" + query + "%", startIndex, pageSize, "-name"),
                 (account, tokens) -> {
                     AccountInfo accountInfo = new AccountInfo();
                     accountInfo.account = account;
@@ -66,7 +74,8 @@ public class TokenPresenter extends BasePresenter<TokenView> {
 
                     return accountInfo;
                 })
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(mRxJavaSchedulers.getIo())
+                .observeOn(mRxJavaSchedulers.getMainThread())
                 .subscribe(new SingleObserver<AccountInfo>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -87,7 +96,7 @@ public class TokenPresenter extends BasePresenter<TokenView> {
     }
 
     public void loadItems(long startIndex, int pageSize) {
-        String acc = Tron.getInstance(mContext).getLoginAddress();
+        String acc = mTron.getLoginAddress();
 
         if (TextUtils.isEmpty(acc)) {
             mView.needLogin();
@@ -96,8 +105,7 @@ public class TokenPresenter extends BasePresenter<TokenView> {
 
         mView.showLoadingDialog();
 
-        Single.zip(Tron.getInstance(mContext).queryAccount(acc),
-                TronNetwork.getInstance().getTokens(startIndex, pageSize, "-name", "ico"),
+        Single.zip(mTron.queryAccount(acc), mTronNetwork.getTokens(startIndex, pageSize, "-name", "ico"),
                 (account, tokens) -> {
                     AccountInfo accountInfo = new AccountInfo();
                     accountInfo.account = account;
@@ -105,7 +113,8 @@ public class TokenPresenter extends BasePresenter<TokenView> {
 
                     return accountInfo;
                 })
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(mRxJavaSchedulers.getIo())
+                .observeOn(mRxJavaSchedulers.getMainThread())
                 .subscribe(new SingleObserver<AccountInfo>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -128,8 +137,9 @@ public class TokenPresenter extends BasePresenter<TokenView> {
     public void participateToken(Token item, long tokenAmount) {
         mView.showLoadingDialog();
 
-        Tron.getInstance(mContext).participateTokens(item.getName(), item.getOwnerAddress(), tokenAmount)
-        .observeOn(AndroidSchedulers.mainThread())
+        mTron.participateTokens(item.getName(), item.getOwnerAddress(), tokenAmount)
+        .subscribeOn(mRxJavaSchedulers.getIo())
+        .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -149,7 +159,7 @@ public class TokenPresenter extends BasePresenter<TokenView> {
     }
 
     public boolean matchPassword(@NonNull String password) {
-        return WalletAppManager.getInstance(mContext).login(password) == WalletAppManager.SUCCESS;
+        return mWalletAppManager.login(password) == WalletAppManager.SUCCESS;
     }
 
     private class AccountInfo {

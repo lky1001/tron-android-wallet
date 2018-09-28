@@ -125,7 +125,8 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
 
     private boolean isContain(Token token) {
         for (Token t : mList) {
-            if (t.getId().equalsIgnoreCase(token.getId())) {
+            if (t.getOwnerAddress().equalsIgnoreCase(token.getOwnerAddress())
+                    && t.getName().equalsIgnoreCase(token.getName())) {
                 return true;
             }
         }

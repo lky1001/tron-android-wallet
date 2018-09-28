@@ -23,6 +23,6 @@ public interface TokenService {
             @Query("limit") int limit, @Query("sort") String sort);
 
     @GET("api/token")
-    Single<Tokens> findTokens(@Query("name") String query, @Query("start") long start, @Query("limit") int limit,
-            @Query("sort") String sort);
+    Single<Tokens> findTokens(@Query("name") String query, @Query("start") long start,
+            @Query("limit") int limit, @Query("sort") String sort);
 }
