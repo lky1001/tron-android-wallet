@@ -12,6 +12,9 @@ import retrofit2.http.Query;
 
 public interface VoteService {
 
+    @GET("api/vote/current-cycle")
+    Single<Votes> getVoteCurrentCycle();
+
     @GET("api/vote/witness")
     Single<Witnesses> getVoteWitnesses();
 

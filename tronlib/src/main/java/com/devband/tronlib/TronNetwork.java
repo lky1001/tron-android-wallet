@@ -65,6 +65,10 @@ public class TronNetwork {
         return mVoteService.getVoteWitnesses();
     }
 
+    public Single<Votes> getVoteCurrentCycle() {
+        return mVoteService.getVoteCurrentCycle();
+    }
+
     public Single<Map<String, Long>> getRemainNextCycle() {
         return mVoteService.getRemainNextCycle();
     }
