@@ -76,23 +76,23 @@ public class VotePresenter extends BasePresenter<VoteView> {
     public void getRepresentativeList(boolean isMyVotes) {
         mView.showLoadingDialog();
 
-        mTronNetwork.getVoteWitnesses()
-        .map(witnesses -> {
+        mTronNetwork.getVoteCurrentCycle()
+        .map(votes -> {
             List<VoteItem> representatives = new ArrayList<>();
 
-            int cnt = witnesses.getData().size();
+            int cnt = votes.getVotesList().size();
 
             long totalMyVotes = 0;
 
             Protocol.Account myAccount = mTron.queryAccount(mTron.getLoginAddress()).blockingGet();
 
             for (int i = 0; i < cnt; i++) {
-                Witness witness = witnesses.getData().get(i);
+                Representative representative = votes.getVotesList().get(i);
 
                 long myVoteCount = 0;
 
                 for (Protocol.Vote vote : myAccount.getVotesList()) {
-                    if (AccountManager.encode58Check(vote.getVoteAddress().toByteArray()).equals(witness.getAddress())) {
+                    if (AccountManager.encode58Check(vote.getVoteAddress().toByteArray()).equals(representative.getAddress())) {
                         myVoteCount = vote.getVoteCount();
                         totalMyVotes += myVoteCount;
                         break;
@@ -100,11 +100,11 @@ public class VotePresenter extends BasePresenter<VoteView> {
                 }
 
                 representatives.add(VoteItem.builder()
-                        .address(witness.getAddress())
-                        .url(witness.getUrl())
-                        .totalVoteCount(witnesses.getTotalVotes())
-                        .voteCount(witness.getRealTimeVotes())
-                        .hasTeamPage(witness.isHasPage())
+                        .address(representative.getAddress())
+                        .url(representative.getUrl())
+                        .totalVoteCount(votes.getTotalVotes())
+                        .voteCount(representative.getVotes())
+                        .hasTeamPage(representative.isHasPage())
                         .myVoteCount(myVoteCount)
                         .build());
             }
@@ -115,7 +115,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
             for (int i = 0; i < cnt; i++) {
                 VoteItem representative = representatives.get(i);
                 representative.setNo(i + 1);
-                representative.setTotalVoteCount(witnesses.getTotalVotes());
+                representative.setTotalVoteCount(votes.getTotalVotes());
             }
 
             long myVotePoint = 0;
@@ -141,7 +141,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
             return VoteItemList.builder()
                     .voteItemList(representatives)
                     .voteItemCount(cnt)
-                    .totalVotes(witnesses.getTotalVotes())
+                    .totalVotes(votes.getTotalVotes())
                     .totalMyVotes(totalMyVotes)
                     .myVotePoint(myVotePoint)
                     .build();
