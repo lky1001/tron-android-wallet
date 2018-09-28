@@ -54,6 +54,7 @@ public class IntroPresenter extends BasePresenter<IntroView> {
                         return CONNECTION_ERROR;
                     }
 
+                    mTron.setFailConnectNode(true);
                     e.printStackTrace();
                 }
 
