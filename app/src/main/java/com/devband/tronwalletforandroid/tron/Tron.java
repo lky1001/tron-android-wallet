@@ -54,10 +54,11 @@ public class Tron {
 
     private boolean mFailConnectNode;
 
-    public Tron(Context context, TronNetwork tronNetwork, CustomPreference customPreference) {
+    public Tron(Context context, TronNetwork tronNetwork, CustomPreference customPreference, AccountManager accountManager) {
         this.mContext = context;
         this.mTronNetwork = tronNetwork;
         this.mCustomPreference = customPreference;
+        this.mAccountManager = accountManager;
         init();
     }
 
@@ -71,8 +72,6 @@ public class Tron {
         mFullNodeList = Arrays.asList(mContext.getResources().getStringArray(R.array.fullnode_ip_list));
         mSolidityNodeList = Arrays.asList(mContext.getResources().getStringArray(R.array.solidity_ip_list));
         initTronNode();
-
-        mAccountManager = new AccountManager(AccountManager.PERSISTENT_LOCAL_DB, mContext);
     }
 
     public void initTronNode() {
@@ -111,10 +110,6 @@ public class Tron {
                 return ERROR_INVALID_PASSWORD;
             }
 
-            if (mAccountManager == null) {
-                mAccountManager = new AccountManager(true, mContext);
-            }
-
             return SUCCESS;
         })
         .flatMap(result -> {
@@ -138,10 +133,6 @@ public class Tron {
         return Single.fromCallable(() -> {
             if (!AccountManager.passwordValid(password)) {
                 return ERROR_INVALID_PASSWORD;
-            }
-
-            if (mAccountManager == null) {
-                mAccountManager = new AccountManager(true, mContext);
             }
 
             return SUCCESS;
@@ -174,10 +165,6 @@ public class Tron {
             return ERROR_INVALID_PASSWORD;
         }
 
-        if (mAccountManager == null) {
-            mAccountManager = new AccountManager(AccountManager.PERSISTENT_LOCAL_DB, mContext);
-        }
-
         if (!mAccountManager.login(password)) {
             return ERROR_INVALID_PASSWORD;
         }
@@ -186,10 +173,6 @@ public class Tron {
     }
 
     public boolean isLogin() {
-        if (mAccountManager == null) {
-            return false;
-        }
-
         return mAccountManager.isLoginState();
     }
 
@@ -322,10 +305,6 @@ public class Tron {
     }
 
     public boolean validPassword(String password) {
-        if (mAccountManager == null) {
-            return false;
-        }
-
         if (!AccountManager.passwordValid(password)) {
             return false;
         }

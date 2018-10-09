@@ -15,6 +15,7 @@ import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.di.ApplicationContext;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulersImpl;
+import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 
@@ -38,7 +39,6 @@ public abstract class AppModule {
 
         return customPreference;
     }
-
 
     @Provides
     @Singleton
@@ -87,9 +87,16 @@ public abstract class AppModule {
 
     @Provides
     @Singleton
+    static AccountManager provideAccountManager(@ApplicationContext Context context) {
+        return new AccountManager(true, AccountManager.PERSISTENT_LOCAL_DB, context);
+    }
+
+
+    @Provides
+    @Singleton
     static Tron provideTron(@ApplicationContext Context context, TronNetwork tronNetwork,
-            CustomPreference customPreference) {
-        Tron tron = new Tron(context, tronNetwork, customPreference);
+            CustomPreference customPreference, AccountManager accountManager) {
+        Tron tron = new Tron(context, tronNetwork, customPreference, accountManager);
 
         return tron;
     }

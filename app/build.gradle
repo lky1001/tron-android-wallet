@@ -163,6 +163,10 @@ dependencies {
     implementation "com.madgag.spongycastle:core:$spongycastleVersion"
     implementation "com.madgag.spongycastle:prov:$spongycastleVersion"
 
+    // https://mvnrepository.com/artifact/org.mindrot/jbcrypt
+    implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
+
+
     implementation "com.github.kenglxn.QRGen:android:2.2.0"
     implementation "com.github.nisrulz:qreader:2.1.2"
 
