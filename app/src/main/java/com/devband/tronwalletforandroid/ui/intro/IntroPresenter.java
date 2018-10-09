@@ -88,7 +88,7 @@ public class IntroPresenter extends BasePresenter<IntroView> {
                         mView.showErrorMsg();
                     }
                 } else {
-                    mView.showErrorMsg();
+                    mView.startCreateAccountActivity();
                 }
             } else if (result == NO_WALLET) {
                 mView.startCreateAccountActivity();

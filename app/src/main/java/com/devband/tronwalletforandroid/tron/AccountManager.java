@@ -85,12 +85,14 @@ public class AccountManager {
             byte[] privKeyPlain = this.mEcKey.getPrivKeyBytes();
             byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, aesKey);
 
-            String privKeyStr = ByteArray.toHexString(privKeyEnced);
+             String privKeyStr = ByteArray.toHexString(privKeyEnced);
             byte[] pubKeyBytes = this.mEcKey.getPubKey();
             String pubKeyStr = ByteArray.toHexString(pubKeyBytes);
 
+            String accountKey = pubKeyStr + privKeyStr;
+
             if (imported) {
-                AccountModel accountModel = mAccountRepository.loadByAccountKey(pubKeyStr + privKeyStr).blockingGet();
+                AccountModel accountModel = mAccountRepository.loadByAccountKey(accountKey).blockingGet();
 
                 if (accountModel != null) {
                     return Tron.ERROR_EXIST_ACCOUNT;
@@ -99,7 +101,7 @@ public class AccountManager {
 
             mLoginAccountModel = AccountModel.builder()
                     .name(accountName)
-                    .account(pubKeyStr + privKeyStr)
+                    .account(accountKey)
                     .imported(imported)
                     .build();
 
@@ -115,7 +117,7 @@ public class AccountManager {
             accountModel = mAccountRepository.loadAccount(DEFAULT_ACCOUNT_INDEX).blockingGet();
         }
 
-        String priKeyEnced = accountModel.getAccount().substring(162, 226);
+        String priKeyEnced = accountModel.getAccount().substring(130, 194);
 
         if (TextUtils.isEmpty(priKeyEnced)) {
             return Tron.ERROR_ACCOUNT_DOES_NOT_EXIST;
@@ -207,7 +209,7 @@ public class AccountManager {
     }
 
     private String loadPriKey() {
-        return mLoginAccountModel.getAccount().substring(162, 226);
+        return mLoginAccountModel.getAccount().substring(131, 195);
     }
 
     public static byte[] decodeFromBase58Check(String addressBase58) {
@@ -358,6 +360,10 @@ public class AccountManager {
     }
 
     public void changeLoginAccount(AccountModel accountModel, @NonNull byte[] aesKey) {
+        if (mLoginAccountModel != null && mLoginAccountModel.getAccount().equals(accountModel.getAccount())) {
+            return;
+        }
+
         loadAccountByRepository(accountModel, aesKey);
     }
 

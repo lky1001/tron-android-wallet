@@ -60,6 +60,8 @@ public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
                     return result;
                 }
 
+                mWalletAppManager.login(password);
+
                 return Tron.SUCCESS;
             } else if (result == WalletAppManager.ERROR) {
                 return Tron.ERROR;

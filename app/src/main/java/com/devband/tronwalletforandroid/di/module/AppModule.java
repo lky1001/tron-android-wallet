@@ -152,6 +152,8 @@ public abstract class AppModule {
     @Singleton
     static AppDatabase provideAppDatabase(@ApplicationContext Context context) {
         return Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, Constants.DB_NAME)
+                .allowMainThreadQueries()
+                //.addMigrations(AppDatabase.MIGRATION_1_2)
                 .build();
     }
 
