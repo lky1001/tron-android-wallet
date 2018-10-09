@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.repository.AccountRepository;
 import com.devband.tronwalletforandroid.tron.repository.FileRepository;
@@ -55,17 +56,17 @@ public class AccountManager {
 
     private AccountModel mLoginAccountModel;
 
-    public AccountManager(boolean genEcKey, int persistentType, Context context) {
+    public AccountManager(boolean genEcKey, int persistentType, AppDatabase appDatabase) {
         if (genEcKey) {
             this.mEcKey = new ECKey(Utils.getRandom());
         }
 
-        initAccountRepository(persistentType, context);
+        initAccountRepository(persistentType, appDatabase);
     }
 
-    private void initAccountRepository(int persistentType, Context context) {
+    private void initAccountRepository(int persistentType, AppDatabase appDatabase) {
         if (persistentType == PERSISTENT_LOCAL_DB) {
-            mAccountRepository = new LocalDbRepository(context);
+            mAccountRepository = new LocalDbRepository(appDatabase);
         } else if (persistentType == PERSISTENT_FILE) {
             mAccountRepository = new FileRepository();
         }

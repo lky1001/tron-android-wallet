@@ -24,22 +24,15 @@ public class WalletAppManager {
     public static final int SUCCESS = 1;
     public static final int ERROR = -1;
 
-    private Context mContext;
-
     private boolean mIsLogin;
 
     private WalletDao mWalletDao;
 
     private PasswordEncoder mPasswordEncoder;
 
-    public WalletAppManager(@NonNull Context context, PasswordEncoder passwordEncoder) {
-        this.mContext = context;
+    public WalletAppManager(@NonNull PasswordEncoder passwordEncoder, @NonNull AppDatabase appDatabase) {
         this.mPasswordEncoder = passwordEncoder;
-        init();
-    }
-
-    private void init() {
-        mWalletDao = AppDatabase.getDatabase(mContext).walletDao();
+        this.mWalletDao = appDatabase.walletDao();
     }
 
     public boolean isLogin() {

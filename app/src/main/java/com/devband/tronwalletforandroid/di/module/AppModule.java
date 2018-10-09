@@ -1,6 +1,7 @@
 package com.devband.tronwalletforandroid.di.module;
 
 import android.app.Application;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.Build;
 
@@ -12,12 +13,14 @@ import com.devband.tronlib.services.CoinMarketCapService;
 import com.devband.tronlib.services.TokenService;
 import com.devband.tronlib.services.TronScanService;
 import com.devband.tronlib.services.VoteService;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.common.security.PasswordEncoder;
 import com.devband.tronwalletforandroid.common.security.PasswordEncoderImpl;
 import com.devband.tronwalletforandroid.common.security.keystore.KeyStore;
 import com.devband.tronwalletforandroid.common.security.keystore.KeyStoreApi18Impl;
 import com.devband.tronwalletforandroid.common.security.keystore.KeyStoreApi23Impl;
+import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.di.ApplicationContext;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulersImpl;
@@ -93,8 +96,8 @@ public abstract class AppModule {
 
     @Provides
     @Singleton
-    static AccountManager provideAccountManager(@ApplicationContext Context context) {
-        return new AccountManager(true, AccountManager.PERSISTENT_LOCAL_DB, context);
+    static AccountManager provideAccountManager(AppDatabase appDatabase) {
+        return new AccountManager(true, AccountManager.PERSISTENT_LOCAL_DB, appDatabase);
     }
 
     @Provides
@@ -132,8 +135,8 @@ public abstract class AppModule {
 
     @Provides
     @Singleton
-    static WalletAppManager provideWalletAppManager(@ApplicationContext Context context, PasswordEncoder passwordEncoder) {
-        return new WalletAppManager(context, passwordEncoder);
+    static WalletAppManager provideWalletAppManager(@ApplicationContext Context context, PasswordEncoder passwordEncoder, AppDatabase appDatabase) {
+        return new WalletAppManager(passwordEncoder, appDatabase);
     }
 
     @Provides
@@ -143,6 +146,13 @@ public abstract class AppModule {
         Tron tron = new Tron(context, tronNetwork, customPreference, accountManager, walletAppManager);
 
         return tron;
+    }
+
+    @Provides
+    @Singleton
+    static AppDatabase provideAppDatabase(@ApplicationContext Context context) {
+        return Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, Constants.DB_NAME)
+                .build();
     }
 
     @Provides

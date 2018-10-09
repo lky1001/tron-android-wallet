@@ -18,8 +18,8 @@ public class LocalDbRepository implements AccountRepository {
 
     private AccountDao mAccountDao;
 
-    public LocalDbRepository(@NonNull Context context) {
-        mAccountDao = AppDatabase.getDatabase(context).accountDao();
+    public LocalDbRepository(@NonNull AppDatabase appDatabase) {
+        mAccountDao = appDatabase.accountDao();
     }
 
     @Override

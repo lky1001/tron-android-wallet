@@ -13,10 +13,10 @@ public class SecurityUpdater {
 
     private WalletDao mWalletDao;
 
-    public SecurityUpdater(Context context, CustomPreference customPreference, PasswordEncoder passwordEncoder) {
+    public SecurityUpdater(Context context, CustomPreference customPreference, PasswordEncoder passwordEncoder, AppDatabase appDatabase) {
         this.customPreference = customPreference;
         this.passwordEncoder = passwordEncoder;
-        mWalletDao = AppDatabase.getDatabase(context).walletDao();
+        mWalletDao = appDatabase.walletDao();
     }
 
     public boolean canUpdate() {
