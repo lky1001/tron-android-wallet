@@ -2,6 +2,7 @@ package com.devband.tronwalletforandroid.di.module;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
 
 import com.devband.tronlib.Hosts;
 import com.devband.tronlib.ServiceBuilder;
@@ -12,6 +13,11 @@ import com.devband.tronlib.services.TokenService;
 import com.devband.tronlib.services.TronScanService;
 import com.devband.tronlib.services.VoteService;
 import com.devband.tronwalletforandroid.common.CustomPreference;
+import com.devband.tronwalletforandroid.common.security.PasswordEncoder;
+import com.devband.tronwalletforandroid.common.security.PasswordEncoderImpl;
+import com.devband.tronwalletforandroid.common.security.keystore.KeyStore;
+import com.devband.tronwalletforandroid.common.security.keystore.KeyStoreApi18Impl;
+import com.devband.tronwalletforandroid.common.security.keystore.KeyStoreApi23Impl;
 import com.devband.tronwalletforandroid.di.ApplicationContext;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulersImpl;
@@ -91,7 +97,6 @@ public abstract class AppModule {
         return new AccountManager(true, AccountManager.PERSISTENT_LOCAL_DB, context);
     }
 
-
     @Provides
     @Singleton
     static Tron provideTron(@ApplicationContext Context context, TronNetwork tronNetwork,
@@ -103,8 +108,41 @@ public abstract class AppModule {
 
     @Provides
     @Singleton
-    static WalletAppManager provideWalletAppManager(@ApplicationContext Context context) {
-        return new WalletAppManager(context);
+    static KeyStore provideKeyStore(@ApplicationContext Context context, CustomPreference customPreference) {
+        KeyStore keyStore = null;
+
+        if (!customPreference.getInitWallet()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                keyStore = new KeyStoreApi23Impl(customPreference);
+            } else {
+                keyStore = new KeyStoreApi18Impl(context);
+            }
+        } else {
+            // check os update
+            if (customPreference.getKeyStoreVersion() >= Build.VERSION_CODES.M) {
+                keyStore = new KeyStoreApi23Impl(customPreference);
+            } else {
+                keyStore = new KeyStoreApi18Impl(context);
+            }
+        }
+
+        keyStore.init();
+
+        return keyStore;
+    }
+
+    @Provides
+    @Singleton
+    static PasswordEncoder providePasswordEncoder(CustomPreference customPreference, KeyStore keyStore) {
+        PasswordEncoder passwordEncoder = new PasswordEncoderImpl(customPreference, keyStore);
+
+        return passwordEncoder;
+    }
+
+    @Provides
+    @Singleton
+    static WalletAppManager provideWalletAppManager(@ApplicationContext Context context, PasswordEncoder passwordEncoder) {
+        return new WalletAppManager(context, passwordEncoder);
     }
 
     @Provides

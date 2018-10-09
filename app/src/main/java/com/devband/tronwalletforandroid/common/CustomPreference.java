@@ -102,8 +102,26 @@ public class CustomPreference {
         }
     }
 
+    public void setInitWallet(boolean isInit) {
+        this.mSettings.initWallet = isInit;
+        saveSettings();
+    }
+
+    public boolean getInitWallet() {
+        return mSettings.initWallet;
+    }
+
+    public void setKeyStoreVersion(int keyStoreVersion) {
+        mSettings.keyStoreVersion = keyStoreVersion;
+        saveSettings();
+    }
+
+    public int getKeyStoreVersion() {
+        return mSettings.keyStoreVersion;
+    }
+
     public String getSalt() {
-        return null;
+        return this.mSettings.salt;
     }
 
     public void setSalt(String salt) {
@@ -117,5 +135,7 @@ public class CustomPreference {
         public String fullNodeHost;
         public boolean useFingerprint;
         public String salt;
+        public boolean initWallet;
+        public int keyStoreVersion;
     }
 }
