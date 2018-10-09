@@ -11,7 +11,7 @@ import io.reactivex.Single;
 
 public interface AccountRepository {
 
-    Single<Boolean> storeAccount(@NonNull AccountModel accountModel);
+    Single<Boolean> insertAccount(@NonNull AccountModel accountModel);
 
     Single<Boolean> updateAccount(@NonNull AccountModel accountModel);
 

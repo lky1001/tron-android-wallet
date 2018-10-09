@@ -129,6 +129,15 @@ public class CustomPreference {
         saveSettings();
     }
 
+    public void setMigrationDb(boolean migrationDb) {
+        this.mSettings.migrationDb = migrationDb;
+        saveSettings();
+    }
+
+    public boolean getMigrationDb() {
+        return this.mSettings.migrationDb;
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class TronSettings {
 
@@ -137,5 +146,6 @@ public class CustomPreference {
         public String salt;
         public boolean initWallet;
         public int keyStoreVersion;
+        public boolean migrationDb;
     }
 }

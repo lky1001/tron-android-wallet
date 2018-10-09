@@ -12,7 +12,7 @@ import io.reactivex.Single;
 public class FileRepository implements AccountRepository {
 
     @Override
-    public Single<Boolean> storeAccount(@NonNull AccountModel accountModel) {
+    public Single<Boolean> insertAccount(@NonNull AccountModel accountModel) {
         return null;
     }
 

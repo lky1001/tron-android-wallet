@@ -1,6 +1,5 @@
 package com.devband.tronwalletforandroid.tron;
 
-import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -99,13 +98,16 @@ public class AccountManager {
                 }
             }
 
+            String address = encode58Check(mEcKey.getAddress());
+
             mLoginAccountModel = AccountModel.builder()
                     .name(accountName)
+                    .address(address)
                     .account(accountKey)
                     .imported(imported)
                     .build();
 
-            mAccountRepository.storeAccount(mLoginAccountModel).blockingGet();
+            mAccountRepository.insertAccount(mLoginAccountModel).blockingGet();
 
             return Tron.SUCCESS;
         });
@@ -151,20 +153,11 @@ public class AccountManager {
 
     @Nullable
     public String getLoginAddress() {
-        if (mEcKey == null) {
-            return getAddressByStorage();
-        }
-
-        return encode58Check(mEcKey.getAddress());
-//        return ByteArray.toHexString(mEcKey.getLoginAddress());
+        return mLoginAccountModel.getAddress();
     }
 
     @Nullable
     public String getLoginPrivateKey() {
-        if (mEcKey == null) {
-            return loadPriKey();
-        }
-
         return ByteArray.toHexString(mEcKey.getPrivKeyBytes());
     }
 
@@ -206,10 +199,6 @@ public class AccountManager {
             return null;
         }
         return String.valueOf(buf, 32, 130);
-    }
-
-    private String loadPriKey() {
-        return mLoginAccountModel.getAccount().substring(131, 195);
     }
 
     public static byte[] decodeFromBase58Check(String addressBase58) {

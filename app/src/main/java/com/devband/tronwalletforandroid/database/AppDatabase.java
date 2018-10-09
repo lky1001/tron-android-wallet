@@ -21,7 +21,7 @@ import com.devband.tronwalletforandroid.database.model.WalletModel;
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
-    static final int VERSION = 1;
+    static final int VERSION = 2;
 
     public abstract AccountDao accountDao();
     public abstract WalletDao walletDao();

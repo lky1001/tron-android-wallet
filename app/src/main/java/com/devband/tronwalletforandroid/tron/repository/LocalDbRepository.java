@@ -23,7 +23,7 @@ public class LocalDbRepository implements AccountRepository {
     }
 
     @Override
-    public Single<Boolean> storeAccount(@NonNull AccountModel accountModel) {
+    public Single<Boolean> insertAccount(@NonNull AccountModel accountModel) {
         return Single.fromCallable(() -> {
             Date now = Calendar.getInstance().getTime();
             accountModel.setCreated(now);

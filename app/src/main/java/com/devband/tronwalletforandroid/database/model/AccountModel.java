@@ -25,7 +25,7 @@ public class AccountModel {
 
     private String name;
 
-    //private String address;
+    private String address;
 
     private String account;
 
