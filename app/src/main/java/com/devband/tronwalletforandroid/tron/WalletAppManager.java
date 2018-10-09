@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.devband.tronwalletforandroid.common.security.PasswordEncoder;
 import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.database.dao.WalletDao;
 import com.devband.tronwalletforandroid.database.model.WalletModel;
@@ -23,8 +24,11 @@ public class WalletAppManager {
 
     private WalletDao mWalletDao;
 
-    public WalletAppManager(@NonNull Context context) {
+    private PasswordEncoder mPasswordEncoder;
+
+    public WalletAppManager(@NonNull Context context, PasswordEncoder passwordEncoder) {
         this.mContext = context;
+        this.mPasswordEncoder = passwordEncoder;
         init();
     }
 

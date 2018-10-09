@@ -3,12 +3,12 @@ apply plugin: 'com.google.protobuf'
 apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.2"
     defaultConfig {
         applicationId "com.devband.tronwalletforandroid"
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 11
         versionName "1.2.4"
         multiDexEnabled true
@@ -87,14 +87,14 @@ protobuf {
 }
 
 ext {
-    appcompatVersion = '27.1.1'
+    appcompatVersion = '28.0.0'
     constraintLayoutVersion = '1.1.3'
     daggerVersion = '2.16'
     roomVersion = '1.1.1'
     grpcVersion = '1.11.0'
     retrofitVersion = '2.4.0'
     lombokVersion = '1.16.20'
-    rxandroidVersion = '2.0.2'
+    rxandroidVersion = '2.1.0'
     butterknifeVersion = '8.8.1'
     powermockVersion = '2.0.0-beta.5'
     spongycastleVersion = '1.53.0.0'
@@ -108,10 +108,11 @@ dependencies {
     // support
     implementation "com.android.support:appcompat-v7:$appcompatVersion"
     implementation "com.android.support:design:$appcompatVersion"
-    implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
     implementation "com.android.support:recyclerview-v7:$appcompatVersion"
     implementation "com.android.support:support-annotations:$appcompatVersion"
     implementation "com.android.support:cardview-v7:$appcompatVersion"
+    implementation "com.android.support:support-v4:$appcompatVersion"
+    implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
 
     // ui
     implementation "com.afollestad.material-dialogs:core:0.9.6.0"
@@ -161,6 +162,10 @@ dependencies {
 
     implementation "com.madgag.spongycastle:core:$spongycastleVersion"
     implementation "com.madgag.spongycastle:prov:$spongycastleVersion"
+
+    // https://mvnrepository.com/artifact/org.mindrot/jbcrypt
+    implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
+
 
     implementation "com.github.kenglxn.QRGen:android:2.2.0"
     implementation "com.github.nisrulz:qreader:2.1.2"

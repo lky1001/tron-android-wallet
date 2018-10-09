@@ -58,39 +58,10 @@ public class AccountManager {
 
     private AccountModel mLoginAccountModel;
 
-    public AccountManager() {
-
-    }
-
-    public AccountManager(int persistentType, Context context) {
-        this(true, persistentType, context);
-    }
-
-    public AccountManager(boolean genEcKey, Context context) {
-        this(genEcKey, PERSISTENT_LOCAL_DB, context);
-    }
-
     public AccountManager(boolean genEcKey, int persistentType, Context context) {
         if (genEcKey) {
             this.mEcKey = new ECKey(Utils.getRandom());
         }
-
-        initAccountRepository(persistentType, context);
-    }
-
-    public AccountManager(String privateKey, Context context) {
-        this(privateKey, PERSISTENT_LOCAL_DB, context);
-    }
-
-    public AccountManager(String privateKey, int persistentType, Context context) {
-        ECKey temKey = null;
-        try {
-            BigInteger priK = new BigInteger(privateKey, KEY_SIZE);
-            temKey = ECKey.fromPrivate(priK);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        this.mEcKey = temKey;
 
         initAccountRepository(persistentType, context);
     }

@@ -17,8 +17,6 @@ import android.view.MenuItem;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.tron.WalletAppManager;
-import com.devband.tronwalletforandroid.ui.intro.IntroActivity;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -134,7 +132,7 @@ public class CommonActivity extends DaggerAppCompatActivity {
             shiftingMode.setAccessible(false);
             for (int i = 0; i < menuView.getChildCount(); i++) {
                 BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
-                item.setShiftingMode(false);
+                //item.setShiftingMode(false);
                 // set once again checked value, so view will be updated
                 item.setChecked(item.getItemData().isChecked());
             }

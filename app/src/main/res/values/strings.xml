@@ -276,6 +276,7 @@
     <string name="thanks_msg">Thanks for your donation!</string>
     <string name="donation_title_text">Wow!</string>
     <string name="send_token_failed_title_text">Warning</string>
+    <string name="participate_token_msg">Please input amount.</string>
     <string name="token_price_text">Price :</string>
     <string name="participate_confirm_text">I confirm to buy tokens</string>
     <string name="your_trx_text">Your trx :</string>
