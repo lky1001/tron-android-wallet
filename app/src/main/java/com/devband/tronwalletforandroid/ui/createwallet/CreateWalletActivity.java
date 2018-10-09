@@ -1,6 +1,8 @@
 package com.devband.tronwalletforandroid.ui.createwallet;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -16,6 +18,7 @@ import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivity;
 import com.devband.tronwalletforandroid.ui.importkey.ImportPrivateKeyActivity;
 
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -98,9 +101,11 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
     }
 
     @Override
-    public void createdWallet() {
+    public void createdWallet(@NonNull byte[] aesKey) {
         hideDialog();
-        startActivity(BackupAccountActivity.class);
+        Intent intent = new Intent(CreateWalletActivity.this, BackupAccountActivity.class);
+        intent.putExtra(BackupAccountActivity.EXTRA_AES_KEY, aesKey);
+        startActivity(intent);
         finishActivity();
     }
 

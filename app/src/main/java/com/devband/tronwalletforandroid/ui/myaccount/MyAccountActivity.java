@@ -331,7 +331,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                         String password = input.toString();
 
                         if (!TextUtils.isEmpty(password) && mMyAccountPresenter.matchPassword(password)) {
-                            String privateKey = mMyAccountPresenter.getLoginPrivateKey();
+                            String privateKey = mMyAccountPresenter.getLoginPrivateKey(password);
 
                             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                             sharingIntent.setType("text/plain");
@@ -410,7 +410,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                 }
 
                 dialog.dismiss();
-                mMyAccountPresenter.freezeBalance((long) (freezeBalance * Constants.ONE_TRX));
+                mMyAccountPresenter.freezeBalance(password, (long) (freezeBalance * Constants.ONE_TRX));
             }
         });
 
@@ -432,7 +432,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                         String password = input.toString();
 
                         if (!TextUtils.isEmpty(password) && mMyAccountPresenter.matchPassword(password)) {
-                            mMyAccountPresenter.unfreezeBalance();
+                            mMyAccountPresenter.unfreezeBalance(password);
                         } else {
                             Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password),
                                     Toast.LENGTH_SHORT).show();

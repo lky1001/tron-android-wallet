@@ -97,7 +97,7 @@ public abstract class AppModule {
     @Provides
     @Singleton
     static AccountManager provideAccountManager(AppDatabase appDatabase) {
-        return new AccountManager(true, AccountManager.PERSISTENT_LOCAL_DB, appDatabase);
+        return new AccountManager(AccountManager.PERSISTENT_LOCAL_DB, appDatabase);
     }
 
     @Provides

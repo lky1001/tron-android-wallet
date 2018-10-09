@@ -28,6 +28,7 @@ import org.tron.protos.Protocol;
 
 import java.io.File;
 import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Map;
 
@@ -49,17 +50,11 @@ public class AccountManager {
 
     private static final int KEY_SIZE = 16;
 
-    private ECKey mEcKey = null;
-
     private AccountRepository mAccountRepository;
 
     private AccountModel mLoginAccountModel;
 
-    public AccountManager(boolean genEcKey, int persistentType, AppDatabase appDatabase) {
-        if (genEcKey) {
-            this.mEcKey = new ECKey(Utils.getRandom());
-        }
-
+    public AccountManager(int persistentType, AppDatabase appDatabase) {
         initAccountRepository(persistentType, appDatabase);
     }
 
@@ -72,20 +67,18 @@ public class AccountManager {
     }
 
     public Single<Integer> genAccount(@NonNull String accountName, @NonNull byte[] aesKey) {
-        if (this.mEcKey == null || this.mEcKey.getPrivKey() == null) {
-            return Single.fromCallable(() -> Tron.ERROR_PRIVATE_KEY);
-        }
-
         return createAddress(accountName, aesKey, false);
     }
 
     private Single<Integer> createAddress(@NonNull String accountName, @NonNull byte[] aesKey, boolean imported) {
         return Single.fromCallable(() -> {
-            byte[] privKeyPlain = this.mEcKey.getPrivKeyBytes();
+            ECKey ecKey = new ECKey(new SecureRandom());
+
+            byte[] privKeyPlain = ecKey.getPrivKeyBytes();
             byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, aesKey);
 
              String privKeyStr = ByteArray.toHexString(privKeyEnced);
-            byte[] pubKeyBytes = this.mEcKey.getPubKey();
+            byte[] pubKeyBytes = ecKey.getPubKey();
             String pubKeyStr = ByteArray.toHexString(pubKeyBytes);
 
             String accountKey = pubKeyStr + privKeyStr;
@@ -98,7 +91,7 @@ public class AccountManager {
                 }
             }
 
-            String address = encode58Check(mEcKey.getAddress());
+            String address = encode58Check(ecKey.getAddress());
 
             mLoginAccountModel = AccountModel.builder()
                     .name(accountName)
@@ -125,23 +118,12 @@ public class AccountManager {
             return Tron.ERROR_ACCOUNT_DOES_NOT_EXIST;
         }
 
-        //dec priKey
-        byte[] priKeyAscEnced = priKeyEnced.getBytes();
-        byte[] priKeyHexEnced = Hex.decode(priKeyAscEnced);
-        byte[] priKeyHexPlain = SymmEncoder.AES128EcbDec(priKeyHexEnced, aesKey);
-        String priKeyPlain = Hex.toHexString(priKeyHexPlain);
+        ECKey temKey = getEcKeyFromEncodedPrivateKey(priKeyEnced, aesKey);
 
-        ECKey temKey = null;
-
-        try {
-            BigInteger priK = new BigInteger(priKeyPlain, KEY_SIZE);
-            temKey = ECKey.fromPrivate(priK);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        if (temKey == null) {
             return Tron.ERROR_INVALID_PASSWORD;
         }
 
-        this.mEcKey = temKey;
         this.mLoginAccountModel = accountModel;
 
         return Tron.SUCCESS;
@@ -157,8 +139,16 @@ public class AccountManager {
     }
 
     @Nullable
-    public String getLoginPrivateKey() {
-        return ByteArray.toHexString(mEcKey.getPrivKeyBytes());
+    public String getLoginPrivateKey(@NonNull byte[] aesKey) {
+        String priKeyEnced = getLoginEncodedPriKey();
+
+        ECKey ecKey = getEcKeyFromEncodedPrivateKey(priKeyEnced, aesKey);
+
+        if (ecKey == null) {
+            throw new IllegalArgumentException();
+        }
+
+        return ByteArray.toHexString(ecKey.getPrivKeyBytes());
     }
 
     private File getAccountStorage() {
@@ -255,8 +245,9 @@ public class AccountManager {
         return Base58.encode(inputCheck);
     }
 
-    public Contract.TransferContract createTransferContract(@NonNull byte[] toAddress, long amount) {
-        byte[] ownerAddress = mEcKey.getAddress();
+    public Contract.TransferContract createTransferContract(@NonNull byte[] aesKey, @NonNull byte[] toAddress, long amount) {
+        ECKey ecKey = getEcKeyFromEncodedPrivateKey(getLoginEncodedPriKey(), aesKey);
+        byte[] ownerAddress = ecKey.getAddress();
 
         Contract.TransferContract.Builder builder = Contract.TransferContract.newBuilder();
         ByteString bsTo = ByteString.copyFrom(toAddress);
@@ -270,8 +261,9 @@ public class AccountManager {
         return contract;
     }
 
-    public Contract.FreezeBalanceContract createFreezeBalanceContract(long frozenBalance, long frozenDuration) {
-        byte[] ownerAddress = mEcKey.getAddress();
+    public Contract.FreezeBalanceContract createFreezeBalanceContract(@NonNull byte[] aesKey, long frozenBalance, long frozenDuration) {
+        ECKey ecKey = getEcKeyFromEncodedPrivateKey(getLoginEncodedPriKey(), aesKey);
+        byte[] ownerAddress = ecKey.getAddress();
 
         Contract.FreezeBalanceContract.Builder builder = Contract.FreezeBalanceContract.newBuilder();
         ByteString byteAddreess = ByteString.copyFrom(ownerAddress);
@@ -282,8 +274,9 @@ public class AccountManager {
         return builder.build();
     }
 
-    public Contract.UnfreezeBalanceContract createUnfreezeBalanceContract() {
-        byte[] ownerAddress = mEcKey.getAddress();
+    public Contract.UnfreezeBalanceContract createUnfreezeBalanceContract(@NonNull byte[] aesKey) {
+        ECKey ecKey = getEcKeyFromEncodedPrivateKey(getLoginEncodedPriKey(), aesKey);
+        byte[] ownerAddress = ecKey.getAddress();
 
         Contract.UnfreezeBalanceContract.Builder builder = Contract.UnfreezeBalanceContract
                 .newBuilder();
@@ -294,8 +287,9 @@ public class AccountManager {
         return builder.build();
     }
 
-    public Contract.TransferAssetContract createTransferAssetTransaction(@NonNull byte[] toAddress, @NonNull byte[] assetName, long amount) {
-        byte[] ownerAddress = mEcKey.getAddress();
+    public Contract.TransferAssetContract createTransferAssetTransaction(@NonNull byte[] aesKey, @NonNull byte[] toAddress, @NonNull byte[] assetName, long amount) {
+        ECKey ecKey = getEcKeyFromEncodedPrivateKey(getLoginEncodedPriKey(), aesKey);
+        byte[] ownerAddress = ecKey.getAddress();
 
         Contract.TransferAssetContract.Builder builder = Contract.TransferAssetContract.newBuilder();
         ByteString bsTo = ByteString.copyFrom(toAddress);
@@ -311,16 +305,12 @@ public class AccountManager {
         return contract;
     }
 
-    public Protocol.Transaction signTransaction(Protocol.Transaction transaction) {
-        if (this.mEcKey == null || this.mEcKey.getPrivKey() == null) {
-            return null;
-        }
-        transaction = TransactionUtils.setTimestamp(transaction);
-        return TransactionUtils.sign(transaction, this.mEcKey);
-    }
+    public Protocol.Transaction signTransaction(@NonNull byte[] aesKey, Protocol.Transaction transaction) {
+        ECKey ecKey = getEcKeyFromEncodedPrivateKey(getLoginEncodedPriKey(), aesKey);
+        byte[] ownerAddress = ecKey.getAddress();
 
-    public ECKey getEcKey() {
-        return mEcKey;
+        transaction = TransactionUtils.setTimestamp(transaction);
+        return TransactionUtils.sign(transaction, ecKey);
     }
 
     public Single<Integer> getAccountCount() {
@@ -339,8 +329,6 @@ public class AccountManager {
     }
 
     public Single<Integer> createAccount(@NonNull String nickname, @NonNull byte[] aesKey) {
-        this.mEcKey = new ECKey(Utils.getRandom());
-
         return createAddress(nickname, aesKey, false);
     }
 
@@ -364,7 +352,6 @@ public class AccountManager {
             ex.printStackTrace();
             Single.fromCallable(() -> Tron.ERROR_PRIVATE_KEY);
         }
-        this.mEcKey = temKey;
 
         return createAddress(nickname, aesKey, imported);
     }
@@ -377,8 +364,9 @@ public class AccountManager {
         return true;
     }
 
-    public Contract.VoteWitnessContract createVoteWitnessContract(Map<String, String> witness) {
-        byte[] ownerAddress = mEcKey.getAddress();
+    public Contract.VoteWitnessContract createVoteWitnessContract(@NonNull byte[] aesKey, Map<String, String> witness) {
+        ECKey ecKey = getEcKeyFromEncodedPrivateKey(getLoginEncodedPriKey(), aesKey);
+        byte[] ownerAddress = ecKey.getAddress();
 
         Contract.VoteWitnessContract.Builder builder = Contract.VoteWitnessContract.newBuilder();
         builder.setOwnerAddress(ByteString.copyFrom(ownerAddress));
@@ -399,9 +387,10 @@ public class AccountManager {
         return builder.build();
     }
 
-    public Contract.ParticipateAssetIssueContract participateAssetIssueContract(byte[] to,
+    public Contract.ParticipateAssetIssueContract participateAssetIssueContract(@NonNull byte[] aesKey, byte[] to,
             byte[] assertName, long amount) {
-        byte[] ownerAddress = mEcKey.getAddress();
+        ECKey ecKey = getEcKeyFromEncodedPrivateKey(getLoginEncodedPriKey(), aesKey);
+        byte[] ownerAddress = ecKey.getAddress();
 
         Contract.ParticipateAssetIssueContract.Builder builder = Contract.ParticipateAssetIssueContract
                 .newBuilder();
@@ -414,6 +403,26 @@ public class AccountManager {
         builder.setAmount(amount);
 
         return builder.build();
+    }
+
+    @Nullable
+    public ECKey getEcKeyFromEncodedPrivateKey(@NonNull String priKeyEnced, @NonNull byte[] aesKey) {
+        //dec priKey
+        byte[] priKeyAscEnced = priKeyEnced.getBytes();
+        byte[] priKeyHexEnced = Hex.decode(priKeyAscEnced);
+        byte[] priKeyHexPlain = SymmEncoder.AES128EcbDec(priKeyHexEnced, aesKey);
+        String priKeyPlain = Hex.toHexString(priKeyHexPlain);
+
+        try {
+            BigInteger priK = new BigInteger(priKeyPlain, KEY_SIZE);
+            return ECKey.fromPrivate(priK);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String getLoginEncodedPriKey() {
+        return mLoginAccountModel.getAccount().substring(130, 194);
     }
 }
 

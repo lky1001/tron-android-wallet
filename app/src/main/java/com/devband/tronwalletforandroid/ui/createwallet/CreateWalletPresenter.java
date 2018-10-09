@@ -1,5 +1,7 @@
 package com.devband.tronwalletforandroid.ui.createwallet;
 
+import android.support.annotation.NonNull;
+
 import com.crashlytics.android.Crashlytics;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
@@ -44,7 +46,7 @@ public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
 
     }
 
-    public void createWallet(String password) {
+    public void createWallet(@NonNull String password) {
         Single.fromCallable(() -> {
             int result = mWalletAppManager.createWallet(password);
 
@@ -84,7 +86,7 @@ public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
                 } else if (result == Tron.ERROR) {
                     mView.passwordError();
                 } else {
-                    mView.createdWallet();
+                    mView.createdWallet(WalletAppManager.getEncKey(password));
                 }
             }
 

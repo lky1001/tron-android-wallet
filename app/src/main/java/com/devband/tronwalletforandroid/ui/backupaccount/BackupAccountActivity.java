@@ -22,6 +22,8 @@ import butterknife.OnClick;
 
 public class BackupAccountActivity extends CommonActivity implements BackupAccountView {
 
+    public static final String EXTRA_AES_KEY = "extra_aes_key";
+
     @Inject
     BackupAccountPresenter mBackupAccountPresenter;
 
@@ -50,6 +52,8 @@ public class BackupAccountActivity extends CommonActivity implements BackupAccou
         }
 
         mBackupAccountPresenter.onCreate();
+        byte[] aesKey = getIntent().getByteArrayExtra(EXTRA_AES_KEY);
+        mBackupAccountPresenter.getAccountAndPrivateKey(aesKey);
     }
 
     @OnClick(R.id.btn_copy_wallet_info)

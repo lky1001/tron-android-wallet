@@ -76,15 +76,12 @@ public class VotePresenter extends BasePresenter<VoteView> {
     public void getRepresentativeList(boolean isMyVotes) {
         mView.showLoadingDialog();
 
-        mTronNetwork.getVoteCurrentCycle()
-        .map(votes -> {
+        Single.zip(mTronNetwork.getVoteCurrentCycle(), mTron.queryAccount(mTron.getLoginAddress()), (votes, myAccount) -> {
             List<VoteItem> representatives = new ArrayList<>();
 
             int cnt = votes.getVotesList().size();
 
             long totalMyVotes = 0;
-
-            Protocol.Account myAccount = mTron.queryAccount(mTron.getLoginAddress()).blockingGet();
 
             for (int i = 0; i < cnt; i++) {
                 Representative representative = votes.getVotesList().get(i);
@@ -148,24 +145,11 @@ public class VotePresenter extends BasePresenter<VoteView> {
         })
         .subscribeOn(mRxJavaSchedulers.getIo())
         .observeOn(mRxJavaSchedulers.getMainThread())
-        .subscribe(new SingleObserver<VoteItemList>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onSuccess(VoteItemList voteItemList) {
-                mView.displayVoteInfo(voteItemList.getTotalVotes(), voteItemList.getVoteItemCount(),
-                        voteItemList.getMyVotePoint(), voteItemList.getTotalMyVotes());
-                showOnlyMyVotes(isMyVotes);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                mView.showServerError();
-            }
-        });
+        .subscribe(voteItemList -> {
+            mView.displayVoteInfo(voteItemList.getTotalVotes(), voteItemList.getVoteItemCount(),
+                    voteItemList.getMyVotePoint(), voteItemList.getTotalMyVotes());
+            showOnlyMyVotes(isMyVotes);
+        }, e -> mView.showServerError());
     }
 
     public void showOnlyMyVotes(boolean isMyVotes) {
@@ -184,7 +168,7 @@ public class VotePresenter extends BasePresenter<VoteView> {
         return mWalletAppManager.login(password) == WalletAppManager.SUCCESS;
     }
 
-    public void voteRepresentative(String address, long vote, boolean includeOtherVotes) {
+    public void voteRepresentative(@NonNull String password, String address, long vote, boolean includeOtherVotes) {
         mView.showLoadingDialog();
 
         Single.fromCallable(() -> {
@@ -212,8 +196,9 @@ public class VotePresenter extends BasePresenter<VoteView> {
                 throw new IllegalStateException();
             }
 
-            return mTron.voteWitness(witness).blockingGet();
+            return witness;
         })
+        .flatMap(witness -> mTron.voteWitness(password, witness))
         .subscribeOn(mRxJavaSchedulers.getIo())
         .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {

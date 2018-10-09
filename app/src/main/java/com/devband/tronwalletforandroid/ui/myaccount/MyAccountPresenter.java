@@ -125,8 +125,8 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         return mWalletAppManager.login(password) == WalletAppManager.SUCCESS;
     }
 
-    public String getLoginPrivateKey() {
-        return mTron.getLoginPrivateKey();
+    public String getLoginPrivateKey(@NonNull String password) {
+        return mTron.getLoginPrivateKey(password);
     }
 
     public void changeLoginAccount(@NonNull AccountModel accountModel) {
@@ -134,10 +134,10 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         mTron.changeLoginAccount(accountModel, null);
     }
 
-    public void freezeBalance(long freezeBalance) {
+    public void freezeBalance(@NonNull String password, long freezeBalance) {
         mView.showLoadingDialog();
 
-        mTron.freezeBalance(freezeBalance, Constants.FREEZE_DURATION)
+        mTron.freezeBalance(password, freezeBalance, Constants.FREEZE_DURATION)
         .subscribeOn(mRxJavaSchedulers.getIo())
         .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {
@@ -163,10 +163,10 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         });
     }
 
-    public void unfreezeBalance() {
+    public void unfreezeBalance(@NonNull String password) {
         mView.showLoadingDialog();
 
-        mTron.unfreezeBalance()
+        mTron.unfreezeBalance(password)
         .subscribeOn(mRxJavaSchedulers.getIo())
         .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {

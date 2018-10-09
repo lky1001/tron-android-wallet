@@ -416,9 +416,9 @@ public class VoteActivity extends CommonActivity implements VoteView {
                         dialog.dismiss();
 
                         if (voteBalance > (item.getMyVoteCount() + mRemainVotePoint)) {
-                            mVotePresenter.voteRepresentative(item.getAddress(), voteBalance, false);
+                            mVotePresenter.voteRepresentative(password, item.getAddress(), voteBalance, false);
                         } else {
-                            mVotePresenter.voteRepresentative(item.getAddress(), voteBalance, true);
+                            mVotePresenter.voteRepresentative(password, item.getAddress(), voteBalance, true);
                         }
                     }
                 });

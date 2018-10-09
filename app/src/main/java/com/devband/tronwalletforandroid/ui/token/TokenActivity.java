@@ -290,7 +290,7 @@ public class TokenActivity extends CommonActivity implements TokenView {
 
                         dialog.dismiss();
 
-                        mTokenPresenter.participateToken(item, tokenAmount);
+                        mTokenPresenter.participateToken(password, item, tokenAmount);
                     }
                 });
 

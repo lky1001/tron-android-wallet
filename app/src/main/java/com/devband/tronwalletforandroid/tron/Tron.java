@@ -197,12 +197,21 @@ public class Tron {
     }
 
     @Nullable
-    public String getLoginPrivateKey() {
+    public String getLoginPrivateKey(@NonNull String password) {
         if (!checkAccountLogin()) {
             return null;
         }
 
-        return mAccountManager.getLoginPrivateKey();
+        return mAccountManager.getLoginPrivateKey(WalletAppManager.getEncKey(password));
+    }
+
+    @Nullable
+    public String getLoginPrivateKey(@NonNull byte[] aesKey) {
+        if (!checkAccountLogin()) {
+            return null;
+        }
+
+        return mAccountManager.getLoginPrivateKey(aesKey);
     }
 
     private boolean checkAccountLogin() {
@@ -263,7 +272,7 @@ public class Tron {
                 throw new InvalidPasswordException();
             }
 
-            Contract.TransferContract contract = mAccountManager.createTransferContract(toAddressBytes, amount);
+            Contract.TransferContract contract = mAccountManager.createTransferContract(WalletAppManager.getEncKey(password), toAddressBytes, amount);
 
             return mTronManager.createTransaction(contract);
         })
@@ -274,12 +283,12 @@ public class Tron {
             }
 
             // sign transaction
-            transaction = mAccountManager.signTransaction(transaction);
+            transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
             return mTronManager.broadcastTransaction(transaction);
         });
     }
 
-    public Single<Boolean> transferAsset(String password, String toAddress, String assetName, long amount) {
+    public Single<Boolean> transferAsset(@Nullable String password, String toAddress, String assetName, long amount) {
         return Single.fromCallable(() -> {
             byte[] toAddressBytes = AccountManager.decodeFromBase58Check(toAddress);
 
@@ -291,7 +300,7 @@ public class Tron {
                 throw new InvalidPasswordException();
             }
 
-            Contract.TransferAssetContract contract = mAccountManager.createTransferAssetTransaction(toAddressBytes, assetName.getBytes(), amount);
+            Contract.TransferAssetContract contract = mAccountManager.createTransferAssetTransaction(WalletAppManager.getEncKey(password), toAddressBytes, assetName.getBytes(), amount);
 
             return mTronManager.createTransferAssetTransaction(contract);
         })
@@ -302,7 +311,7 @@ public class Tron {
             }
 
             // sign transaction
-            transaction = mAccountManager.signTransaction(transaction);
+            transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
             return mTronManager.broadcastTransaction(transaction);
         });
     }
@@ -315,7 +324,7 @@ public class Tron {
         }
     }
 
-    public boolean validPassword(String password) {
+    public boolean validPassword(@Nullable String password) {
         if (!WalletAppManager.passwordValid(password)) {
             return false;
         }
@@ -390,12 +399,12 @@ public class Tron {
         return mTronManager.listNodes();
     }
 
-    public Single<Boolean> participateTokens(String tokenName, String issuerAddress, long amount) {
+    public Single<Boolean> participateTokens(@Nullable String password, String tokenName, String issuerAddress, long amount) {
         return Single.fromCallable(() -> {
             byte[] toAddressBytes = AccountManager.decodeFromBase58Check(issuerAddress);
 
             Contract.ParticipateAssetIssueContract participateAssetIssueContract = mAccountManager
-                    .participateAssetIssueContract(toAddressBytes, tokenName.getBytes(), amount);
+                    .participateAssetIssueContract(WalletAppManager.getEncKey(password), toAddressBytes, tokenName.getBytes(), amount);
 
             return mTronManager.createParticipateAssetIssueTransaction(participateAssetIssueContract);
         })
@@ -406,14 +415,14 @@ public class Tron {
             }
 
             // sign transaction
-            transaction = mAccountManager.signTransaction(transaction);
+            transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
             return mTronManager.broadcastTransaction(transaction);
         });
     }
 
-    public Single<Boolean> voteWitness(Map<String, String> witness) {
+    public Single<Boolean> voteWitness(@Nullable String password, Map<String, String> witness) {
         return Single.fromCallable(() -> {
-            Contract.VoteWitnessContract voteWitnessContract = mAccountManager.createVoteWitnessContract(witness);
+            Contract.VoteWitnessContract voteWitnessContract = mAccountManager.createVoteWitnessContract(WalletAppManager.getEncKey(password), witness);
 
             return mTronManager.createTransaction(voteWitnessContract);
         })
@@ -424,14 +433,14 @@ public class Tron {
             }
 
             // sign transaction
-            transaction = mAccountManager.signTransaction(transaction);
+            transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
             return mTronManager.broadcastTransaction(transaction);
         });
     }
 
-    public Single<Boolean> freezeBalance(long freezeBalance, long freezeDuration) {
+    public Single<Boolean> freezeBalance(@Nullable String password, long freezeBalance, long freezeDuration) {
         return Single.fromCallable(() -> {
-            Contract.FreezeBalanceContract freezeBalanceContract = mAccountManager.createFreezeBalanceContract(freezeBalance, freezeDuration);
+            Contract.FreezeBalanceContract freezeBalanceContract = mAccountManager.createFreezeBalanceContract(WalletAppManager.getEncKey(password), freezeBalance, freezeDuration);
 
             return mTronManager.createTransaction(freezeBalanceContract);
         })
@@ -442,14 +451,14 @@ public class Tron {
             }
 
             // sign transaction
-            transaction = mAccountManager.signTransaction(transaction);
+            transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
             return mTronManager.broadcastTransaction(transaction);
         });
     }
 
-    public Single<Boolean> unfreezeBalance() {
+    public Single<Boolean> unfreezeBalance(@Nullable String password) {
         return Single.fromCallable(() -> {
-            Contract.UnfreezeBalanceContract unfreezeBalanceContract = mAccountManager.createUnfreezeBalanceContract();
+            Contract.UnfreezeBalanceContract unfreezeBalanceContract = mAccountManager.createUnfreezeBalanceContract(WalletAppManager.getEncKey(password));
 
             return mTronManager.createTransaction(unfreezeBalanceContract);
         })
@@ -460,7 +469,7 @@ public class Tron {
             }
 
             // sign transaction
-            transaction = mAccountManager.signTransaction(transaction);
+            transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
             return mTronManager.broadcastTransaction(transaction);
         });
     }
