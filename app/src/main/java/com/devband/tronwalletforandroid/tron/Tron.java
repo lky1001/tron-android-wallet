@@ -52,13 +52,17 @@ public class Tron {
 
     private AccountManager mAccountManager;
 
+    private WalletAppManager mWalletAppManager;
+
     private boolean mFailConnectNode;
 
-    public Tron(Context context, TronNetwork tronNetwork, CustomPreference customPreference, AccountManager accountManager) {
+    public Tron(Context context, TronNetwork tronNetwork, CustomPreference customPreference, AccountManager accountManager,
+            WalletAppManager walletAppManager) {
         this.mContext = context;
         this.mTronNetwork = tronNetwork;
         this.mCustomPreference = customPreference;
         this.mAccountManager = accountManager;
+        this.mWalletAppManager = walletAppManager;
         init();
     }
 
@@ -106,7 +110,7 @@ public class Tron {
 
     public Single<Integer> registerAccount(@NonNull String nickname, @NonNull String privateKey, @NonNull String password) {
         return Single.fromCallable(() -> {
-            if (!AccountManager.passwordValid(password)) {
+            if (!WalletAppManager.passwordValid(password)) {
                 return ERROR_INVALID_PASSWORD;
             }
 
@@ -121,7 +125,10 @@ public class Tron {
         })
         .flatMap(name -> {
             if (name != null) {
-                return mAccountManager.importAccount(name, privateKey, password, false);
+                byte[] aesKey = WalletAppManager.getEncKey(password);
+                if (aesKey != null) {
+                    return mAccountManager.importAccount(name, privateKey, aesKey, false);
+                }
             }
 
             return Single.just(ERROR_INVALID_PASSWORD);
@@ -131,7 +138,7 @@ public class Tron {
 
     public Single<Integer> registerAccount(@NonNull String nickname, @NonNull String password) {
         return Single.fromCallable(() -> {
-            if (!AccountManager.passwordValid(password)) {
+            if (!WalletAppManager.passwordValid(password)) {
                 return ERROR_INVALID_PASSWORD;
             }
 
@@ -146,26 +153,30 @@ public class Tron {
         })
         .flatMap(name -> {
             if (name != null) {
-                return mAccountManager.genAccount(name, password);
+                byte[] aesKey = WalletAppManager.getEncKey(password);
+                return mAccountManager.genAccount(name, aesKey);
             }
 
             return Single.just(ERROR_INVALID_PASSWORD);
         });
     }
 
-    public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey) {
+    public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey, @NonNull String password) {
         return generateDefaultAccountName(nickname)
             .flatMap(name -> {
-                return mAccountManager.importAccount(name, privateKey, null, true);
+                byte[] aesKey = WalletAppManager.getEncKey(password);
+                return mAccountManager.importAccount(name, privateKey, aesKey, true);
             });
     }
 
     public int login(String password) {
-        if (!AccountManager.passwordValid(password)) {
+        if (!WalletAppManager.passwordValid(password)) {
             return ERROR_INVALID_PASSWORD;
         }
 
-        if (!mAccountManager.login(password)) {
+        byte[] aesKey = WalletAppManager.getEncKey(password);
+
+        if (aesKey == null || mAccountManager.loadAccountByRepository(null, aesKey) != Tron.SUCCESS) {
             return ERROR_INVALID_PASSWORD;
         }
 
@@ -173,7 +184,7 @@ public class Tron {
     }
 
     public boolean isLogin() {
-        return mAccountManager.isLoginState();
+        return mWalletAppManager.isLoginState();
     }
 
     @Nullable
@@ -195,7 +206,7 @@ public class Tron {
     }
 
     private boolean checkAccountLogin() {
-        if (mAccountManager == null || !mAccountManager.isLoginState()) {
+        if (mAccountManager == null || !mWalletAppManager.isLoginState()) {
             return false;
         }
 
@@ -248,7 +259,7 @@ public class Tron {
                 throw new InvalidAddressException();
             }
 
-            if (!mAccountManager.checkPassWord(password)) {
+            if (!mWalletAppManager.checkPassWord(password)) {
                 throw new InvalidPasswordException();
             }
 
@@ -276,7 +287,7 @@ public class Tron {
                 throw new InvalidAddressException();
             }
 
-            if (!mAccountManager.checkPassWord(password)) {
+            if (!mWalletAppManager.checkPassWord(password)) {
                 throw new InvalidPasswordException();
             }
 
@@ -305,11 +316,11 @@ public class Tron {
     }
 
     public boolean validPassword(String password) {
-        if (!AccountManager.passwordValid(password)) {
+        if (!WalletAppManager.passwordValid(password)) {
             return false;
         }
 
-        return mAccountManager.checkPassWord(password);
+        return mWalletAppManager.checkPassWord(password);
     }
 
     public void logout() {
@@ -340,10 +351,11 @@ public class Tron {
         return mAccountManager.changeLoginAccountName(accountName);
     }
 
-    public Single<Boolean> createAccount(@NonNull String nickname) {
+    public Single<Boolean> createAccount(@NonNull String nickname, @NonNull String password) {
         return generateDefaultAccountName(nickname)
                 .flatMap(name -> {
-                    return mAccountManager.createAccount(name);
+                    byte[] aesKey = WalletAppManager.getEncKey(password);
+                    return mAccountManager.createAccount(name, aesKey);
                 })
                 .flatMap(result -> {
                     if (result == Tron.SUCCESS) {
@@ -358,8 +370,9 @@ public class Tron {
         return mAccountManager.getAccountList();
     }
 
-    public void changeLoginAccount(@NonNull AccountModel accountModel) {
-        mAccountManager.changeLoginAccount(accountModel);
+    public void changeLoginAccount(@NonNull AccountModel accountModel, @NonNull String password) {
+        byte[] aesKey = WalletAppManager.getEncKey(password);
+        mAccountManager.changeLoginAccount(accountModel, aesKey);
     }
 
     private Single<String> generateDefaultAccountName(String prefix) {
@@ -453,6 +466,6 @@ public class Tron {
     }
 
     public boolean changePassword(String newPassword) {
-        return mAccountManager.changePassword(newPassword);
+        return false;
     }
 }

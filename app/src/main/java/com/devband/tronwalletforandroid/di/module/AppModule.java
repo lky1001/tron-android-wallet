@@ -99,15 +99,6 @@ public abstract class AppModule {
 
     @Provides
     @Singleton
-    static Tron provideTron(@ApplicationContext Context context, TronNetwork tronNetwork,
-            CustomPreference customPreference, AccountManager accountManager) {
-        Tron tron = new Tron(context, tronNetwork, customPreference, accountManager);
-
-        return tron;
-    }
-
-    @Provides
-    @Singleton
     static KeyStore provideKeyStore(@ApplicationContext Context context, CustomPreference customPreference) {
         KeyStore keyStore = null;
 
@@ -143,6 +134,15 @@ public abstract class AppModule {
     @Singleton
     static WalletAppManager provideWalletAppManager(@ApplicationContext Context context, PasswordEncoder passwordEncoder) {
         return new WalletAppManager(context, passwordEncoder);
+    }
+
+    @Provides
+    @Singleton
+    static Tron provideTron(@ApplicationContext Context context, TronNetwork tronNetwork,
+                            CustomPreference customPreference, AccountManager accountManager, WalletAppManager walletAppManager) {
+        Tron tron = new Tron(context, tronNetwork, customPreference, accountManager, walletAppManager);
+
+        return tron;
     }
 
     @Provides

@@ -27,7 +27,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
-import com.devband.tronwalletforandroid.tron.AccountManager;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
@@ -295,7 +295,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                             return;
                         }
 
-                        if (!AccountManager.passwordValid(newPassword)) {
+                        if (!WalletAppManager.passwordValid(newPassword)) {
                             Toast.makeText(dialog.getContext(), R.string.invalid_new_password, Toast.LENGTH_SHORT).show();
                             return;
                         }

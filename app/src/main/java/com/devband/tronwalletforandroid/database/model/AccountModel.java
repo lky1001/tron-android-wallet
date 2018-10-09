@@ -2,6 +2,7 @@ package com.devband.tronwalletforandroid.database.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import java.util.Date;
 
@@ -32,6 +33,7 @@ public class AccountModel {
 
     private Date updated;
 
+    @NonNull
     @Override
     public String toString() {
         if (imported) {

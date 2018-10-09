@@ -418,7 +418,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     private void createAccount() {
         showProgressDialog(null, getString(R.string.loading_msg));
-        mMainPresenter.createAccount(Constants.PREFIX_ACCOUNT_NAME);
+        // todo - input password
+        mMainPresenter.createAccount(Constants.PREFIX_ACCOUNT_NAME, "");
     }
 
     private void importAccount() {
@@ -435,7 +436,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                         String privateKey = input.toString();
 
                         if (!TextUtils.isEmpty(privateKey)) {
-                            mMainPresenter.importAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey);
+                            // todo - input password
+                            mMainPresenter.importAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey, "");
                         }
                     }
                 }).show();

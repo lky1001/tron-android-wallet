@@ -130,7 +130,8 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
     }
 
     public void changeLoginAccount(@NonNull AccountModel accountModel) {
-        mTron.changeLoginAccount(accountModel);
+        // todo - remove password
+        mTron.changeLoginAccount(accountModel, null);
     }
 
     public void freezeBalance(long freezeBalance) {

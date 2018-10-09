@@ -2,6 +2,7 @@ package com.devband.tronwalletforandroid.tron;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.devband.tronwalletforandroid.common.security.PasswordEncoder;
@@ -9,9 +10,14 @@ import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.database.dao.WalletDao;
 import com.devband.tronwalletforandroid.database.model.WalletModel;
 
+import org.tron.common.crypto.Hash;
+
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class WalletAppManager {
+
+    private static final int KEY_SIZE = 16;
 
     public static final int MIN_PASSWORD_LENGTH = 8;
 
@@ -89,6 +95,10 @@ public class WalletAppManager {
         return wallet.isAgree();
     }
 
+    public boolean isLoginState() {
+        return mIsLogin;
+    }
+
     public boolean changePassword(@NonNull String originPassword, @NonNull String newPassword) {
         WalletModel wallet = mWalletDao.loadWallet();
 
@@ -99,5 +109,32 @@ public class WalletAppManager {
         }
 
         return false;
+    }
+
+    public boolean checkPassWord(String password) {
+        WalletModel wallet = mWalletDao.loadWallet();
+        return PasswordUtil.matches(password, wallet.getPassword());
+    }
+
+    @Nullable
+    public static byte[] getEncKey(String password) {
+        if (!passwordValid(password)) {
+            return null;
+        }
+        byte[] encKey;
+        encKey = Hash.sha256(password.getBytes());
+        encKey = Arrays.copyOfRange(encKey, 0, KEY_SIZE);
+        return encKey;
+    }
+
+    public static boolean passwordValid(String password) {
+        if (password == null || password.isEmpty()) {
+            return false;
+        }
+
+        if (password.length() < Tron.MIN_PASSWORD_LENGTH) {
+            return false;
+        }
+        return true;
     }
 }

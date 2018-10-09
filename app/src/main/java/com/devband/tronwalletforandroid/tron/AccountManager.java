@@ -28,7 +28,6 @@ import org.tron.protos.Protocol;
 
 import java.io.File;
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -51,8 +50,6 @@ public class AccountManager {
     private static final int KEY_SIZE = 16;
 
     private ECKey mEcKey = null;
-    private boolean mLoginState = false;
-    private byte[] mAesKey;
 
     private AccountRepository mAccountRepository;
 
@@ -74,31 +71,25 @@ public class AccountManager {
         }
     }
 
-    public Single<Integer> genAccount(@NonNull String accountName, @NonNull String password) {
+    public Single<Integer> genAccount(@NonNull String accountName, @NonNull byte[] aesKey) {
         if (this.mEcKey == null || this.mEcKey.getPrivKey() == null) {
             return Single.fromCallable(() -> Tron.ERROR_PRIVATE_KEY);
         }
 
-        byte[] pwd = getPassWord(password);
-        String pwdAsc = ByteArray.toHexString(pwd);
-
-        //encrypted by password
-        byte[] aseKey = getEncKey(password);
-
-        return createAddress(accountName, pwdAsc, aseKey, false);
+        return createAddress(accountName, aesKey, false);
     }
 
-    private Single<Integer> createAddress(@NonNull String accountName, @NonNull String pwdAsc, @NonNull byte[] aseKey, boolean imported) {
+    private Single<Integer> createAddress(@NonNull String accountName, @NonNull byte[] aesKey, boolean imported) {
         return Single.fromCallable(() -> {
             byte[] privKeyPlain = this.mEcKey.getPrivKeyBytes();
-            byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, aseKey);
+            byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, aesKey);
 
             String privKeyStr = ByteArray.toHexString(privKeyEnced);
             byte[] pubKeyBytes = this.mEcKey.getPubKey();
             String pubKeyStr = ByteArray.toHexString(pubKeyBytes);
 
             if (imported) {
-                AccountModel accountModel = mAccountRepository.loadByAccountKey(pwdAsc + pubKeyStr + privKeyStr).blockingGet();
+                AccountModel accountModel = mAccountRepository.loadByAccountKey(pubKeyStr + privKeyStr).blockingGet();
 
                 if (accountModel != null) {
                     return Tron.ERROR_EXIST_ACCOUNT;
@@ -107,7 +98,7 @@ public class AccountManager {
 
             mLoginAccountModel = AccountModel.builder()
                     .name(accountName)
-                    .account(pwdAsc + pubKeyStr + privKeyStr)
+                    .account(pubKeyStr + privKeyStr)
                     .imported(imported)
                     .build();
 
@@ -117,32 +108,7 @@ public class AccountManager {
         });
     }
 
-    public boolean login(@NonNull String password) {
-        this.mAesKey = getEncKey(password);
-        loadAccountByRepository(null);
-        this.mLoginState = checkPassWord(password);
-        return mLoginState;
-    }
-
-    public boolean changePassword(@NonNull String password) {
-        this.mAesKey = getEncKey(password);
-
-        byte[] pwd = getPassWord(password);
-        String pwdAsc = ByteArray.toHexString(pwd);
-
-        List<AccountModel> accountModels = mAccountRepository.loadAllAccounts().blockingGet();
-
-        for (AccountModel accountModel : accountModels) {
-            accountModel.setAccount(pwdAsc + accountModel.getAccount().substring(32, accountModel.getAccount().length()));
-            mAccountRepository.updateAccount(accountModel).blockingGet();
-        }
-
-        mLoginAccountModel.setAccount(pwdAsc + mLoginAccountModel.getAccount().substring(32, mLoginAccountModel.getAccount().length()));
-
-        return true;
-    }
-
-    private int loadAccountByRepository(@Nullable AccountModel accountModel) {
+    public int loadAccountByRepository(@Nullable AccountModel accountModel, @NonNull byte[] aesKey) {
         if (accountModel == null) {
             // todo - improve
             accountModel = mAccountRepository.loadAccount(DEFAULT_ACCOUNT_INDEX).blockingGet();
@@ -150,14 +116,14 @@ public class AccountManager {
 
         String priKeyEnced = accountModel.getAccount().substring(162, 226);
 
-        if (priKeyEnced == null) {
+        if (TextUtils.isEmpty(priKeyEnced)) {
             return Tron.ERROR_ACCOUNT_DOES_NOT_EXIST;
         }
 
         //dec priKey
         byte[] priKeyAscEnced = priKeyEnced.getBytes();
         byte[] priKeyHexEnced = Hex.decode(priKeyAscEnced);
-        byte[] priKeyHexPlain = SymmEncoder.AES128EcbDec(priKeyHexEnced, mAesKey);
+        byte[] priKeyHexPlain = SymmEncoder.AES128EcbDec(priKeyHexEnced, aesKey);
         String priKeyPlain = Hex.toHexString(priKeyHexPlain);
 
         ECKey temKey = null;
@@ -176,20 +142,12 @@ public class AccountManager {
         return Tron.SUCCESS;
     }
 
-    public boolean isLoginState() {
-        return this.mLoginState;
-    }
-
     public void logout() {
-        this.mLoginState = false;
+        this.mLoginAccountModel = null;
     }
 
     @Nullable
     public String getLoginAddress() {
-        if (!mLoginState) {
-            return null;
-        }
-
         if (mEcKey == null) {
             return getAddressByStorage();
         }
@@ -200,53 +158,11 @@ public class AccountManager {
 
     @Nullable
     public String getLoginPrivateKey() {
-        if (!mLoginState) {
-            return null;
-        }
-
         if (mEcKey == null) {
             return loadPriKey();
         }
 
         return ByteArray.toHexString(mEcKey.getPrivKeyBytes());
-    }
-
-    public boolean checkPassWord(String password) {
-        byte[] pwd = getPassWord(password);
-        if (pwd == null) {
-            return false;
-        }
-        String pwdAsc = ByteArray.toHexString(pwd);
-        String pwdInstore = loadPassword();
-        return pwdAsc.equals(pwdInstore);
-    }
-
-    @Nullable
-    private String loadPassword() {
-        return mLoginAccountModel.getAccount().substring(0, 32);
-    }
-
-    @Nullable
-    private byte[] getPassWord(String password) {
-        if (!passwordValid(password)) {
-            return null;
-        }
-        byte[] pwd;
-        pwd = Hash.sha256(password.getBytes());
-        pwd = Hash.sha256(pwd);
-        pwd = Arrays.copyOfRange(pwd, 0, KEY_SIZE);
-        return pwd;
-    }
-
-    @Nullable
-    private byte[] getEncKey(String password) {
-        if (!passwordValid(password)) {
-            return null;
-        }
-        byte[] encKey;
-        encKey = Hash.sha256(password.getBytes());
-        encKey = Arrays.copyOfRange(encKey, 0, KEY_SIZE);
-        return encKey;
     }
 
     private File getAccountStorage() {
@@ -261,17 +177,6 @@ public class AccountManager {
         }
 
         return file;
-    }
-
-    public static boolean passwordValid(String password) {
-        if (password == null || password.isEmpty()) {
-            return false;
-        }
-
-        if (password.length() < Tron.MIN_PASSWORD_LENGTH) {
-            return false;
-        }
-        return true;
     }
 
     @Nullable
@@ -441,21 +346,21 @@ public class AccountManager {
         return mAccountRepository.updateAccount(mLoginAccountModel);
     }
 
-    public Single<Integer> createAccount(@NonNull String nickname) {
+    public Single<Integer> createAccount(@NonNull String nickname, @NonNull byte[] aesKey) {
         this.mEcKey = new ECKey(Utils.getRandom());
 
-        return createAddress(nickname, loadPassword(), mAesKey, false);
+        return createAddress(nickname, aesKey, false);
     }
 
     public Single<List<AccountModel>> getAccountList() {
         return mAccountRepository.loadAllAccounts();
     }
 
-    public void changeLoginAccount(AccountModel accountModel) {
-        loadAccountByRepository(accountModel);
+    public void changeLoginAccount(AccountModel accountModel, @NonNull byte[] aesKey) {
+        loadAccountByRepository(accountModel, aesKey);
     }
 
-    public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey, @Nullable String password, boolean imported) {
+    public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey, @NonNull byte[] aesKey, boolean imported) {
         ECKey temKey = null;
         try {
             temKey = ECKey.fromPrivate(ByteArray.fromHexString(privateKey));
@@ -465,17 +370,7 @@ public class AccountManager {
         }
         this.mEcKey = temKey;
 
-        if (TextUtils.isEmpty(password)) {
-            password = loadPassword();
-        } else {
-            //encrypted by password
-            mAesKey = getEncKey(password);
-
-            byte[] pwd = getPassWord(password);
-            password = ByteArray.toHexString(pwd);
-        }
-
-        return createAddress(nickname, password, mAesKey, imported);
+        return createAddress(nickname, aesKey, imported);
     }
 
     public static boolean priKeyValid(byte[] priKey) {

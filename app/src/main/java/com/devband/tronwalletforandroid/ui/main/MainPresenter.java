@@ -166,8 +166,8 @@ public class MainPresenter extends BasePresenter<MainView> {
         return mTron.changeLoginAccountName(accountName);
     }
 
-    public void createAccount(@NonNull String nickname) {
-        mTron.createAccount(nickname)
+    public void createAccount(@NonNull String nickname, @NonNull String password) {
+        mTron.createAccount(nickname, password)
         .subscribe(new SingleObserver<Boolean>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -191,11 +191,12 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void changeLoginAccount(@NonNull AccountModel accountModel) {
-        mTron.changeLoginAccount(accountModel);
+        // todo - remove password
+        mTron.changeLoginAccount(accountModel, null);
     }
 
-    public void importAccount(@NonNull String nickname, @NonNull String privateKey) {
-        mTron.importAccount(nickname, privateKey)
+    public void importAccount(@NonNull String nickname, @NonNull String privateKey, @NonNull String password) {
+        mTron.importAccount(nickname, privateKey, password)
         .subscribeOn(mRxJavaSchedulers.getIo())
         .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Integer>() {
