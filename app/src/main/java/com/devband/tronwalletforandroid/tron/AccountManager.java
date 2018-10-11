@@ -21,7 +21,6 @@ import org.tron.common.utils.Base58;
 import org.tron.common.utils.ByteArray;
 import org.tron.common.utils.FileUtil;
 import org.tron.common.utils.TransactionUtils;
-import org.tron.common.utils.Utils;
 import org.tron.core.config.Parameter;
 import org.tron.protos.Contract;
 import org.tron.protos.Protocol;
@@ -67,17 +66,23 @@ public class AccountManager {
     }
 
     public Single<Integer> genAccount(@NonNull String accountName, @NonNull byte[] aesKey) {
-        return createAddress(accountName, aesKey, false);
+        return createAddress(accountName, aesKey, false, null);
     }
 
-    private Single<Integer> createAddress(@NonNull String accountName, @NonNull byte[] aesKey, boolean imported) {
+    private Single<Integer> createAddress(@NonNull String accountName, @NonNull byte[] aesKey, boolean imported, ECKey temKey) {
         return Single.fromCallable(() -> {
-            ECKey ecKey = new ECKey(new SecureRandom());
+            ECKey ecKey;
+
+            if (imported) {
+                ecKey = temKey;
+            } else {
+                ecKey= new ECKey(new SecureRandom());
+            }
 
             byte[] privKeyPlain = ecKey.getPrivKeyBytes();
             byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, aesKey);
 
-             String privKeyStr = ByteArray.toHexString(privKeyEnced);
+            String privKeyStr = ByteArray.toHexString(privKeyEnced);
             byte[] pubKeyBytes = ecKey.getPubKey();
             String pubKeyStr = ByteArray.toHexString(pubKeyBytes);
 
@@ -329,7 +334,7 @@ public class AccountManager {
     }
 
     public Single<Integer> createAccount(@NonNull String nickname, @NonNull byte[] aesKey) {
-        return createAddress(nickname, aesKey, false);
+        return createAddress(nickname, aesKey, false, null);
     }
 
     public Single<List<AccountModel>> getAccountList() {
@@ -350,10 +355,10 @@ public class AccountManager {
             temKey = ECKey.fromPrivate(ByteArray.fromHexString(privateKey));
         } catch (Exception ex) {
             ex.printStackTrace();
-            Single.fromCallable(() -> Tron.ERROR_PRIVATE_KEY);
+            return Single.fromCallable(() -> Tron.ERROR_PRIVATE_KEY);
         }
 
-        return createAddress(nickname, aesKey, imported);
+        return createAddress(nickname, aesKey, imported, temKey);
     }
 
     public static boolean priKeyValid(byte[] priKey) {

@@ -17,6 +17,7 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.common.security.PasswordEncoder;
 import com.devband.tronwalletforandroid.common.security.PasswordEncoderImpl;
+import com.devband.tronwalletforandroid.common.security.UpdatableBCrypt;
 import com.devband.tronwalletforandroid.common.security.keystore.KeyStore;
 import com.devband.tronwalletforandroid.common.security.keystore.KeyStoreApi18Impl;
 import com.devband.tronwalletforandroid.common.security.keystore.KeyStoreApi23Impl;
@@ -44,9 +45,7 @@ public abstract class AppModule {
     @Provides
     @Singleton
     static CustomPreference provideCustomPreference(@ApplicationContext Context context) {
-        CustomPreference customPreference = new CustomPreference(context);
-
-        return customPreference;
+        return  new CustomPreference(context);
     }
 
     @Provides
@@ -127,25 +126,31 @@ public abstract class AppModule {
 
     @Provides
     @Singleton
-    static PasswordEncoder providePasswordEncoder(CustomPreference customPreference, KeyStore keyStore) {
-        PasswordEncoder passwordEncoder = new PasswordEncoderImpl(customPreference, keyStore);
+    static UpdatableBCrypt provideUpdatableBCrypt() {
+        return new UpdatableBCrypt(Constants.SALT_LOG_ROUND);
+    }
+
+    @Provides
+    @Singleton
+    static PasswordEncoder providePasswordEncoder(CustomPreference customPreference, KeyStore keyStore,
+            UpdatableBCrypt updatableBCrypt) {
+        PasswordEncoderImpl passwordEncoder = new PasswordEncoderImpl(customPreference, keyStore, updatableBCrypt);
+        passwordEncoder.init();
 
         return passwordEncoder;
     }
 
     @Provides
     @Singleton
-    static WalletAppManager provideWalletAppManager(@ApplicationContext Context context, PasswordEncoder passwordEncoder, AppDatabase appDatabase) {
+    static WalletAppManager provideWalletAppManager(PasswordEncoder passwordEncoder, AppDatabase appDatabase) {
         return new WalletAppManager(passwordEncoder, appDatabase);
     }
 
     @Provides
     @Singleton
     static Tron provideTron(@ApplicationContext Context context, TronNetwork tronNetwork,
-                            CustomPreference customPreference, AccountManager accountManager, WalletAppManager walletAppManager) {
-        Tron tron = new Tron(context, tronNetwork, customPreference, accountManager, walletAppManager);
-
-        return tron;
+            CustomPreference customPreference, AccountManager accountManager, WalletAppManager walletAppManager) {
+        return new Tron(context, tronNetwork, customPreference, accountManager, walletAppManager);
     }
 
     @Provides

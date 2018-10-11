@@ -189,7 +189,7 @@ public class Tron {
 
     @Nullable
     public String getLoginAddress() {
-        if (!checkAccountLogin()) {
+        if (!mWalletAppManager.isLoginState()) {
             return null;
         }
 
@@ -198,28 +198,26 @@ public class Tron {
 
     @Nullable
     public String getLoginPrivateKey(@NonNull String password) {
-        if (!checkAccountLogin()) {
+        if (!mWalletAppManager.isLoginState()) {
             return null;
         }
 
-        return mAccountManager.getLoginPrivateKey(WalletAppManager.getEncKey(password));
+        byte[] encKey = WalletAppManager.getEncKey(password);
+
+        if (encKey == null) {
+            return null;
+        }
+
+        return mAccountManager.getLoginPrivateKey(encKey);
     }
 
     @Nullable
     public String getLoginPrivateKey(@NonNull byte[] aesKey) {
-        if (!checkAccountLogin()) {
+        if (!mWalletAppManager.isLoginState()) {
             return null;
         }
 
         return mAccountManager.getLoginPrivateKey(aesKey);
-    }
-
-    private boolean checkAccountLogin() {
-        if (mAccountManager == null || !mWalletAppManager.isLoginState()) {
-            return false;
-        }
-
-        return true;
     }
 
     public Single<Account> getAccount(@NonNull String address) {

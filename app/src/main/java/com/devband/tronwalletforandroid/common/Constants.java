@@ -28,4 +28,7 @@ public class Constants {
     public static final long GRPC_TIME_OUT_IN_MS = 2 * 1000;
 
     public static final String DB_NAME = "tron_wallet_db";
+
+    public static final int SALT_LOG_ROUND = 30;
+    public static final String ALIAS_SALT = "alias_salt";
 }
