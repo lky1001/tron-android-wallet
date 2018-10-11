@@ -20,25 +20,22 @@ public class PasswordEncoderImpl implements PasswordEncoder {
     }
 
     public void init() {
-        if (!keyStore.createKeys(Constants.ALIAS_SALT)) {
-            // todo
-            //throw new NoSuchAlgorithmException();
-        }
-
         if (TextUtils.isEmpty(this.customPreference.getSalt())) {
             String salt = this.updatableBCrypt.gensalt();
 
             this.customPreference.setSalt(this.keyStore.encryptString(salt, Constants.ALIAS_SALT));
-        };
+        }
     }
 
     @Override
     public String encode(@NonNull String rawPassword) {
-        return this.updatableBCrypt.hash(rawPassword, this.keyStore.decryptString(this.customPreference.getSalt(), Constants.ALIAS_SALT));
+        String encodedPassword = this.updatableBCrypt.hash(rawPassword, this.keyStore.decryptString(this.customPreference.getSalt(), Constants.ALIAS_SALT));
+        return keyStore.encryptString(encodedPassword, Constants.ALIAS_PASSWORD_KEY);
     }
 
     @Override
     public boolean matches(@NonNull String rawPassword, @NonNull String encodedPassword) {
-        return this.updatableBCrypt.verifyHash(rawPassword, encodedPassword);
+        String password = keyStore.decryptString(encodedPassword, Constants.ALIAS_PASSWORD_KEY);
+        return this.updatableBCrypt.verifyHash(rawPassword, password);
     }
 }

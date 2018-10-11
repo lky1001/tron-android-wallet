@@ -110,68 +110,59 @@ public class Tron {
     }
 
     public Single<Integer> registerAccount(@NonNull String nickname, @NonNull String privateKey, @NonNull String password) {
-        return Single.fromCallable(() -> {
-            if (!WalletAppManager.passwordValid(password)) {
-                return ERROR_INVALID_PASSWORD;
-            }
-
-            return SUCCESS;
-        })
-        .flatMap(result -> {
-            if (result == SUCCESS) {
-                return generateDefaultAccountName(nickname);
-            } else {
-                return null;
-            }
-        })
-        .flatMap(name -> {
-            if (name != null) {
-                byte[] aesKey = WalletAppManager.getEncKey(password);
-                if (aesKey != null) {
-                    return mAccountManager.importAccount(name, privateKey, aesKey, false);
-                }
-            }
-
+        if (!WalletAppManager.passwordValid(password)) {
             return Single.just(ERROR_INVALID_PASSWORD);
-        });
+        }
 
+        boolean result = mWalletAppManager.checkPassword(password);
+
+        if (!result) {
+            return Single.just(ERROR_INVALID_PASSWORD);
+        }
+
+        return generateDefaultAccountName(nickname)
+                .flatMap(accountNickname -> {
+                    byte[] aesKey = WalletAppManager.getEncKey(password);
+                    return mAccountManager.importAccount(accountNickname, privateKey, aesKey, false);
+                });
     }
 
     public Single<Integer> registerAccount(@NonNull String nickname, @NonNull String password) {
-        return Single.fromCallable(() -> {
-            if (!WalletAppManager.passwordValid(password)) {
-                return ERROR_INVALID_PASSWORD;
-            }
+        boolean result = mWalletAppManager.checkPassword(password);
 
-            return SUCCESS;
-        })
-        .flatMap(result -> {
-            if (result == SUCCESS) {
-                return generateDefaultAccountName(nickname);
-            } else {
-                return null;
-            }
-        })
-        .flatMap(name -> {
-            if (name != null) {
-                byte[] aesKey = WalletAppManager.getEncKey(password);
-                return mAccountManager.genAccount(name, aesKey);
-            }
-
+        if (!result) {
             return Single.just(ERROR_INVALID_PASSWORD);
-        });
+        }
+
+        return generateDefaultAccountName(nickname)
+                .flatMap(accountNickname -> {
+                    byte[] aesKey = WalletAppManager.getEncKey(password);
+                    return mAccountManager.genAccount(accountNickname, aesKey);
+                });
     }
 
     public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey, @NonNull String password) {
+        boolean result = mWalletAppManager.checkPassword(password);
+
+        if (!result) {
+            return Single.just(ERROR_INVALID_PASSWORD);
+        }
+
         return generateDefaultAccountName(nickname)
-            .flatMap(name -> {
-                byte[] aesKey = WalletAppManager.getEncKey(password);
-                return mAccountManager.importAccount(name, privateKey, aesKey, true);
-            });
+                .flatMap(accountNickname -> {
+                    byte[] aesKey = WalletAppManager.getEncKey(password);
+                    return mAccountManager.importAccount(accountNickname, privateKey, aesKey, true);
+                });
     }
 
-    public int login(String password) {
-        if (!WalletAppManager.passwordValid(password)) {
+    public void loginWithFingerPrint() {
+        mWalletAppManager.loginWithFingerPrint();
+    }
+
+    public int login(@NonNull String password) {
+        int result = mWalletAppManager.login(password);
+
+        if (result != WalletAppManager.SUCCESS) {
             return ERROR_INVALID_PASSWORD;
         }
 
@@ -199,6 +190,12 @@ public class Tron {
 
     @Nullable
     public String getLoginPrivateKey(@NonNull String password) {
+        boolean result = mWalletAppManager.checkPassword(password);
+
+        if (!result) {
+            return null;
+        }
+
         byte[] encKey = WalletAppManager.getEncKey(password);
 
         if (encKey == null) {
@@ -264,14 +261,6 @@ public class Tron {
         }
     }
 
-    public boolean validPassword(@Nullable String password) {
-        if (!WalletAppManager.passwordValid(password)) {
-            return false;
-        }
-
-        return mWalletAppManager.checkPassWord(password);
-    }
-
     public void logout() {
         if (mAccountManager != null) {
             mAccountManager.logout();
@@ -300,18 +289,17 @@ public class Tron {
         return mAccountManager.changeLoginAccountName(accountName);
     }
 
-    public Single<Boolean> createAccount(@NonNull String nickname, @NonNull String password) {
+    public Single<Integer> createAccount(@NonNull String nickname, @NonNull String password) {
+        boolean result = mWalletAppManager.checkPassword(password);
+
+        if (!result) {
+            return Single.just(ERROR_INVALID_PASSWORD);
+        }
+
         return generateDefaultAccountName(nickname)
-                .flatMap(name -> {
+                .flatMap(accountNickname -> {
                     byte[] aesKey = WalletAppManager.getEncKey(password);
-                    return mAccountManager.createAccount(name, aesKey);
-                })
-                .flatMap(result -> {
-                    if (result == Tron.SUCCESS) {
-                        return Single.just(true);
-                    } else {
-                        return Single.just(false);
-                    }
+                    return mAccountManager.createAccount(accountNickname, aesKey);
                 });
     }
 
@@ -319,16 +307,21 @@ public class Tron {
         return mAccountManager.getAccountList();
     }
 
-    public void changeLoginAccount(@NonNull AccountModel accountModel, @NonNull String password) {
-        byte[] aesKey = WalletAppManager.getEncKey(password);
-        mAccountManager.changeLoginAccount(accountModel, aesKey);
+    public boolean changeLoginAccount(@NonNull AccountModel accountModel, @NonNull String password) {
+        boolean result = mWalletAppManager.checkPassword(password);
+
+        if (result) {
+            byte[] aesKey = WalletAppManager.getEncKey(password);
+            mAccountManager.changeLoginAccount(accountModel, aesKey);
+            return true;
+        }
+
+        return false;
     }
 
     private Single<String> generateDefaultAccountName(String prefix) {
         return mAccountManager.getAccountCount()
-                .flatMap(cnt -> {
-                    return Single.just(prefix + (++cnt));
-                });
+                .map(cnt ->  prefix + (++cnt));
     }
 
     public Single<GrpcAPI.WitnessList> getWitnessList() {
@@ -340,6 +333,12 @@ public class Tron {
     }
 
     public Single<Boolean> participateTokens(@Nullable String password, String tokenName, String issuerAddress, long amount) {
+        boolean result = mWalletAppManager.checkPassword(password);
+
+        if (!result) {
+            return Single.just(false);
+        }
+
         return Single.fromCallable(() -> {
             byte[] toAddressBytes = AccountManager.decodeFromBase58Check(issuerAddress);
             byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
@@ -371,6 +370,12 @@ public class Tron {
     }
 
     public Single<Boolean> voteWitness(@Nullable String password, Map<String, String> witness) {
+        boolean result = mWalletAppManager.checkPassword(password);
+
+        if (!result) {
+            return Single.just(false);
+        }
+
         return Single.fromCallable(() -> {
             byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
 
@@ -408,12 +413,20 @@ public class Tron {
     }
 
     public Single<Boolean> freezeBalance(@Nullable String password, long freezeBalance, long freezeDuration) {
+        boolean result = mWalletAppManager.checkPassword(password);
+
+        if (!result) {
+            return Single.just(false);
+        }
+
         return Single.fromCallable(() -> {
             byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
+            ByteString byteAddress = ByteString.copyFrom(ownerAddressBytes);
 
             Contract.FreezeBalanceContract freezeBalanceContract = Contract.FreezeBalanceContract.newBuilder()
                     .setFrozenBalance(freezeBalance)
                     .setFrozenDuration(freezeDuration)
+                    .setOwnerAddress(byteAddress)
                     .build();
 
             return mTronManager.createTransaction(freezeBalanceContract);
@@ -431,13 +444,19 @@ public class Tron {
     }
 
     public Single<Boolean> unfreezeBalance(@Nullable String password) {
+        boolean result = mWalletAppManager.checkPassword(password);
+
+        if (!result) {
+            return Single.just(false);
+        }
+
         return Single.fromCallable(() -> {
             byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
-            ByteString byteAddreess = ByteString.copyFrom(ownerAddressBytes);
+            ByteString byteAddress = ByteString.copyFrom(ownerAddressBytes);
 
             Contract.UnfreezeBalanceContract unfreezeBalanceContract = Contract.UnfreezeBalanceContract
                     .newBuilder()
-                    .setOwnerAddress(byteAddreess)
+                    .setOwnerAddress(byteAddress)
                     .build();
 
             return mTronManager.createTransaction(unfreezeBalanceContract);
@@ -455,6 +474,12 @@ public class Tron {
     }
 
     public Single<Boolean> sendCoin(@NonNull String password, @NonNull String toAddress, long amount) {
+        boolean result = mWalletAppManager.checkPassword(password);
+
+        if (!result) {
+            return Single.just(false);
+        }
+
         return Single.fromCallable(() -> {
             byte[] toAddressBytes = AccountManager.decodeFromBase58Check(toAddress);
 
@@ -462,7 +487,7 @@ public class Tron {
                 throw new InvalidAddressException();
             }
 
-            if (!mWalletAppManager.checkPassWord(password)) {
+            if (!mWalletAppManager.checkPassword(password)) {
                 throw new InvalidPasswordException();
             }
 
@@ -492,6 +517,12 @@ public class Tron {
     }
 
     public Single<Boolean> transferAsset(@Nullable String password, String toAddress, String assetName, long amount) {
+        boolean result = mWalletAppManager.checkPassword(password);
+
+        if (!result) {
+            return Single.just(false);
+        }
+
         return Single.fromCallable(() -> {
             byte[] toAddressBytes = AccountManager.decodeFromBase58Check(toAddress);
 
@@ -499,7 +530,7 @@ public class Tron {
                 throw new InvalidAddressException();
             }
 
-            if (!mWalletAppManager.checkPassWord(password)) {
+            if (!mWalletAppManager.checkPassword(password)) {
                 throw new InvalidPasswordException();
             }
 
@@ -532,5 +563,13 @@ public class Tron {
 
     public boolean changePassword(String newPassword) {
         return false;
+    }
+
+    public Single<Integer> createWallet(String password) {
+        return Single.just(mWalletAppManager.createWallet(password));
+    }
+
+    public void agreeTerms(boolean agree) {
+        mWalletAppManager.agreeTerms(agree);
     }
 }

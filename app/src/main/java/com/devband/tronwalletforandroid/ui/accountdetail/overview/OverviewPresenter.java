@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Account;
-import com.devband.tronlib.dto.TransactionStats;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
@@ -16,6 +15,7 @@ import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 
@@ -53,8 +53,7 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
     public void getAccount(@NonNull String address) {
         mView.showLoadingDialog();
 
-        mTronNetwork.getAccount(address)
-        .map((account -> {
+        Single.zip(mTronNetwork.getAccount(address), mTronNetwork.getTransactionStats(address), ((account, transactionStats) -> {
             List<Frozen> frozenList = new ArrayList<>();
 
             for (Account.FrozenTrx frozen : account.getFrozen().getBalances()) {
@@ -76,8 +75,6 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
                         .balance(balance.getBalance())
                         .build());
             }
-
-            TransactionStats transactionStats = mTronNetwork.getTransactionStats(address).blockingGet();
 
             return TronAccount.builder()
                     .balance(account.getBalance())

@@ -168,20 +168,24 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void createAccount(@NonNull String nickname, @NonNull String password) {
         mTron.createAccount(nickname, password)
-        .subscribe(new SingleObserver<Boolean>() {
+        .subscribe(new SingleObserver<Integer>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onSuccess(Boolean aBoolean) {
-                mView.successCreateAccount();
+            public void onSuccess(Integer result) {
+                if (result == Tron.SUCCESS) {
+                    mView.successCreateAccount();
+                } else {
+                    mView.showInvalidPasswordMsg();
+                }
             }
 
             @Override
             public void onError(Throwable e) {
-                mView.connectionError();
+
             }
         });
     }
@@ -190,9 +194,8 @@ public class MainPresenter extends BasePresenter<MainView> {
         return mTron.getAccountList();
     }
 
-    public void changeLoginAccount(@NonNull AccountModel accountModel) {
-        // todo - remove password
-        mTron.changeLoginAccount(accountModel, null);
+    public void changeLoginAccount(@NonNull AccountModel accountModel, String password) {
+        mTron.changeLoginAccount(accountModel, password);
     }
 
     public void importAccount(@NonNull String nickname, @NonNull String privateKey, @NonNull String password) {
@@ -213,6 +216,8 @@ public class MainPresenter extends BasePresenter<MainView> {
                     mView.duplicatedAccount();
                 } else if (result == Tron.ERROR_PRIVATE_KEY) {
                     mView.failCreateAccount();
+                } else if (result == Tron.ERROR_INVALID_PASSWORD) {
+                    mView.showInvalidPasswordMsg();
                 }
             }
 

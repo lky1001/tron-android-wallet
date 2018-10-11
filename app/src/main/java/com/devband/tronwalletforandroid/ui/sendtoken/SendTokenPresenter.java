@@ -64,7 +64,7 @@ public class SendTokenPresenter extends BasePresenter<SendTokenView> {
     }
 
     public void sendTron(String password, String toAddress, long amount) {
-        if (!mTron.isLogin() || !mTron.validPassword(password)) {
+        if (!mTron.isLogin()) {
             mView.invalidPassword();
             return;
         }
@@ -93,7 +93,7 @@ public class SendTokenPresenter extends BasePresenter<SendTokenView> {
     }
 
     public void transferAsset(String password, String toAddress, String assetName, long amount) {
-        if (!mTron.isLogin() || !mTron.validPassword(password)) {
+        if (!mTron.isLogin()) {
             mView.invalidPassword();
             return;
         }

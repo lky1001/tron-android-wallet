@@ -1,7 +1,6 @@
 package com.devband.tronwalletforandroid.ui.blockexplorer.overview;
 
 import com.devband.tronlib.TronNetwork;
-import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.dto.RichInfo;
 import com.devband.tronlib.dto.RichTotal;
 import com.devband.tronlib.dto.Stat;
@@ -13,6 +12,7 @@ import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 
@@ -106,18 +106,15 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
     void richListDataLoad() {
         mView.showLoadingDialog();
 
-        mTronNetwork.getRichList()
-                .map(richData ->  {
-                    CoinMarketCap coinMarketCap = mTronNetwork
-                            .getCoinInfo(Constants.TRON_COINMARKET_NAME).blockingGet().get(0);
-
+        Single.zip(mTronNetwork.getRichList(), mTronNetwork.getCoinInfo(Constants.TRON_COINMARKET_NAME),
+                ((richData, coinMarketCaps) -> {
                     List<RichItemViewModel> viewModels = new ArrayList<>();
                     RichTotal total = richData.getTotal();
                     for (RichInfo info : richData.getData()) {
-                        viewModels.add(new RichItemViewModel(total, info, coinMarketCap));
+                        viewModels.add(new RichItemViewModel(total, info, coinMarketCaps.get(0)));
                     }
                     return viewModels;
-                })
+                }))
                 .observeOn(mRxJavaSchedulers.getMainThread())
                 .subscribe(
                         mView::richListLoadSuccess,

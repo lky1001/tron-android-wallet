@@ -16,14 +16,11 @@ import io.reactivex.disposables.Disposable;
 public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
 
     private Tron mTron;
-    private WalletAppManager mWalletAppManager;
     private RxJavaSchedulers mRxJavaSchedulers;
 
-    public CreateWalletPresenter(CreateWalletView view, Tron tron, WalletAppManager walletAppManager,
-            RxJavaSchedulers rxJavaSchedulers) {
+    public CreateWalletPresenter(CreateWalletView view, Tron tron, RxJavaSchedulers rxJavaSchedulers) {
         super(view);
         this.mTron = tron;
-        this.mWalletAppManager = walletAppManager;
         this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
@@ -47,29 +44,26 @@ public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
     }
 
     public void createWallet(@NonNull String password) {
-        Single.fromCallable(() -> {
-            int result = mWalletAppManager.createWallet(password);
-
-            if (result == WalletAppManager.SUCCESS) {
-                result = mTron.registerAccount(Constants.PREFIX_ACCOUNT_NAME, password).blockingGet();
-                if (result != Tron.SUCCESS) {
-                    return result;
-                }
-
-                result = mTron.login(password);
-
-                if (result != Tron.SUCCESS) {
-                    return result;
-                }
-
-                mWalletAppManager.login(password);
-
-                return Tron.SUCCESS;
-            } else if (result == WalletAppManager.ERROR) {
-                return Tron.ERROR;
+        mTron.createWallet(password)
+        .flatMap(createWalletResult -> {
+            if (createWalletResult == WalletAppManager.SUCCESS) {
+                return mTron.registerAccount(Constants.PREFIX_ACCOUNT_NAME, password);
+            } else {
+                return Single.just(Tron.ERROR);
             }
+        })
+        .map(registerAccountResult -> {
+            if (registerAccountResult != Tron.SUCCESS) {
+                return registerAccountResult;
+            } else {
+                int result = mTron.login(password);
 
-            return result;
+                if (result == WalletAppManager.SUCCESS) {
+                    return Tron.SUCCESS;
+                }
+
+                return Tron.ERROR_INVALID_PASSWORD;
+            }
         })
         .subscribeOn(mRxJavaSchedulers.getIo())
         .observeOn(mRxJavaSchedulers.getMainThread())

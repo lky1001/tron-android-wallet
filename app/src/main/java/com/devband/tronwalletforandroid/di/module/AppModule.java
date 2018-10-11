@@ -126,6 +126,9 @@ public abstract class AppModule {
         }
 
         keyStore.init();
+        keyStore.createKeys(Constants.ALIAS_SALT);
+        keyStore.createKeys(Constants.ALIAS_PASSWORD_KEY);
+        keyStore.createKeys(Constants.ALIAS_ACCOUNT_KEY);
 
         return keyStore;
     }

@@ -145,11 +145,8 @@ public class VoteActivity extends CommonActivity implements VoteView {
             }
         });
 
-        mCheckMyVotes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mVotePresenter.showOnlyMyVotes(mCheckMyVotes.isChecked());
-            }
+        mCheckMyVotes.setOnClickListener(view -> {
+            mVotePresenter.showOnlyMyVotes(mCheckMyVotes.isChecked());
         });
 
         mVotePresenter.setAdapterDataModel(mVoteListAdapter);
@@ -372,62 +369,56 @@ public class VoteActivity extends CommonActivity implements VoteView {
                     }
                 });
 
-                voteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        long voteBalance = 0;
+                voteButton.setOnClickListener(view -> {
+                    long voteBalance = 0;
 
-                        try {
-                            String number = inputVote.getText().toString().replaceAll(",", "");
-                            voteBalance = Long.parseLong(number);
-                        } catch (NumberFormatException e) {
-                            Toast.makeText(VoteActivity.this, getString(R.string.invalid_vote),
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+                    try {
+                        String number = inputVote.getText().toString().replaceAll(",", "");
+                        voteBalance = Long.parseLong(number);
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(VoteActivity.this, getString(R.string.invalid_vote),
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                        if (voteBalance > mTotalVotePoint) {
-                            Toast.makeText(VoteActivity.this, getString(R.string.invalid_vote),
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+                    if (voteBalance > mTotalVotePoint) {
+                        Toast.makeText(VoteActivity.this, getString(R.string.invalid_vote),
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                        if (voteBalance == 0 && otherVote == 0) {
-                            Toast.makeText(VoteActivity.this, getString(R.string.invalid_vote),
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+                    if (voteBalance == 0 && otherVote == 0) {
+                        Toast.makeText(VoteActivity.this, getString(R.string.invalid_vote),
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                        String password = inputPassword.getText().toString();
-                        if (TextUtils.isEmpty(password) || !mVotePresenter.matchPassword(password)) {
-                            Toast.makeText(VoteActivity.this, getString(R.string.invalid_password),
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+                    String password = inputPassword.getText().toString();
+                    if (TextUtils.isEmpty(password) || !mVotePresenter.matchPassword(password)) {
+                        Toast.makeText(VoteActivity.this, getString(R.string.invalid_password),
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                        boolean agree = agreeVoteCheckBox.isChecked();
+                    boolean agree = agreeVoteCheckBox.isChecked();
 
-                        if (!agree) {
-                            Toast.makeText(VoteActivity.this, getString(R.string.need_all_agree),
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+                    if (!agree) {
+                        Toast.makeText(VoteActivity.this, getString(R.string.need_all_agree),
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                        dialog.dismiss();
+                    dialog.dismiss();
 
-                        if (voteBalance > (item.getMyVoteCount() + mRemainVotePoint)) {
-                            mVotePresenter.voteRepresentative(password, item.getAddress(), voteBalance, false);
-                        } else {
-                            mVotePresenter.voteRepresentative(password, item.getAddress(), voteBalance, true);
-                        }
+                    if (voteBalance > (item.getMyVoteCount() + mRemainVotePoint)) {
+                        mVotePresenter.voteRepresentative(password, item.getAddress(), voteBalance, false);
+                    } else {
+                        mVotePresenter.voteRepresentative(password, item.getAddress(), voteBalance, true);
                     }
                 });
 
-                maxButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        inputVote.setText(String.valueOf(mTotalVotePoint));
-                    }
+                maxButton.setOnClickListener(view -> {
+                    inputVote.setText(String.valueOf(mTotalVotePoint));
                 });
 
                 dialog.show();

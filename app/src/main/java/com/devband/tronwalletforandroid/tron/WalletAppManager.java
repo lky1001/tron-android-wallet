@@ -1,6 +1,5 @@
 package com.devband.tronwalletforandroid.tron;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -49,11 +48,15 @@ public class WalletAppManager {
         }
 
         mWalletDao.insert(WalletModel.builder()
-                .password(PasswordUtil.getHashedPassword(password))
+                .password(mPasswordEncoder.encode(password))
                 .created(Calendar.getInstance().getTime())
                 .build());
 
         return SUCCESS;
+    }
+
+    public void loginWithFingerPrint() {
+        mIsLogin = true;
     }
 
     public int login(@NonNull String password) {
@@ -63,7 +66,7 @@ public class WalletAppManager {
 
         WalletModel wallet = mWalletDao.loadWallet();
 
-        if (PasswordUtil.matches(password, wallet.getPassword())) {
+        if (mPasswordEncoder.matches(password, wallet.getPassword())) {
             mIsLogin = true;
             return SUCCESS;
         }
@@ -95,8 +98,8 @@ public class WalletAppManager {
     public boolean changePassword(@NonNull String originPassword, @NonNull String newPassword) {
         WalletModel wallet = mWalletDao.loadWallet();
 
-        if (PasswordUtil.matches(originPassword, wallet.getPassword())) {
-            wallet.setPassword(PasswordUtil.getHashedPassword(newPassword));
+        if (mPasswordEncoder.matches(originPassword, wallet.getPassword())) {
+            wallet.setPassword(mPasswordEncoder.encode(newPassword));
             mWalletDao.update(wallet);
             return true;
         }
@@ -104,9 +107,9 @@ public class WalletAppManager {
         return false;
     }
 
-    public boolean checkPassWord(String password) {
+    public boolean checkPassword(String password) {
         WalletModel wallet = mWalletDao.loadWallet();
-        return PasswordUtil.matches(password, wallet.getPassword());
+        return mPasswordEncoder.matches(password, wallet.getPassword());
     }
 
     @Nullable
@@ -121,13 +124,14 @@ public class WalletAppManager {
     }
 
     public static boolean passwordValid(String password) {
-        if (password == null || password.isEmpty()) {
+        if (TextUtils.isEmpty(password)) {
             return false;
         }
 
         if (password.length() < Tron.MIN_PASSWORD_LENGTH) {
             return false;
         }
+
         return true;
     }
 }

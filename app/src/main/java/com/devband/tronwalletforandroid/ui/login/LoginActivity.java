@@ -25,6 +25,9 @@ import butterknife.OnClick;
 public class LoginActivity extends CommonActivity implements LoginView {
 
     @Inject
+    Tron mTron;
+
+    @Inject
     LoginPresenter mLoginPresenter;
 
     @Inject
@@ -110,6 +113,7 @@ public class LoginActivity extends CommonActivity implements LoginView {
         } else if (result == Tron.SUCCESS) {
             Toast.makeText(LoginActivity.this, getString(R.string.login_success),
                     Toast.LENGTH_SHORT).show();
+            mTron.loginWithFingerPrint();
 
             startActivity(MainActivity.class);
             finishActivity();
