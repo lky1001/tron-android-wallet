@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -17,13 +15,15 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivity;
 import com.devband.tronwalletforandroid.ui.importkey.ImportPrivateKeyActivity;
+import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 
-import javax.annotation.Nonnull;
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class CreateWalletActivity extends CommonActivity implements CreateWalletView {
 
@@ -38,6 +38,9 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
 
     @BindView(R.id.btn_create_wallet)
     Button mCreateWalletButton;
+
+    @BindView(R.id.btn_import_private_key)
+    Button mImportPrivateKeyButton;
 
     @BindView(R.id.agree_lost_password)
     CheckBox mChkLostPassword;
@@ -59,45 +62,37 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
 
         mCreateWalletPresenter.onCreate();
 
-        mInputPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        addDisposable(RxTextView.textChanges(mInputPassword)
+                .debounce(1, TimeUnit.SECONDS)
+                .map(CharSequence::toString)
+                .subscribe(password -> {
+                    if (password.toString().length() >= WalletAppManager.MIN_PASSWORD_LENGTH) {
+                        mCreateWalletButton.setEnabled(true);
+                    } else {
+                        mCreateWalletButton.setEnabled(false);
+                    }
+                }));
 
-            }
+        addDisposable(RxView.clicks(mCreateWalletButton)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(view -> {
+                    if (!mChkLostPassword.isChecked()
+                            || !mChkLostPasswordRecover.isChecked()) {
+                        Toast.makeText(CreateWalletActivity.this, getString(R.string.need_all_agree),
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().length() >= WalletAppManager.MIN_PASSWORD_LENGTH) {
-                    mCreateWalletButton.setEnabled(true);
-                } else {
-                    mCreateWalletButton.setEnabled(false);
-                }
-            }
+                    showProgressDialog(null, getString(R.string.loading_msg));
+                    mCreateWalletPresenter.createWallet(mInputPassword.getText().toString());
+                }));
 
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-    }
-
-    @OnClick(R.id.btn_create_wallet)
-    public void onCreateAccountClick() {
-        if (!mChkLostPassword.isChecked()
-                || !mChkLostPasswordRecover.isChecked()) {
-            Toast.makeText(CreateWalletActivity.this, getString(R.string.need_all_agree),
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        showProgressDialog(null, getString(R.string.loading_msg));
-        mCreateWalletPresenter.createWallet(mInputPassword.getText().toString());
-    }
-
-    @OnClick(R.id.btn_import_private_key)
-    public void onImportPrivateKey() {
-        startActivity(ImportPrivateKeyActivity.class);
-        finishActivity();
+        addDisposable(RxView.clicks(mImportPrivateKeyButton)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(view -> {
+                    startActivity(ImportPrivateKeyActivity.class);
+                    finishActivity();
+                }));
     }
 
     @Override

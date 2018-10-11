@@ -22,10 +22,13 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import dagger.android.support.DaggerAppCompatActivity;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 public class CommonActivity extends DaggerAppCompatActivity {
 
     protected MaterialDialog mMaterialDialog;
+    private CompositeDisposable mAllDisposables = new CompositeDisposable();
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -53,9 +56,14 @@ public class CommonActivity extends DaggerAppCompatActivity {
         return true;
     }
 
+    protected void addDisposable(Disposable disposable) {
+        mAllDisposables.add(disposable);
+    }
+
     @Override
     protected void onDestroy() {
         hideDialog();
+        mAllDisposables.clear();
         super.onDestroy();
     }
 
