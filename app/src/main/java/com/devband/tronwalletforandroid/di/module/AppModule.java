@@ -19,6 +19,7 @@ import com.devband.tronwalletforandroid.common.security.PasswordEncoder;
 import com.devband.tronwalletforandroid.common.security.PasswordEncoderImpl;
 import com.devband.tronwalletforandroid.common.security.UpdatableBCrypt;
 import com.devband.tronwalletforandroid.common.security.keystore.KeyStore;
+import com.devband.tronwalletforandroid.common.security.keystore.KeyStoreApi15Impl;
 import com.devband.tronwalletforandroid.common.security.keystore.KeyStoreApi18Impl;
 import com.devband.tronwalletforandroid.common.security.keystore.KeyStoreApi23Impl;
 import com.devband.tronwalletforandroid.database.AppDatabase;
@@ -28,6 +29,7 @@ import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulersImpl;
 import com.devband.tronwalletforandroid.tron.AccountManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
+import com.devband.tronwalletforandroid.tron.repository.LocalDbRepository;
 
 import javax.inject.Singleton;
 
@@ -95,8 +97,8 @@ public abstract class AppModule {
 
     @Provides
     @Singleton
-    static AccountManager provideAccountManager(AppDatabase appDatabase) {
-        return new AccountManager(AccountManager.PERSISTENT_LOCAL_DB, appDatabase);
+    static AccountManager provideAccountManager(AppDatabase appDatabase, KeyStore keyStore) {
+        return new AccountManager(new LocalDbRepository(appDatabase), keyStore);
     }
 
     @Provides
@@ -107,15 +109,19 @@ public abstract class AppModule {
         if (!customPreference.getInitWallet()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 keyStore = new KeyStoreApi23Impl(customPreference);
-            } else {
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 keyStore = new KeyStoreApi18Impl(context);
+            } else {
+                keyStore = new KeyStoreApi15Impl();
             }
         } else {
             // check os update
             if (customPreference.getKeyStoreVersion() >= Build.VERSION_CODES.M) {
                 keyStore = new KeyStoreApi23Impl(customPreference);
-            } else {
+            } else if (customPreference.getKeyStoreVersion() >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 keyStore = new KeyStoreApi18Impl(context);
+            } else {
+                keyStore = new KeyStoreApi15Impl();
             }
         }
 

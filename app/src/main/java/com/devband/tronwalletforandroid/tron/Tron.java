@@ -12,6 +12,7 @@ import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.exception.InvalidAddressException;
 import com.devband.tronwalletforandroid.tron.exception.InvalidPasswordException;
+import com.google.protobuf.ByteString;
 
 import org.tron.api.GrpcAPI;
 import org.tron.common.utils.ByteArray;
@@ -198,17 +199,13 @@ public class Tron {
 
     @Nullable
     public String getLoginPrivateKey(@NonNull String password) {
-        if (!mWalletAppManager.isLoginState()) {
-            return null;
-        }
-
         byte[] encKey = WalletAppManager.getEncKey(password);
 
         if (encKey == null) {
             return null;
         }
 
-        return mAccountManager.getLoginPrivateKey(encKey);
+        return getLoginPrivateKey(encKey);
     }
 
     @Nullable
@@ -258,61 +255,6 @@ public class Tron {
         }
     }
 
-    public Single<Boolean> sendCoin(@NonNull String password, @NonNull String toAddress, long amount) {
-        return Single.fromCallable(() -> {
-            byte[] toAddressBytes = AccountManager.decodeFromBase58Check(toAddress);
-
-            if (toAddressBytes == null) {
-                throw new InvalidAddressException();
-            }
-
-            if (!mWalletAppManager.checkPassWord(password)) {
-                throw new InvalidPasswordException();
-            }
-
-            Contract.TransferContract contract = mAccountManager.createTransferContract(WalletAppManager.getEncKey(password), toAddressBytes, amount);
-
-            return mTronManager.createTransaction(contract);
-        })
-        .flatMap(transactionSingle -> transactionSingle)
-        .flatMap(transaction -> {
-            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
-                throw new RuntimeException();
-            }
-
-            // sign transaction
-            transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
-            return mTronManager.broadcastTransaction(transaction);
-        });
-    }
-
-    public Single<Boolean> transferAsset(@Nullable String password, String toAddress, String assetName, long amount) {
-        return Single.fromCallable(() -> {
-            byte[] toAddressBytes = AccountManager.decodeFromBase58Check(toAddress);
-
-            if (toAddressBytes == null) {
-                throw new InvalidAddressException();
-            }
-
-            if (!mWalletAppManager.checkPassWord(password)) {
-                throw new InvalidPasswordException();
-            }
-
-            Contract.TransferAssetContract contract = mAccountManager.createTransferAssetTransaction(WalletAppManager.getEncKey(password), toAddressBytes, assetName.getBytes(), amount);
-
-            return mTronManager.createTransferAssetTransaction(contract);
-        })
-        .flatMap(transactionSingle -> transactionSingle)
-        .flatMap(transaction -> {
-            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
-                throw new RuntimeException();
-            }
-
-            // sign transaction
-            transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
-            return mTronManager.broadcastTransaction(transaction);
-        });
-    }
 
     public void shutdown() {
         try {
@@ -400,9 +342,19 @@ public class Tron {
     public Single<Boolean> participateTokens(@Nullable String password, String tokenName, String issuerAddress, long amount) {
         return Single.fromCallable(() -> {
             byte[] toAddressBytes = AccountManager.decodeFromBase58Check(issuerAddress);
+            byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
 
-            Contract.ParticipateAssetIssueContract participateAssetIssueContract = mAccountManager
-                    .participateAssetIssueContract(WalletAppManager.getEncKey(password), toAddressBytes, tokenName.getBytes(), amount);
+            ByteString bsTo = ByteString.copyFrom(toAddressBytes);
+            ByteString bsName = ByteString.copyFrom(tokenName.getBytes());
+            ByteString bsOwner = ByteString.copyFrom(ownerAddressBytes);
+
+            Contract.ParticipateAssetIssueContract participateAssetIssueContract = Contract.ParticipateAssetIssueContract
+                    .newBuilder()
+                    .setToAddress(bsTo)
+                    .setAssetName(bsName)
+                    .setOwnerAddress(bsOwner)
+                    .setAmount(amount)
+                    .build();
 
             return mTronManager.createParticipateAssetIssueTransaction(participateAssetIssueContract);
         })
@@ -420,7 +372,26 @@ public class Tron {
 
     public Single<Boolean> voteWitness(@Nullable String password, Map<String, String> witness) {
         return Single.fromCallable(() -> {
-            Contract.VoteWitnessContract voteWitnessContract = mAccountManager.createVoteWitnessContract(WalletAppManager.getEncKey(password), witness);
+            byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
+
+            Contract.VoteWitnessContract.Builder builder = Contract.VoteWitnessContract.newBuilder();
+            builder.setOwnerAddress(ByteString.copyFrom(ownerAddressBytes));
+
+            for (String addressBase58 : witness.keySet()) {
+                String value = witness.get(addressBase58);
+                long count = Long.parseLong(value);
+                Contract.VoteWitnessContract.Vote.Builder voteBuilder = Contract.VoteWitnessContract.Vote
+                        .newBuilder();
+                byte[] address = AccountManager.decodeFromBase58Check(addressBase58);
+                if (address == null) {
+                    continue;
+                }
+                voteBuilder.setVoteAddress(ByteString.copyFrom(address));
+                voteBuilder.setVoteCount(count);
+                builder.addVotes(voteBuilder.build());
+            }
+
+            Contract.VoteWitnessContract voteWitnessContract = builder.build();
 
             return mTronManager.createTransaction(voteWitnessContract);
         })
@@ -438,7 +409,12 @@ public class Tron {
 
     public Single<Boolean> freezeBalance(@Nullable String password, long freezeBalance, long freezeDuration) {
         return Single.fromCallable(() -> {
-            Contract.FreezeBalanceContract freezeBalanceContract = mAccountManager.createFreezeBalanceContract(WalletAppManager.getEncKey(password), freezeBalance, freezeDuration);
+            byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
+
+            Contract.FreezeBalanceContract freezeBalanceContract = Contract.FreezeBalanceContract.newBuilder()
+                    .setFrozenBalance(freezeBalance)
+                    .setFrozenDuration(freezeDuration)
+                    .build();
 
             return mTronManager.createTransaction(freezeBalanceContract);
         })
@@ -456,7 +432,13 @@ public class Tron {
 
     public Single<Boolean> unfreezeBalance(@Nullable String password) {
         return Single.fromCallable(() -> {
-            Contract.UnfreezeBalanceContract unfreezeBalanceContract = mAccountManager.createUnfreezeBalanceContract(WalletAppManager.getEncKey(password));
+            byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
+            ByteString byteAddreess = ByteString.copyFrom(ownerAddressBytes);
+
+            Contract.UnfreezeBalanceContract unfreezeBalanceContract = Contract.UnfreezeBalanceContract
+                    .newBuilder()
+                    .setOwnerAddress(byteAddreess)
+                    .build();
 
             return mTronManager.createTransaction(unfreezeBalanceContract);
         })
@@ -470,6 +452,82 @@ public class Tron {
             transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
             return mTronManager.broadcastTransaction(transaction);
         });
+    }
+
+    public Single<Boolean> sendCoin(@NonNull String password, @NonNull String toAddress, long amount) {
+        return Single.fromCallable(() -> {
+            byte[] toAddressBytes = AccountManager.decodeFromBase58Check(toAddress);
+
+            if (toAddressBytes == null) {
+                throw new InvalidAddressException();
+            }
+
+            if (!mWalletAppManager.checkPassWord(password)) {
+                throw new InvalidPasswordException();
+            }
+
+            byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
+
+            ByteString bsTo = ByteString.copyFrom(toAddressBytes);
+            ByteString bsOwner = ByteString.copyFrom(ownerAddressBytes);
+
+            Contract.TransferContract contract = Contract.TransferContract.newBuilder()
+                    .setToAddress(bsTo)
+                    .setOwnerAddress(bsOwner)
+                    .setAmount(amount)
+                    .build();
+
+            return mTronManager.createTransaction(contract);
+        })
+                .flatMap(transactionSingle -> transactionSingle)
+                .flatMap(transaction -> {
+                    if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+                        throw new RuntimeException();
+                    }
+
+                    // sign transaction
+                    transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
+                    return mTronManager.broadcastTransaction(transaction);
+                });
+    }
+
+    public Single<Boolean> transferAsset(@Nullable String password, String toAddress, String assetName, long amount) {
+        return Single.fromCallable(() -> {
+            byte[] toAddressBytes = AccountManager.decodeFromBase58Check(toAddress);
+
+            if (toAddressBytes == null) {
+                throw new InvalidAddressException();
+            }
+
+            if (!mWalletAppManager.checkPassWord(password)) {
+                throw new InvalidPasswordException();
+            }
+
+            byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
+
+            ByteString bsTo = ByteString.copyFrom(toAddressBytes);
+            ByteString bsName = ByteString.copyFrom(assetName.getBytes());
+            ByteString bsOwner = ByteString.copyFrom(ownerAddressBytes);
+
+            Contract.TransferAssetContract contract = Contract.TransferAssetContract.newBuilder()
+                    .setToAddress(bsTo)
+                    .setAssetName(bsName)
+                    .setOwnerAddress(bsOwner)
+                    .setAmount(amount)
+                    .build();
+
+            return mTronManager.createTransferAssetTransaction(contract);
+        })
+                .flatMap(transactionSingle -> transactionSingle)
+                .flatMap(transaction -> {
+                    if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+                        throw new RuntimeException();
+                    }
+
+                    // sign transaction
+                    transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
+                    return mTronManager.broadcastTransaction(transaction);
+                });
     }
 
     public boolean changePassword(String newPassword) {

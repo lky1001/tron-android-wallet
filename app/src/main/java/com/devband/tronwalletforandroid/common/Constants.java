@@ -31,4 +31,5 @@ public class Constants {
 
     public static final int SALT_LOG_ROUND = 30;
     public static final String ALIAS_SALT = "alias_salt";
+    public static final String ALIAS_ACCOUNT_KEY = "alias_account_key";
 }
