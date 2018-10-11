@@ -1,6 +1,5 @@
 package com.devband.tronwalletforandroid.tron.repository;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.devband.tronwalletforandroid.database.AppDatabase;
@@ -48,21 +47,21 @@ public class LocalDbRepository implements AccountRepository {
 
     @Override
     public Maybe<AccountModel> loadAccount(int index) {
-        return Maybe.fromCallable(() -> mAccountDao.loadAccountById(index));
+        return Maybe.just(mAccountDao.loadAccountById(index));
     }
 
     @Override
     public Single<List<AccountModel>> loadAllAccounts() {
-        return Single.fromCallable(() -> mAccountDao.loadAllAccounts());
+        return Single.just(mAccountDao.loadAllAccounts());
     }
 
     @Override
     public Single<Integer> countAccount() {
-        return Single.fromCallable(() -> mAccountDao.countAccounts());
+        return Single.just(mAccountDao.countAccounts());
     }
 
     @Override
     public Maybe<AccountModel> loadByAccountKey(String accountKey) {
-        return Maybe.fromCallable(() -> mAccountDao.loadByAccountKey(accountKey));
+        return Maybe.just(mAccountDao.loadByAccountKey(accountKey));
     }
 }
