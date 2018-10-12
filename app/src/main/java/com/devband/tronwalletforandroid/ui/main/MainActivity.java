@@ -641,7 +641,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         @Override
         public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int pos, long id) {
             new MaterialDialog.Builder(MainActivity.this)
-                    .title(R.string.title_create_account)
+                    .title(R.string.title_change_account)
                     .titleColorRes(R.color.colorAccent)
                     .contentColorRes(R.color.colorAccent)
                     .backgroundColorRes(android.R.color.white)
