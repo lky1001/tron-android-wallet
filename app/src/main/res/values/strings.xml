@@ -308,5 +308,6 @@
     <string name="max_button_text">Max</string>
     <string name="warning_vote_least_one">* You must vote at least one vote.</string>
     <string name="warning_cancel_other_votes">* All other votes will be canceled.</string>
-    <string name="create_account_hint">Password</string>
+    <string name="create_account_password_hint">Password</string>
+    <string name="change_account_password_hint">Password</string>
 </resources>

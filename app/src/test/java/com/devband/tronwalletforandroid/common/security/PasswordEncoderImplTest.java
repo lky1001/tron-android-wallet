@@ -65,6 +65,7 @@ public class PasswordEncoderImplTest {
         doReturn(true).when(keyStore).createKeys(anyString());
         doReturn(SALT).when(customPreference).getSalt();
         doReturn(SALT).when(keyStore).decryptString(SALT, Constants.ALIAS_SALT);
+        doReturn(ENCODED_PASSWORD).when(keyStore).encryptString(ENCODED_PASSWORD, Constants.ALIAS_PASSWORD_KEY);
 
         passwordEncoder = new PasswordEncoderImpl(customPreference, keyStore, updatableBCrypt);
     }

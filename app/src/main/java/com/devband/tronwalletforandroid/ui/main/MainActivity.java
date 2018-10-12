@@ -425,11 +425,10 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 .contentColorRes(R.color.colorAccent)
                 .backgroundColorRes(android.R.color.white)
                 .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
-                .input(getString(R.string.create_account_hint), "", (dialog, input) -> {
+                .input(getString(R.string.create_account_password_hint), "", (dialog, input) -> {
                     showProgressDialog(null, getString(R.string.loading_msg));
                     mMainPresenter.createAccount(Constants.PREFIX_ACCOUNT_NAME, input.toString());
                 }).show();
-
     }
 
     private void importAccount() {
@@ -641,11 +640,24 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
         @Override
         public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int pos, long id) {
-            AccountModel accountModel = mAccountAdapter.getItem(pos);
-            mMainPresenter.changeLoginAccount(accountModel);
-            mMainTitleText.setText(accountModel.getName());
-            mDrawer.closeDrawers();
-            checkLoginState();
+            new MaterialDialog.Builder(MainActivity.this)
+                    .title(R.string.title_create_account)
+                    .titleColorRes(R.color.colorAccent)
+                    .contentColorRes(R.color.colorAccent)
+                    .backgroundColorRes(android.R.color.white)
+                    .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                    .input(getString(R.string.change_account_password_hint), "", (dialog, input) -> {
+                        showProgressDialog(null, getString(R.string.loading_msg));
+                        AccountModel accountModel = mAccountAdapter.getItem(pos);
+                        if (mMainPresenter.changeLoginAccount(accountModel, input.toString())) {
+                            mMainTitleText.setText(accountModel.getName());
+                            checkLoginState();
+                        } else {
+                            showInvalidPasswordMsg();
+                        }
+
+                        mDrawer.closeDrawers();
+                    }).show();
         }
 
         @Override
