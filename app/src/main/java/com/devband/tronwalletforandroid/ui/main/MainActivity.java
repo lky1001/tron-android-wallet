@@ -640,24 +640,12 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
         @Override
         public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int pos, long id) {
-            new MaterialDialog.Builder(MainActivity.this)
-                    .title(R.string.title_change_account)
-                    .titleColorRes(R.color.colorAccent)
-                    .contentColorRes(R.color.colorAccent)
-                    .backgroundColorRes(android.R.color.white)
-                    .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
-                    .input(getString(R.string.change_account_password_hint), "", (dialog, input) -> {
-                        showProgressDialog(null, getString(R.string.loading_msg));
-                        AccountModel accountModel = mAccountAdapter.getItem(pos);
-                        if (mMainPresenter.changeLoginAccount(accountModel, input.toString())) {
-                            mMainTitleText.setText(accountModel.getName());
-                            checkLoginState();
-                        } else {
-                            showInvalidPasswordMsg();
-                        }
+            AccountModel accountModel = mAccountAdapter.getItem(pos);
 
-                        mDrawer.closeDrawers();
-                    }).show();
+            mMainPresenter.changeLoginAccount(accountModel);
+            mMainTitleText.setText(accountModel.getName());
+
+            checkLoginState();
         }
 
         @Override

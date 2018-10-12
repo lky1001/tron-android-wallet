@@ -194,8 +194,8 @@ public class MainPresenter extends BasePresenter<MainView> {
         return mTron.getAccountList();
     }
 
-    public boolean changeLoginAccount(@NonNull AccountModel accountModel, String password) {
-        return mTron.changeLoginAccount(accountModel, password);
+    public boolean changeLoginAccount(@NonNull AccountModel accountModel) {
+        return mTron.changeLoginAccount(accountModel);
     }
 
     public void importAccount(@NonNull String nickname, @NonNull String privateKey, @NonNull String password) {

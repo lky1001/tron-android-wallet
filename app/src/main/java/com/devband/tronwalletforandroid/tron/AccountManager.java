@@ -100,7 +100,7 @@ public class AccountManager {
         });
     }
 
-    public int loadAccountByRepository(@Nullable AccountModel accountModel, @NonNull byte[] aesKey) {
+    public int loadAccountByRepository(@Nullable AccountModel accountModel) {
         if (accountModel == null) {
             // todo - improve
             accountModel = mAccountRepository.loadAccount(DEFAULT_ACCOUNT_INDEX).blockingGet();
@@ -112,18 +112,10 @@ public class AccountManager {
             return Tron.ERROR_ACCOUNT_DOES_NOT_EXIST;
         }
 
-        ECKey temKey = getEcKeyFromEncodedPrivateKey(priKeyEnced, aesKey);
-
-        if (temKey == null) {
-            return Tron.ERROR_INVALID_PASSWORD;
-        }
-
         this.mLoginAccountModel = accountModel;
 
         return Tron.SUCCESS;
     }
-
-
 
     public void logout() {
         this.mLoginAccountModel = null;
@@ -270,12 +262,12 @@ public class AccountManager {
         return mAccountRepository.loadAllAccounts();
     }
 
-    public void changeLoginAccount(AccountModel accountModel, @NonNull byte[] aesKey) {
+    public void changeLoginAccount(AccountModel accountModel) {
         if (mLoginAccountModel != null && mLoginAccountModel.getAccount().equals(accountModel.getAccount())) {
             return;
         }
 
-        loadAccountByRepository(accountModel, aesKey);
+        loadAccountByRepository(accountModel);
     }
 
     public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey, @NonNull byte[] aesKey, boolean imported) {

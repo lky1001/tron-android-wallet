@@ -166,11 +166,7 @@ public class Tron {
             return ERROR_INVALID_PASSWORD;
         }
 
-        byte[] aesKey = WalletAppManager.getEncKey(password);
-
-        if (aesKey == null || mAccountManager.loadAccountByRepository(null, aesKey) != Tron.SUCCESS) {
-            return ERROR_INVALID_PASSWORD;
-        }
+        mAccountManager.loadAccountByRepository(null);
 
         return SUCCESS;
     }
@@ -307,16 +303,9 @@ public class Tron {
         return mAccountManager.getAccountList();
     }
 
-    public boolean changeLoginAccount(@NonNull AccountModel accountModel, @NonNull String password) {
-        boolean result = mWalletAppManager.checkPassword(password);
-
-        if (result) {
-            byte[] aesKey = WalletAppManager.getEncKey(password);
-            mAccountManager.changeLoginAccount(accountModel, aesKey);
-            return true;
-        }
-
-        return false;
+    public boolean changeLoginAccount(@NonNull AccountModel accountModel) {
+        mAccountManager.changeLoginAccount(accountModel);
+        return true;
     }
 
     private Single<String> generateDefaultAccountName(String prefix) {
