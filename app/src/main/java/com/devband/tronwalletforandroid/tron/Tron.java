@@ -347,24 +347,25 @@ public class Tron {
             ByteString bsName = ByteString.copyFrom(tokenName.getBytes());
             ByteString bsOwner = ByteString.copyFrom(ownerAddressBytes);
 
-            Contract.ParticipateAssetIssueContract participateAssetIssueContract = Contract.ParticipateAssetIssueContract
+            return Contract.ParticipateAssetIssueContract
                     .newBuilder()
                     .setToAddress(bsTo)
                     .setAssetName(bsName)
                     .setOwnerAddress(bsOwner)
                     .setAmount(amount)
                     .build();
-
-            return mTronManager.createParticipateAssetIssueTransaction(participateAssetIssueContract);
         })
-        .flatMap(transactionSingle -> transactionSingle)
-        .flatMap(transaction -> {
-            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+        .flatMap(contract -> mTronManager.createTransaction(contract))
+        .flatMap(transactionExtention-> {
+            if (!transactionExtention.getResult().getResult()) {
                 throw new RuntimeException();
             }
 
-            // sign transaction
-            transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
+            if (transactionExtention.getTransaction().getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            Protocol.Transaction transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transactionExtention.getTransaction());
             return mTronManager.broadcastTransaction(transaction);
         });
     }
@@ -396,18 +397,19 @@ public class Tron {
                 builder.addVotes(voteBuilder.build());
             }
 
-            Contract.VoteWitnessContract voteWitnessContract = builder.build();
-
-            return mTronManager.createTransaction(voteWitnessContract);
+            return builder.build();
         })
-        .flatMap(transactionSingle -> transactionSingle)
-        .flatMap(transaction -> {
-            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+        .flatMap(contract -> mTronManager.createTransaction(contract))
+        .flatMap(transactionExtention-> {
+            if (!transactionExtention.getResult().getResult()) {
                 throw new RuntimeException();
             }
 
-            // sign transaction
-            transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
+            if (transactionExtention.getTransaction().getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            Protocol.Transaction transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transactionExtention.getTransaction());
             return mTronManager.broadcastTransaction(transaction);
         });
     }
@@ -423,22 +425,23 @@ public class Tron {
             byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
             ByteString byteAddress = ByteString.copyFrom(ownerAddressBytes);
 
-            Contract.FreezeBalanceContract freezeBalanceContract = Contract.FreezeBalanceContract.newBuilder()
+            return Contract.FreezeBalanceContract.newBuilder()
                     .setFrozenBalance(freezeBalance)
                     .setFrozenDuration(freezeDuration)
                     .setOwnerAddress(byteAddress)
                     .build();
-
-            return mTronManager.createTransaction(freezeBalanceContract);
         })
-        .flatMap(transactionSingle -> transactionSingle)
-        .flatMap(transaction -> {
-            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+        .flatMap(contract -> mTronManager.createTransaction(contract))
+        .flatMap(transactionExtention-> {
+            if (!transactionExtention.getResult().getResult()) {
                 throw new RuntimeException();
             }
 
-            // sign transaction
-            transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
+            if (transactionExtention.getTransaction().getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            Protocol.Transaction transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transactionExtention.getTransaction());
             return mTronManager.broadcastTransaction(transaction);
         });
     }
@@ -454,21 +457,22 @@ public class Tron {
             byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
             ByteString byteAddress = ByteString.copyFrom(ownerAddressBytes);
 
-            Contract.UnfreezeBalanceContract unfreezeBalanceContract = Contract.UnfreezeBalanceContract
+            return Contract.UnfreezeBalanceContract
                     .newBuilder()
                     .setOwnerAddress(byteAddress)
                     .build();
-
-            return mTronManager.createTransaction(unfreezeBalanceContract);
         })
-        .flatMap(transactionSingle -> transactionSingle)
-        .flatMap(transaction -> {
-            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+        .flatMap(contract -> mTronManager.createTransaction(contract))
+        .flatMap(transactionExtention-> {
+            if (!transactionExtention.getResult().getResult()) {
                 throw new RuntimeException();
             }
 
-            // sign transaction
-            transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
+            if (transactionExtention.getTransaction().getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            Protocol.Transaction transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transactionExtention.getTransaction());
             return mTronManager.broadcastTransaction(transaction);
         });
     }
@@ -496,24 +500,25 @@ public class Tron {
             ByteString bsTo = ByteString.copyFrom(toAddressBytes);
             ByteString bsOwner = ByteString.copyFrom(ownerAddressBytes);
 
-            Contract.TransferContract contract = Contract.TransferContract.newBuilder()
+            return Contract.TransferContract.newBuilder()
                     .setToAddress(bsTo)
                     .setOwnerAddress(bsOwner)
                     .setAmount(amount)
                     .build();
-
-            return mTronManager.createTransaction(contract);
         })
-                .flatMap(transactionSingle -> transactionSingle)
-                .flatMap(transaction -> {
-                    if (transaction == null || transaction.getRawData().getContractCount() == 0) {
-                        throw new RuntimeException();
-                    }
+        .flatMap(contract -> mTronManager.createTransaction(contract))
+        .flatMap(transactionExtention-> {
+            if (!transactionExtention.getResult().getResult()) {
+                throw new RuntimeException();
+            }
 
-                    // sign transaction
-                    transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
-                    return mTronManager.broadcastTransaction(transaction);
-                });
+            if (transactionExtention.getTransaction().getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            Protocol.Transaction transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transactionExtention.getTransaction());
+            return mTronManager.broadcastTransaction(transaction);
+        });
     }
 
     public Single<Boolean> transferAsset(@Nullable String password, String toAddress, String assetName, long amount) {
@@ -540,25 +545,26 @@ public class Tron {
             ByteString bsName = ByteString.copyFrom(assetName.getBytes());
             ByteString bsOwner = ByteString.copyFrom(ownerAddressBytes);
 
-            Contract.TransferAssetContract contract = Contract.TransferAssetContract.newBuilder()
+            return Contract.TransferAssetContract.newBuilder()
                     .setToAddress(bsTo)
                     .setAssetName(bsName)
                     .setOwnerAddress(bsOwner)
                     .setAmount(amount)
                     .build();
-
-            return mTronManager.createTransferAssetTransaction(contract);
         })
-                .flatMap(transactionSingle -> transactionSingle)
-                .flatMap(transaction -> {
-                    if (transaction == null || transaction.getRawData().getContractCount() == 0) {
-                        throw new RuntimeException();
-                    }
+        .flatMap(contract -> mTronManager.createTransaction(contract))
+        .flatMap(transactionExtention-> {
+            if (!transactionExtention.getResult().getResult()) {
+                throw new RuntimeException();
+            }
 
-                    // sign transaction
-                    transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transaction);
-                    return mTronManager.broadcastTransaction(transaction);
-                });
+            if (transactionExtention.getTransaction().getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            Protocol.Transaction transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transactionExtention.getTransaction());
+            return mTronManager.broadcastTransaction(transaction);
+        });
     }
 
     public boolean changePassword(String newPassword) {
