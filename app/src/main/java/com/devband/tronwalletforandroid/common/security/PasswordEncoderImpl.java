@@ -29,13 +29,11 @@ public class PasswordEncoderImpl implements PasswordEncoder {
 
     @Override
     public String encode(@NonNull String rawPassword) {
-        String encodedPassword = this.updatableBCrypt.hash(rawPassword, this.keyStore.decryptString(this.customPreference.getSalt(), Constants.ALIAS_SALT));
-        return keyStore.encryptString(encodedPassword, Constants.ALIAS_PASSWORD_KEY);
+        return this.updatableBCrypt.hash(rawPassword, this.keyStore.decryptString(this.customPreference.getSalt(), Constants.ALIAS_SALT));
     }
 
     @Override
     public boolean matches(@NonNull String rawPassword, @NonNull String encodedPassword) {
-        String password = keyStore.decryptString(encodedPassword, Constants.ALIAS_PASSWORD_KEY);
-        return this.updatableBCrypt.verifyHash(rawPassword, password);
+        return this.updatableBCrypt.verifyHash(rawPassword, encodedPassword);
     }
 }

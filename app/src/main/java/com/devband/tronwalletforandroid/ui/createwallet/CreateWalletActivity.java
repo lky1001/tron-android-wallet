@@ -24,6 +24,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class CreateWalletActivity extends CommonActivity implements CreateWalletView {
 
@@ -65,26 +67,13 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
         addDisposable(RxTextView.textChanges(mInputPassword)
                 .debounce(1, TimeUnit.SECONDS)
                 .map(CharSequence::toString)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(password -> {
-                    if (password.toString().length() >= WalletAppManager.MIN_PASSWORD_LENGTH) {
+                    if (password.length() >= WalletAppManager.MIN_PASSWORD_LENGTH) {
                         mCreateWalletButton.setEnabled(true);
                     } else {
                         mCreateWalletButton.setEnabled(false);
                     }
-                }));
-
-        addDisposable(RxView.clicks(mCreateWalletButton)
-                .throttleFirst(2, TimeUnit.SECONDS)
-                .subscribe(view -> {
-                    if (!mChkLostPassword.isChecked()
-                            || !mChkLostPasswordRecover.isChecked()) {
-                        Toast.makeText(CreateWalletActivity.this, getString(R.string.need_all_agree),
-                                Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    showProgressDialog(null, getString(R.string.loading_msg));
-                    mCreateWalletPresenter.createWallet(mInputPassword.getText().toString());
                 }));
 
         addDisposable(RxView.clicks(mImportPrivateKeyButton)
@@ -93,6 +82,19 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
                     startActivity(ImportPrivateKeyActivity.class);
                     finishActivity();
                 }));
+    }
+
+    @OnClick(R.id.btn_create_wallet)
+    public void onCreateWalletClick() {
+        if (!mChkLostPassword.isChecked()
+                || !mChkLostPasswordRecover.isChecked()) {
+            Toast.makeText(CreateWalletActivity.this, getString(R.string.need_all_agree),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        showProgressDialog(null, getString(R.string.loading_msg));
+        mCreateWalletPresenter.createWallet(mInputPassword.getText().toString());
     }
 
     @Override

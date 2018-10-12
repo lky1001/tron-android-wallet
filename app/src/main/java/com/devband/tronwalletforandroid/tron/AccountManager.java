@@ -322,7 +322,7 @@ public class AccountManager {
     }
 
     private String getDecodedAccountKey(@NonNull AccountModel accountModel) {
-        return mKeyStore.encryptString(accountModel.getAccount(), Constants.ALIAS_ACCOUNT_KEY);
+        return mKeyStore.decryptString(accountModel.getAccount(), Constants.ALIAS_ACCOUNT_KEY);
     }
 }
 
