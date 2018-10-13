@@ -369,48 +369,50 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
         MaterialDialog dialog = builder.build();
 
+        Button maxButton = (Button) dialog.getCustomView().findViewById(R.id.max_button);
         Button freezeButton = (Button) dialog.getCustomView().findViewById(R.id.btn_freeze);
         CheckBox agreeFreezeCheckBox = (CheckBox) dialog.getCustomView().findViewById(R.id.agree_freeze_balance);
         EditText inputAmount = (EditText) dialog.getCustomView().findViewById(R.id.input_amount);
         EditText inputPassword = (EditText) dialog.getCustomView().findViewById(R.id.input_password);
 
-        freezeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // check freeze balance
-                long freezeBalance = 0;
-                try {
-                    freezeBalance = Long.parseLong(inputAmount.getText().toString());
-                } catch (NumberFormatException e) {
-                    Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_amount),
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        maxButton.setOnClickListener(view -> {
+            inputAmount.setText(String.valueOf(mAccountBalance));
+        });
 
-                if (freezeBalance > mAccountBalance) {
-                    Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_amount),
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                String password = inputPassword.getText().toString();
-                if (TextUtils.isEmpty(password) || !mMyAccountPresenter.matchPassword(password)) {
-                    Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password),
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                boolean agree = agreeFreezeCheckBox.isChecked();
-
-                if (!agree) {
-                    Toast.makeText(MyAccountActivity.this, getString(R.string.need_all_agree),
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                dialog.dismiss();
-                mMyAccountPresenter.freezeBalance(password, (long) (freezeBalance * Constants.ONE_TRX));
+        freezeButton.setOnClickListener(view -> {
+            // check freeze balance
+            long freezeBalance = 0;
+            try {
+                freezeBalance = Long.parseLong(inputAmount.getText().toString());
+            } catch (NumberFormatException e) {
+                Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_amount),
+                        Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            if (freezeBalance > mAccountBalance) {
+                Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_amount),
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String password = inputPassword.getText().toString();
+            if (TextUtils.isEmpty(password) || !mMyAccountPresenter.matchPassword(password)) {
+                Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password),
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            boolean agree = agreeFreezeCheckBox.isChecked();
+
+            if (!agree) {
+                Toast.makeText(MyAccountActivity.this, getString(R.string.need_all_agree),
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            dialog.dismiss();
+            mMyAccountPresenter.freezeBalance(password, (long) (freezeBalance * Constants.ONE_TRX));
         });
 
         dialog.show();
