@@ -452,6 +452,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             if (!TextUtils.isEmpty(privateKey) && !TextUtils.isEmpty(password)) {
                 mMainPresenter.importAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey, password);
             }
+
+            dialog.dismiss();
         });
 
         dialog.show();

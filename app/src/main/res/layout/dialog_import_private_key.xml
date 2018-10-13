@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/import_account_hint"
+            android:textColor="@android:color/black"
             android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
 
@@ -26,11 +27,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/input_password_text"
+            android:textColor="@android:color/black"
             android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
-        android:id="@+id/btn_import"
+        android:id="@+id/btn_import_private_key"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

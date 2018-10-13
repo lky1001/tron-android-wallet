@@ -134,10 +134,14 @@ public class Tron {
             return SUCCESS;
         })
         .flatMap(result -> {
-            String accountNickname = generateDefaultAccountName(nickname);
+            if (result == SUCCESS) {
+                String accountNickname = generateDefaultAccountName(nickname);
 
-            byte[] aesKey = WalletAppManager.getEncKey(password);
-            return mAccountManager.importAccount(accountNickname, privateKey, aesKey, true);
+                byte[] aesKey = WalletAppManager.getEncKey(password);
+                return mAccountManager.importAccount(accountNickname, privateKey, aesKey, true);
+            } else {
+                return Single.just(ERROR_INVALID_PASSWORD);
+            }
         });
     }
 
