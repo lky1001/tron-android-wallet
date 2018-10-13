@@ -71,11 +71,8 @@ public class AccountManager {
             byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, aesKey);
 
             String privKeyStr = ByteArray.toHexString(privKeyEnced);
-            byte[] pubKeyBytes = ecKey.getPubKey();
-            String pubKeyStr = ByteArray.toHexString(pubKeyBytes);
 
-            String accountKey = pubKeyStr + privKeyStr;
-            String encodedKey = mKeyStore.encryptString(accountKey, Constants.ALIAS_ACCOUNT_KEY);
+            String encodedKey = mKeyStore.encryptString(privKeyStr, Constants.ALIAS_ACCOUNT_KEY);
 
             if (imported) {
                 AccountModel accountModel = mAccountRepository.loadByAccountKey(encodedKey).blockingGet();
@@ -106,7 +103,7 @@ public class AccountManager {
             accountModel = mAccountRepository.loadAccount(DEFAULT_ACCOUNT_INDEX).blockingGet();
         }
 
-        String priKeyEnced = getEncodedPrivateKey(accountModel);
+        String priKeyEnced = getDecodedAccountKey(accountModel);
 
         if (TextUtils.isEmpty(priKeyEnced)) {
             return Tron.ERROR_ACCOUNT_DOES_NOT_EXIST;
@@ -306,11 +303,7 @@ public class AccountManager {
     }
 
     private String getLoginEncodedPriKey() {
-        return getEncodedPrivateKey(mLoginAccountModel);
-    }
-
-    private String getEncodedPrivateKey(@NonNull AccountModel accountModel) {
-        return getDecodedAccountKey(accountModel).substring(130, 194);
+        return getDecodedAccountKey(mLoginAccountModel);
     }
 
     private String getDecodedAccountKey(@NonNull AccountModel accountModel) {

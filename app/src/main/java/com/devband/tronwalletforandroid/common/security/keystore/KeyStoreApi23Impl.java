@@ -14,15 +14,18 @@ import com.devband.tronwalletforandroid.common.CustomPreference;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
 import java.util.ArrayList;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.inject.Inject;
@@ -77,6 +80,19 @@ public class KeyStoreApi23Impl implements KeyStore {
                         .setEncryptionPaddings(NEW_PADDING)
                         .build());
                 keyGenerator.generateKey();
+
+                SecretKey secretKey = (SecretKey) mKeyStore.getKey(alias, null);
+
+                Cipher inCipher = Cipher.getInstance(CIPHER_ALGORITHM);
+                inCipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+                byte[] iv = inCipher.getIV();
+
+                if (iv == null) {
+                    return false;
+                }
+
+                mCustomPreference.storeEncryptedIv(iv, alias);
             }
 
             return true;
@@ -88,11 +104,18 @@ public class KeyStoreApi23Impl implements KeyStore {
             e.printStackTrace();
         } catch (KeyStoreException e) {
             e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
         }
 
         return false;
     }
 
+    @SuppressLint("NewApi")
     @Nullable
     @Override
     public String encryptString(@NonNull String text, @NonNull String alias) {
@@ -103,18 +126,12 @@ public class KeyStoreApi23Impl implements KeyStore {
         byte [] values = null;
 
         try {
+            byte[] iv = mCustomPreference.retrieveEncryptedIv(alias);
+
             SecretKey secretKey = (SecretKey) mKeyStore.getKey(alias, null);
 
             Cipher inCipher = Cipher.getInstance(CIPHER_ALGORITHM);
-            inCipher.init(Cipher.ENCRYPT_MODE, secretKey);
-
-            byte[] iv = inCipher.getIV();
-
-            if (iv == null) {
-                return null;
-            }
-
-            mCustomPreference.storeEncryptedIv(iv, alias);
+            inCipher.init(Cipher.ENCRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             CipherOutputStream cipherOutputStream = new CipherOutputStream(
