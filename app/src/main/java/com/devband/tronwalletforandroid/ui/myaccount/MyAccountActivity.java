@@ -89,7 +89,6 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
     private ArrayAdapter<AccountModel> mAccountAdapter;
 
-    private AccountModel mSelectedAccount;
     private long mAccountBalance;
 
     @Override

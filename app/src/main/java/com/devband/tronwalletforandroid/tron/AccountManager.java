@@ -53,8 +53,8 @@ public class AccountManager {
         this.mKeyStore = keyStore;
     }
 
-    public Single<Integer> genAccount(@NonNull String accountName, @NonNull byte[] aesKey) {
-        return createAddress(accountName, aesKey, false, null);
+    public Single<Integer> createAccount(@NonNull String nickname, @NonNull byte[] aesKey) {
+        return createAddress(nickname, aesKey, false, null);
     }
 
     private Single<Integer> createAddress(@NonNull String accountName, @NonNull byte[] aesKey, boolean imported, ECKey temKey) {
@@ -75,7 +75,7 @@ public class AccountManager {
             String encodedKey = mKeyStore.encryptString(privKeyStr, Constants.ALIAS_ACCOUNT_KEY);
 
             if (imported) {
-                AccountModel accountModel = mAccountRepository.loadByAccountKey(encodedKey).blockingGet();
+                AccountModel accountModel = mAccountRepository.loadByAccountKey(encodedKey);
 
                 if (accountModel != null) {
                     return Tron.ERROR_EXIST_ACCOUNT;
@@ -86,7 +86,7 @@ public class AccountManager {
 
             mLoginAccountModel = AccountModel.builder()
                     .name(accountName)
-                    .address(address)
+                    .address(mKeyStore.encryptString(address, Constants.ALIAS_ADDRESS_KEY))
                     .account(encodedKey)
                     .imported(imported)
                     .build();
@@ -119,7 +119,7 @@ public class AccountManager {
     }
 
     public String getLoginAddress() {
-        return mLoginAccountModel.getAddress();
+        return mKeyStore.decryptString(mLoginAccountModel.getAddress(), Constants.ALIAS_ADDRESS_KEY);
     }
 
     @Nullable
@@ -236,7 +236,7 @@ public class AccountManager {
         return TransactionUtils.sign(transaction, ecKey);
     }
 
-    public Single<Integer> getAccountCount() {
+    public Integer getAccountCount() {
         return mAccountRepository.countAccount();
     }
 
@@ -249,10 +249,6 @@ public class AccountManager {
         mLoginAccountModel.setName(accountName);
 
         return mAccountRepository.updateAccount(mLoginAccountModel);
-    }
-
-    public Single<Integer> createAccount(@NonNull String nickname, @NonNull byte[] aesKey) {
-        return createAddress(nickname, aesKey, false, null);
     }
 
     public Single<List<AccountModel>> getAccountList() {

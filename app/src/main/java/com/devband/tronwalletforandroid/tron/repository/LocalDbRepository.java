@@ -56,12 +56,12 @@ public class LocalDbRepository implements AccountRepository {
     }
 
     @Override
-    public Single<Integer> countAccount() {
-        return Single.just(mAccountDao.countAccounts());
+    public Integer countAccount() {
+        return mAccountDao.countAccounts();
     }
 
     @Override
-    public Maybe<AccountModel> loadByAccountKey(String accountKey) {
-        return Maybe.just(mAccountDao.loadByAccountKey(accountKey));
+    public AccountModel loadByAccountKey(String accountKey) {
+        return mAccountDao.loadByAccountKey(accountKey);
     }
 }

@@ -645,6 +645,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             mMainPresenter.changeLoginAccount(accountModel);
             mMainTitleText.setText(accountModel.getName());
 
+            mDrawer.closeDrawers();
+
             checkLoginState();
         }
 

@@ -19,7 +19,7 @@ public interface AccountRepository {
 
     Single<List<AccountModel>> loadAllAccounts();
 
-    Single<Integer> countAccount();
+    Integer countAccount();
 
-    Maybe<AccountModel> loadByAccountKey(String accountKey);
+    AccountModel loadByAccountKey(String accountKey);
 }

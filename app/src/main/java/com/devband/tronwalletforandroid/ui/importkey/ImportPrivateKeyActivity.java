@@ -3,9 +3,7 @@ package com.devband.tronwalletforandroid.ui.importkey;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -15,12 +13,16 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.main.MainActivity;
+import com.jakewharton.rxbinding2.widget.RxTextView;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class ImportPrivateKeyActivity extends CommonActivity implements ImportPrivateKeyView {
 
@@ -63,52 +65,25 @@ public class ImportPrivateKeyActivity extends CommonActivity implements ImportPr
 
         mImportPrivateKeyPresenter.onCreate();
 
-        mInputPrivateKey.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        addDisposable(RxTextView.textChanges(mInputPrivateKey)
+                .debounce(1, TimeUnit.SECONDS)
+                .map(CharSequence::toString)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(pk -> {
+                    mCheckPrivateKey = !TextUtils.isEmpty(pk);
 
-            }
+                    checkInputRequired();
+                }));
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // todo - check invalid private key
-                if (!TextUtils.isEmpty(s.toString())) {
-                    mCheckPrivateKey = true;
-                } else {
-                    mCheckPrivateKey = false;
-                }
+        addDisposable(RxTextView.textChanges(mInputPassword)
+                .debounce(1, TimeUnit.SECONDS)
+                .map(CharSequence::toString)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(password -> {
+                    mCheckPassword = WalletAppManager.passwordValid(password);
 
-                checkInputRequired();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        mInputPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().length() >= WalletAppManager.MIN_PASSWORD_LENGTH) {
-                    mCheckPassword = true;
-                } else {
-                    mCheckPassword = false;
-                }
-
-                checkInputRequired();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+                    checkInputRequired();
+                }));
     }
 
     private void checkInputRequired() {
@@ -121,8 +96,7 @@ public class ImportPrivateKeyActivity extends CommonActivity implements ImportPr
 
     @OnClick(R.id.btn_create_wallet)
     public void onCreateAccountClick() {
-        if (!mChkLostPassword.isChecked()
-                || !mChkLostPasswordRecover.isChecked()) {
+        if (!mChkLostPassword.isChecked() || !mChkLostPasswordRecover.isChecked()) {
             Toast.makeText(ImportPrivateKeyActivity.this, getString(R.string.need_all_agree),
                     Toast.LENGTH_SHORT).show();
             return;

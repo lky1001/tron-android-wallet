@@ -32,12 +32,12 @@ public class FileRepository implements AccountRepository {
     }
 
     @Override
-    public Single<Integer> countAccount() {
+    public Integer countAccount() {
         return null;
     }
 
     @Override
-    public Maybe<AccountModel> loadByAccountKey(String accountKey) {
+    public AccountModel loadByAccountKey(String accountKey) {
         return null;
     }
 }

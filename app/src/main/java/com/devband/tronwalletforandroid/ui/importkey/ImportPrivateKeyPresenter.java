@@ -46,7 +46,7 @@ public class ImportPrivateKeyPresenter extends BasePresenter<ImportPrivateKeyVie
         mTron.createWallet(password)
                 .flatMap(result -> {
                     if (result == WalletAppManager.SUCCESS) {
-                        return mTron.registerAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey, password);
+                        return mTron.importAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey, password);
                     }
 
                     return Single.just(result);

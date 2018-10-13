@@ -47,7 +47,7 @@ public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
         mTron.createWallet(password)
         .flatMap(createWalletResult -> {
             if (createWalletResult == WalletAppManager.SUCCESS) {
-                return mTron.registerAccount(Constants.PREFIX_ACCOUNT_NAME, password);
+                return mTron.createAccount(Constants.PREFIX_ACCOUNT_NAME, password);
             } else {
                 return Single.just(Tron.ERROR);
             }
