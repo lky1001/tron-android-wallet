@@ -13,4 +13,6 @@ public interface SendTokenView extends IView {
     void displayAccountInfo(Protocol.Account account);
 
     void invalidAddress();
+
+    void connectionError();
 }

@@ -259,6 +259,14 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                 Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void connectionError() {
+        hideDialog();
+
+        Toast.makeText(SendTokenActivity.this, getString(R.string.connection_error_msg),
+                Toast.LENGTH_SHORT).show();
+    }
+
     private void startQrScan() {
         Intent qrScanIntent = new Intent(SendTokenActivity.this, QrScanActivity.class);
         startActivityForResult(qrScanIntent, QR_SCAN_ADDRESS);
