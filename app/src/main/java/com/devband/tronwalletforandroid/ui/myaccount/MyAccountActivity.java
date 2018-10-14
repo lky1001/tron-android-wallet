@@ -263,6 +263,12 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
         }
     }
 
+    @Override
+    public void showInvalidPasswordMsg() {
+        hideDialog();
+        Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password), Toast.LENGTH_SHORT).show();
+    }
+
     @OnClick(R.id.btn_change_password)
     public void onChangePasswordClick() {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(this)

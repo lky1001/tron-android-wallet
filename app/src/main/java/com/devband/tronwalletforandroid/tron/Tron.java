@@ -366,11 +366,11 @@ public class Tron {
     }
 
     public Single<Boolean> freezeBalance(@Nullable String password, long freezeBalance, long freezeDuration) {
-        if (!mWalletAppManager.checkPassword(password)) {
-            return Single.just(false);
-        }
-
         return Single.fromCallable(() -> {
+            if (!mWalletAppManager.checkPassword(password)) {
+                throw new InvalidPasswordException();
+            }
+
             byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
             ByteString byteAddress = ByteString.copyFrom(ownerAddressBytes);
 

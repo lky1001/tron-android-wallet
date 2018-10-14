@@ -8,6 +8,7 @@ import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
+import com.devband.tronwalletforandroid.tron.exception.InvalidPasswordException;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
 import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
@@ -156,8 +157,12 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
-                mView.showServerError();
+                if (e instanceof InvalidPasswordException) {
+                    mView.showInvalidPasswordMsg();
+                } else {
+                    e.printStackTrace();
+                    mView.showServerError();
+                }
             }
         });
     }
