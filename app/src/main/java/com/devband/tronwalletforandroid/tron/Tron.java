@@ -147,6 +147,7 @@ public class Tron {
 
     public void loginWithFingerPrint() {
         mWalletAppManager.loginWithFingerPrint();
+        mAccountManager.loadAccountByRepository(null);
     }
 
     public int login(@NonNull String password) {
