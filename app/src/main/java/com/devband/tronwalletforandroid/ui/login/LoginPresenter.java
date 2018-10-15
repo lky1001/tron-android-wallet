@@ -58,6 +58,13 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 } else {
                     mTron.migrationOldData(password);
                     mCustomPreference.setMigrationDb(true);
+
+                    int res = mTron.login(password);
+
+                    if (res != Tron.SUCCESS) {
+                        return WalletAppManager.ERROR;
+                    }
+
                     return Tron.SUCCESS;
                 }
             } else {

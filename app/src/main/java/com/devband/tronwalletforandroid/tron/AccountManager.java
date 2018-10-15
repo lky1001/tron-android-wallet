@@ -314,9 +314,9 @@ public class AccountManager {
             String encPriKey = mKeyStore.encryptString(priKeyEnced, Constants.ALIAS_ACCOUNT_KEY);
 
             String address = encode58Check(getEcKeyFromEncodedPrivateKey(priKeyEnced, WalletAppManager.getEncKey(password)).getAddress());
-            mKeyStore.encryptString(address, Constants.ALIAS_ADDRESS_KEY);
+            String encAddress = mKeyStore.encryptString(address, Constants.ALIAS_ADDRESS_KEY);
 
-            accountModel.setAddress(address);
+            accountModel.setAddress(encAddress);
             accountModel.setAccount(encPriKey);
 
             mAccountRepository.updateAccount(accountModel).blockingGet();
