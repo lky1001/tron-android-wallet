@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -152,25 +153,62 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     }
 
     @Override
-    public void displayAccountInfo(@NonNull String address, @NonNull TronAccount account) {
+    public void displayAccountInfo(@NonNull String address, @Nullable TronAccount account) {
         if (isFinishing()) {
             return;
         }
-        mAccountBalance = (long) (account.getBalance() / Constants.ONE_TRX);
-
-        if (TextUtils.isEmpty(account.getName())) {
-            mNameText.setText("-");
-        } else {
-            mNameText.setText(account.getName());
-        }
 
         mAddressText.setText(address);
-        mBalanceText.setText(Constants.tronBalanceFormat.format(mAccountBalance) + " " + Constants.TRON_SYMBOL);
-        mBandwidthText.setText(Constants.tronBalanceFormat.format(account.getBandwidth()));
-        mTokensLayout.removeAllViews();
 
-        if (!account.getAssetList().isEmpty()) {
-            for (Asset asset : account.getAssetList()) {
+        if (account != null) {
+            mAccountBalance = (long) (account.getBalance() / Constants.ONE_TRX);
+
+            if (TextUtils.isEmpty(account.getName())) {
+                mNameText.setText("-");
+            } else {
+                mNameText.setText(account.getName());
+            }
+
+            mBalanceText.setText(Constants.tronBalanceFormat.format(mAccountBalance) + " " + Constants.TRON_SYMBOL);
+            mBandwidthText.setText(Constants.tronBalanceFormat.format(account.getBandwidth()));
+            mTokensLayout.removeAllViews();
+
+            if (!account.getAssetList().isEmpty()) {
+                for (Asset asset : account.getAssetList()) {
+                    View v = LayoutInflater.from(MyAccountActivity.this).inflate(R.layout.list_item_my_token, null);
+                    v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                            RecyclerView.LayoutParams.WRAP_CONTENT));
+
+                    TextView tokenNameText = v.findViewById(R.id.token_name_text);
+                    TextView tokenAmountText = v.findViewById(R.id.token_amount_text);
+                    ImageButton favoriteButton = v.findViewById(R.id.token_favorite_button);
+                    favoriteButton.setTag(asset);
+
+                    if (mMyAccountPresenter.isFavoriteToken(asset.getName())) {
+                        favoriteButton.setImageResource(R.drawable.ic_star);
+                    } else {
+                        favoriteButton.setImageResource(R.drawable.ic_star_outline);
+                    }
+
+                    favoriteButton.setOnClickListener(view -> {
+                        if (view.getTag() instanceof Asset) {
+                            Asset tag = (Asset) view.getTag();
+
+                            if (mMyAccountPresenter.isFavoriteToken(tag.getName())) {
+                                mMyAccountPresenter.removeFavorite(tag.getName());
+                                favoriteButton.setImageResource(R.drawable.ic_star_outline);
+                            } else {
+                                mMyAccountPresenter.doFavorite(tag.getName());
+                                favoriteButton.setImageResource(R.drawable.ic_star);
+                            }
+                        }
+                    });
+
+                    tokenNameText.setText(asset.getName());
+                    tokenAmountText.setText(Constants.tronBalanceFormat.format(asset.getBalance()));
+                    mTokensLayout.addView(v);
+                }
+            } else {
                 View v = LayoutInflater.from(MyAccountActivity.this).inflate(R.layout.list_item_my_token, null);
                 v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                         RecyclerView.LayoutParams.WRAP_CONTENT));
@@ -178,48 +216,37 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                 TextView tokenNameText = v.findViewById(R.id.token_name_text);
                 TextView tokenAmountText = v.findViewById(R.id.token_amount_text);
 
-                tokenNameText.setText(asset.getName());
-                tokenAmountText.setText(Constants.tronBalanceFormat.format(asset.getBalance()));
+                tokenNameText.setText(getString(R.string.no_tokens));
+                tokenNameText.setGravity(Gravity.CENTER);
+                tokenAmountText.setVisibility(View.GONE);
                 mTokensLayout.addView(v);
             }
-        } else {
-            View v = LayoutInflater.from(MyAccountActivity.this).inflate(R.layout.list_item_my_token, null);
-            v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
-                    RecyclerView.LayoutParams.WRAP_CONTENT));
 
-            TextView tokenNameText = v.findViewById(R.id.token_name_text);
-            TextView tokenAmountText = v.findViewById(R.id.token_amount_text);
+            mFreezeButton.setVisibility(View.VISIBLE);
 
-            tokenNameText.setText(getString(R.string.no_tokens));
-            tokenNameText.setGravity(Gravity.CENTER);
-            tokenAmountText.setVisibility(View.GONE);
-            mTokensLayout.addView(v);
-        }
+            long frozenBalance = 0;
+            long expiredTime = 0;
 
-        mFreezeButton.setVisibility(View.VISIBLE);
-
-        long frozenBalance = 0;
-        long expiredTime = 0;
-
-        if (!account.getFrozenList().isEmpty()) {
-            for (Frozen frozen : account.getFrozenList()) {
-                frozenBalance += frozen.getFrozenBalance();
-                if (frozen.getExpireTime() > expiredTime) {
-                    expiredTime = frozen.getExpireTime();
+            if (!account.getFrozenList().isEmpty()) {
+                for (Frozen frozen : account.getFrozenList()) {
+                    frozenBalance += frozen.getFrozenBalance();
+                    if (frozen.getExpireTime() > expiredTime) {
+                        expiredTime = frozen.getExpireTime();
+                    }
                 }
+
+                mUnFreezeButton.setVisibility(View.VISIBLE);
+            } else {
+                mUnFreezeButton.setVisibility(View.GONE);
             }
 
-            mUnFreezeButton.setVisibility(View.VISIBLE);
-        } else {
-            mUnFreezeButton.setVisibility(View.GONE);
-        }
-
-        mTronPowerText.setText(Constants.tronBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
-        mFrozenTrxBalanceText.setText(Constants.tronBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
-        if (expiredTime > 0) {
-            mFrozenTrxExpiredText.setText(Constants.sdf.format(new Date(expiredTime)));
-        } else {
-            mFrozenTrxExpiredText.setText("-");
+            mTronPowerText.setText(Constants.tronBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
+            mFrozenTrxBalanceText.setText(Constants.tronBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
+            if (expiredTime > 0) {
+                mFrozenTrxExpiredText.setText(Constants.sdf.format(new Date(expiredTime)));
+            } else {
+                mFrozenTrxExpiredText.setText("-");
+            }
         }
 
         hideDialog();
