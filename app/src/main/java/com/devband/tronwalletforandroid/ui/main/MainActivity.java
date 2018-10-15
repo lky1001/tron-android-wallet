@@ -449,6 +449,16 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             String privateKey = inputPrivateKey.getText().toString();
             String password = inputPassword.getText().toString();
 
+            if (TextUtils.isEmpty(privateKey)) {
+                Toast.makeText(this, R.string.required_private_key, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(password)) {
+                Toast.makeText(this, R.string.required_password, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             if (!TextUtils.isEmpty(privateKey) && !TextUtils.isEmpty(password)) {
                 mMainPresenter.importAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey, password);
             }

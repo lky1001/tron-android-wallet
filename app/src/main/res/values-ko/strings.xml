@@ -311,4 +311,6 @@
     <string name="create_account_password_hint">비밀번호</string>
     <string name="change_account_password_hint">비밀번호</string>
     <string name="title_change_account">계정 변경</string>
+    <string name="required_private_key">프라이빗키를 입력하세요.</string>
+    <string name="required_password">비밀번호를 입력하세요.</string>
 </resources>

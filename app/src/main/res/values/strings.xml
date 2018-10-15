@@ -311,4 +311,6 @@
     <string name="create_account_password_hint">Password</string>
     <string name="change_account_password_hint">Password</string>
     <string name="title_change_account">Change Account</string>
+    <string name="required_private_key">Private key is required.</string>
+    <string name="required_password">Password is required.</string>
 </resources>
