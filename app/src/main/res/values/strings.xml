@@ -313,4 +313,5 @@
     <string name="title_change_account">Change Account</string>
     <string name="required_private_key">Private key is required.</string>
     <string name="required_password">Password is required.</string>
+    <string name="preparing_btn_text">PREPARING</string>
 </resources>
