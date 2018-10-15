@@ -59,6 +59,17 @@ public class WalletAppManager {
         mIsLogin = true;
     }
 
+    public boolean oldLogin(@NonNull String password) {
+        WalletModel wallet = mWalletDao.loadWallet();
+
+        if (PasswordUtil.matches(password, wallet.getPassword())) {
+            mIsLogin = true;
+            return true;
+        }
+
+        return false;
+    }
+
     public int login(@NonNull String password) {
         if (TextUtils.isEmpty(password) || password.length() < MIN_PASSWORD_LENGTH) {
             return ERROR;
@@ -133,5 +144,18 @@ public class WalletAppManager {
         }
 
         return true;
+    }
+
+    // todo - remove when all user updated above 1.2.5
+    public boolean migrationPassword(@NonNull String password) {
+        if (oldLogin(password)) {
+            WalletModel wallet = mWalletDao.loadWallet();
+            wallet.setPassword(mPasswordEncoder.encode(password));
+            wallet.setUpdated(Calendar.getInstance().getTime());
+            mWalletDao.update(wallet);
+            return true;
+        }
+
+        return false;
     }
 }

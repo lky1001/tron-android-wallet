@@ -10,8 +10,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.devband.tronwalletforandroid.BuildConfig;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivity;
 import com.devband.tronwalletforandroid.ui.importkey.ImportPrivateKeyActivity;
@@ -31,6 +33,9 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
 
     @Inject
     CreateWalletPresenter mCreateWalletPresenter;
+
+    @Inject
+    CustomPreference mCustomPreference;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -60,6 +65,10 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.title_create_wallet);
+        }
+
+        if (BuildConfig.VERSION_CODE > 11) {
+            mCustomPreference.setMigrationDb(true);
         }
 
         mCreateWalletPresenter.onCreate();

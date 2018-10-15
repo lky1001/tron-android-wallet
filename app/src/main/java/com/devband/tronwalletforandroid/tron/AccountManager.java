@@ -305,5 +305,17 @@ public class AccountManager {
     private String getDecodedAccountKey(@NonNull AccountModel accountModel) {
         return mKeyStore.decryptString(accountModel.getAccount(), Constants.ALIAS_ACCOUNT_KEY);
     }
+
+    // todo - remove when all user updated above 1.2.5
+    public void migrationAccount(@NonNull String password) {
+        List<AccountModel> accountList = mAccountRepository.loadAllAccounts().blockingGet();
+        for (AccountModel accountModel : accountList) {
+            String priKeyEnced = accountModel.getAccount().substring(130, 194);
+            String encPriKey = mKeyStore.encryptString(priKeyEnced, Constants.ALIAS_ACCOUNT_KEY);
+            accountModel.setAccount(encPriKey);
+            mAccountRepository.updateAccount(accountModel).blockingGet();
+        }
+
+    }
 }
 

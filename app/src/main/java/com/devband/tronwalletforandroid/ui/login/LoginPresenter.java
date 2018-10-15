@@ -2,6 +2,7 @@ package com.devband.tronwalletforandroid.ui.login;
 
 import android.support.annotation.Nullable;
 
+import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
@@ -16,13 +17,15 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     private Tron mTron;
     private WalletAppManager mWalletAppManager;
     private RxJavaSchedulers mRxJavaSchedulers;
+    private final CustomPreference mCustomPreference;
 
     public LoginPresenter(LoginView view, Tron tron, WalletAppManager walletAppManager,
-            RxJavaSchedulers rxJavaSchedulers) {
+            RxJavaSchedulers rxJavaSchedulers, CustomPreference customPreference) {
         super(view);
         this.mTron = tron;
         this.mWalletAppManager = walletAppManager;
         this.mRxJavaSchedulers = rxJavaSchedulers;
+        this.mCustomPreference = customPreference;
     }
 
     @Override
@@ -47,16 +50,27 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
     public void loginWallet(@Nullable String password) {
         Single.fromCallable(() -> {
-            int result = mWalletAppManager.login(password);
+            if (!mCustomPreference.getMigrationDb()) {
+                boolean loginResult = mWalletAppManager.oldLogin(password);
 
-            if (result == WalletAppManager.SUCCESS) {
-                int res = mTron.login(password);
-                if (res != Tron.SUCCESS) {
+                if (!loginResult) {
                     return WalletAppManager.ERROR;
+                } else {
+                    mTron.migrationOldData(password);
+                    return Tron.SUCCESS;
                 }
-            }
+            } else {
+                int result = mWalletAppManager.login(password);
 
-            return result;
+                if (result == WalletAppManager.SUCCESS) {
+                    int res = mTron.login(password);
+                    if (res != Tron.SUCCESS) {
+                        return WalletAppManager.ERROR;
+                    }
+                }
+
+                return result;
+            }
         })
         .subscribeOn(mRxJavaSchedulers.getIo())
         .observeOn(mRxJavaSchedulers.getMainThread())

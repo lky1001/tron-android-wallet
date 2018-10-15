@@ -514,4 +514,10 @@ public class Tron {
     public void agreeTerms(boolean agree) {
         mWalletAppManager.agreeTerms(agree);
     }
+
+    public void migrationOldData(@NonNull String password) {
+        if (mWalletAppManager.migrationPassword(password)) {
+            mAccountManager.migrationAccount(password);
+        }
+    }
 }
