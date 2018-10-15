@@ -64,17 +64,17 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autoLink="all"
+                    android:gravity="center"
                     android:textColorLink="@color/colorPrimary"
                     android:text="@string/productivity_text"/>
 
                 <TextView
                     android:id="@+id/productivity_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:gravity="center"
                     tools:text="99.95%"/>
 
             </LinearLayout>
