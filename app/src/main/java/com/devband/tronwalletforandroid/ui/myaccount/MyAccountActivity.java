@@ -182,6 +182,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                     TextView tokenNameText = v.findViewById(R.id.token_name_text);
                     TextView tokenAmountText = v.findViewById(R.id.token_amount_text);
                     ImageButton favoriteButton = v.findViewById(R.id.token_favorite_button);
+                    favoriteButton.setVisibility(View.VISIBLE);
                     favoriteButton.setTag(asset);
 
                     if (mMyAccountPresenter.isFavoriteToken(asset.getName())) {

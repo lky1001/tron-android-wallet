@@ -13,13 +13,13 @@ import java.util.List;
 @Dao
 public interface FavoriteTokenDao {
 
-    @Query("SELECT * from favorite_token where id = :id LIMIT 1")
+    @Query("SELECT * FROM favorite_token WHERE id = :id LIMIT 1")
     FavoriteTokenModel findById(int id);
 
-    @Query("SELECT * from favorite_token where account_id = :accountId AND token_name = :name LIMIT 1")
+    @Query("SELECT * FROM favorite_token WHERE account_id = :accountId AND token_name = :name LIMIT 1")
     FavoriteTokenModel findByAccountIdAndTokenName(int accountId, String name);
 
-    @Query("SELECT * from favorite_token")
+    @Query("SELECT * FROM favorite_token")
     List<FavoriteTokenModel> findAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

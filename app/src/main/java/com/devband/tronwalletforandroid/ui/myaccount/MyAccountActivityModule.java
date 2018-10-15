@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.myaccount;
 
+import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
@@ -16,7 +17,8 @@ public abstract class MyAccountActivityModule {
 
     @Provides
     static MyAccountPresenter provideMyAccountPresenter(MyAccountView myAccountView, Tron tron,
-            WalletAppManager walletAppManager, RxJavaSchedulers rxJavaSchedulers) {
-        return new MyAccountPresenter(myAccountView, tron, walletAppManager, rxJavaSchedulers);
+            WalletAppManager walletAppManager, RxJavaSchedulers rxJavaSchedulers, AppDatabase appDatabase) {
+        return new MyAccountPresenter(myAccountView, tron, walletAppManager, rxJavaSchedulers,
+                appDatabase);
     }
 }

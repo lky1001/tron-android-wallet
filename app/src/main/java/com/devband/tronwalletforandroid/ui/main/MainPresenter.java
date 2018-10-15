@@ -8,6 +8,9 @@ import com.devband.tronlib.dto.Account;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.common.CustomPreference;
+import com.devband.tronwalletforandroid.database.AppDatabase;
+import com.devband.tronwalletforandroid.database.dao.FavoriteTokenDao;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
@@ -30,13 +33,17 @@ public class MainPresenter extends BasePresenter<MainView> {
     private Tron mTron;
     private TronNetwork mTronNetwork;
     private RxJavaSchedulers mRxJavaSchedulers;
+    private CustomPreference mCustomPreference;
+    private FavoriteTokenDao mFavoriteTokenDao;
 
     public MainPresenter(MainView view, Tron tron, TronNetwork tronNetwork,
-            RxJavaSchedulers rxJavaSchedulers) {
+            RxJavaSchedulers rxJavaSchedulers, CustomPreference customPreference, AppDatabase appDatabase) {
         super(view);
         this.mTron = tron;
         this.mTronNetwork = tronNetwork;
         this.mRxJavaSchedulers = rxJavaSchedulers;
+        this.mCustomPreference = customPreference;
+        this.mFavoriteTokenDao = appDatabase.favoriteTokenDao();
     }
 
     public void setAdapterDataModel(AdapterDataModel<Asset> adapterDataModel) {
@@ -79,6 +86,7 @@ public class MainPresenter extends BasePresenter<MainView> {
                         .build());
             }
 
+            int accountId = mTron.getLoginAccount().getId();
             List<Asset> assetList = new ArrayList<>();
 
             for (Account.Balance balance : account.getTokenBalances()) {
@@ -86,10 +94,19 @@ public class MainPresenter extends BasePresenter<MainView> {
                     continue;
                 }
 
-                assetList.add(Asset.builder()
-                        .name(balance.getName())
-                        .balance(balance.getBalance())
-                        .build());
+                if (mCustomPreference.isFavoriteToken(accountId)) {
+                    if (mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, balance.getName()) != null) {
+                        assetList.add(Asset.builder()
+                                .name(balance.getName())
+                                .balance(balance.getBalance())
+                                .build());
+                    }
+                } else {
+                    assetList.add(Asset.builder()
+                            .name(balance.getName())
+                            .balance(balance.getBalance())
+                            .build());
+                }
             }
 
             return TronAccount.builder()
@@ -230,5 +247,19 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public int getLoginAccountIndex() {
         return mTron.getLoginAccount().getId();
+    }
+
+    public void setOnlyFavorites(boolean isFavorites) {
+        if (mTron.getLoginAccount() != null) {
+            mCustomPreference.setFavoriteToken(mTron.getLoginAccount().getId(), isFavorites);
+        }
+    }
+
+    public boolean getIsFavoritesTokens() {
+        if (mTron.getLoginAccount() != null) {
+            return mCustomPreference.isFavoriteToken(mTron.getLoginAccount().getId());
+        }
+
+        return false;
     }
 }

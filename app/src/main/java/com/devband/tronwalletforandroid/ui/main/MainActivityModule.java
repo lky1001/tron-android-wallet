@@ -1,6 +1,8 @@
 package com.devband.tronwalletforandroid.ui.main;
 
 import com.devband.tronlib.TronNetwork;
+import com.devband.tronwalletforandroid.common.CustomPreference;
+import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 
@@ -16,7 +18,7 @@ public abstract class MainActivityModule {
 
     @Provides
     static MainPresenter provideMainPresenter(MainView mainView, Tron tron, TronNetwork tronNetwork,
-            RxJavaSchedulers rxJavaSchedulers) {
-        return new MainPresenter(mainView, tron, tronNetwork, rxJavaSchedulers);
+            RxJavaSchedulers rxJavaSchedulers, CustomPreference customPreference, AppDatabase appDatabase) {
+        return new MainPresenter(mainView, tron, tronNetwork, rxJavaSchedulers, customPreference, appDatabase);
     }
 }

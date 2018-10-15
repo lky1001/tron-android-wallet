@@ -314,4 +314,5 @@
     <string name="required_private_key">프라이빗키를 입력하세요.</string>
     <string name="required_password">비밀번호를 입력하세요.</string>
     <string name="preparing_btn_text">준비중</string>
+    <string name="favorites_text">즐겨찾기만 보기</string>
 </resources>

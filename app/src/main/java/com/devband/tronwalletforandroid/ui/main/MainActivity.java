@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -113,6 +114,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @BindView(R.id.my_token_listview)
     RecyclerView mMyTokenListView;
 
+    @BindView(R.id.check_favorite_tokens)
+    CheckBox mShowOnlyFavoritesCheckBox;
+
     Spinner mAccountSpinner;
 
     TextView mNavHeaderText;
@@ -155,7 +159,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         mMyTokenListView.addItemDecoration(new DividerItemDecoration(0));
         mMyTokenListView.setNestedScrollingEnabled(false);
 
-        mMyTokenListAdapter = new MyTokenListAdapter(MainActivity.this);
+        mMyTokenListAdapter = new MyTokenListAdapter();
         mMyTokenListView.setAdapter(mMyTokenListAdapter);
         mAdapterView = mMyTokenListAdapter;
 
@@ -193,6 +197,13 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                     isShow = false;
                 }
             }
+        });
+
+        mShowOnlyFavoritesCheckBox.setOnCheckedChangeListener((view, isChecked) -> {
+            mMainPresenter.setOnlyFavorites(isChecked);
+
+            mShowOnlyFavoritesCheckBox.setEnabled(false);
+            checkLoginState();
         });
 
         initAccountList(false);
@@ -333,6 +344,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
                 }
             });
+
+            mShowOnlyFavoritesCheckBox.setChecked(mMainPresenter.getIsFavoritesTokens());
         } else {
             finishActivity();
             startActivity(LoginActivity.class);
@@ -472,6 +485,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     public void displayAccountInfo(@NonNull TronAccount account) {
         mLoginTronAccount = account;
+        mShowOnlyFavoritesCheckBox.setEnabled(true);
 
         if (mLoginTronAccount.getAssetList().isEmpty()) {
             mNoTokenLayout.setVisibility(View.VISIBLE);
@@ -563,6 +577,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     public void connectionError() {
         mLoadingAccountInfo = false;
+        mShowOnlyFavoritesCheckBox.setEnabled(true);
         Toast.makeText(MainActivity.this, getString(R.string.connection_error_msg),
                 Toast.LENGTH_SHORT).show();
     }

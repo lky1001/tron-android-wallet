@@ -32,6 +32,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:layout_marginLeft="15dp"
+            android:visibility="gone"
             android:tint="@color/favorite_token_color"
             app:srcCompat="@drawable/ic_star_outline" />
     </LinearLayout>

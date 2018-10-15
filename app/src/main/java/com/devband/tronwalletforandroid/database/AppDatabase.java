@@ -10,12 +10,13 @@ import com.devband.tronwalletforandroid.database.dao.AccountDao;
 import com.devband.tronwalletforandroid.database.dao.FavoriteTokenDao;
 import com.devband.tronwalletforandroid.database.dao.WalletDao;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
+import com.devband.tronwalletforandroid.database.model.FavoriteTokenModel;
 import com.devband.tronwalletforandroid.database.model.WalletModel;
 
 @Database(entities = {
         WalletModel.class,
         AccountModel.class,
-        FavoriteTokenDao.class
+        FavoriteTokenModel.class
 }, version = AppDatabase.VERSION, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -29,10 +30,14 @@ public abstract class AppDatabase extends RoomDatabase {
     public static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE `account` ADD COLUMN `address` TEXT");
+            database.execSQL("ALTER TABLE account ADD COLUMN address TEXT");
 
-            database.execSQL("CREATE TABLE IF NOT EXISTS favorite_token "
-                + "(`id` INTEGER NOT NULL, `account_id` INTEGER, `token_name` TEXT, PRIMARY KEY(`id`))");
+            try {
+                database.execSQL("CREATE TABLE IF NOT EXISTS favorite_token "
+                        + "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, account_id INTEGER NOT NULL, token_name TEXT)");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     };
 }

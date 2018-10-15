@@ -314,4 +314,5 @@
     <string name="required_private_key">Private key is required.</string>
     <string name="required_password">Password is required.</string>
     <string name="preparing_btn_text">PREPARING</string>
+    <string name="favorites_text">Only favorites</string>
 </resources>

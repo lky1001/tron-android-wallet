@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class CustomPreference {
 
     private static final String CUSTOM_PREFERENCE = "custom_preference";
     private static final String PREFERENCE_SETTINGS = "preference_settings";
+    public static final String FAVORITE_TOKENS_KEY_PREFIX = "favorite_tokens_";
 
     private final String LOG_TAG = CustomPreference.class.getSimpleName();
 
@@ -68,6 +70,16 @@ public class CustomPreference {
 
     public boolean getUseFingerprint() {
         return mSettings.useFingerprint;
+    }
+
+    public void setFavoriteToken(int accountId, boolean isFavorite) {
+        SharedPreferences.Editor edit = mSharedPreferences.edit();
+        edit.putBoolean(FAVORITE_TOKENS_KEY_PREFIX + accountId, isFavorite);
+        edit.apply();
+    }
+
+    public boolean isFavoriteToken(int accountId) {
+        return mSharedPreferences.getBoolean(FAVORITE_TOKENS_KEY_PREFIX + accountId, false);
     }
 
     public void storeEncryptedIv(byte[] data, String name) {
@@ -147,5 +159,6 @@ public class CustomPreference {
         public boolean initWallet;
         public int keyStoreVersion;
         public boolean migrationDb;
+        public Map<Integer, Boolean> favoritesToken;
     }
 }
