@@ -59,7 +59,7 @@ public abstract class AppModule {
     @Provides
     @Singleton
     static CoinMarketCapService provideCoinMarketCapService() {
-        return ServiceBuilder.createService(CoinMarketCapService.class, Hosts.TRONSCAN_API);
+        return ServiceBuilder.createService(CoinMarketCapService.class, Hosts.COINMARKETCAP_API);
     }
 
     @Provides
