@@ -312,10 +312,15 @@ public class AccountManager {
         for (AccountModel accountModel : accountList) {
             String priKeyEnced = accountModel.getAccount().substring(130, 194);
             String encPriKey = mKeyStore.encryptString(priKeyEnced, Constants.ALIAS_ACCOUNT_KEY);
+
+            String address = encode58Check(getEcKeyFromEncodedPrivateKey(priKeyEnced, WalletAppManager.getEncKey(password)).getAddress());
+            mKeyStore.encryptString(address, Constants.ALIAS_ADDRESS_KEY);
+
+            accountModel.setAddress(address);
             accountModel.setAccount(encPriKey);
+
             mAccountRepository.updateAccount(accountModel).blockingGet();
         }
-
     }
 }
 
