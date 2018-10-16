@@ -36,7 +36,7 @@ public class AccountManager {
 
     private static final String LOG_TAG = AccountManager.class.getSimpleName();
 
-    public static final int DEFAULT_ACCOUNT_INDEX = 1;
+    public static final long DEFAULT_ACCOUNT_INDEX = 1;
 
     private static final String ACCOUNT_FILE_PATH = "tron/tron.dat";
 
@@ -98,10 +98,11 @@ public class AccountManager {
         });
     }
 
-    public int loadAccountByRepository(@Nullable AccountModel accountModel) {
+    public int loadAccountByRepository(@Nullable AccountModel accountModel, long lastSelectedIndex) {
         if (accountModel == null) {
             // todo - improve
-            accountModel = mAccountRepository.loadAccount(DEFAULT_ACCOUNT_INDEX).blockingGet();
+            long idx = lastSelectedIndex > 0 ? lastSelectedIndex : DEFAULT_ACCOUNT_INDEX;
+            accountModel = mAccountRepository.loadAccount(idx).blockingGet();
         }
 
         String priKeyEnced = getDecodedAccountKey(accountModel);
@@ -261,7 +262,7 @@ public class AccountManager {
             return;
         }
 
-        loadAccountByRepository(accountModel);
+        loadAccountByRepository(accountModel, accountModel.getId());
     }
 
     public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey, @NonNull byte[] aesKey, boolean imported) {

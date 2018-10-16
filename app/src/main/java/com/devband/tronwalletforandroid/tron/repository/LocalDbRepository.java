@@ -44,7 +44,7 @@ public class LocalDbRepository implements AccountRepository {
     }
 
     @Override
-    public Maybe<AccountModel> loadAccount(int index) {
+    public Maybe<AccountModel> loadAccount(long index) {
         return Maybe.just(mAccountDao.loadAccountById(index));
     }
 

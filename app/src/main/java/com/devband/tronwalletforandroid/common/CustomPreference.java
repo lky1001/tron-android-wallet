@@ -148,6 +148,15 @@ public class CustomPreference {
         saveSettings();
     }
 
+    public void setLastSelectedAccountId(long accountId) {
+        mSettings.lastSelectedAccountId = accountId;
+        saveSettings();
+    }
+
+    public long getLastSelectedAccountId() {
+        return mSettings.lastSelectedAccountId;
+    }
+
     public boolean getMigrationDb() {
         return this.mSettings.migrationDb;
     }
@@ -161,5 +170,6 @@ public class CustomPreference {
         public boolean initWallet;
         public int keyStoreVersion;
         public boolean migrationDb;
+        public long lastSelectedAccountId;
     }
 }

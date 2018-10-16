@@ -148,7 +148,7 @@ public class Tron {
 
     public void loginWithFingerPrint() {
         mWalletAppManager.loginWithFingerPrint();
-        mAccountManager.loadAccountByRepository(null);
+        mAccountManager.loadAccountByRepository(null, mCustomPreference.getLastSelectedAccountId());
     }
 
     public int login(@NonNull String password) {
@@ -158,7 +158,7 @@ public class Tron {
             return ERROR_INVALID_PASSWORD;
         }
 
-        mAccountManager.loadAccountByRepository(null);
+        mAccountManager.loadAccountByRepository(null, mCustomPreference.getLastSelectedAccountId());
 
         return SUCCESS;
     }
@@ -274,6 +274,7 @@ public class Tron {
 
     public boolean changeLoginAccount(@NonNull AccountModel accountModel) {
         mAccountManager.changeLoginAccount(accountModel);
+        mCustomPreference.setLastSelectedAccountId(accountModel.getId());
         return true;
     }
 

@@ -15,7 +15,7 @@ import java.util.List;
 public interface AccountDao {
 
     @Query("SELECT * FROM account WHERE id = :id LIMIT 1")
-    AccountModel loadAccountById(int id);
+    AccountModel loadAccountById(long id);
 
     @Query("SELECT * FROM account")
     List<AccountModel> loadAllAccounts();
