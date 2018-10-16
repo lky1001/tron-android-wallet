@@ -113,7 +113,7 @@ public abstract class AppModule {
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 keyStore = new KeyStoreApi18Impl(context);
             } else {
-                keyStore = new KeyStoreApi15Impl();
+                keyStore = new KeyStoreApi15Impl(customPreference);
             }
         } else {
             // check os update
@@ -122,7 +122,7 @@ public abstract class AppModule {
             } else if (customPreference.getKeyStoreVersion() >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 keyStore = new KeyStoreApi18Impl(context);
             } else {
-                keyStore = new KeyStoreApi15Impl();
+                keyStore = new KeyStoreApi15Impl(customPreference);
             }
         }
 

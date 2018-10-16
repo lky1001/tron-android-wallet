@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -89,6 +91,7 @@ public class CustomPreference {
         edit.apply();
     }
 
+    @Nullable
     public byte[] retrieveEncryptedIv(String name) {
         String base64 = mSharedPreferences.getString(name, null);
         if (base64 == null) return null;
