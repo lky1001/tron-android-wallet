@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.createwallet;
 
+import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 
@@ -15,7 +16,7 @@ public abstract class CreateWalletActivityModule {
 
     @Provides
     static CreateWalletPresenter provideCreateWalletPresenter(CreateWalletView createWalletView,
-            Tron tron, RxJavaSchedulers rxJavaSchedulers) {
-        return new CreateWalletPresenter(createWalletView, tron, rxJavaSchedulers);
+            Tron tron, RxJavaSchedulers rxJavaSchedulers, CustomPreference customPreference) {
+        return new CreateWalletPresenter(createWalletView, tron, rxJavaSchedulers, customPreference);
     }
 }

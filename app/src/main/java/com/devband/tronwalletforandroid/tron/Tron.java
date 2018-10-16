@@ -1,6 +1,7 @@
 package com.devband.tronwalletforandroid.tron;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -518,6 +519,8 @@ public class Tron {
     public void migrationOldData(@NonNull String password) {
         if (mWalletAppManager.migrationPassword(password)) {
             mAccountManager.migrationAccount(password);
+            mCustomPreference.setInitWallet(true);
+            mCustomPreference.setKeyStoreVersion(Build.VERSION.SDK_INT);
         }
     }
 }

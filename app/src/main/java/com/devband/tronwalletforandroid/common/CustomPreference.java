@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -162,6 +161,5 @@ public class CustomPreference {
         public boolean initWallet;
         public int keyStoreVersion;
         public boolean migrationDb;
-        public Map<Integer, Boolean> favoritesToken;
     }
 }

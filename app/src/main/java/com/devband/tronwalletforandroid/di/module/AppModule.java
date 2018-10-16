@@ -107,23 +107,14 @@ public abstract class AppModule {
     static KeyStore provideKeyStore(@ApplicationContext Context context, CustomPreference customPreference) {
         KeyStore keyStore = null;
 
-        if (!customPreference.getInitWallet()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                keyStore = new KeyStoreApi23Impl(customPreference);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                keyStore = new KeyStoreApi18Impl(context);
-            } else {
-                keyStore = new KeyStoreApi15Impl(customPreference);
-            }
+        int keyStoreVersion = customPreference.getInitWallet() ? customPreference.getKeyStoreVersion() : Build.VERSION.SDK_INT;
+
+        if (keyStoreVersion >= Build.VERSION_CODES.M) {
+            keyStore = new KeyStoreApi23Impl(customPreference);
+        } else if (keyStoreVersion >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            keyStore = new KeyStoreApi18Impl(context);
         } else {
-            // check os update
-            if (customPreference.getKeyStoreVersion() >= Build.VERSION_CODES.M) {
-                keyStore = new KeyStoreApi23Impl(customPreference);
-            } else if (customPreference.getKeyStoreVersion() >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                keyStore = new KeyStoreApi18Impl(context);
-            } else {
-                keyStore = new KeyStoreApi15Impl(customPreference);
-            }
+            keyStore = new KeyStoreApi15Impl(customPreference);
         }
 
         keyStore.init();

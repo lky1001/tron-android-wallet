@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.createwallet;
 
+import android.os.Build;
 import android.support.annotation.NonNull;
 
 import com.crashlytics.android.Crashlytics;
@@ -18,11 +19,14 @@ public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
 
     private Tron mTron;
     private RxJavaSchedulers mRxJavaSchedulers;
+    private CustomPreference mCustomPreference;
 
-    public CreateWalletPresenter(CreateWalletView view, Tron tron, RxJavaSchedulers rxJavaSchedulers) {
+    public CreateWalletPresenter(CreateWalletView view, Tron tron, RxJavaSchedulers rxJavaSchedulers,
+            CustomPreference customPreference) {
         super(view);
         this.mTron = tron;
         this.mRxJavaSchedulers = rxJavaSchedulers;
+        this.mCustomPreference = customPreference;
     }
 
     @Override
@@ -60,6 +64,8 @@ public class CreateWalletPresenter extends BasePresenter<CreateWalletView> {
                 int result = mTron.login(password);
 
                 if (result == WalletAppManager.SUCCESS) {
+                    mCustomPreference.setInitWallet(true);
+                    mCustomPreference.setKeyStoreVersion(Build.VERSION.SDK_INT);
                     return Tron.SUCCESS;
                 }
 
