@@ -92,7 +92,7 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
 
         holder.voteProgress.setMax(Constants.VOTE_MAX_PROGRESS);
         // total representative votes
-        holder.voteProgress.setSecondaryProgress((float) item.getTotalVoteCount() / (float) item.getTotalVoteCount() * Constants.VOTE_MAX_PROGRESS);
+        holder.voteProgress.setSecondaryProgress((float) item.getLastCycleVoteCount() / (float) item.getTotalVoteCount() * Constants.VOTE_MAX_PROGRESS);
         // user votes
         holder.voteProgress.setProgress((float) item.getMyVoteCount() / (float) item.getTotalVoteCount() * Constants.VOTE_MAX_PROGRESS);
 
