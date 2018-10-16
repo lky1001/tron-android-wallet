@@ -129,7 +129,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                         mAccountSpinner.setAdapter(mAccountAdapter);
 
                         for (int i = 0; i < accountModelList.size(); i++) {
-                            int id = mMyAccountPresenter.getLoginAccountIndex();
+                            long id = mMyAccountPresenter.getLoginAccountIndex();
                             if (id == accountModelList.get(i).getId()) {
                                 mAccountSpinner.setSelection(i);
                                 break;

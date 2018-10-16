@@ -86,7 +86,7 @@ public class MainPresenter extends BasePresenter<MainView> {
                         .build());
             }
 
-            int accountId = mTron.getLoginAccount().getId();
+            long accountId = mTron.getLoginAccount().getId();
             List<Asset> assetList = new ArrayList<>();
 
             for (Account.Balance balance : account.getTokenBalances()) {
@@ -245,7 +245,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         });
     }
 
-    public int getLoginAccountIndex() {
+    public long getLoginAccountIndex() {
         return mTron.getLoginAccount().getId();
     }
 

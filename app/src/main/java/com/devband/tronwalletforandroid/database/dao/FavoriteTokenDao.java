@@ -17,7 +17,7 @@ public interface FavoriteTokenDao {
     FavoriteTokenModel findById(int id);
 
     @Query("SELECT * FROM favorite_token WHERE account_id = :accountId AND token_name = :name LIMIT 1")
-    FavoriteTokenModel findByAccountIdAndTokenName(int accountId, String name);
+    FavoriteTokenModel findByAccountIdAndTokenName(long accountId, String name);
 
     @Query("SELECT * FROM favorite_token")
     List<FavoriteTokenModel> findAll();

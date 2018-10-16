@@ -21,7 +21,7 @@ public interface AccountDao {
     List<AccountModel> loadAllAccounts();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(AccountModel accountModel);
+    long insert(AccountModel accountModel);
 
     @Update
     void update(AccountModel accountModel);

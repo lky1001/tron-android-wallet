@@ -22,7 +22,7 @@ public class FavoriteTokenModel {
     private int id;
 
     @ColumnInfo(name = "account_id")
-    private int accountId;
+    private long accountId;
 
     @ColumnInfo(name = "token_name")
     private String tokenName;

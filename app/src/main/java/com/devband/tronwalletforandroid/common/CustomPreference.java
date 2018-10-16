@@ -74,13 +74,13 @@ public class CustomPreference {
         return mSettings.useFingerprint;
     }
 
-    public void setFavoriteToken(int accountId, boolean isFavorite) {
+    public void setFavoriteToken(long accountId, boolean isFavorite) {
         SharedPreferences.Editor edit = mSharedPreferences.edit();
         edit.putBoolean(FAVORITE_TOKENS_KEY_PREFIX + accountId, isFavorite);
         edit.apply();
     }
 
-    public boolean isFavoriteToken(int accountId) {
+    public boolean isFavoriteToken(long accountId) {
         return mSharedPreferences.getBoolean(FAVORITE_TOKENS_KEY_PREFIX + accountId, false);
     }
 

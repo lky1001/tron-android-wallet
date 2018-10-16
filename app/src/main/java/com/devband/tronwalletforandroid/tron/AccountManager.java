@@ -91,7 +91,8 @@ public class AccountManager {
                     .imported(imported)
                     .build();
 
-            mAccountRepository.insertAccount(mLoginAccountModel).blockingGet();
+            long id = mAccountRepository.insertAccount(mLoginAccountModel).blockingGet();
+            mLoginAccountModel.setId(id);
 
             return Tron.SUCCESS;
         });

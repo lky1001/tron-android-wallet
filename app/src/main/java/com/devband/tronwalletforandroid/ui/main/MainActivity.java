@@ -322,7 +322,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
                 @Override
                 public void onSuccess(List<AccountModel> accountModelList) {
-                    int id = mMainPresenter.getLoginAccountIndex();
+                    long id = mMainPresenter.getLoginAccountIndex();
 
                     int size = accountModelList.size();
 
