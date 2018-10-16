@@ -310,7 +310,7 @@ public class AccountManager {
     public void migrationAccount(@NonNull String password) {
         List<AccountModel> accountList = mAccountRepository.loadAllAccounts().blockingGet();
         for (AccountModel accountModel : accountList) {
-            String priKeyEnced = accountModel.getAccount().substring(130, 194);
+            String priKeyEnced = accountModel.getAccount().substring(162, 226);
             String encPriKey = mKeyStore.encryptString(priKeyEnced, Constants.ALIAS_ACCOUNT_KEY);
 
             String address = encode58Check(getEcKeyFromEncodedPrivateKey(priKeyEnced, WalletAppManager.getEncKey(password)).getAddress());
@@ -323,4 +323,3 @@ public class AccountManager {
         }
     }
 }
-
