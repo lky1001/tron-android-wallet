@@ -25,6 +25,7 @@ import com.devband.tronlib.services.CoinMarketCapService;
 import com.devband.tronlib.services.TokenService;
 import com.devband.tronlib.services.TronScanService;
 import com.devband.tronlib.services.VoteService;
+import com.devband.tronlib.services.WlcApiService;
 
 import java.util.List;
 import java.util.Map;
@@ -40,29 +41,21 @@ public class TronNetwork {
     private TronScanService mTronScanService;
     private TokenService mTokenService;
     private AccountService mAccountService;
+    private WlcApiService mWlcApiService;
 
-    public void setVoteService(VoteService voteService) {
+    public TronNetwork(VoteService voteService, CoinMarketCapService coinMarketCapService,
+            TronScanService tronScanService, TokenService tokenService, AccountService accountService,
+            WlcApiService wlcApiService) {
         this.mVoteService = voteService;
-    }
-
-    public void setCoinMarketCapService(CoinMarketCapService coinMarketCapService) {
         this.mCoinMarketCapService = coinMarketCapService;
-    }
-
-    public void setTronScanService(TronScanService tronScanService) {
         this.mTronScanService = tronScanService;
-    }
-
-    public void setTokenService(TokenService tokenService) {
         this.mTokenService = tokenService;
-    }
-
-    public void setAccountService(AccountService accountService) {
         this.mAccountService = accountService;
+        this.mWlcApiService = wlcApiService;
     }
 
     public Single<Witnesses> getVoteWitnesses() {
-        return mVoteService.getVoteWitnesses();
+        return mWlcApiService.getVoteWitnesses();
     }
 
     public Single<Votes> getVoteCurrentCycle() {

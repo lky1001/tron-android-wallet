@@ -146,6 +146,7 @@
     <string name="total_votes_text">Total votes</string>
     <string name="representative_your_vote_text">Your vote :</string>
     <string name="representative_total_votes_text">Total votes :</string>
+    <string name="representative_realtime_votes_text">RealTime votes :</string>
     <string name="votes_remaining_text">Votes Remaining</string>
     <string name="super_representatives_text">Super Representatives</string>
     <string name="super_representative_candidates_text">Super Representative Candidates</string>

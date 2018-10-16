@@ -76,12 +76,23 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
 
         holder.representativeAddressText.setText(item.getAddress());
         holder.yourVoteText.setText(Constants.numberFormat.format(item.getMyVoteCount()));
-        holder.totalVoteText.setText(Constants.numberFormat.format(item.getVoteCount())
-                + " (" + Constants.percentFormat.format(((double) item.getVoteCount() / (double) item.getTotalVoteCount()) * 100f) + "%)");
+        holder.totalVoteText.setText(Constants.numberFormat.format(item.getTotalVoteCount())
+                + " (" + Constants.percentFormat.format(item.getVotesPercentage()) + "%)");
+        holder.realtimeVoteText.setText(Constants.numberFormat.format(item.getRealTimeVoteCount()));
+
+        holder.realtimeChangedText.setText(Constants.numberFormat.format(item.getChangeVotes()));
+
+        if (item.getChangeVotes() < 0) {
+            holder.realtimeChangedText.setTextColor(mContext.getResources().getColor(R.color.vote_down_color));
+        } else if (item.getChangeVotes() > 0) {
+            holder.realtimeChangedText.setTextColor(mContext.getResources().getColor(R.color.vote_up_color));
+        } else {
+            holder.realtimeChangedText.setTextColor(mContext.getResources().getColor(R.color.default_text_color));
+        }
 
         holder.voteProgress.setMax(Constants.VOTE_MAX_PROGRESS);
         // total representative votes
-        holder.voteProgress.setSecondaryProgress((float) item.getVoteCount() / (float) item.getTotalVoteCount() * Constants.VOTE_MAX_PROGRESS);
+        holder.voteProgress.setSecondaryProgress((float) item.getTotalVoteCount() / (float) item.getTotalVoteCount() * Constants.VOTE_MAX_PROGRESS);
         // user votes
         holder.voteProgress.setProgress((float) item.getMyVoteCount() / (float) item.getTotalVoteCount() * Constants.VOTE_MAX_PROGRESS);
 
@@ -165,6 +176,12 @@ public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VoteVi
 
         @BindView(R.id.total_votes_text)
         TextView totalVoteText;
+
+        @BindView(R.id.realtime_votes_text)
+        TextView realtimeVoteText;
+
+        @BindView(R.id.realtime_changed_text)
+        TextView realtimeChangedText;
 
         @BindView(R.id.progress_votes)
         RoundCornerProgressBar voteProgress;

@@ -32,5 +32,8 @@
     <color name="confirm_text_color">#029f2a</color>
     <color name="unconfirm_text_color">#c40b19</color>
     <color name="favorite_token_color">#8b8b8b</color>
+    <color name="vote_down_color">#cf312e</color>
+    <color name="vote_up_color">#029f2a</color>
+    <color name="default_text_color">#808080</color>
 
 </resources>

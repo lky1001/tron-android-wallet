@@ -146,6 +146,7 @@
     <string name="total_votes_text">총 투표</string>
     <string name="representative_your_vote_text">내 투표 :</string>
     <string name="representative_total_votes_text">총 투표 :</string>
+    <string name="representative_realtime_votes_text">실시간 투표 :</string>
     <string name="votes_remaining_text">투표 가능</string>
     <string name="super_representatives_text">대표자</string>
     <string name="super_representative_candidates_text">대표자 후보</string>
