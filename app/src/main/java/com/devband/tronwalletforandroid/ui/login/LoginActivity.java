@@ -70,6 +70,7 @@ public class LoginActivity extends CommonActivity implements LoginView {
                     .setOnFingerAuthListener(new FingerAuth.OnFingerAuthListener() {
                         @Override
                         public void onSuccess() {
+                            mTron.loginWithFingerPrint();
                             loginResult(Tron.SUCCESS);
                         }
 
@@ -113,7 +114,6 @@ public class LoginActivity extends CommonActivity implements LoginView {
         } else if (result == Tron.SUCCESS) {
             Toast.makeText(LoginActivity.this, getString(R.string.login_success),
                     Toast.LENGTH_SHORT).show();
-            mTron.loginWithFingerPrint();
 
             startActivity(MainActivity.class);
             finishActivity();
