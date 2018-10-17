@@ -119,10 +119,14 @@ public class Tron {
             return SUCCESS;
         })
         .flatMap(result -> {
-            String accountNickname = generateDefaultAccountName(nickname);
+            if (result == SUCCESS) {
+                String accountNickname = generateDefaultAccountName(nickname);
 
-            byte[] aesKey = WalletAppManager.getEncKey(password);
-            return mAccountManager.createAccount(accountNickname, aesKey);
+                byte[] aesKey = WalletAppManager.getEncKey(password);
+                return mAccountManager.createAccount(accountNickname, aesKey);
+            } else {
+                return Single.just(ERROR_INVALID_PASSWORD);
+            }
         });
     }
 
