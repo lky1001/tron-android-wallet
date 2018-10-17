@@ -23,76 +23,76 @@ class TronManager implements ITronManager {
 
     @Override
     public Single<Protocol.Account> queryAccount(byte[] address) {
-        return Single.just(grpcClient.queryAccount(address));
+        return Single.fromCallable(() -> grpcClient.queryAccount(address));
     }
 
     @Override
     public Single<GrpcAPI.WitnessList> listWitnesses() {
-        return Single.just(grpcClient.listWitnesses());
+        return Single.fromCallable(() -> grpcClient.listWitnesses());
     }
 
     @Override
     public Single<GrpcAPI.AssetIssueList> getAssetIssueList() {
-        return Single.just(grpcClient.getAssetIssueList());
+        return Single.fromCallable(() -> grpcClient.getAssetIssueList());
     }
 
     @Override
     public Single<GrpcAPI.NodeList> listNodes() {
-        return Single.just(grpcClient.listNodes());
+        return Single.fromCallable(() -> grpcClient.listNodes());
     }
 
     @Override
     public Single<GrpcAPI.AssetIssueList> getAssetIssueByAccount(byte[] address) {
-        return Single.just(grpcClient.getAssetIssueByAccount(address));
+        return Single.fromCallable(() -> grpcClient.getAssetIssueByAccount(address));
     }
 
     @Override
     public Single<GrpcAPI.TransactionExtention> createTransaction(Contract.TransferContract contract) {
-        return Single.just(grpcClient.createTransaction(contract));
+        return Single.fromCallable(() -> grpcClient.createTransaction(contract));
     }
 
     @Override
     public Single<GrpcAPI.TransactionExtention> createTransaction(Contract.FreezeBalanceContract contract) {
-        return Single.just(grpcClient.createFreezeBalance(contract));
+        return Single.fromCallable(() -> grpcClient.createFreezeBalance(contract));
     }
 
     @Override
     public Single<GrpcAPI.TransactionExtention> createTransaction(Contract.WithdrawBalanceContract contract) {
-        return Single.just(grpcClient.createWithdrawBalance(contract));
+        return Single.fromCallable(() -> grpcClient.createWithdrawBalance(contract));
     }
 
     @Override
     public Single<GrpcAPI.TransactionExtention> createTransaction(Contract.UnfreezeBalanceContract contract) {
-        return Single.just(grpcClient.createUnfreezeBalance(contract));
+        return Single.fromCallable(() -> grpcClient.createUnfreezeBalance(contract));
     }
 
     @Override
     public Single<GrpcAPI.TransactionExtention> createTransaction(Contract.UnfreezeAssetContract contract) {
-        return Single.just(grpcClient.createUnfreezeAsset(contract));
+        return Single.fromCallable(() -> grpcClient.createUnfreezeAsset(contract));
     }
 
     @Override
     public Single<GrpcAPI.TransactionExtention> createTransaction(Contract.VoteWitnessContract contract) {
-        return Single.just(grpcClient.voteWitnessAccount(contract));
+        return Single.fromCallable(() -> grpcClient.voteWitnessAccount(contract));
     }
 
     @Override
     public Single<GrpcAPI.TransactionExtention> createTransaction(Contract.TransferAssetContract contract) {
-        return Single.just(grpcClient.createTransferAssetTransaction(contract));
+        return Single.fromCallable(() -> grpcClient.createTransferAssetTransaction(contract));
     }
 
     @Override
     public Single<GrpcAPI.TransactionExtention> createTransaction(Contract.ParticipateAssetIssueContract contract) {
-        return Single.just(grpcClient.createParticipateAssetIssueTransaction(contract));
+        return Single.fromCallable(() -> grpcClient.createParticipateAssetIssueTransaction(contract));
     }
 
     @Override
     public Single<Boolean> broadcastTransaction(Protocol.Transaction transaction) {
-        return Single.just(grpcClient.broadcastTransaction(transaction));
+        return Single.fromCallable(() -> grpcClient.broadcastTransaction(transaction));
     }
 
     @Override
     public Single<GrpcAPI.BlockExtention> getBlockHeight() {
-        return Single.just(grpcClient.getBlock(-1));
+        return Single.fromCallable(() -> grpcClient.getBlock(-1));
     }
 }

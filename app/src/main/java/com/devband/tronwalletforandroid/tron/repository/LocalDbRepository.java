@@ -45,12 +45,12 @@ public class LocalDbRepository implements AccountRepository {
 
     @Override
     public Maybe<AccountModel> loadAccount(long index) {
-        return Maybe.just(mAccountDao.loadAccountById(index));
+        return Maybe.fromCallable(() -> mAccountDao.loadAccountById(index));
     }
 
     @Override
     public Single<List<AccountModel>> loadAllAccounts() {
-        return Single.just(mAccountDao.loadAllAccounts());
+        return Single.fromCallable(() -> mAccountDao.loadAllAccounts());
     }
 
     @Override

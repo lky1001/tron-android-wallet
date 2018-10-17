@@ -514,7 +514,7 @@ public class Tron {
     }
 
     public Single<Integer> createWallet(String password) {
-        return Single.just(mWalletAppManager.createWallet(password));
+        return Single.fromCallable(() -> mWalletAppManager.createWallet(password));
     }
 
     public void agreeTerms(boolean agree) {

@@ -76,96 +76,96 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void getMyAccountInfo() {
         mTron.getAccount(mTron.getLoginAddress())
-        .map((account -> {
-            List<Frozen> frozenList = new ArrayList<>();
+                .map((account -> {
+                    List<Frozen> frozenList = new ArrayList<>();
 
-            for (Account.FrozenTrx frozen : account.getFrozen().getBalances()) {
-                frozenList.add(Frozen.builder()
-                        .frozenBalance(frozen.getAmount())
-                        .expireTime(frozen.getExpires())
-                        .build());
-            }
-
-            long accountId = mTron.getLoginAccount().getId();
-            List<Asset> assetList = new ArrayList<>();
-
-            for (Account.Balance balance : account.getTokenBalances()) {
-                if (Constants.TRON_SYMBOL.equalsIgnoreCase(balance.getName())) {
-                    continue;
-                }
-
-                if (mCustomPreference.isFavoriteToken(accountId)) {
-                    if (mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, balance.getName()) != null) {
-                        assetList.add(Asset.builder()
-                                .name(balance.getName())
-                                .balance(balance.getBalance())
+                    for (Account.FrozenTrx frozen : account.getFrozen().getBalances()) {
+                        frozenList.add(Frozen.builder()
+                                .frozenBalance(frozen.getAmount())
+                                .expireTime(frozen.getExpires())
                                 .build());
                     }
-                } else {
-                    assetList.add(Asset.builder()
-                            .name(balance.getName())
-                            .balance(balance.getBalance())
-                            .build());
-                }
-            }
 
-            return TronAccount.builder()
-                    .balance(account.getBalance())
-                    .bandwidth(account.getBandwidth().getNetRemaining())
-                    .assetList(assetList)
-                    .frozenList(frozenList)
-                    .build();
-        }))
-        .subscribeOn(mRxJavaSchedulers.getIo())
-        .observeOn(mRxJavaSchedulers.getMainThread())
-        .subscribe(new SingleObserver<TronAccount>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+                    long accountId = mTron.getLoginAccount().getId();
+                    List<Asset> assetList = new ArrayList<>();
 
-            }
+                    for (Account.Balance balance : account.getTokenBalances()) {
+                        if (Constants.TRON_SYMBOL.equalsIgnoreCase(balance.getName())) {
+                            continue;
+                        }
 
-            @Override
-            public void onSuccess(TronAccount account) {
-                mView.displayAccountInfo(account);
-                mAdapterDataModel.clear();
-                mAdapterDataModel.addAll(account.getAssetList());
-            }
+                        if (mCustomPreference.isFavoriteToken(accountId)) {
+                            if (mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, balance.getName()) != null) {
+                                assetList.add(Asset.builder()
+                                        .name(balance.getName())
+                                        .balance(balance.getBalance())
+                                        .build());
+                            }
+                        } else {
+                            assetList.add(Asset.builder()
+                                    .name(balance.getName())
+                                    .balance(balance.getBalance())
+                                    .build());
+                        }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                e.printStackTrace();
-                // todo - error msg
-                if (e instanceof ConnectException) {
-                    // internet error
-                }
+                    return TronAccount.builder()
+                            .balance(account.getBalance())
+                            .bandwidth(account.getBandwidth().getNetRemaining())
+                            .assetList(assetList)
+                            .frozenList(frozenList)
+                            .build();
+                }))
+                .subscribeOn(mRxJavaSchedulers.getIo())
+                .observeOn(mRxJavaSchedulers.getMainThread())
+                .subscribe(new SingleObserver<TronAccount>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-                mView.connectionError();
-            }
-        });
+                    }
+
+                    @Override
+                    public void onSuccess(TronAccount account) {
+                        mView.displayAccountInfo(account);
+                        mAdapterDataModel.clear();
+                        mAdapterDataModel.addAll(account.getAssetList());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        // todo - error msg
+                        if (e instanceof ConnectException) {
+                            // internet error
+                        }
+
+                        mView.connectionError();
+                    }
+                });
     }
 
     public void getTronMarketInfo() {
         mTronNetwork.getCoinInfo(Constants.TRON_COINMARKET_NAME)
-        .subscribeOn(mRxJavaSchedulers.getIo())
-        .observeOn(mRxJavaSchedulers.getMainThread())
-        .subscribe(new SingleObserver<List<CoinMarketCap>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+                .subscribeOn(mRxJavaSchedulers.getIo())
+                .observeOn(mRxJavaSchedulers.getMainThread())
+                .subscribe(new SingleObserver<List<CoinMarketCap>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            }
+                    }
 
-            @Override
-            public void onSuccess(List<CoinMarketCap> coinMarketCaps) {
-                if (coinMarketCaps.size() > 0) {
-                    mView.setTronMarketInfo(coinMarketCaps.get(0));
-                }
-            }
+                    @Override
+                    public void onSuccess(List<CoinMarketCap> coinMarketCaps) {
+                        if (coinMarketCaps.size() > 0) {
+                            mView.setTronMarketInfo(coinMarketCaps.get(0));
+                        }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
 
-            }
-        });
+                    }
+                });
     }
 
     public boolean logout() {
@@ -185,26 +185,28 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void createAccount(@NonNull String nickname, @NonNull String password) {
         mTron.createAccount(nickname, password)
-        .subscribe(new SingleObserver<Integer>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+                .subscribeOn(mRxJavaSchedulers.getIo())
+                .observeOn(mRxJavaSchedulers.getMainThread())
+                .subscribe(new SingleObserver<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            }
+                    }
 
-            @Override
-            public void onSuccess(Integer result) {
-                if (result == Tron.SUCCESS) {
-                    mView.successCreateAccount();
-                } else {
-                    mView.showInvalidPasswordMsg();
-                }
-            }
+                    @Override
+                    public void onSuccess(Integer result) {
+                        if (result == Tron.SUCCESS) {
+                            mView.successCreateAccount();
+                        } else {
+                            mView.showInvalidPasswordMsg();
+                        }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
 
-            }
-        });
+                    }
+                });
     }
 
     public Single<List<AccountModel>> getAccountList() {
@@ -217,32 +219,32 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void importAccount(@NonNull String nickname, @NonNull String privateKey, @NonNull String password) {
         mTron.importAccount(nickname, privateKey, password)
-        .subscribeOn(mRxJavaSchedulers.getIo())
-        .observeOn(mRxJavaSchedulers.getMainThread())
-        .subscribe(new SingleObserver<Integer>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+                .subscribeOn(mRxJavaSchedulers.getIo())
+                .observeOn(mRxJavaSchedulers.getMainThread())
+                .subscribe(new SingleObserver<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            }
+                    }
 
-            @Override
-            public void onSuccess(Integer result) {
-                if (result == Tron.SUCCESS) {
-                    mView.successImportAccount();
-                } else if (result == Tron.ERROR_EXIST_ACCOUNT) {
-                    mView.duplicatedAccount();
-                } else if (result == Tron.ERROR_PRIVATE_KEY) {
-                    mView.failCreateAccount();
-                } else if (result == Tron.ERROR_INVALID_PASSWORD) {
-                    mView.showInvalidPasswordMsg();
-                }
-            }
+                    @Override
+                    public void onSuccess(Integer result) {
+                        if (result == Tron.SUCCESS) {
+                            mView.successImportAccount();
+                        } else if (result == Tron.ERROR_EXIST_ACCOUNT) {
+                            mView.duplicatedAccount();
+                        } else if (result == Tron.ERROR_PRIVATE_KEY) {
+                            mView.failCreateAccount();
+                        } else if (result == Tron.ERROR_INVALID_PASSWORD) {
+                            mView.showInvalidPasswordMsg();
+                        }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                mView.failCreateAccount();
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.failCreateAccount();
+                    }
+                });
     }
 
     public long getLoginAccountIndex() {
