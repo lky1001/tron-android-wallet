@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,7 +28,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
-import com.devband.tronwalletforandroid.tron.AccountManager;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
@@ -89,7 +90,6 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
     private ArrayAdapter<AccountModel> mAccountAdapter;
 
-    private AccountModel mSelectedAccount;
     private long mAccountBalance;
 
     @Override
@@ -129,7 +129,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                         mAccountSpinner.setAdapter(mAccountAdapter);
 
                         for (int i = 0; i < accountModelList.size(); i++) {
-                            int id = mMyAccountPresenter.getLoginAccountIndex();
+                            long id = mMyAccountPresenter.getLoginAccountIndex();
                             if (id == accountModelList.get(i).getId()) {
                                 mAccountSpinner.setSelection(i);
                                 break;
@@ -153,25 +153,63 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     }
 
     @Override
-    public void displayAccountInfo(@NonNull String address, @NonNull TronAccount account) {
+    public void displayAccountInfo(@NonNull String address, @Nullable TronAccount account) {
         if (isFinishing()) {
             return;
         }
-        mAccountBalance = (long) (account.getBalance() / Constants.ONE_TRX);
-
-        if (TextUtils.isEmpty(account.getName())) {
-            mNameText.setText("-");
-        } else {
-            mNameText.setText(account.getName());
-        }
 
         mAddressText.setText(address);
-        mBalanceText.setText(Constants.tronBalanceFormat.format(mAccountBalance) + " " + Constants.TRON_SYMBOL);
-        mBandwidthText.setText(Constants.tronBalanceFormat.format(account.getBandwidth()));
-        mTokensLayout.removeAllViews();
 
-        if (!account.getAssetList().isEmpty()) {
-            for (Asset asset : account.getAssetList()) {
+        if (account != null) {
+            mAccountBalance = (long) (account.getBalance() / Constants.ONE_TRX);
+
+            if (TextUtils.isEmpty(account.getName())) {
+                mNameText.setText("-");
+            } else {
+                mNameText.setText(account.getName());
+            }
+
+            mBalanceText.setText(Constants.tronBalanceFormat.format(mAccountBalance) + " " + Constants.TRON_SYMBOL);
+            mBandwidthText.setText(Constants.tronBalanceFormat.format(account.getBandwidth()));
+            mTokensLayout.removeAllViews();
+
+            if (!account.getAssetList().isEmpty()) {
+                for (Asset asset : account.getAssetList()) {
+                    View v = LayoutInflater.from(MyAccountActivity.this).inflate(R.layout.list_item_my_token, null);
+                    v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                            RecyclerView.LayoutParams.WRAP_CONTENT));
+
+                    TextView tokenNameText = v.findViewById(R.id.token_name_text);
+                    TextView tokenAmountText = v.findViewById(R.id.token_amount_text);
+                    ImageButton favoriteButton = v.findViewById(R.id.token_favorite_button);
+                    favoriteButton.setVisibility(View.VISIBLE);
+                    favoriteButton.setTag(asset);
+
+                    if (mMyAccountPresenter.isFavoriteToken(asset.getName())) {
+                        favoriteButton.setImageResource(R.drawable.ic_star);
+                    } else {
+                        favoriteButton.setImageResource(R.drawable.ic_star_outline);
+                    }
+
+                    favoriteButton.setOnClickListener(view -> {
+                        if (view.getTag() instanceof Asset) {
+                            Asset tag = (Asset) view.getTag();
+
+                            if (mMyAccountPresenter.isFavoriteToken(tag.getName())) {
+                                mMyAccountPresenter.removeFavorite(tag.getName());
+                                favoriteButton.setImageResource(R.drawable.ic_star_outline);
+                            } else {
+                                mMyAccountPresenter.doFavorite(tag.getName());
+                                favoriteButton.setImageResource(R.drawable.ic_star);
+                            }
+                        }
+                    });
+
+                    tokenNameText.setText(asset.getName());
+                    tokenAmountText.setText(Constants.tronBalanceFormat.format(asset.getBalance()));
+                    mTokensLayout.addView(v);
+                }
+            } else {
                 View v = LayoutInflater.from(MyAccountActivity.this).inflate(R.layout.list_item_my_token, null);
                 v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                         RecyclerView.LayoutParams.WRAP_CONTENT));
@@ -179,48 +217,37 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                 TextView tokenNameText = v.findViewById(R.id.token_name_text);
                 TextView tokenAmountText = v.findViewById(R.id.token_amount_text);
 
-                tokenNameText.setText(asset.getName());
-                tokenAmountText.setText(Constants.tronBalanceFormat.format(asset.getBalance()));
+                tokenNameText.setText(getString(R.string.no_tokens));
+                tokenNameText.setGravity(Gravity.CENTER);
+                tokenAmountText.setVisibility(View.GONE);
                 mTokensLayout.addView(v);
             }
-        } else {
-            View v = LayoutInflater.from(MyAccountActivity.this).inflate(R.layout.list_item_my_token, null);
-            v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
-                    RecyclerView.LayoutParams.WRAP_CONTENT));
 
-            TextView tokenNameText = v.findViewById(R.id.token_name_text);
-            TextView tokenAmountText = v.findViewById(R.id.token_amount_text);
+            mFreezeButton.setVisibility(View.VISIBLE);
 
-            tokenNameText.setText(getString(R.string.no_tokens));
-            tokenNameText.setGravity(Gravity.CENTER);
-            tokenAmountText.setVisibility(View.GONE);
-            mTokensLayout.addView(v);
-        }
+            long frozenBalance = 0;
+            long expiredTime = 0;
 
-        mFreezeButton.setVisibility(View.VISIBLE);
-
-        long frozenBalance = 0;
-        long expiredTime = 0;
-
-        if (!account.getFrozenList().isEmpty()) {
-            for (Frozen frozen : account.getFrozenList()) {
-                frozenBalance += frozen.getFrozenBalance();
-                if (frozen.getExpireTime() > expiredTime) {
-                    expiredTime = frozen.getExpireTime();
+            if (!account.getFrozenList().isEmpty()) {
+                for (Frozen frozen : account.getFrozenList()) {
+                    frozenBalance += frozen.getFrozenBalance();
+                    if (frozen.getExpireTime() > expiredTime) {
+                        expiredTime = frozen.getExpireTime();
+                    }
                 }
+
+                mUnFreezeButton.setVisibility(View.VISIBLE);
+            } else {
+                mUnFreezeButton.setVisibility(View.GONE);
             }
 
-            mUnFreezeButton.setVisibility(View.VISIBLE);
-        } else {
-            mUnFreezeButton.setVisibility(View.GONE);
-        }
-
-        mTronPowerText.setText(Constants.tronBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
-        mFrozenTrxBalanceText.setText(Constants.tronBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
-        if (expiredTime > 0) {
-            mFrozenTrxExpiredText.setText(Constants.sdf.format(new Date(expiredTime)));
-        } else {
-            mFrozenTrxExpiredText.setText("-");
+            mTronPowerText.setText(Constants.tronBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
+            mFrozenTrxBalanceText.setText(Constants.tronBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
+            if (expiredTime > 0) {
+                mFrozenTrxExpiredText.setText(Constants.sdf.format(new Date(expiredTime)));
+            } else {
+                mFrozenTrxExpiredText.setText("-");
+            }
         }
 
         hideDialog();
@@ -264,6 +291,12 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
         }
     }
 
+    @Override
+    public void showInvalidPasswordMsg() {
+        hideDialog();
+        Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password), Toast.LENGTH_SHORT).show();
+    }
+
     @OnClick(R.id.btn_change_password)
     public void onChangePasswordClick() {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
@@ -295,7 +328,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                             return;
                         }
 
-                        if (!AccountManager.passwordValid(newPassword)) {
+                        if (!WalletAppManager.passwordValid(newPassword)) {
                             Toast.makeText(dialog.getContext(), R.string.invalid_new_password, Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -331,7 +364,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                         String password = input.toString();
 
                         if (!TextUtils.isEmpty(password) && mMyAccountPresenter.matchPassword(password)) {
-                            String privateKey = mMyAccountPresenter.getLoginPrivateKey();
+                            String privateKey = mMyAccountPresenter.getLoginPrivateKey(password);
 
                             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                             sharingIntent.setType("text/plain");
@@ -370,48 +403,50 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
         MaterialDialog dialog = builder.build();
 
+        Button maxButton = (Button) dialog.getCustomView().findViewById(R.id.max_button);
         Button freezeButton = (Button) dialog.getCustomView().findViewById(R.id.btn_freeze);
         CheckBox agreeFreezeCheckBox = (CheckBox) dialog.getCustomView().findViewById(R.id.agree_freeze_balance);
         EditText inputAmount = (EditText) dialog.getCustomView().findViewById(R.id.input_amount);
         EditText inputPassword = (EditText) dialog.getCustomView().findViewById(R.id.input_password);
 
-        freezeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // check freeze balance
-                long freezeBalance = 0;
-                try {
-                    freezeBalance = Long.parseLong(inputAmount.getText().toString());
-                } catch (NumberFormatException e) {
-                    Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_amount),
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        maxButton.setOnClickListener(view -> {
+            inputAmount.setText(String.valueOf(mAccountBalance));
+        });
 
-                if (freezeBalance > mAccountBalance) {
-                    Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_amount),
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                String password = inputPassword.getText().toString();
-                if (TextUtils.isEmpty(password) || !mMyAccountPresenter.matchPassword(password)) {
-                    Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password),
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                boolean agree = agreeFreezeCheckBox.isChecked();
-
-                if (!agree) {
-                    Toast.makeText(MyAccountActivity.this, getString(R.string.need_all_agree),
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                dialog.dismiss();
-                mMyAccountPresenter.freezeBalance((long) (freezeBalance * Constants.ONE_TRX));
+        freezeButton.setOnClickListener(view -> {
+            // check freeze balance
+            long freezeBalance = 0;
+            try {
+                freezeBalance = Long.parseLong(inputAmount.getText().toString());
+            } catch (NumberFormatException e) {
+                Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_amount),
+                        Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            if (freezeBalance > mAccountBalance) {
+                Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_amount),
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String password = inputPassword.getText().toString();
+            if (TextUtils.isEmpty(password) || !mMyAccountPresenter.matchPassword(password)) {
+                Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password),
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            boolean agree = agreeFreezeCheckBox.isChecked();
+
+            if (!agree) {
+                Toast.makeText(MyAccountActivity.this, getString(R.string.need_all_agree),
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            dialog.dismiss();
+            mMyAccountPresenter.freezeBalance(password, (long) (freezeBalance * Constants.ONE_TRX));
         });
 
         dialog.show();
@@ -432,7 +467,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                         String password = input.toString();
 
                         if (!TextUtils.isEmpty(password) && mMyAccountPresenter.matchPassword(password)) {
-                            mMyAccountPresenter.unfreezeBalance();
+                            mMyAccountPresenter.unfreezeBalance(password);
                         } else {
                             Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password),
                                     Toast.LENGTH_SHORT).show();

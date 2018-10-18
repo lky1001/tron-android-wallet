@@ -14,14 +14,11 @@ import io.reactivex.disposables.Disposable;
 public class ImportPrivateKeyPresenter extends BasePresenter<ImportPrivateKeyView> {
 
     private Tron mTron;
-    private WalletAppManager mWalletAppManager;
     private RxJavaSchedulers mRxJavaSchedulers;
 
-    public ImportPrivateKeyPresenter(ImportPrivateKeyView view, Tron tron, WalletAppManager walletAppManager,
-            RxJavaSchedulers rxJavaSchedulers) {
+    public ImportPrivateKeyPresenter(ImportPrivateKeyView view, Tron tron, RxJavaSchedulers rxJavaSchedulers) {
         super(view);
         this.mTron = tron;
-        this.mWalletAppManager = walletAppManager;
         this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
@@ -46,52 +43,52 @@ public class ImportPrivateKeyPresenter extends BasePresenter<ImportPrivateKeyVie
     }
 
     public void createWallet(String privateKey, String password) {
-        Single.fromCallable(() -> {
-            int result = mWalletAppManager.createWallet(password);
+        mTron.createWallet(password)
+                .flatMap(result -> {
+                    if (result == WalletAppManager.SUCCESS) {
+                        return mTron.importAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey, password);
+                    }
 
-            if (result == WalletAppManager.SUCCESS) {
-                result = mTron.registerAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey, password).blockingGet();
-                if (result != Tron.SUCCESS) {
-                    return result;
-                }
+                    return Single.just(result);
+                })
+                .map(result -> {
+                    if (result != Tron.SUCCESS) {
+                        return result;
+                    }
 
-                result = mTron.login(password);
+                    result = mTron.login(password);
 
-                if (result != Tron.SUCCESS) {
-                    return result;
-                }
+                    if (result != Tron.SUCCESS) {
+                        return result;
+                    }
 
-                mWalletAppManager.agreeTerms(true);
-                return Tron.SUCCESS;
-            } else if (result == WalletAppManager.ERROR) {
-                //mView.passwordError();
-            }
-            return result;
-        })
-        .subscribeOn(mRxJavaSchedulers.getIo())
-        .observeOn(mRxJavaSchedulers.getMainThread())
-        .subscribe(new SingleObserver<Integer>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+                    mTron.agreeTerms(true);
+                    return Tron.SUCCESS;
+                })
+                .subscribeOn(mRxJavaSchedulers.getIo())
+                .observeOn(mRxJavaSchedulers.getMainThread())
+                .subscribe(new SingleObserver<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            }
+                    }
 
-            @Override
-            public void onSuccess(Integer result) {
-                if (result == Tron.ERROR_INVALID_PASSWORD) {
-                    mView.passwordError();
-                } else if (result == Tron.ERROR) {
-                    mView.passwordError();
-                } else {
-                    mView.createdWallet();
-                }
-            }
+                    @Override
+                    public void onSuccess(Integer result) {
+                        if (result == Tron.ERROR_INVALID_PASSWORD) {
+                            mView.passwordError();
+                        } else if (result == Tron.ERROR) {
+                            mView.passwordError();
+                        } else {
+                            mView.createdWallet();
+                        }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.logException(e);
-                mView.registerWalletError();
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.logException(e);
+                        mView.registerWalletError();
+                    }
+                });
     }
 }

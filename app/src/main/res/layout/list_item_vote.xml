@@ -72,11 +72,53 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/representative_realtime_votes_text"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/realtime_votes_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:textSize="12sp"
+                        tools:text="9632,756,158" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:textSize="12sp"
+                        android:text="(" />
+
+                    <TextView
+                        android:id="@+id/realtime_changed_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textColor="@color/default_text_color"
+                        tools:text="-2,738,798" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:text="@string/representative_total_votes_text" />
+                        android:text=")" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/representative_total_votes_text"
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/total_votes_text"
@@ -89,7 +131,7 @@
 
                 <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
                     android:id="@+id/progress_votes"
-                    android:layout_width="200dp"
+                    android:layout_width="230dp"
                     android:layout_height="10dp"
                     android:layout_marginTop="5dp"
                     app:rcRadius="3dp"

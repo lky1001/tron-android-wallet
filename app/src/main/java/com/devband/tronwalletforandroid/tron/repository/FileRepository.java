@@ -12,7 +12,7 @@ import io.reactivex.Single;
 public class FileRepository implements AccountRepository {
 
     @Override
-    public Single<Boolean> storeAccount(@NonNull AccountModel accountModel) {
+    public Single<Long> insertAccount(@NonNull AccountModel accountModel) {
         return null;
     }
 
@@ -22,7 +22,7 @@ public class FileRepository implements AccountRepository {
     }
 
     @Override
-    public Maybe<AccountModel> loadAccount(int index) {
+    public Maybe<AccountModel> loadAccount(long index) {
         return null;
     }
 
@@ -32,12 +32,12 @@ public class FileRepository implements AccountRepository {
     }
 
     @Override
-    public Single<Integer> countAccount() {
+    public Integer countAccount() {
         return null;
     }
 
     @Override
-    public Maybe<AccountModel> loadByAccountKey(String accountKey) {
+    public AccountModel loadByAccountKey(String accountKey) {
         return null;
     }
 }

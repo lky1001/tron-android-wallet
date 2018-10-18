@@ -1,6 +1,5 @@
 package com.devband.tronwalletforandroid.ui.main.adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,11 +23,8 @@ public class MyTokenListAdapter extends RecyclerView.Adapter<MyTokenListAdapter.
 
     private List<Asset> mList;
 
-    private Context mContext;
-
-    public MyTokenListAdapter(Context mContext) {
+    public MyTokenListAdapter() {
         this.mList = new ArrayList<>();
-        this.mContext = mContext;
     }
 
     @NonNull

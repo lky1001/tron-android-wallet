@@ -17,17 +17,18 @@ import android.view.MenuItem;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.tron.WalletAppManager;
-import com.devband.tronwalletforandroid.ui.intro.IntroActivity;
 
 import java.lang.reflect.Field;
 import java.util.List;
 
 import dagger.android.support.DaggerAppCompatActivity;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 public class CommonActivity extends DaggerAppCompatActivity {
 
     protected MaterialDialog mMaterialDialog;
+    private CompositeDisposable mAllDisposables = new CompositeDisposable();
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -55,9 +56,14 @@ public class CommonActivity extends DaggerAppCompatActivity {
         return true;
     }
 
+    protected void addDisposable(Disposable disposable) {
+        mAllDisposables.add(disposable);
+    }
+
     @Override
     protected void onDestroy() {
         hideDialog();
+        mAllDisposables.clear();
         super.onDestroy();
     }
 
@@ -134,7 +140,7 @@ public class CommonActivity extends DaggerAppCompatActivity {
             shiftingMode.setAccessible(false);
             for (int i = 0; i < menuView.getChildCount(); i++) {
                 BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
-                item.setShiftingMode(false);
+                item.setShifting(false);
                 // set once again checked value, so view will be updated
                 item.setChecked(item.getItemData().isChecked());
             }

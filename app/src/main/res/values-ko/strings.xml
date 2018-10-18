@@ -146,6 +146,7 @@
     <string name="total_votes_text">총 투표</string>
     <string name="representative_your_vote_text">내 투표 :</string>
     <string name="representative_total_votes_text">총 투표 :</string>
+    <string name="representative_realtime_votes_text">실시간 투표 :</string>
     <string name="votes_remaining_text">투표 가능</string>
     <string name="super_representatives_text">대표자</string>
     <string name="super_representative_candidates_text">대표자 후보</string>
@@ -308,4 +309,11 @@
     <string name="max_button_text">최대</string>
     <string name="warning_vote_least_one">* 최소 1표 이상은 투표 해야 합니다.</string>
     <string name="warning_cancel_other_votes">* 다른 모든 투표는 취소됩니다.</string>
+    <string name="create_account_password_hint">비밀번호</string>
+    <string name="change_account_password_hint">비밀번호</string>
+    <string name="title_change_account">계정 변경</string>
+    <string name="required_private_key">프라이빗키를 입력하세요.</string>
+    <string name="required_password">비밀번호를 입력하세요.</string>
+    <string name="preparing_btn_text">준비중</string>
+    <string name="favorites_text">즐겨찾기만 보기</string>
 </resources>

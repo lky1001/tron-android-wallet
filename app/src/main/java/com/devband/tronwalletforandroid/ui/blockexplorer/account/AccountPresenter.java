@@ -1,7 +1,6 @@
 package com.devband.tronwalletforandroid.ui.blockexplorer.account;
 
 import com.devband.tronlib.TronNetwork;
-import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.dto.TronAccount;
 import com.devband.tronlib.dto.TronAccounts;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
@@ -9,6 +8,7 @@ import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
+import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 
@@ -51,19 +51,16 @@ public class AccountPresenter extends BasePresenter<AccountView> {
     public void getTronAccounts(long startIndex, int pageSize) {
         mView.showLoadingDialog();
 
-        mTronNetwork
-                .getAccounts(startIndex, pageSize, "-balance")
-                .map(tronAccounts -> {
-                    CoinMarketCap coinMarketCap = mTronNetwork.getCoinInfo(Constants.TRON_COINMARKET_NAME).blockingGet().get(0);
-
+        Single.zip(mTronNetwork.getAccounts(startIndex, pageSize, "-balance"), mTronNetwork.getCoinInfo(Constants.TRON_COINMARKET_NAME),
+                ((tronAccounts, coinMarketCaps) -> {
                     for (TronAccount tronAccount : tronAccounts.getData()) {
-                        tronAccount.setTotalSupply((long) Double.parseDouble(coinMarketCap.getTotalSupply()));
-                        tronAccount.setAvailableSypply((long) Double.parseDouble(coinMarketCap.getAvailableSupply()));
+                        tronAccount.setTotalSupply((long) Double.parseDouble(coinMarketCaps.get(0).getTotalSupply()));
+                        tronAccount.setAvailableSypply((long) Double.parseDouble(coinMarketCaps.get(0).getAvailableSupply()));
                         tronAccount.setBalancePercent(((double) tronAccount.getBalance() / Constants.ONE_TRX / (double) tronAccount.getAvailableSypply()) * 100f);
                     }
 
                     return tronAccounts;
-                })
+                }))
                 .subscribeOn(mRxJavaSchedulers.getIo())
                 .observeOn(mRxJavaSchedulers.getMainThread())
                 .subscribe(new SingleObserver<TronAccounts>() {

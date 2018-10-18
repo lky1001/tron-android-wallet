@@ -146,6 +146,7 @@
     <string name="total_votes_text">Total votes</string>
     <string name="representative_your_vote_text">Your vote :</string>
     <string name="representative_total_votes_text">Total votes :</string>
+    <string name="representative_realtime_votes_text">Realtime :</string>
     <string name="votes_remaining_text">Votes Remaining</string>
     <string name="super_representatives_text">Super Representatives</string>
     <string name="super_representative_candidates_text">Super Representative Candidates</string>
@@ -276,6 +277,7 @@
     <string name="thanks_msg">Thanks for your donation!</string>
     <string name="donation_title_text">Wow!</string>
     <string name="send_token_failed_title_text">Warning</string>
+    <string name="participate_token_msg">Please input amount.</string>
     <string name="token_price_text">Price :</string>
     <string name="participate_confirm_text">I confirm to buy tokens</string>
     <string name="your_trx_text">Your trx :</string>
@@ -307,4 +309,11 @@
     <string name="max_button_text">Max</string>
     <string name="warning_vote_least_one">* You must vote at least one vote.</string>
     <string name="warning_cancel_other_votes">* All other votes will be canceled.</string>
+    <string name="create_account_password_hint">Password</string>
+    <string name="change_account_password_hint">Password</string>
+    <string name="title_change_account">Change Account</string>
+    <string name="required_private_key">Private key is required.</string>
+    <string name="required_password">Password is required.</string>
+    <string name="preparing_btn_text">PREPARING</string>
+    <string name="favorites_text">Only favorites</string>
 </resources>

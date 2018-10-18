@@ -22,6 +22,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -32,9 +35,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
+import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
-import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.blockexplorer.BlockExplorerActivity;
@@ -111,6 +114,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @BindView(R.id.my_token_listview)
     RecyclerView mMyTokenListView;
 
+    @BindView(R.id.check_favorite_tokens)
+    CheckBox mShowOnlyFavoritesCheckBox;
+
     Spinner mAccountSpinner;
 
     TextView mNavHeaderText;
@@ -153,7 +159,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         mMyTokenListView.addItemDecoration(new DividerItemDecoration(0));
         mMyTokenListView.setNestedScrollingEnabled(false);
 
-        mMyTokenListAdapter = new MyTokenListAdapter(MainActivity.this);
+        mMyTokenListAdapter = new MyTokenListAdapter();
         mMyTokenListView.setAdapter(mMyTokenListAdapter);
         mAdapterView = mMyTokenListAdapter;
 
@@ -191,6 +197,13 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                     isShow = false;
                 }
             }
+        });
+
+        mShowOnlyFavoritesCheckBox.setOnCheckedChangeListener((view, isChecked) -> {
+            mMainPresenter.setOnlyFavorites(isChecked);
+
+            mShowOnlyFavoritesCheckBox.setEnabled(false);
+            checkLoginState();
         });
 
         initAccountList(false);
@@ -309,7 +322,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
                 @Override
                 public void onSuccess(List<AccountModel> accountModelList) {
-                    int id = mMainPresenter.getLoginAccountIndex();
+                    long id = mMainPresenter.getLoginAccountIndex();
 
                     int size = accountModelList.size();
 
@@ -331,6 +344,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
                 }
             });
+
+            mShowOnlyFavoritesCheckBox.setChecked(mMainPresenter.getIsFavoritesTokens());
         } else {
             finishActivity();
             startActivity(LoginActivity.class);
@@ -417,33 +432,60 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     }
 
     private void createAccount() {
-        showProgressDialog(null, getString(R.string.loading_msg));
-        mMainPresenter.createAccount(Constants.PREFIX_ACCOUNT_NAME);
-    }
-
-    private void importAccount() {
         new MaterialDialog.Builder(this)
-                .title(R.string.title_import_account)
+                .title(R.string.title_create_account)
                 .titleColorRes(R.color.colorAccent)
                 .contentColorRes(R.color.colorAccent)
                 .backgroundColorRes(android.R.color.white)
                 .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
-                .input(getString(R.string.import_account_hint), "", new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        dialog.dismiss();
-                        String privateKey = input.toString();
-
-                        if (!TextUtils.isEmpty(privateKey)) {
-                            mMainPresenter.importAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey);
-                        }
-                    }
+                .input(getString(R.string.create_account_password_hint), "", (dialog, input) -> {
+                    showProgressDialog(null, getString(R.string.loading_msg));
+                    mMainPresenter.createAccount(Constants.PREFIX_ACCOUNT_NAME, input.toString());
                 }).show();
+    }
+
+    private void importAccount() {
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                .title(R.string.title_import_account)
+                .titleColorRes(R.color.colorAccent)
+                .contentColorRes(R.color.colorAccent)
+                .backgroundColorRes(android.R.color.white)
+                .customView(R.layout.dialog_import_private_key, false);
+
+        MaterialDialog dialog = builder.build();
+
+        EditText inputPrivateKey = (EditText) dialog.getCustomView().findViewById(R.id.input_private_key);
+        EditText inputPassword = (EditText) dialog.getCustomView().findViewById(R.id.input_password);
+        Button importButton = (Button) dialog.getCustomView().findViewById(R.id.btn_import_private_key);
+
+        importButton.setOnClickListener(view -> {
+            String privateKey = inputPrivateKey.getText().toString();
+            String password = inputPassword.getText().toString();
+
+            if (TextUtils.isEmpty(privateKey)) {
+                Toast.makeText(this, R.string.required_private_key, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(password)) {
+                Toast.makeText(this, R.string.required_password, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!TextUtils.isEmpty(privateKey) && !TextUtils.isEmpty(password)) {
+                mMainPresenter.importAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey, password);
+            }
+
+            dialog.dismiss();
+        });
+
+        dialog.show();
     }
 
     @Override
     public void displayAccountInfo(@NonNull TronAccount account) {
         mLoginTronAccount = account;
+        mShowOnlyFavoritesCheckBox.setEnabled(true);
 
         if (mLoginTronAccount.getAssetList().isEmpty()) {
             mNoTokenLayout.setVisibility(View.VISIBLE);
@@ -535,6 +577,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     public void connectionError() {
         mLoadingAccountInfo = false;
+        mShowOnlyFavoritesCheckBox.setEnabled(true);
         Toast.makeText(MainActivity.this, getString(R.string.connection_error_msg),
                 Toast.LENGTH_SHORT).show();
     }
@@ -625,9 +668,12 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         @Override
         public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int pos, long id) {
             AccountModel accountModel = mAccountAdapter.getItem(pos);
+
             mMainPresenter.changeLoginAccount(accountModel);
             mMainTitleText.setText(accountModel.getName());
+
             mDrawer.closeDrawers();
+
             checkLoginState();
         }
 

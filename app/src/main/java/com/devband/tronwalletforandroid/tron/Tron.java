@@ -1,6 +1,7 @@
 package com.devband.tronwalletforandroid.tron;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -12,6 +13,7 @@ import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.exception.InvalidAddressException;
 import com.devband.tronwalletforandroid.tron.exception.InvalidPasswordException;
+import com.google.protobuf.ByteString;
 
 import org.tron.api.GrpcAPI;
 import org.tron.common.utils.ByteArray;
@@ -52,12 +54,17 @@ public class Tron {
 
     private AccountManager mAccountManager;
 
+    private WalletAppManager mWalletAppManager;
+
     private boolean mFailConnectNode;
 
-    public Tron(Context context, TronNetwork tronNetwork, CustomPreference customPreference) {
+    public Tron(Context context, TronNetwork tronNetwork, CustomPreference customPreference, AccountManager accountManager,
+            WalletAppManager walletAppManager) {
         this.mContext = context;
         this.mTronNetwork = tronNetwork;
         this.mCustomPreference = customPreference;
+        this.mAccountManager = accountManager;
+        this.mWalletAppManager = walletAppManager;
         init();
     }
 
@@ -71,8 +78,6 @@ public class Tron {
         mFullNodeList = Arrays.asList(mContext.getResources().getStringArray(R.array.fullnode_ip_list));
         mSolidityNodeList = Arrays.asList(mContext.getResources().getStringArray(R.array.solidity_ip_list));
         initTronNode();
-
-        mAccountManager = new AccountManager(AccountManager.PERSISTENT_LOCAL_DB, mContext);
     }
 
     public void initTronNode() {
@@ -105,97 +110,70 @@ public class Tron {
                 });
     }
 
-    public Single<Integer> registerAccount(@NonNull String nickname, @NonNull String privateKey, @NonNull String password) {
+    public Single<Integer> createAccount(@NonNull String nickname, @NonNull String password) {
         return Single.fromCallable(() -> {
-            if (!AccountManager.passwordValid(password)) {
+            if (!mWalletAppManager.checkPassword(password)) {
                 return ERROR_INVALID_PASSWORD;
-            }
-
-            if (mAccountManager == null) {
-                mAccountManager = new AccountManager(true, mContext);
             }
 
             return SUCCESS;
         })
         .flatMap(result -> {
             if (result == SUCCESS) {
-                return generateDefaultAccountName(nickname);
+                String accountNickname = generateDefaultAccountName(nickname);
+
+                byte[] aesKey = WalletAppManager.getEncKey(password);
+                return mAccountManager.createAccount(accountNickname, aesKey);
             } else {
-                return null;
+                return Single.just(ERROR_INVALID_PASSWORD);
             }
-        })
-        .flatMap(name -> {
-            if (name != null) {
-                return mAccountManager.importAccount(name, privateKey, password, false);
-            }
-
-            return Single.just(ERROR_INVALID_PASSWORD);
         });
-
     }
 
-    public Single<Integer> registerAccount(@NonNull String nickname, @NonNull String password) {
+    public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey, @NonNull String password) {
         return Single.fromCallable(() -> {
-            if (!AccountManager.passwordValid(password)) {
+            if (!mWalletAppManager.checkPassword(password)) {
                 return ERROR_INVALID_PASSWORD;
-            }
-
-            if (mAccountManager == null) {
-                mAccountManager = new AccountManager(true, mContext);
             }
 
             return SUCCESS;
         })
         .flatMap(result -> {
             if (result == SUCCESS) {
-                return generateDefaultAccountName(nickname);
-            } else {
-                return null;
-            }
-        })
-        .flatMap(name -> {
-            if (name != null) {
-                return mAccountManager.genAccount(name, password);
-            }
+                String accountNickname = generateDefaultAccountName(nickname);
 
-            return Single.just(ERROR_INVALID_PASSWORD);
+                byte[] aesKey = WalletAppManager.getEncKey(password);
+                return mAccountManager.importAccount(accountNickname, privateKey, aesKey, true);
+            } else {
+                return Single.just(ERROR_INVALID_PASSWORD);
+            }
         });
     }
 
-    public Single<Integer> importAccount(@NonNull String nickname, @NonNull String privateKey) {
-        return generateDefaultAccountName(nickname)
-            .flatMap(name -> {
-                return mAccountManager.importAccount(name, privateKey, null, true);
-            });
+    public void loginWithFingerPrint() {
+        mWalletAppManager.loginWithFingerPrint();
+        mAccountManager.loadAccountByRepository(null, mCustomPreference.getLastSelectedAccountId());
     }
 
-    public int login(String password) {
-        if (!AccountManager.passwordValid(password)) {
+    public int login(@NonNull String password) {
+        int result = mWalletAppManager.login(password);
+
+        if (result != WalletAppManager.SUCCESS) {
             return ERROR_INVALID_PASSWORD;
         }
 
-        if (mAccountManager == null) {
-            mAccountManager = new AccountManager(AccountManager.PERSISTENT_LOCAL_DB, mContext);
-        }
-
-        if (!mAccountManager.login(password)) {
-            return ERROR_INVALID_PASSWORD;
-        }
+        mAccountManager.loadAccountByRepository(null, mCustomPreference.getLastSelectedAccountId());
 
         return SUCCESS;
     }
 
     public boolean isLogin() {
-        if (mAccountManager == null) {
-            return false;
-        }
-
-        return mAccountManager.isLoginState();
+        return mWalletAppManager.isLoginState();
     }
 
     @Nullable
     public String getLoginAddress() {
-        if (!checkAccountLogin()) {
+        if (!mWalletAppManager.isLoginState()) {
             return null;
         }
 
@@ -203,20 +181,27 @@ public class Tron {
     }
 
     @Nullable
-    public String getLoginPrivateKey() {
-        if (!checkAccountLogin()) {
+    public String getLoginPrivateKey(@NonNull String password) {
+        if (!mWalletAppManager.checkPassword(password)) {
             return null;
         }
 
-        return mAccountManager.getLoginPrivateKey();
-    }
+        byte[] encKey = WalletAppManager.getEncKey(password);
 
-    private boolean checkAccountLogin() {
-        if (mAccountManager == null || !mAccountManager.isLoginState()) {
-            return false;
+        if (encKey == null) {
+            return null;
         }
 
-        return true;
+        return getLoginPrivateKey(encKey);
+    }
+
+    @Nullable
+    public String getLoginPrivateKey(@NonNull byte[] aesKey) {
+        if (!mWalletAppManager.isLoginState()) {
+            return null;
+        }
+
+        return mAccountManager.getLoginPrivateKey(aesKey);
     }
 
     public Single<Account> getAccount(@NonNull String address) {
@@ -257,61 +242,6 @@ public class Tron {
         }
     }
 
-    public Single<Boolean> sendCoin(@NonNull String password, @NonNull String toAddress, long amount) {
-        return Single.fromCallable(() -> {
-            byte[] toAddressBytes = AccountManager.decodeFromBase58Check(toAddress);
-
-            if (toAddressBytes == null) {
-                throw new InvalidAddressException();
-            }
-
-            if (!mAccountManager.checkPassWord(password)) {
-                throw new InvalidPasswordException();
-            }
-
-            Contract.TransferContract contract = mAccountManager.createTransferContract(toAddressBytes, amount);
-
-            return mTronManager.createTransaction(contract);
-        })
-        .flatMap(transactionSingle -> transactionSingle)
-        .flatMap(transaction -> {
-            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
-                throw new RuntimeException();
-            }
-
-            // sign transaction
-            transaction = mAccountManager.signTransaction(transaction);
-            return mTronManager.broadcastTransaction(transaction);
-        });
-    }
-
-    public Single<Boolean> transferAsset(String password, String toAddress, String assetName, long amount) {
-        return Single.fromCallable(() -> {
-            byte[] toAddressBytes = AccountManager.decodeFromBase58Check(toAddress);
-
-            if (toAddressBytes == null) {
-                throw new InvalidAddressException();
-            }
-
-            if (!mAccountManager.checkPassWord(password)) {
-                throw new InvalidPasswordException();
-            }
-
-            Contract.TransferAssetContract contract = mAccountManager.createTransferAssetTransaction(toAddressBytes, assetName.getBytes(), amount);
-
-            return mTronManager.createTransferAssetTransaction(contract);
-        })
-        .flatMap(transactionSingle -> transactionSingle)
-        .flatMap(transaction -> {
-            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
-                throw new RuntimeException();
-            }
-
-            // sign transaction
-            transaction = mAccountManager.signTransaction(transaction);
-            return mTronManager.broadcastTransaction(transaction);
-        });
-    }
 
     public void shutdown() {
         try {
@@ -319,18 +249,6 @@ public class Tron {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    public boolean validPassword(String password) {
-        if (mAccountManager == null) {
-            return false;
-        }
-
-        if (!AccountManager.passwordValid(password)) {
-            return false;
-        }
-
-        return mAccountManager.checkPassWord(password);
     }
 
     public void logout() {
@@ -342,14 +260,7 @@ public class Tron {
     }
 
     public Single<Boolean> hasAccount() {
-        return mAccountManager.getAccountCount()
-                .flatMap(count -> {
-                    if (count > 0) {
-                        return Single.just(true);
-                    } else {
-                        return Single.just(false);
-                    }
-                });
+        return Single.fromCallable(() -> mAccountManager.getAccountCount() > 0);
     }
 
     @Nullable
@@ -361,33 +272,18 @@ public class Tron {
         return mAccountManager.changeLoginAccountName(accountName);
     }
 
-    public Single<Boolean> createAccount(@NonNull String nickname) {
-        return generateDefaultAccountName(nickname)
-                .flatMap(name -> {
-                    return mAccountManager.createAccount(name);
-                })
-                .flatMap(result -> {
-                    if (result == Tron.SUCCESS) {
-                        return Single.just(true);
-                    } else {
-                        return Single.just(false);
-                    }
-                });
-    }
-
     public Single<List<AccountModel>> getAccountList() {
         return mAccountManager.getAccountList();
     }
 
-    public void changeLoginAccount(@NonNull AccountModel accountModel) {
+    public boolean changeLoginAccount(@NonNull AccountModel accountModel) {
         mAccountManager.changeLoginAccount(accountModel);
+        mCustomPreference.setLastSelectedAccountId(accountModel.getId());
+        return true;
     }
 
-    private Single<String> generateDefaultAccountName(String prefix) {
-        return mAccountManager.getAccountCount()
-                .flatMap(cnt -> {
-                    return Single.just(prefix + (++cnt));
-                });
+    private String generateDefaultAccountName(String prefix) {
+        return prefix + (mAccountManager.getAccountCount() + 1);
     }
 
     public Single<GrpcAPI.WitnessList> getWitnessList() {
@@ -398,82 +294,238 @@ public class Tron {
         return mTronManager.listNodes();
     }
 
-    public Single<Boolean> participateTokens(String tokenName, String issuerAddress, long amount) {
+    public Single<Boolean> participateTokens(@Nullable String password, String tokenName, String issuerAddress, long amount) {
+        if (!mWalletAppManager.checkPassword(password)) {
+            return Single.just(false);
+        }
+
         return Single.fromCallable(() -> {
             byte[] toAddressBytes = AccountManager.decodeFromBase58Check(issuerAddress);
+            byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
 
-            Contract.ParticipateAssetIssueContract participateAssetIssueContract = mAccountManager
-                    .participateAssetIssueContract(toAddressBytes, tokenName.getBytes(), amount);
+            ByteString bsTo = ByteString.copyFrom(toAddressBytes);
+            ByteString bsName = ByteString.copyFrom(tokenName.getBytes());
+            ByteString bsOwner = ByteString.copyFrom(ownerAddressBytes);
 
-            return mTronManager.createParticipateAssetIssueTransaction(participateAssetIssueContract);
+            return Contract.ParticipateAssetIssueContract
+                    .newBuilder()
+                    .setToAddress(bsTo)
+                    .setAssetName(bsName)
+                    .setOwnerAddress(bsOwner)
+                    .setAmount(amount)
+                    .build();
         })
-        .flatMap(transactionSingle -> transactionSingle)
-        .flatMap(transaction -> {
-            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+        .flatMap(contract -> mTronManager.createTransaction(contract))
+        .flatMap(transactionExtention-> {
+            if (!transactionExtention.getResult().getResult()) {
                 throw new RuntimeException();
             }
 
-            // sign transaction
-            transaction = mAccountManager.signTransaction(transaction);
+            if (transactionExtention.getTransaction().getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            Protocol.Transaction transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transactionExtention.getTransaction());
             return mTronManager.broadcastTransaction(transaction);
         });
     }
 
-    public Single<Boolean> voteWitness(Map<String, String> witness) {
-        return Single.fromCallable(() -> {
-            Contract.VoteWitnessContract voteWitnessContract = mAccountManager.createVoteWitnessContract(witness);
+    public Single<Boolean> voteWitness(@Nullable String password, Map<String, String> witness) {
+        if (!mWalletAppManager.checkPassword(password)) {
+            return Single.just(false);
+        }
 
-            return mTronManager.createTransaction(voteWitnessContract);
+        return Single.fromCallable(() -> {
+            byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
+
+            Contract.VoteWitnessContract.Builder builder = Contract.VoteWitnessContract.newBuilder();
+            builder.setOwnerAddress(ByteString.copyFrom(ownerAddressBytes));
+
+            for (String addressBase58 : witness.keySet()) {
+                String value = witness.get(addressBase58);
+                long count = Long.parseLong(value);
+                Contract.VoteWitnessContract.Vote.Builder voteBuilder = Contract.VoteWitnessContract.Vote
+                        .newBuilder();
+                byte[] address = AccountManager.decodeFromBase58Check(addressBase58);
+                if (address == null) {
+                    continue;
+                }
+                voteBuilder.setVoteAddress(ByteString.copyFrom(address));
+                voteBuilder.setVoteCount(count);
+                builder.addVotes(voteBuilder.build());
+            }
+
+            return builder.build();
         })
-        .flatMap(transactionSingle -> transactionSingle)
-        .flatMap(transaction -> {
-            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+        .flatMap(contract -> mTronManager.createTransaction(contract))
+        .flatMap(transactionExtention-> {
+            if (!transactionExtention.getResult().getResult()) {
                 throw new RuntimeException();
             }
 
-            // sign transaction
-            transaction = mAccountManager.signTransaction(transaction);
+            if (transactionExtention.getTransaction().getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            Protocol.Transaction transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transactionExtention.getTransaction());
             return mTronManager.broadcastTransaction(transaction);
         });
     }
 
-    public Single<Boolean> freezeBalance(long freezeBalance, long freezeDuration) {
+    public Single<Boolean> freezeBalance(@Nullable String password, long freezeBalance, long freezeDuration) {
         return Single.fromCallable(() -> {
-            Contract.FreezeBalanceContract freezeBalanceContract = mAccountManager.createFreezeBalanceContract(freezeBalance, freezeDuration);
+            if (!mWalletAppManager.checkPassword(password)) {
+                throw new InvalidPasswordException();
+            }
 
-            return mTronManager.createTransaction(freezeBalanceContract);
+            byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
+            ByteString byteAddress = ByteString.copyFrom(ownerAddressBytes);
+
+            return Contract.FreezeBalanceContract.newBuilder()
+                    .setFrozenBalance(freezeBalance)
+                    .setFrozenDuration(freezeDuration)
+                    .setOwnerAddress(byteAddress)
+                    .build();
         })
-        .flatMap(transactionSingle -> transactionSingle)
-        .flatMap(transaction -> {
-            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+        .flatMap(contract -> mTronManager.createTransaction(contract))
+        .flatMap(transactionExtention-> {
+            if (!transactionExtention.getResult().getResult()) {
                 throw new RuntimeException();
             }
 
-            // sign transaction
-            transaction = mAccountManager.signTransaction(transaction);
+            if (transactionExtention.getTransaction().getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            Protocol.Transaction transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transactionExtention.getTransaction());
             return mTronManager.broadcastTransaction(transaction);
         });
     }
 
-    public Single<Boolean> unfreezeBalance() {
-        return Single.fromCallable(() -> {
-            Contract.UnfreezeBalanceContract unfreezeBalanceContract = mAccountManager.createUnfreezeBalanceContract();
+    public Single<Boolean> unfreezeBalance(@Nullable String password) {
+        if (!mWalletAppManager.checkPassword(password)) {
+            return Single.just(false);
+        }
 
-            return mTronManager.createTransaction(unfreezeBalanceContract);
+        return Single.fromCallable(() -> {
+            byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
+            ByteString byteAddress = ByteString.copyFrom(ownerAddressBytes);
+
+            return Contract.UnfreezeBalanceContract
+                    .newBuilder()
+                    .setOwnerAddress(byteAddress)
+                    .build();
         })
-        .flatMap(transactionSingle -> transactionSingle)
-        .flatMap(transaction -> {
-            if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+        .flatMap(contract -> mTronManager.createTransaction(contract))
+        .flatMap(transactionExtention-> {
+            if (!transactionExtention.getResult().getResult()) {
                 throw new RuntimeException();
             }
 
-            // sign transaction
-            transaction = mAccountManager.signTransaction(transaction);
+            if (transactionExtention.getTransaction().getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            Protocol.Transaction transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transactionExtention.getTransaction());
+            return mTronManager.broadcastTransaction(transaction);
+        });
+    }
+
+    public Single<Boolean> sendCoin(@NonNull String password, @NonNull String toAddress, long amount) {
+        return Single.fromCallable(() -> {
+            byte[] toAddressBytes = AccountManager.decodeFromBase58Check(toAddress);
+
+            if (toAddressBytes == null) {
+                throw new InvalidAddressException();
+            }
+
+            if (!mWalletAppManager.checkPassword(password)) {
+                throw new InvalidPasswordException();
+            }
+
+            byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
+
+            ByteString bsTo = ByteString.copyFrom(toAddressBytes);
+            ByteString bsOwner = ByteString.copyFrom(ownerAddressBytes);
+
+            return Contract.TransferContract.newBuilder()
+                    .setToAddress(bsTo)
+                    .setOwnerAddress(bsOwner)
+                    .setAmount(amount)
+                    .build();
+        })
+        .flatMap(contract -> mTronManager.createTransaction(contract))
+        .flatMap(transactionExtention-> {
+            if (!transactionExtention.getResult().getResult()) {
+                throw new RuntimeException();
+            }
+
+            if (transactionExtention.getTransaction().getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            Protocol.Transaction transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transactionExtention.getTransaction());
+            return mTronManager.broadcastTransaction(transaction);
+        });
+    }
+
+    public Single<Boolean> transferAsset(@Nullable String password, String toAddress, String assetName, long amount) {
+        return Single.fromCallable(() -> {
+            byte[] toAddressBytes = AccountManager.decodeFromBase58Check(toAddress);
+
+            if (toAddressBytes == null) {
+                throw new InvalidAddressException();
+            }
+
+            if (!mWalletAppManager.checkPassword(password)) {
+                throw new InvalidPasswordException();
+            }
+
+            byte[] ownerAddressBytes = AccountManager.decodeFromBase58Check(mAccountManager.getLoginAddress());
+
+            ByteString bsTo = ByteString.copyFrom(toAddressBytes);
+            ByteString bsName = ByteString.copyFrom(assetName.getBytes());
+            ByteString bsOwner = ByteString.copyFrom(ownerAddressBytes);
+
+            return Contract.TransferAssetContract.newBuilder()
+                    .setToAddress(bsTo)
+                    .setAssetName(bsName)
+                    .setOwnerAddress(bsOwner)
+                    .setAmount(amount)
+                    .build();
+        })
+        .flatMap(contract -> mTronManager.createTransaction(contract))
+        .flatMap(transactionExtention-> {
+            if (!transactionExtention.getResult().getResult()) {
+                throw new RuntimeException();
+            }
+
+            if (transactionExtention.getTransaction().getRawData().getContractCount() == 0) {
+                throw new RuntimeException();
+            }
+
+            Protocol.Transaction transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey(password), transactionExtention.getTransaction());
             return mTronManager.broadcastTransaction(transaction);
         });
     }
 
     public boolean changePassword(String newPassword) {
-        return mAccountManager.changePassword(newPassword);
+        return false;
+    }
+
+    public Single<Integer> createWallet(String password) {
+        return Single.fromCallable(() -> mWalletAppManager.createWallet(password));
+    }
+
+    public void agreeTerms(boolean agree) {
+        mWalletAppManager.agreeTerms(agree);
+    }
+
+    public void migrationOldData(@NonNull String password) {
+        if (mWalletAppManager.migrationPassword(password)) {
+            mAccountManager.migrationAccount(password);
+            mCustomPreference.setInitWallet(true);
+            mCustomPreference.setKeyStoreVersion(Build.VERSION.SDK_INT);
+        }
     }
 }

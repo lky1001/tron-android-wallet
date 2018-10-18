@@ -21,9 +21,9 @@ public interface WalletDao {
     @Delete
     void delete(WalletModel walletModel);
 
-    @Query("SELECT COUNT(*) from wallet")
+    @Query("SELECT COUNT(*) FROM wallet")
     int countWallets();
 
-    @Query("SELECT * from wallet LIMIT 1")
+    @Query("SELECT * FROM wallet LIMIT 1")
     WalletModel loadWallet();
 }

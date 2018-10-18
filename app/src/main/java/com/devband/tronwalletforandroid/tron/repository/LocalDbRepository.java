@@ -1,6 +1,5 @@
 package com.devband.tronwalletforandroid.tron.repository;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.devband.tronwalletforandroid.database.AppDatabase;
@@ -18,19 +17,17 @@ public class LocalDbRepository implements AccountRepository {
 
     private AccountDao mAccountDao;
 
-    public LocalDbRepository(@NonNull Context context) {
-        mAccountDao = AppDatabase.getDatabase(context).accountDao();
+    public LocalDbRepository(@NonNull AppDatabase appDatabase) {
+        mAccountDao = appDatabase.accountDao();
     }
 
     @Override
-    public Single<Boolean> storeAccount(@NonNull AccountModel accountModel) {
+    public Single<Long> insertAccount(@NonNull AccountModel accountModel) {
         return Single.fromCallable(() -> {
             Date now = Calendar.getInstance().getTime();
             accountModel.setCreated(now);
 
-            mAccountDao.insert(accountModel);
-
-            return true;
+            return mAccountDao.insert(accountModel);
         });
     }
 
@@ -47,7 +44,7 @@ public class LocalDbRepository implements AccountRepository {
     }
 
     @Override
-    public Maybe<AccountModel> loadAccount(int index) {
+    public Maybe<AccountModel> loadAccount(long index) {
         return Maybe.fromCallable(() -> mAccountDao.loadAccountById(index));
     }
 
@@ -57,12 +54,12 @@ public class LocalDbRepository implements AccountRepository {
     }
 
     @Override
-    public Single<Integer> countAccount() {
-        return Single.fromCallable(() -> mAccountDao.countAccounts());
+    public Integer countAccount() {
+        return mAccountDao.countAccounts();
     }
 
     @Override
-    public Maybe<AccountModel> loadByAccountKey(String accountKey) {
-        return Maybe.fromCallable(() -> mAccountDao.loadByAccountKey(accountKey));
+    public AccountModel loadByAccountKey(String accountKey) {
+        return mAccountDao.loadByAccountKey(accountKey);
     }
 }

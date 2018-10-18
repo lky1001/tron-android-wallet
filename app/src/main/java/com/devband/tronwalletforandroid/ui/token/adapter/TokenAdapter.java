@@ -73,32 +73,35 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.TokenViewHol
         holder.tokenSaleProgress.setMax(100f);
         holder.tokenSaleProgress.setProgress((float) item.getIssuedPercentage());
         holder.tokenEndText.setText(mContext.getString(R.string.ends_text) + " " + Utils.getDateTimeWithTimezone(item.getEndTime()));
-        holder.visitWebsiteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new MaterialDialog.Builder(mContext)
-                        .title(R.string.visit_external_site_text)
-                        .content(item.getUrl() + " " + mContext.getString(R.string.external_website_warning_msg))
-                        .titleColorRes(android.R.color.black)
-                        .contentColorRes(android.R.color.black)
-                        .backgroundColorRes(android.R.color.white)
-                        .positiveText(R.string.visit_site_text)
-                        .negativeText(R.string.cancel_text)
-                        .onPositive((dialog, which) -> {
-                            dialog.dismiss();
-                            new FinestWebView.Builder(mContext).show(item.getUrl());
-                        }).show();
-            }
+        holder.visitWebsiteButton.setOnClickListener(view -> {
+            new MaterialDialog.Builder(mContext)
+                    .title(R.string.visit_external_site_text)
+                    .content(item.getUrl() + " " + mContext.getString(R.string.external_website_warning_msg))
+                    .titleColorRes(android.R.color.black)
+                    .contentColorRes(android.R.color.black)
+                    .backgroundColorRes(android.R.color.white)
+                    .positiveText(R.string.visit_site_text)
+                    .negativeText(R.string.cancel_text)
+                    .onPositive((dialog, which) -> {
+                        dialog.dismiss();
+                        new FinestWebView.Builder(mContext).show(item.getUrl());
+                    }).show();
         });
+
+        holder.participateButton.setEnabled(false);
+        holder.participateButton.setTag(null);
+
         if (item.getIssued() == item.getTotalSupply()
                 || Calendar.getInstance().getTimeInMillis() > item.getEndTime()) {
             holder.participateButton.setBackgroundResource(R.color.token_finished_button_color);
             holder.participateButton.setText(R.string.finished_btn_text);
-            holder.participateButton.setEnabled(false);
-            holder.participateButton.setTag(null);
+        } else if (item.getStartTime() > Calendar.getInstance().getTimeInMillis()) {
+            holder.participateButton.setBackgroundResource(R.color.token_preparing_button_color);
+            holder.participateButton.setText(R.string.preparing_btn_text);
         } else {
             holder.participateButton.setBackgroundResource(R.color.token_participate_button_color);
             holder.participateButton.setText(R.string.participate_btn_text);
+            holder.participateButton.setEnabled(true);
             holder.participateButton.setTag(item);
             holder.participateButton.setOnClickListener(mOnParticipateClickListener);
         }

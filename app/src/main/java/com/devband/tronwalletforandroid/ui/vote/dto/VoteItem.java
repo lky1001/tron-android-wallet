@@ -23,7 +23,13 @@ public class VoteItem {
 
     private Long totalVoteCount;
 
-    private Long voteCount;
+    private Long lastCycleVoteCount;
+
+    private Long realTimeVoteCount;
 
     private Long myVoteCount;
+
+    private long changeVotes;
+
+    private double votesPercentage;
 }

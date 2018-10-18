@@ -2,6 +2,8 @@ package com.devband.tronwalletforandroid.ui.sendtoken;
 
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
+import com.devband.tronwalletforandroid.tron.exception.InvalidAddressException;
+import com.devband.tronwalletforandroid.tron.exception.InvalidPasswordException;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import org.tron.protos.Protocol;
@@ -64,7 +66,7 @@ public class SendTokenPresenter extends BasePresenter<SendTokenView> {
     }
 
     public void sendTron(String password, String toAddress, long amount) {
-        if (!mTron.isLogin() || !mTron.validPassword(password)) {
+        if (!mTron.isLogin()) {
             mView.invalidPassword();
             return;
         }
@@ -86,14 +88,21 @@ public class SendTokenPresenter extends BasePresenter<SendTokenView> {
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
-                mView.invalidAddress();
+                if (e instanceof InvalidAddressException) {
+                    mView.invalidAddress();
+                } else if (e instanceof InvalidPasswordException) {
+                    mView.invalidPassword();
+                } else if (e instanceof RuntimeException) {
+                    mView.connectionError();
+                } else {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
     public void transferAsset(String password, String toAddress, String assetName, long amount) {
-        if (!mTron.isLogin() || !mTron.validPassword(password)) {
+        if (!mTron.isLogin()) {
             mView.invalidPassword();
             return;
         }
@@ -115,8 +124,15 @@ public class SendTokenPresenter extends BasePresenter<SendTokenView> {
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
-                mView.invalidAddress();
+                if (e instanceof InvalidAddressException) {
+                    mView.invalidAddress();
+                } else if (e instanceof InvalidPasswordException) {
+                    mView.invalidPassword();
+                } else if (e instanceof RuntimeException) {
+                    mView.connectionError();
+                } else {
+                    e.printStackTrace();
+                }
             }
         });
     }

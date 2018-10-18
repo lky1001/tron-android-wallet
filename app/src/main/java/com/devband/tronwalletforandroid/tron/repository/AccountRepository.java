@@ -11,15 +11,15 @@ import io.reactivex.Single;
 
 public interface AccountRepository {
 
-    Single<Boolean> storeAccount(@NonNull AccountModel accountModel);
+    Single<Long> insertAccount(@NonNull AccountModel accountModel);
 
     Single<Boolean> updateAccount(@NonNull AccountModel accountModel);
 
-    Maybe<AccountModel> loadAccount(int index);
+    Maybe<AccountModel> loadAccount(long index);
 
     Single<List<AccountModel>> loadAllAccounts();
 
-    Single<Integer> countAccount();
+    Integer countAccount();
 
-    Maybe<AccountModel> loadByAccountKey(String accountKey);
+    AccountModel loadByAccountKey(String accountKey);
 }

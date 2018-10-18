@@ -18,7 +18,6 @@ import org.tron.api.WalletSolidityGrpc;
 import org.tron.protos.Contract;
 import org.tron.protos.Contract.AssetIssueContract;
 import org.tron.protos.Protocol.Account;
-import org.tron.protos.Protocol.Block;
 import org.tron.protos.Protocol.Transaction;
 
 import java.util.concurrent.TimeUnit;
@@ -63,75 +62,82 @@ public class GrpcClient {
         return blockingStubFullNode.getAccount(request);
     }
 
-    public Transaction createTransaction(Contract.TransferContract contract) {
-        return blockingStubFullNode.createTransaction(contract);
+    public GrpcAPI.TransactionExtention createTransaction(Contract.TransferContract contract) {
+        return blockingStubFullNode.createTransaction2(contract);
     }
 
-    public Transaction createTransaction(Contract.VoteWitnessContract contract) {
-        return blockingStubFullNode.voteWitnessAccount(contract);
+    public GrpcAPI.TransactionExtention createTransferAssetTransaction(Contract.TransferAssetContract contract) {
+        return blockingStubFullNode.transferAsset2(contract);
     }
 
-    public Transaction createTransferAssetTransaction(Contract.TransferAssetContract contract) {
-        return blockingStubFullNode.transferAsset(contract);
+    public GrpcAPI.TransactionExtention createParticipateAssetIssueTransaction(Contract.ParticipateAssetIssueContract contract) {
+        return blockingStubFullNode.participateAssetIssue2(contract);
     }
 
-    public Transaction createParticipateAssetIssueTransaction(Contract.ParticipateAssetIssueContract contract) {
-        return blockingStubFullNode.participateAssetIssue(contract);
+    public GrpcAPI.TransactionExtention createAssetIssue(Contract.AssetIssueContract contract) {
+        return blockingStubFullNode.createAssetIssue2(contract);
     }
 
-    public Transaction createAssetIssue(Contract.AssetIssueContract contract) {
-        return blockingStubFullNode.createAssetIssue(contract);
+    public GrpcAPI.TransactionExtention voteWitnessAccount(Contract.VoteWitnessContract contract) {
+        return blockingStubFullNode.voteWitnessAccount2(contract);
     }
 
-    public Transaction voteWitnessAccount(Contract.VoteWitnessContract contract) {
-        return blockingStubFullNode.voteWitnessAccount(contract);
+    public GrpcAPI.TransactionExtention createWitness(Contract.WitnessCreateContract contract) {
+        return blockingStubFullNode.createWitness2(contract);
     }
 
-    public Transaction createWitness(Contract.WitnessCreateContract contract) {
-        return blockingStubFullNode.createWitness(contract);
+    public GrpcAPI.TransactionExtention createFreezeBalance(Contract.FreezeBalanceContract contract) {
+        return blockingStubFullNode.freezeBalance2(contract);
+    }
+
+    public GrpcAPI.TransactionExtention createWithdrawBalance(Contract.WithdrawBalanceContract contract) {
+        return blockingStubFullNode.withdrawBalance2(contract);
+    }
+
+    public GrpcAPI.TransactionExtention createUnfreezeBalance(Contract.UnfreezeBalanceContract contract) {
+        return blockingStubFullNode.unfreezeBalance2(contract);
+    }
+
+    public GrpcAPI.TransactionExtention createUnfreezeAsset(Contract.UnfreezeAssetContract contract) {
+        return blockingStubFullNode.unfreezeAsset2(contract);
     }
 
     public boolean broadcastTransaction(Transaction signaturedTransaction) {
-        GrpcAPI.Return response = blockingStubFullNode.broadcastTransaction(signaturedTransaction);
-        return response.getResult();
+        return blockingStubFullNode.broadcastTransaction(signaturedTransaction)
+                .getResult();
     }
 
-    public Block getBlock(long blockNum) {
+    public GrpcAPI.BlockExtention getBlock(long blockNum) {
         if (blockNum < 0) {
-            return blockingStubFullNode.withDeadlineAfter(Constants.GRPC_TIME_OUT_IN_MS, TimeUnit.MILLISECONDS).getNowBlock(EmptyMessage.newBuilder().build());
+            return blockingStubFullNode
+                    .withDeadlineAfter(Constants.GRPC_TIME_OUT_IN_MS, TimeUnit.MILLISECONDS)
+                    .getNowBlock2(EmptyMessage.newBuilder().build());
         }
         NumberMessage.Builder builder = NumberMessage.newBuilder();
         builder.setNum(blockNum);
-        return blockingStubFullNode.getBlockByNum(builder.build());
+        return blockingStubFullNode.getBlockByNum2(builder.build());
     }
 
     @Nullable
     public WitnessList listWitnesses() {
-        WitnessList witnessList = blockingStubFullNode.listWitnesses(EmptyMessage.newBuilder().build());
-        return witnessList;
+        return blockingStubFullNode.listWitnesses(EmptyMessage.newBuilder().build());
     }
 
     @Nullable
     public AssetIssueList getAssetIssueList() {
-        AssetIssueList assetIssueList = blockingStubFullNode
-                .getAssetIssueList(EmptyMessage.newBuilder().build());
-        return assetIssueList;
+        return blockingStubFullNode.getAssetIssueList(EmptyMessage.newBuilder().build());
     }
 
     @Nullable
     public NodeList listNodes() {
-        NodeList nodeList = blockingStubFullNode
-                .listNodes(EmptyMessage.newBuilder().build());
-        return nodeList;
+        return blockingStubFullNode.listNodes(EmptyMessage.newBuilder().build());
     }
 
     @Nullable
     public AssetIssueList getAssetIssueByAccount(byte[] address) {
         ByteString addressBS = ByteString.copyFrom(address);
         Account request = Account.newBuilder().setAddress(addressBS).build();
-        AssetIssueList assetIssueList = blockingStubFullNode
-                .getAssetIssueByAccount(request);
-        return assetIssueList;
+        return blockingStubFullNode.getAssetIssueByAccount(request);
     }
 
     public AssetIssueContract getAssetIssueByName(String assetName) {
@@ -143,21 +149,4 @@ public class GrpcClient {
     public NumberMessage getTotalTransaction() {
         return blockingStubFullNode.totalTransaction(EmptyMessage.newBuilder().build());
     }
-
-    public Transaction createTransaction(Contract.FreezeBalanceContract contract) {
-        return blockingStubFullNode.freezeBalance(contract);
-    }
-
-    public Transaction createTransaction(Contract.WithdrawBalanceContract contract) {
-        return blockingStubFullNode.withdrawBalance(contract);
-    }
-
-    public Transaction createTransaction(Contract.UnfreezeBalanceContract contract) {
-        return blockingStubFullNode.unfreezeBalance(contract);
-    }
-
-    public Transaction createTransaction(Contract.UnfreezeAssetContract contract) {
-        return blockingStubFullNode.unfreezeAsset(contract);
-    }
-
 }

@@ -1,13 +1,18 @@
 package com.devband.tronwalletforandroid.ui.myaccount;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.devband.tronlib.dto.Account;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.database.AppDatabase;
+import com.devband.tronwalletforandroid.database.dao.FavoriteTokenDao;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
+import com.devband.tronwalletforandroid.database.model.FavoriteTokenModel;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
+import com.devband.tronwalletforandroid.tron.exception.InvalidPasswordException;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
 import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
@@ -26,13 +31,15 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
     private Tron mTron;
     private WalletAppManager mWalletAppManager;
     private RxJavaSchedulers mRxJavaSchedulers;
+    private FavoriteTokenDao mFavoriteTokenDao;
 
     public MyAccountPresenter(MyAccountView view, Tron tron, WalletAppManager walletAppManager,
-            RxJavaSchedulers rxJavaSchedulers) {
+            RxJavaSchedulers rxJavaSchedulers, AppDatabase appDatabase) {
         super(view);
         this.mTron = tron;
         this.mWalletAppManager = walletAppManager;
         this.mRxJavaSchedulers = rxJavaSchedulers;
+        this.mFavoriteTokenDao = appDatabase.favoriteTokenDao();
     }
 
     @Override
@@ -63,7 +70,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
         mView.showLoadingDialog();
 
-        mTron.getAccount(mTron.getLoginAddress())
+        mTron.getAccount(address)
         .map((account -> {
             List<Frozen> frozenList = new ArrayList<>();
 
@@ -117,6 +124,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
                 }
 
                 mView.showServerError();
+                mView.displayAccountInfo(address, null);
             }
         });
     }
@@ -125,18 +133,18 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         return mWalletAppManager.login(password) == WalletAppManager.SUCCESS;
     }
 
-    public String getLoginPrivateKey() {
-        return mTron.getLoginPrivateKey();
+    public String getLoginPrivateKey(@NonNull String password) {
+        return mTron.getLoginPrivateKey(password);
     }
 
     public void changeLoginAccount(@NonNull AccountModel accountModel) {
         mTron.changeLoginAccount(accountModel);
     }
 
-    public void freezeBalance(long freezeBalance) {
+    public void freezeBalance(@NonNull String password, long freezeBalance) {
         mView.showLoadingDialog();
 
-        mTron.freezeBalance(freezeBalance, Constants.FREEZE_DURATION)
+        mTron.freezeBalance(password, freezeBalance, Constants.FREEZE_DURATION)
         .subscribeOn(mRxJavaSchedulers.getIo())
         .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {
@@ -156,16 +164,20 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
-                mView.showServerError();
+                if (e instanceof InvalidPasswordException) {
+                    mView.showInvalidPasswordMsg();
+                } else {
+                    e.printStackTrace();
+                    mView.showServerError();
+                }
             }
         });
     }
 
-    public void unfreezeBalance() {
+    public void unfreezeBalance(@NonNull String password) {
         mView.showLoadingDialog();
 
-        mTron.unfreezeBalance()
+        mTron.unfreezeBalance(password)
         .subscribeOn(mRxJavaSchedulers.getIo())
         .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {
@@ -194,7 +206,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         });
     }
 
-    public int getLoginAccountIndex() {
+    public long getLoginAccountIndex() {
         return mTron.getLoginAccount().getId();
     }
 
@@ -228,5 +240,36 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
                 mView.changePasswordResult(false);
             }
         });
+    }
+
+    @Nullable
+    public boolean isFavoriteToken(@NonNull String tokenName) {
+        if (mTron.getLoginAccount() != null) {
+            long accountId = mTron.getLoginAccount().getId();
+
+            return mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, tokenName) != null;
+        }
+
+        return false;
+    }
+
+    public void doFavorite(@NonNull String tokenName) {
+        if (mTron.getLoginAccount() != null) {
+            long accountId = mTron.getLoginAccount().getId();
+            FavoriteTokenModel model = FavoriteTokenModel.builder()
+                    .accountId(accountId)
+                    .tokenName(tokenName)
+                    .build();
+
+            mFavoriteTokenDao.insert(model);
+        }
+    }
+
+    public void removeFavorite(@NonNull String tokenName) {
+        if (mTron.getLoginAccount() != null) {
+            long accountId = mTron.getLoginAccount().getId();
+            FavoriteTokenModel favoriteTokenModel = mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, tokenName);
+            mFavoriteTokenDao.delete(favoriteTokenModel);
+        }
     }
 }

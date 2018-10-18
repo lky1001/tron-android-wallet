@@ -14,14 +14,14 @@ import java.util.List;
 @Dao
 public interface AccountDao {
 
-    @Query("SELECT * from account where id = :id LIMIT 1")
-    AccountModel loadAccountById(int id);
+    @Query("SELECT * FROM account WHERE id = :id LIMIT 1")
+    AccountModel loadAccountById(long id);
 
-    @Query("SELECT * from account")
+    @Query("SELECT * FROM account")
     List<AccountModel> loadAllAccounts();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(AccountModel accountModel);
+    long insert(AccountModel accountModel);
 
     @Update
     void update(AccountModel accountModel);
@@ -29,9 +29,9 @@ public interface AccountDao {
     @Delete
     void delete(AccountModel accountModel);
 
-    @Query("SELECT COUNT(*) from account")
+    @Query("SELECT COUNT(*) FROM account")
     int countAccounts();
 
-    @Query("SELECT * from account where account = :accountKey LIMIT 1")
+    @Query("SELECT * FROM account WHERE account = :accountKey LIMIT 1")
     AccountModel loadByAccountKey(String accountKey);
 }

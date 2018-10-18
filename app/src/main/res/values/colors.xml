@@ -19,6 +19,7 @@
     <color name="main_sub_title_color">#aaffffff</color>
     <color name="super_representative_background_color">#7c7b81</color>
     <color name="token_participate_button_color">#0084ff</color>
+    <color name="token_preparing_button_color">#a0d1ff</color>
     <color name="token_finished_button_color">#8b8b8b</color>
     <color name="copy_button_color">#8b8b8b</color>
     <color name="bottom_navi_unselected">#8b8b8b</color>
@@ -30,5 +31,9 @@
     <color name="copy_address_button_color">#7c7b81</color>
     <color name="confirm_text_color">#029f2a</color>
     <color name="unconfirm_text_color">#c40b19</color>
+    <color name="favorite_token_color">#8b8b8b</color>
+    <color name="vote_down_color">#cf312e</color>
+    <color name="vote_up_color">#029f2a</color>
+    <color name="default_text_color">#808080</color>
 
 </resources>

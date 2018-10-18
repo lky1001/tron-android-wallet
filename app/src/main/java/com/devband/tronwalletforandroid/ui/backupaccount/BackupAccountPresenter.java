@@ -25,10 +25,7 @@ public class BackupAccountPresenter extends BasePresenter<BackupAccountView> {
 
     @Override
     public void onCreate() {
-        String address = mTron.getLoginAddress();
-        String privateKey = mTron.getLoginPrivateKey();
 
-        mView.displayAccountInfo(address, privateKey);
     }
 
     @Override
@@ -69,5 +66,12 @@ public class BackupAccountPresenter extends BasePresenter<BackupAccountView> {
                 mView.startMainActivity();
             }
         });
+    }
+
+    public void getAccountAndPrivateKey(byte[] aesKey) {
+        String address = mTron.getLoginAddress();
+        String privateKey = mTron.getLoginPrivateKey(aesKey);
+
+        mView.displayAccountInfo(address, privateKey);
     }
 }

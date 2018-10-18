@@ -1,35 +1,37 @@
 package com.devband.tronwalletforandroid.tron;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.devband.tronwalletforandroid.common.security.PasswordEncoder;
 import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.database.dao.WalletDao;
 import com.devband.tronwalletforandroid.database.model.WalletModel;
 
+import org.tron.common.crypto.Hash;
+
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class WalletAppManager {
+
+    private static final int KEY_SIZE = 16;
 
     public static final int MIN_PASSWORD_LENGTH = 8;
 
     public static final int SUCCESS = 1;
     public static final int ERROR = -1;
 
-    private Context mContext;
-
     private boolean mIsLogin;
 
     private WalletDao mWalletDao;
 
-    public WalletAppManager(@NonNull Context context) {
-        this.mContext = context;
-        init();
-    }
+    private PasswordEncoder mPasswordEncoder;
 
-    private void init() {
-        mWalletDao = AppDatabase.getDatabase(mContext).walletDao();
+    public WalletAppManager(@NonNull PasswordEncoder passwordEncoder, @NonNull AppDatabase appDatabase) {
+        this.mPasswordEncoder = passwordEncoder;
+        this.mWalletDao = appDatabase.walletDao();
     }
 
     public boolean isLogin() {
@@ -46,11 +48,26 @@ public class WalletAppManager {
         }
 
         mWalletDao.insert(WalletModel.builder()
-                .password(PasswordUtil.getHashedPassword(password))
+                .password(mPasswordEncoder.encode(password))
                 .created(Calendar.getInstance().getTime())
                 .build());
 
         return SUCCESS;
+    }
+
+    public void loginWithFingerPrint() {
+        mIsLogin = true;
+    }
+
+    public boolean oldLogin(@NonNull String password) {
+        WalletModel wallet = mWalletDao.loadWallet();
+
+        if (PasswordUtil.matches(password, wallet.getPassword())) {
+            mIsLogin = true;
+            return true;
+        }
+
+        return false;
     }
 
     public int login(@NonNull String password) {
@@ -60,7 +77,7 @@ public class WalletAppManager {
 
         WalletModel wallet = mWalletDao.loadWallet();
 
-        if (PasswordUtil.matches(password, wallet.getPassword())) {
+        if (mPasswordEncoder.matches(password, wallet.getPassword())) {
             mIsLogin = true;
             return SUCCESS;
         }
@@ -85,11 +102,56 @@ public class WalletAppManager {
         return wallet.isAgree();
     }
 
+    public boolean isLoginState() {
+        return mIsLogin;
+    }
+
     public boolean changePassword(@NonNull String originPassword, @NonNull String newPassword) {
         WalletModel wallet = mWalletDao.loadWallet();
 
-        if (PasswordUtil.matches(originPassword, wallet.getPassword())) {
-            wallet.setPassword(PasswordUtil.getHashedPassword(newPassword));
+        if (mPasswordEncoder.matches(originPassword, wallet.getPassword())) {
+            wallet.setPassword(mPasswordEncoder.encode(newPassword));
+            mWalletDao.update(wallet);
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean checkPassword(String password) {
+        WalletModel wallet = mWalletDao.loadWallet();
+        return mPasswordEncoder.matches(password, wallet.getPassword());
+    }
+
+    @Nullable
+    public static byte[] getEncKey(String password) {
+        if (!passwordValid(password)) {
+            return null;
+        }
+        byte[] encKey;
+        encKey = Hash.sha256(password.getBytes());
+        encKey = Arrays.copyOfRange(encKey, 0, KEY_SIZE);
+        return encKey;
+    }
+
+    public static boolean passwordValid(String password) {
+        if (TextUtils.isEmpty(password)) {
+            return false;
+        }
+
+        if (password.length() < Tron.MIN_PASSWORD_LENGTH) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // todo - remove when all user updated above 1.2.5
+    public boolean migrationPassword(@NonNull String password) {
+        if (oldLogin(password)) {
+            WalletModel wallet = mWalletDao.loadWallet();
+            wallet.setPassword(mPasswordEncoder.encode(password));
+            wallet.setUpdated(Calendar.getInstance().getTime());
             mWalletDao.update(wallet);
             return true;
         }

@@ -195,11 +195,25 @@
                     android:orientation="horizontal">
                     <TextView
                         android:id="@+id/my_token_text"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
+                        android:layout_weight="1"
                         android:textColor="@color/main_my_token_color"
                         android:text="@string/my_tokens" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_my_token_color"
+                        android:text="@string/favorites_text" />
+
+                    <CheckBox
+                        android:id="@+id/check_favorite_tokens"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/AppTheme"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginRight="15dp" />
                 </LinearLayout>
 
                 <View

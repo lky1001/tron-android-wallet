@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.tron;
 
+import org.tron.api.GrpcAPI;
 import org.tron.api.GrpcAPI.AssetIssueList;
 import org.tron.api.GrpcAPI.NodeList;
 import org.tron.api.GrpcAPI.WitnessList;
@@ -23,23 +24,23 @@ public interface ITronManager {
 
     Single<AssetIssueList> getAssetIssueByAccount(byte[] address);
 
-    Single<Protocol.Transaction> createTransaction(Contract.TransferContract contract);
+    Single<GrpcAPI.TransactionExtention> createTransaction(Contract.TransferContract contract);
 
-    Single<Protocol.Transaction> createTransaction(Contract.FreezeBalanceContract contract);
+    Single<GrpcAPI.TransactionExtention> createTransaction(Contract.FreezeBalanceContract contract);
 
-    Single<Protocol.Transaction> createTransaction(Contract.WithdrawBalanceContract contract);
+    Single<GrpcAPI.TransactionExtention> createTransaction(Contract.WithdrawBalanceContract contract);
 
-    Single<Protocol.Transaction> createTransaction(Contract.UnfreezeBalanceContract contract);
+    Single<GrpcAPI.TransactionExtention> createTransaction(Contract.UnfreezeBalanceContract contract);
 
-    Single<Protocol.Transaction> createTransaction(Contract.UnfreezeAssetContract contract);
+    Single<GrpcAPI.TransactionExtention> createTransaction(Contract.UnfreezeAssetContract contract);
 
-    Single<Protocol.Transaction> createTransaction(Contract.VoteWitnessContract contract);
+    Single<GrpcAPI.TransactionExtention> createTransaction(Contract.VoteWitnessContract contract);
 
-    Single<Protocol.Transaction> createTransferAssetTransaction(Contract.TransferAssetContract contract);
+    Single<GrpcAPI.TransactionExtention> createTransaction(Contract.TransferAssetContract contract);
 
-    Single<Protocol.Transaction> createParticipateAssetIssueTransaction(Contract.ParticipateAssetIssueContract contract);
+    Single<GrpcAPI.TransactionExtention> createTransaction(Contract.ParticipateAssetIssueContract contract);
 
     Single<Boolean> broadcastTransaction(Protocol.Transaction transaction);
 
-    Single<Protocol.Block> getBlockHeight();
+    Single<GrpcAPI.BlockExtention> getBlockHeight();
 }

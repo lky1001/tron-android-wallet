@@ -15,9 +15,6 @@ public interface VoteService {
     @GET("api/vote/current-cycle")
     Single<Votes> getVoteCurrentCycle();
 
-    @GET("api/vote/witness")
-    Single<Witnesses> getVoteWitnesses();
-
     @GET("api/vote/next-cycle")
     Single<Map<String, Long>> getRemainNextCycle();
 

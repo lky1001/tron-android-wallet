@@ -222,7 +222,7 @@ public class TokenActivity extends CommonActivity implements TokenView {
                 TextView priceText = (TextView) dialog.getCustomView().findViewById(R.id.price_text);
                 TextView yourTrxText = (TextView) dialog.getCustomView().findViewById(R.id.your_trx_text);
 
-                priceText.setText(Utils.getRealTrxFormat(item.getTrxNum()) + " " + Constants.TRON_SYMBOL);
+                priceText.setText(Utils.getRealTrxFormat(item.getPrice()) + " " + Constants.TRON_SYMBOL);
                 yourTrxText.setText(Utils.getRealTrxFormat(mLoginAccountTrx) + " " + Constants.TRON_SYMBOL);
 
                 inputAmount.addTextChangedListener(new TextWatcher() {
@@ -290,7 +290,7 @@ public class TokenActivity extends CommonActivity implements TokenView {
 
                         dialog.dismiss();
 
-                        mTokenPresenter.participateToken(item, tokenAmount);
+                        mTokenPresenter.participateToken(password, item, tokenAmount);
                     }
                 });
 

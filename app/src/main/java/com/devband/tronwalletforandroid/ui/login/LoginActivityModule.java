@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.login;
 
+import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
@@ -16,7 +17,8 @@ public abstract class LoginActivityModule {
 
     @Provides
     static LoginPresenter provideLoginPresenter(LoginView loginView, Tron tron,
-            WalletAppManager walletAppManager, RxJavaSchedulers rxJavaSchedulers) {
-        return new LoginPresenter(loginView, tron, walletAppManager, rxJavaSchedulers);
+            WalletAppManager walletAppManager, RxJavaSchedulers rxJavaSchedulers,
+            CustomPreference customPreference) {
+        return new LoginPresenter(loginView, tron, walletAppManager, rxJavaSchedulers, customPreference);
     }
 }

@@ -25,6 +25,9 @@ import butterknife.OnClick;
 public class LoginActivity extends CommonActivity implements LoginView {
 
     @Inject
+    Tron mTron;
+
+    @Inject
     LoginPresenter mLoginPresenter;
 
     @Inject
@@ -67,6 +70,7 @@ public class LoginActivity extends CommonActivity implements LoginView {
                     .setOnFingerAuthListener(new FingerAuth.OnFingerAuthListener() {
                         @Override
                         public void onSuccess() {
+                            mTron.loginWithFingerPrint();
                             loginResult(Tron.SUCCESS);
                         }
 

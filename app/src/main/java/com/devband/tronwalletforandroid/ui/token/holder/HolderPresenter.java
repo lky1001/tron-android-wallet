@@ -1,13 +1,13 @@
 package com.devband.tronwalletforandroid.ui.token.holder;
 
 import com.devband.tronlib.TronNetwork;
-import com.devband.tronlib.dto.Token;
 import com.devband.tronlib.dto.TokenHolder;
 import com.devband.tronlib.dto.TokenHolders;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
+import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 
@@ -50,11 +50,8 @@ public class HolderPresenter extends BasePresenter<HolderView> {
     public void getTokenHolders(String tokenName, long startIndex, int pageSize) {
         mView.showLoadingDialog();
 
-        mTronNetwork
-                .getTokenHolders(tokenName, startIndex, pageSize, "-balance")
-                .map((tokenHolders -> {
-                    Token token = mTronNetwork.getTokenDetail(tokenName).blockingGet();
-
+        Single.zip(mTronNetwork.getTokenHolders(tokenName, startIndex, pageSize, "-balance"), mTronNetwork.getTokenDetail(tokenName),
+                ((tokenHolders, token) -> {
                     for (TokenHolder tokenHolder : tokenHolders.getData()) {
                         tokenHolder.setTotalSupply(token.getTotalSupply());
                         tokenHolder.setBalancePercent(((double) tokenHolder.getBalance() / (double) token.getTotalSupply()) * 100f);

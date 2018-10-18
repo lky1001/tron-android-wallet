@@ -1,31 +1,42 @@
 package com.devband.tronwalletforandroid.ui.createwallet;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.devband.tronwalletforandroid.BuildConfig;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.backupaccount.BackupAccountActivity;
 import com.devband.tronwalletforandroid.ui.importkey.ImportPrivateKeyActivity;
+import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class CreateWalletActivity extends CommonActivity implements CreateWalletView {
 
     @Inject
     CreateWalletPresenter mCreateWalletPresenter;
+
+    @Inject
+    CustomPreference mCustomPreference;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -35,6 +46,9 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
 
     @BindView(R.id.btn_create_wallet)
     Button mCreateWalletButton;
+
+    @BindView(R.id.btn_import_private_key)
+    Button mImportPrivateKeyButton;
 
     @BindView(R.id.agree_lost_password)
     CheckBox mChkLostPassword;
@@ -54,32 +68,34 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
             getSupportActionBar().setTitle(R.string.title_create_wallet);
         }
 
+        if (BuildConfig.VERSION_CODE > Constants.MIGRATION_TARGET_VERSION) {
+            mCustomPreference.setMigrationDb(true);
+        }
+
         mCreateWalletPresenter.onCreate();
 
-        mInputPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        addDisposable(RxTextView.textChanges(mInputPassword)
+                .debounce(1, TimeUnit.SECONDS)
+                .map(CharSequence::toString)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(password -> {
+                    if (password.length() >= WalletAppManager.MIN_PASSWORD_LENGTH) {
+                        mCreateWalletButton.setEnabled(true);
+                    } else {
+                        mCreateWalletButton.setEnabled(false);
+                    }
+                }));
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().length() >= WalletAppManager.MIN_PASSWORD_LENGTH) {
-                    mCreateWalletButton.setEnabled(true);
-                } else {
-                    mCreateWalletButton.setEnabled(false);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+        addDisposable(RxView.clicks(mImportPrivateKeyButton)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(view -> {
+                    startActivity(ImportPrivateKeyActivity.class);
+                    finishActivity();
+                }));
     }
 
     @OnClick(R.id.btn_create_wallet)
-    public void onCreateAccountClick() {
+    public void onCreateWalletClick() {
         if (!mChkLostPassword.isChecked()
                 || !mChkLostPasswordRecover.isChecked()) {
             Toast.makeText(CreateWalletActivity.this, getString(R.string.need_all_agree),
@@ -91,16 +107,12 @@ public class CreateWalletActivity extends CommonActivity implements CreateWallet
         mCreateWalletPresenter.createWallet(mInputPassword.getText().toString());
     }
 
-    @OnClick(R.id.btn_import_private_key)
-    public void onImportPrivateKey() {
-        startActivity(ImportPrivateKeyActivity.class);
-        finishActivity();
-    }
-
     @Override
-    public void createdWallet() {
+    public void createdWallet(@NonNull byte[] aesKey) {
         hideDialog();
-        startActivity(BackupAccountActivity.class);
+        Intent intent = new Intent(CreateWalletActivity.this, BackupAccountActivity.class);
+        intent.putExtra(BackupAccountActivity.EXTRA_AES_KEY, aesKey);
+        startActivity(intent);
         finishActivity();
     }
 

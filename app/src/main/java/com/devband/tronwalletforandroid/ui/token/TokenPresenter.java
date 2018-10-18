@@ -134,10 +134,10 @@ public class TokenPresenter extends BasePresenter<TokenView> {
                 });
     }
 
-    public void participateToken(Token item, long tokenAmount) {
+    public void participateToken(@NonNull String password, Token item, long tokenAmount) {
         mView.showLoadingDialog();
 
-        mTron.participateTokens(item.getName(), item.getOwnerAddress(), tokenAmount)
+        mTron.participateTokens(password, item.getName(), item.getOwnerAddress(), tokenAmount)
         .subscribeOn(mRxJavaSchedulers.getIo())
         .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {

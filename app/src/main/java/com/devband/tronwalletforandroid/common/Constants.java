@@ -26,4 +26,13 @@ public class Constants {
     public static final String SUPER_REPRESENTATIVE_TEAM_PAGE_URL = "https://tronscan.org/#/representative/";
     public static final int CONNECTION_RETRY = 10;
     public static final long GRPC_TIME_OUT_IN_MS = 2 * 1000;
+
+    public static final String DB_NAME = "tron_wallet_db";
+
+    public static final int SALT_LOG_ROUND = 10;
+    public static final String ALIAS_SALT = "alias_salt";
+    public static final String ALIAS_ACCOUNT_KEY = "alias_account_key";
+    public static final String ALIAS_PASSWORD_KEY = "alias_password_key";
+    public static final String ALIAS_ADDRESS_KEY = "alias_address_key";
+    public static final int MIGRATION_TARGET_VERSION = 11;
 }
