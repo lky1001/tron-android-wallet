@@ -22,14 +22,12 @@ public class LocalDbRepository implements AccountRepository {
     }
 
     @Override
-    public Single<Boolean> insertAccount(@NonNull AccountModel accountModel) {
+    public Single<Long> insertAccount(@NonNull AccountModel accountModel) {
         return Single.fromCallable(() -> {
             Date now = Calendar.getInstance().getTime();
             accountModel.setCreated(now);
 
-            mAccountDao.insert(accountModel);
-
-            return true;
+            return mAccountDao.insert(accountModel);
         });
     }
 
@@ -46,13 +44,13 @@ public class LocalDbRepository implements AccountRepository {
     }
 
     @Override
-    public Maybe<AccountModel> loadAccount(int index) {
-        return Maybe.just(mAccountDao.loadAccountById(index));
+    public Maybe<AccountModel> loadAccount(long index) {
+        return Maybe.fromCallable(() -> mAccountDao.loadAccountById(index));
     }
 
     @Override
     public Single<List<AccountModel>> loadAllAccounts() {
-        return Single.just(mAccountDao.loadAllAccounts());
+        return Single.fromCallable(() -> mAccountDao.loadAllAccounts());
     }
 
     @Override

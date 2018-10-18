@@ -15,13 +15,13 @@ import java.util.List;
 public interface AccountDao {
 
     @Query("SELECT * FROM account WHERE id = :id LIMIT 1")
-    AccountModel loadAccountById(int id);
+    AccountModel loadAccountById(long id);
 
     @Query("SELECT * FROM account")
     List<AccountModel> loadAllAccounts();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(AccountModel accountModel);
+    long insert(AccountModel accountModel);
 
     @Update
     void update(AccountModel accountModel);

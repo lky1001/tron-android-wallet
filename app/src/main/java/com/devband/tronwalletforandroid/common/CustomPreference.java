@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -74,13 +73,13 @@ public class CustomPreference {
         return mSettings.useFingerprint;
     }
 
-    public void setFavoriteToken(int accountId, boolean isFavorite) {
+    public void setFavoriteToken(long accountId, boolean isFavorite) {
         SharedPreferences.Editor edit = mSharedPreferences.edit();
         edit.putBoolean(FAVORITE_TOKENS_KEY_PREFIX + accountId, isFavorite);
         edit.apply();
     }
 
-    public boolean isFavoriteToken(int accountId) {
+    public boolean isFavoriteToken(long accountId) {
         return mSharedPreferences.getBoolean(FAVORITE_TOKENS_KEY_PREFIX + accountId, false);
     }
 
@@ -149,6 +148,15 @@ public class CustomPreference {
         saveSettings();
     }
 
+    public void setLastSelectedAccountId(long accountId) {
+        mSettings.lastSelectedAccountId = accountId;
+        saveSettings();
+    }
+
+    public long getLastSelectedAccountId() {
+        return mSettings.lastSelectedAccountId;
+    }
+
     public boolean getMigrationDb() {
         return this.mSettings.migrationDb;
     }
@@ -162,6 +170,6 @@ public class CustomPreference {
         public boolean initWallet;
         public int keyStoreVersion;
         public boolean migrationDb;
-        public Map<Integer, Boolean> favoritesToken;
+        public long lastSelectedAccountId;
     }
 }

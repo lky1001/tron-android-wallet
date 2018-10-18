@@ -21,7 +21,7 @@ import lombok.Setter;
 public class AccountModel {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     private String name;
 

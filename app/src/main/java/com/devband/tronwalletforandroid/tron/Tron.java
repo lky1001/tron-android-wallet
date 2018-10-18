@@ -1,6 +1,7 @@
 package com.devband.tronwalletforandroid.tron;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -118,10 +119,14 @@ public class Tron {
             return SUCCESS;
         })
         .flatMap(result -> {
-            String accountNickname = generateDefaultAccountName(nickname);
+            if (result == SUCCESS) {
+                String accountNickname = generateDefaultAccountName(nickname);
 
-            byte[] aesKey = WalletAppManager.getEncKey(password);
-            return mAccountManager.createAccount(accountNickname, aesKey);
+                byte[] aesKey = WalletAppManager.getEncKey(password);
+                return mAccountManager.createAccount(accountNickname, aesKey);
+            } else {
+                return Single.just(ERROR_INVALID_PASSWORD);
+            }
         });
     }
 
@@ -147,7 +152,7 @@ public class Tron {
 
     public void loginWithFingerPrint() {
         mWalletAppManager.loginWithFingerPrint();
-        mAccountManager.loadAccountByRepository(null);
+        mAccountManager.loadAccountByRepository(null, mCustomPreference.getLastSelectedAccountId());
     }
 
     public int login(@NonNull String password) {
@@ -157,7 +162,7 @@ public class Tron {
             return ERROR_INVALID_PASSWORD;
         }
 
-        mAccountManager.loadAccountByRepository(null);
+        mAccountManager.loadAccountByRepository(null, mCustomPreference.getLastSelectedAccountId());
 
         return SUCCESS;
     }
@@ -273,6 +278,7 @@ public class Tron {
 
     public boolean changeLoginAccount(@NonNull AccountModel accountModel) {
         mAccountManager.changeLoginAccount(accountModel);
+        mCustomPreference.setLastSelectedAccountId(accountModel.getId());
         return true;
     }
 
@@ -508,7 +514,7 @@ public class Tron {
     }
 
     public Single<Integer> createWallet(String password) {
-        return Single.just(mWalletAppManager.createWallet(password));
+        return Single.fromCallable(() -> mWalletAppManager.createWallet(password));
     }
 
     public void agreeTerms(boolean agree) {
@@ -518,6 +524,8 @@ public class Tron {
     public void migrationOldData(@NonNull String password) {
         if (mWalletAppManager.migrationPassword(password)) {
             mAccountManager.migrationAccount(password);
+            mCustomPreference.setInitWallet(true);
+            mCustomPreference.setKeyStoreVersion(Build.VERSION.SDK_INT);
         }
     }
 }

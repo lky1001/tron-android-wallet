@@ -206,7 +206,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         });
     }
 
-    public int getLoginAccountIndex() {
+    public long getLoginAccountIndex() {
         return mTron.getLoginAccount().getId();
     }
 
@@ -245,7 +245,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
     @Nullable
     public boolean isFavoriteToken(@NonNull String tokenName) {
         if (mTron.getLoginAccount() != null) {
-            int accountId = mTron.getLoginAccount().getId();
+            long accountId = mTron.getLoginAccount().getId();
 
             return mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, tokenName) != null;
         }
@@ -255,7 +255,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
     public void doFavorite(@NonNull String tokenName) {
         if (mTron.getLoginAccount() != null) {
-            int accountId = mTron.getLoginAccount().getId();
+            long accountId = mTron.getLoginAccount().getId();
             FavoriteTokenModel model = FavoriteTokenModel.builder()
                     .accountId(accountId)
                     .tokenName(tokenName)
@@ -267,7 +267,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
     public void removeFavorite(@NonNull String tokenName) {
         if (mTron.getLoginAccount() != null) {
-            int accountId = mTron.getLoginAccount().getId();
+            long accountId = mTron.getLoginAccount().getId();
             FavoriteTokenModel favoriteTokenModel = mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, tokenName);
             mFavoriteTokenDao.delete(favoriteTokenModel);
         }
