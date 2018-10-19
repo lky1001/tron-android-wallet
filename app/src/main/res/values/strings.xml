@@ -318,4 +318,5 @@
     <string name="favorites_text">Only favorites</string>
     <string name="navigation_menu_exchange">Exchange</string>
     <string name="title_exchange">Exchange</string>
+    <string name="empty_exchanges">No Exchange</string>
 </resources>

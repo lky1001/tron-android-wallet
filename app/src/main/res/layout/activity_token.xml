@@ -15,8 +15,7 @@
             android:layout_height="?attr/actionBarSize"
             app:titleTextColor="@android:color/white"
             app:subtitleTextColor="@android:color/white"
-            android:background="?attr/colorPrimary">
-        </android.support.v7.widget.Toolbar>
+            android:background="?attr/colorPrimary"/>
 
         <com.miguelcatalan.materialsearchview.MaterialSearchView
             android:id="@+id/search_view"
@@ -47,7 +46,5 @@
             android:visibility="gone"
             tron:empty_title="@string/empty_tokens"/>
 
-    </android.support.v4.widget.SwipeRefreshLayout>>
-
-
+    </android.support.v4.widget.SwipeRefreshLayout>
 </android.support.constraint.ConstraintLayout>

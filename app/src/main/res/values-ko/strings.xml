@@ -318,4 +318,5 @@
     <string name="favorites_text">즐겨찾기만 보기</string>
     <string name="navigation_menu_exchange">거래소</string>
     <string name="title_exchange">거래소</string>
+    <string name="empty_exchanges">거래 목록이 없습니다</string>
 </resources>
