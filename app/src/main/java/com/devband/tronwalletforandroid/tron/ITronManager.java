@@ -46,9 +46,9 @@ public interface ITronManager {
 
     Single<GrpcAPI.ExchangeList> getExchangeList();
 
-    Single<GrpcAPI.ExchangeList> getPaginatedExchangeList(GrpcAPI.PaginatedMessage paginatedMessage);
+    Single<GrpcAPI.ExchangeList> getPaginatedExchangeList(long offset, long limit);
 
-    Single<Protocol.Exchange> getExchangeById(byte[] id);
+    Single<Protocol.Exchange> getExchangeById(String id);
 
     Single<GrpcAPI.TransactionExtention> createExchangeCreateContract(Contract.ExchangeCreateContract contract);
 

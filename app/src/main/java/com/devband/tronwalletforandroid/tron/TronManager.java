@@ -102,13 +102,17 @@ class TronManager implements ITronManager {
     }
 
     @Override
-    public Single<GrpcAPI.ExchangeList> getPaginatedExchangeList(GrpcAPI.PaginatedMessage paginatedMessage) {
+    public Single<GrpcAPI.ExchangeList> getPaginatedExchangeList(long offset, long limit) {
+        GrpcAPI.PaginatedMessage paginatedMessage = GrpcAPI.PaginatedMessage.newBuilder()
+                .setOffset(offset)
+                .setLimit(limit)
+                .build();
         return Single.fromCallable(() -> grpcClient.getPaginatedExchangeList(paginatedMessage));
     }
 
     @Override
-    public Single<Protocol.Exchange> getExchangeById(byte[] id) {
-        return Single.fromCallable(() -> grpcClient.getExchangeById(id));
+    public Single<Protocol.Exchange> getExchangeById(String id) {
+        return Single.fromCallable(() -> grpcClient.getExchangeById(id.getBytes()));
     }
 
     @Override
