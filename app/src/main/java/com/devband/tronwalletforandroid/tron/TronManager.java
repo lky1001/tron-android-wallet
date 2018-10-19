@@ -95,4 +95,39 @@ class TronManager implements ITronManager {
     public Single<GrpcAPI.BlockExtention> getBlockHeight() {
         return Single.fromCallable(() -> grpcClient.getBlock(-1));
     }
+
+    @Override
+    public Single<GrpcAPI.ExchangeList> getExchangeList() {
+        return Single.fromCallable(() -> grpcClient.getExchangeList());
+    }
+
+    @Override
+    public Single<GrpcAPI.ExchangeList> getPaginatedExchangeList(GrpcAPI.PaginatedMessage paginatedMessage) {
+        return Single.fromCallable(() -> grpcClient.getPaginatedExchangeList(paginatedMessage));
+    }
+
+    @Override
+    public Single<Protocol.Exchange> getExchangeById(byte[] id) {
+        return Single.fromCallable(() -> grpcClient.getExchangeById(id));
+    }
+
+    @Override
+    public Single<GrpcAPI.TransactionExtention> createExchangeCreateContract(Contract.ExchangeCreateContract contract) {
+        return Single.fromCallable(() -> grpcClient.createExchangeCreateContract(contract));
+    }
+
+    @Override
+    public Single<GrpcAPI.TransactionExtention> createExchangeInjectContract(Contract.ExchangeInjectContract contract) {
+        return Single.fromCallable(() -> grpcClient.createExchangeInjectContract(contract));
+    }
+
+    @Override
+    public Single<GrpcAPI.TransactionExtention> createExchangeWithdrawContract(Contract.ExchangeWithdrawContract contract) {
+        return Single.fromCallable(() -> grpcClient.createExchangeWithdrawContract(contract));
+    }
+
+    @Override
+    public Single<GrpcAPI.TransactionExtention> createExchangeTransactionContract(Contract.ExchangeTransactionContract contract) {
+        return Single.fromCallable(() -> grpcClient.createExchangeTransactionContract(contract));
+    }
 }

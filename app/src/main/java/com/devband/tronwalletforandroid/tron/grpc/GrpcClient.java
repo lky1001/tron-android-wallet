@@ -17,6 +17,7 @@ import org.tron.api.WalletGrpc;
 import org.tron.api.WalletSolidityGrpc;
 import org.tron.protos.Contract;
 import org.tron.protos.Contract.AssetIssueContract;
+import org.tron.protos.Protocol;
 import org.tron.protos.Protocol.Account;
 import org.tron.protos.Protocol.Transaction;
 
@@ -148,5 +149,34 @@ public class GrpcClient {
 
     public NumberMessage getTotalTransaction() {
         return blockingStubFullNode.totalTransaction(EmptyMessage.newBuilder().build());
+    }
+
+    public GrpcAPI.ExchangeList getExchangeList() {
+        return blockingStubFullNode.listExchanges(EmptyMessage.newBuilder().build());
+    }
+
+    public GrpcAPI.ExchangeList getPaginatedExchangeList(GrpcAPI.PaginatedMessage paginatedMessage) {
+        return blockingStubFullNode.getPaginatedExchangeList(paginatedMessage);
+    }
+
+    public Protocol.Exchange getExchangeById(byte[] id) {
+        ByteString idBS = ByteString.copyFrom(id);
+        return blockingStubFullNode.getExchangeById(BytesMessage.newBuilder().setValue(idBS).build());
+    }
+
+    public GrpcAPI.TransactionExtention createExchangeCreateContract(Contract.ExchangeCreateContract contract) {
+        return blockingStubFullNode.exchangeCreate(contract);
+    }
+
+    public GrpcAPI.TransactionExtention createExchangeInjectContract(Contract.ExchangeInjectContract contract) {
+        return blockingStubFullNode.exchangeInject(contract);
+    }
+
+    public GrpcAPI.TransactionExtention createExchangeWithdrawContract(Contract.ExchangeWithdrawContract contract) {
+        return blockingStubFullNode.exchangeWithdraw(contract);
+    }
+
+    public GrpcAPI.TransactionExtention createExchangeTransactionContract(Contract.ExchangeTransactionContract contract) {
+        return blockingStubFullNode.exchangeTransaction(contract);
     }
 }
