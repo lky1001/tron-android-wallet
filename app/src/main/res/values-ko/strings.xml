@@ -316,4 +316,6 @@
     <string name="required_password">비밀번호를 입력하세요.</string>
     <string name="preparing_btn_text">준비중</string>
     <string name="favorites_text">즐겨찾기만 보기</string>
+    <string name="navigation_menu_exchange">거래소</string>
+    <string name="title_exchange">거래소</string>
 </resources>

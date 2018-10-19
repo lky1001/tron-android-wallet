@@ -6,6 +6,7 @@
 
     <color name="activity_intro_background">#cf312e</color>
     <color name="activity_create_wallet_background">#ffffff</color>
+    <color name="activity_exchange_background">#ffffff</color>
     <color name="activity_address_background">#ffffff</color>
     <color name="navigation_header_need_signin_color">#ffffff</color>
     <color name="more_background_color">#f3f3f3</color>

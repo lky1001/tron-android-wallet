@@ -41,6 +41,7 @@ import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.blockexplorer.BlockExplorerActivity;
+import com.devband.tronwalletforandroid.ui.exchange.ExchangeActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 import com.devband.tronwalletforandroid.ui.main.adapter.MyTokenListAdapter;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
@@ -415,6 +416,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 break;
             case R.id.drawer_item_block_explorer:
                 startActivity(BlockExplorerActivity.class);
+                break;
+            case R.id.drawer_item_exchange:
+                startActivity(ExchangeActivity.class);
                 break;
             case R.id.drawer_item_more:
                  startActivity(MoreActivity.class);
