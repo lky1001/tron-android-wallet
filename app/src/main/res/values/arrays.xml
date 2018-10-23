@@ -2,16 +2,11 @@
 <resources>
     <!--https://tron-wiki.readthedocs.io/en/latest/Technical_Overview_of_TRON.html-->
     <array name="fullnode.ip.list">
-        <item>54.236.37.243:50051</item>
-        <item>52.53.189.99:50051</item>
-        <item>34.253.187.192:50051</item>
-        <item>54.252.224.209:50051</item>
-        <item>35.180.51.163:50051</item>
-        <item>52.62.210.100:50051</item>
+        <item>grpc.trongrid.io:50051</item>
     </array>
 
     <array name="solidity.ip.list">
-        <item>39.105.66.80:50051</item>
+        <item>grpc.trongrid.io:50052</item>
     </array>
 
     <string-array name="feedback_email_recipient">
