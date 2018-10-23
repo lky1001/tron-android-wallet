@@ -325,11 +325,23 @@ public class AccountManager {
         }
     }
 
-    public boolean changePassword(String newPassword) {
+    public boolean changePassword(String oldPassword, String newPassword) {
         List<AccountModel> accountList = mAccountRepository.loadAllAccounts().blockingGet();
         
         for (AccountModel accountModel : accountList) {
+            String priKeyEnced = mKeyStore.decryptString(accountModel.getAccount(), Constants.ALIAS_ADDRESS_KEY);
 
+            byte[] aesKey = WalletAppManager.getEncKey(oldPassword);
+
+            byte[] privKeyPlain = getEcKeyFromEncodedPrivateKey(priKeyEnced, aesKey).getPrivKeyBytes();
+            byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, aesKey);
+
+            String privKeyStr = ByteArray.toHexString(privKeyEnced);
+            String encPrivKey = mKeyStore.encryptString(privKeyStr, Constants.ALIAS_ACCOUNT_KEY);
+
+            accountModel.setAccount(encPrivKey);
+
+            mAccountRepository.updateAccount(accountModel).blockingGet();
         }
 
         return true;
