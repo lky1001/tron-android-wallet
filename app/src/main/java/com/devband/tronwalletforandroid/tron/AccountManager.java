@@ -324,4 +324,14 @@ public class AccountManager {
             mAccountRepository.updateAccount(accountModel).blockingGet();
         }
     }
+
+    public boolean changePassword(String newPassword) {
+        List<AccountModel> accountList = mAccountRepository.loadAllAccounts().blockingGet();
+        
+        for (AccountModel accountModel : accountList) {
+
+        }
+
+        return true;
+    }
 }

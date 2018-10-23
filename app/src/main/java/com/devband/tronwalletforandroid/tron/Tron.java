@@ -509,7 +509,10 @@ public class Tron {
         });
     }
 
-    public boolean changePassword(String newPassword) {
+    public boolean changePassword(@NonNull String originPassword, @NonNull String newPassword) {
+        if (mWalletAppManager.changePassword(originPassword, newPassword)) {
+            return mAccountManager.changePassword(newPassword);
+        }
         return false;
     }
 

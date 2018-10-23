@@ -111,6 +111,7 @@ public class WalletAppManager {
 
         if (mPasswordEncoder.matches(originPassword, wallet.getPassword())) {
             wallet.setPassword(mPasswordEncoder.encode(newPassword));
+            wallet.setUpdated(Calendar.getInstance().getTime());
             mWalletDao.update(wallet);
             return true;
         }
