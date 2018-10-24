@@ -210,18 +210,10 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         return mTron.getLoginAccount().getId();
     }
 
-    public void changePassword(@NonNull String originPassword, @NonNull String newPassword) {
-        mView.showLoadingDialog();
+    public void changePassword(@NonNull String oldPassword, @NonNull String newPassword) {
+        mView.showChangePasswordDialog();
 
-        Single.fromCallable(() -> {
-            boolean result = mWalletAppManager.changePassword(originPassword, newPassword);
-
-            if (result) {
-                return mTron.changePassword(newPassword);
-            }
-
-            return false;
-        })
+        Single.fromCallable(() -> mTron.changePassword(oldPassword, newPassword))
         .subscribeOn(mRxJavaSchedulers.getIo())
         .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<Boolean>() {

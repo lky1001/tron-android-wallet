@@ -23,4 +23,6 @@ public interface MyAccountView extends IView {
     void changePasswordResult(boolean result);
 
     void showInvalidPasswordMsg();
+
+    void showChangePasswordDialog();
 }

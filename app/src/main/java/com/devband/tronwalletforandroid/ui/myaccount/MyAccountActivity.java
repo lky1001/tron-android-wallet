@@ -22,7 +22,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
@@ -297,6 +296,11 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
         Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password), Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void showChangePasswordDialog() {
+        Toast.makeText(MyAccountActivity.this, getString(R.string.change_password_loading_msg), Toast.LENGTH_SHORT).show();
+    }
+
     @OnClick(R.id.btn_change_password)
     public void onChangePasswordClick() {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
@@ -308,42 +312,35 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                 .customView(R.layout.dialog_change_password, true)
                 .positiveText(R.string.confirm_text)
                 .negativeText(R.string.cancel_text)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        String currentPassword = ((EditText) dialog.getCustomView().findViewById(R.id.current_password))
-                                .getText().toString();
-                        if (!mMyAccountPresenter.matchPassword(currentPassword)) {
-                            Toast.makeText(dialog.getContext(), R.string.unmatched_current_password, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        
-                        String newPassword = ((EditText) dialog.getCustomView().findViewById(R.id.new_password))
-                                .getText().toString();
-                        String confirmNewPassword = ((EditText) dialog.getCustomView().findViewById(R.id.confirm_new_password))
-                                .getText().toString();
+                .onPositive((dialog, which) -> {
+                    String currentPassword = ((EditText) dialog.getCustomView().findViewById(R.id.current_password))
+                            .getText().toString();
 
-                        if (!TextUtils.equals(newPassword, confirmNewPassword)) {
-                            Toast.makeText(dialog.getContext(), R.string.not_equal_new_password, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        if (!WalletAppManager.passwordValid(newPassword)) {
-                            Toast.makeText(dialog.getContext(), R.string.invalid_new_password, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        dialog.dismiss();
-                        mMyAccountPresenter.changePassword(currentPassword, confirmNewPassword);
-                        Log.d("hanseon--", "positive : " + currentPassword + ", " + newPassword + "," + confirmNewPassword);
+                    if (!mMyAccountPresenter.matchPassword(currentPassword)) {
+                        Toast.makeText(dialog.getContext(), R.string.unmatched_current_password, Toast.LENGTH_SHORT).show();
+                        return;
                     }
+
+                    String newPassword = ((EditText) dialog.getCustomView().findViewById(R.id.new_password))
+                            .getText().toString();
+                    String confirmNewPassword = ((EditText) dialog.getCustomView().findViewById(R.id.confirm_new_password))
+                            .getText().toString();
+
+                    if (!TextUtils.equals(newPassword, confirmNewPassword)) {
+                        Toast.makeText(dialog.getContext(), R.string.not_equal_new_password, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (!WalletAppManager.passwordValid(newPassword)) {
+                        Toast.makeText(dialog.getContext(), R.string.invalid_new_password, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    dialog.dismiss();
+                    mMyAccountPresenter.changePassword(currentPassword, confirmNewPassword);
+                    Log.d("hanseon--", "positive : " + currentPassword + ", " + newPassword + "," + confirmNewPassword);
                 })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Log.d("hanseon--", "negative");
-                    }
-                });
+                .onNegative((dialog, which) -> Log.d("hanseon--", "negative"));
 
         MaterialDialog dialog = builder.build();
         dialog.show();
