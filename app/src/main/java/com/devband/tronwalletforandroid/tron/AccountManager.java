@@ -25,6 +25,7 @@ import org.tron.protos.Protocol;
 import java.io.File;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.Single;
@@ -331,16 +332,30 @@ public class AccountManager {
         for (AccountModel accountModel : accountList) {
             String priKeyEnced = mKeyStore.decryptString(accountModel.getAccount(), Constants.ALIAS_ADDRESS_KEY);
 
-            byte[] aesKey = WalletAppManager.getEncKey(oldPassword);
+            byte[] oldAesKey = WalletAppManager.getEncKey(oldPassword);
 
-            byte[] privKeyPlain = getEcKeyFromEncodedPrivateKey(priKeyEnced, aesKey).getPrivKeyBytes();
-            byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, aesKey);
+            if (priKeyEnced == null || oldAesKey == null) {
+                return false;
+            }
+
+            byte[] privKeyPlain = getEcKeyFromEncodedPrivateKey(priKeyEnced, oldAesKey).getPrivKeyBytes();
+
+            byte[] newAesKey = WalletAppManager.getEncKey(newPassword);
+
+            if (newAesKey == null) {
+                return false;
+            }
+
+            byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, newAesKey);
 
             String privKeyStr = ByteArray.toHexString(privKeyEnced);
             String encPrivKey = mKeyStore.encryptString(privKeyStr, Constants.ALIAS_ACCOUNT_KEY);
 
             accountModel.setAccount(encPrivKey);
+        }
 
+        for (AccountModel accountModel : accountList) {
+            accountModel.setUpdated(Calendar.getInstance().getTime());
             mAccountRepository.updateAccount(accountModel).blockingGet();
         }
 

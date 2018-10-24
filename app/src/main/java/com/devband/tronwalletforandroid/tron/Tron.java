@@ -511,8 +511,14 @@ public class Tron {
 
     public boolean changePassword(@NonNull String oldPassword, @NonNull String newPassword) {
         if (mWalletAppManager.changePassword(oldPassword, newPassword)) {
-            return mAccountManager.changePassword(oldPassword, newPassword);
+            if (!mAccountManager.changePassword(oldPassword, newPassword)) {
+                // rollback
+                mWalletAppManager.changePassword(newPassword, oldPassword);
+                return false;
+            }
+            return true;
         }
+
         return false;
     }
 
