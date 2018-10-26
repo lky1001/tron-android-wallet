@@ -330,7 +330,7 @@ public class AccountManager {
         List<AccountModel> accountList = mAccountRepository.loadAllAccounts().blockingGet();
         
         for (AccountModel accountModel : accountList) {
-            String priKeyEnced = mKeyStore.decryptString(accountModel.getAccount(), Constants.ALIAS_ADDRESS_KEY);
+            String priKeyEnced = mKeyStore.decryptString(accountModel.getAccount(), Constants.ALIAS_ACCOUNT_KEY);
 
             byte[] oldAesKey = WalletAppManager.getEncKey(oldPassword);
 
