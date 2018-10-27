@@ -123,6 +123,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
     @OnClick(R.id.btn_send_trx)
     public void onSendTrxClick() {
         String address = mInputAddress.getText().toString();
+        address = address.trim();
 
         if (address.isEmpty()) {
             Toast.makeText(SendTokenActivity.this, getString(R.string.invalid_address),
