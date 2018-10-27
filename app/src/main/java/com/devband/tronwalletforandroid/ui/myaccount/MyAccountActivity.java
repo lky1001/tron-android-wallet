@@ -298,7 +298,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
     @Override
     public void showChangePasswordDialog() {
-        Toast.makeText(MyAccountActivity.this, getString(R.string.change_password_loading_msg), Toast.LENGTH_SHORT).show();
+        showProgressDialog(getString(R.string.change_password), getString(R.string.change_password_loading_msg));
     }
 
     @OnClick(R.id.btn_change_password)
