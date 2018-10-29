@@ -323,4 +323,7 @@
     <string name="change_password_loading_msg">Never turn off app or phone!!</string>
     <string name="change_password_warning_msg">* Never turn off app or phone while changing password. You lose everything.</string>
     <string name="navigation_menu_change_password">Change Password</string>
+    <string name="remove_account_warning_msg">Unexpected bad things will happen if you don’t read this!</string>
+    <string name="remove_account_remind_msg">This action cannot be undone. This will permanently delete the account. Please type in the name of the account to confirm.</string>
+    <string name="account_name_text">Account Name</string>
 </resources>
