@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +26,6 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
-import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
@@ -280,70 +278,14 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
     }
 
     @Override
-    public void changePasswordResult(boolean result) {
-        hideDialog();
-
-        if (result) {
-            Toast.makeText(MyAccountActivity.this, getString(R.string.change_password_success_msg), Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(MyAccountActivity.this, getString(R.string.change_password_fail_msg), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
     public void showInvalidPasswordMsg() {
         hideDialog();
         Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password), Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void showChangePasswordDialog() {
-        showProgressDialog(getString(R.string.change_password), getString(R.string.change_password_loading_msg));
-    }
+    @OnClick(R.id.btn_remove_account)
+    public void onRemoveAccountClick() {
 
-    @OnClick(R.id.btn_change_password)
-    public void onChangePasswordClick() {
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
-                .title(R.string.change_password)
-                .titleColorRes(R.color.colorAccent)
-                .contentColorRes(R.color.colorAccent)
-                .backgroundColorRes(android.R.color.white)
-                .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
-                .customView(R.layout.dialog_change_password, true)
-                .positiveText(R.string.confirm_text)
-                .negativeText(R.string.cancel_text)
-                .onPositive((dialog, which) -> {
-                    String currentPassword = ((EditText) dialog.getCustomView().findViewById(R.id.current_password))
-                            .getText().toString();
-
-                    if (!mMyAccountPresenter.matchPassword(currentPassword)) {
-                        Toast.makeText(dialog.getContext(), R.string.unmatched_current_password, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    String newPassword = ((EditText) dialog.getCustomView().findViewById(R.id.new_password))
-                            .getText().toString();
-                    String confirmNewPassword = ((EditText) dialog.getCustomView().findViewById(R.id.confirm_new_password))
-                            .getText().toString();
-
-                    if (!TextUtils.equals(newPassword, confirmNewPassword)) {
-                        Toast.makeText(dialog.getContext(), R.string.not_equal_new_password, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (!WalletAppManager.passwordValid(newPassword)) {
-                        Toast.makeText(dialog.getContext(), R.string.invalid_new_password, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    dialog.dismiss();
-                    mMyAccountPresenter.changePassword(currentPassword, confirmNewPassword);
-                    Log.d("hanseon--", "positive : " + currentPassword + ", " + newPassword + "," + confirmNewPassword);
-                })
-                .onNegative((dialog, which) -> Log.d("hanseon--", "negative"));
-
-        MaterialDialog dialog = builder.build();
-        dialog.show();
     }
 
     @OnClick(R.id.btn_export_private_key)

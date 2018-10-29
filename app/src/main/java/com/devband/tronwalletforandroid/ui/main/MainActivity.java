@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +40,7 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.blockexplorer.BlockExplorerActivity;
 import com.devband.tronwalletforandroid.ui.exchange.ExchangeActivity;
@@ -405,6 +407,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             case R.id.drawer_item_my_address:
                 startActivity(AddressActivity.class);
                 break;
+            case R.id.drawer_item_change_password:
+                changePassword();
+                break;
             case R.id.drawer_item_send_tron:
                 startActivity(SendTokenActivity.class);
                 break;
@@ -428,6 +433,49 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 break;
         }
         return false;
+    }
+
+    private void changePassword() {
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                .title(R.string.change_password)
+                .titleColorRes(R.color.colorAccent)
+                .contentColorRes(R.color.colorAccent)
+                .backgroundColorRes(android.R.color.white)
+                .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                .customView(R.layout.dialog_change_password, true)
+                .positiveText(R.string.confirm_text)
+                .negativeText(R.string.cancel_text)
+                .onPositive((dialog, which) -> {
+                    String currentPassword = ((EditText) dialog.getCustomView().findViewById(R.id.current_password))
+                            .getText().toString();
+
+                    if (!mMainPresenter.matchPassword(currentPassword)) {
+                        Toast.makeText(dialog.getContext(), R.string.unmatched_current_password, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    String newPassword = ((EditText) dialog.getCustomView().findViewById(R.id.new_password))
+                            .getText().toString();
+                    String confirmNewPassword = ((EditText) dialog.getCustomView().findViewById(R.id.confirm_new_password))
+                            .getText().toString();
+
+                    if (!TextUtils.equals(newPassword, confirmNewPassword)) {
+                        Toast.makeText(dialog.getContext(), R.string.not_equal_new_password, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (!WalletAppManager.passwordValid(newPassword)) {
+                        Toast.makeText(dialog.getContext(), R.string.invalid_new_password, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    dialog.dismiss();
+                    mMainPresenter.changePassword(currentPassword, confirmNewPassword);
+                })
+                .onNegative((dialog, which) -> Log.d("hanseon--", "negative"));
+
+        MaterialDialog dialog = builder.build();
+        dialog.show();
     }
 
     public void logout() {
@@ -690,5 +738,21 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @OnClick(R.id.get_token_button)
     public void onGetTokenClick() {
         startActivity(TokenActivity.class);
+    }
+
+    @Override
+    public void changePasswordResult(boolean result) {
+        hideDialog();
+
+        if (result) {
+            Toast.makeText(MainActivity.this, getString(R.string.change_password_success_msg), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(MainActivity.this, getString(R.string.change_password_fail_msg), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void showChangePasswordDialog() {
+        showProgressDialog(getString(R.string.change_password), getString(R.string.change_password_loading_msg));
     }
 }

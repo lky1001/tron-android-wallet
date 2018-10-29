@@ -6,6 +6,11 @@
         android:iconTint="@color/colorPrimary"
         android:title="@string/navigation_menu_my_account" />
 
+    <item android:id="@+id/drawer_item_change_password"
+        android:icon="@drawable/ic_password"
+        android:iconTint="@color/colorPrimary"
+        android:title="@string/navigation_menu_change_password" />
+
     <item android:id="@+id/drawer_item_my_address"
         android:icon="@drawable/ic_qrcode_white"
         android:iconTint="@color/colorPrimary"

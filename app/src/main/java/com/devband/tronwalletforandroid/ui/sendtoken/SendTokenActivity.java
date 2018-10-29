@@ -165,6 +165,8 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                 .append(getString(R.string.send_token_amount_text))
                 .append(amountText);
 
+        final String finalAddress = address;
+
         new MaterialDialog.Builder(SendTokenActivity.this)
                 .title(R.string.send_token_title)
                 .content(sb.toString())
@@ -178,10 +180,10 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                         long amount = (long) (finalAmountDouble * Constants.ONE_TRX);
 
                         showProgressDialog(null, getString(R.string.loading_msg));
-                        mSendTokenPresenter.sendTron(password, address, amount);
+                        mSendTokenPresenter.sendTron(password, finalAddress, amount);
                     } else {
                         showProgressDialog(null, getString(R.string.loading_msg));
-                        mSendTokenPresenter.transferAsset(password, address, mSelectedAsset.getName(), (long) finalAmountDouble);
+                        mSendTokenPresenter.transferAsset(password, finalAddress, mSelectedAsset.getName(), (long) finalAmountDouble);
                     }
                 }).show();
     }

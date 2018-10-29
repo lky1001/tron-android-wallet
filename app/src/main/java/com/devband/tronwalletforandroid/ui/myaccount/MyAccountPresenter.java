@@ -129,9 +129,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         });
     }
 
-    public boolean matchPassword(@NonNull String password) {
-        return mWalletAppManager.login(password) == WalletAppManager.SUCCESS;
-    }
+
 
     public String getLoginPrivateKey(@NonNull String password) {
         return mTron.getLoginPrivateKey(password);
@@ -210,30 +208,6 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         return mTron.getLoginAccount().getId();
     }
 
-    public void changePassword(@NonNull String oldPassword, @NonNull String newPassword) {
-        mView.showChangePasswordDialog();
-
-        Single.fromCallable(() -> mTron.changePassword(oldPassword, newPassword))
-        .subscribeOn(mRxJavaSchedulers.getIo())
-        .observeOn(mRxJavaSchedulers.getMainThread())
-        .subscribe(new SingleObserver<Boolean>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onSuccess(Boolean result) {
-                mView.changePasswordResult(result);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                mView.changePasswordResult(false);
-            }
-        });
-    }
-
     @Nullable
     public boolean isFavoriteToken(@NonNull String tokenName) {
         if (mTron.getLoginAccount() != null) {
@@ -263,5 +237,9 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
             FavoriteTokenModel favoriteTokenModel = mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, tokenName);
             mFavoriteTokenDao.delete(favoriteTokenModel);
         }
+    }
+
+    public boolean matchPassword(@NonNull String password) {
+        return mWalletAppManager.login(password) == WalletAppManager.SUCCESS;
     }
 }

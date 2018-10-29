@@ -288,7 +288,7 @@
     <string name="empty_transfer">전송 데이터가 없습니다</string>
     <string name="empty_transactions">거래 데이터가 없습니다</string>
     <string name="change_password">비밀번호 변경</string>
-    <string name="change_wallet_password">지갑 비밀번호 변경</string>
+    <string name="remove_account_text">계정 삭제</string>
     <string name="current_password">현재 비밀번호</string>
     <string name="new_password">새 비밀번호</string>
     <string name="confirm_new_password">새 비밀번호 확인</string>
@@ -322,4 +322,5 @@
     <string name="empty_exchanges">거래 목록이 없습니다</string>
     <string name="change_password_loading_msg">절대로 앱이나 휴대폰을 종료하지마세요!!</string>
     <string name="change_password_warning_msg">* 비밀번호를 변경하는 동안 절대로 앱이나 휴대폰을 종료하지 마세요. 모든 것을 잃게 됩니다.</string>
+    <string name="navigation_menu_change_password">지갑 비밀번호 변경</string>
 </resources>
