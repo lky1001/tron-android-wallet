@@ -37,15 +37,15 @@
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
         <EditText
             android:id="@+id/input_account_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/account_name_text"
-            android:textColor="@android:color/black"
-            android:inputType="textPassword" />
+            android:textColor="@android:color/black" />
     </android.support.design.widget.TextInputLayout>
 
     <Button

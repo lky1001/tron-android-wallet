@@ -230,7 +230,7 @@
                     android:layout_margin="5dp"
                     android:background="@color/copy_address_button_color"
                     android:textColor="@android:color/white"
-                    android:text="@string/change_wallet_password" />
+                    android:text="@string/remove_account_text" />
 
             </LinearLayout>
 

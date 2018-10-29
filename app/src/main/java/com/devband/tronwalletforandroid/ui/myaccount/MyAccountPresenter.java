@@ -208,6 +208,10 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         return mTron.getLoginAccount().getId();
     }
 
+    public AccountModel getLoginAccount() {
+        return mTron.getLoginAccount();
+    }
+
     @Nullable
     public boolean isFavoriteToken(@NonNull String tokenName) {
         if (mTron.getLoginAccount() != null) {
@@ -241,5 +245,9 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
     public boolean matchPassword(@NonNull String password) {
         return mWalletAppManager.login(password) == WalletAppManager.SUCCESS;
+    }
+
+    public void removeAccount(long accountId, String accountName) {
+
     }
 }

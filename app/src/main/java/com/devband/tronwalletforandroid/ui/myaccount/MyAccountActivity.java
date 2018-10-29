@@ -30,9 +30,11 @@ import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
 import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -285,7 +287,46 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
 
     @OnClick(R.id.btn_remove_account)
     public void onRemoveAccountClick() {
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                .title(R.string.title_remove_acocunt)
+                .titleColorRes(R.color.colorAccent)
+                .contentColorRes(R.color.colorAccent)
+                .backgroundColorRes(android.R.color.white)
+                .customView(R.layout.dialog_remove_account, false);
 
+        MaterialDialog dialog = builder.build();
+
+        Button removeButton = (Button) dialog.getCustomView().findViewById(R.id.btn_remove_account);
+        TextView accountNameText = (TextView) dialog.getCustomView().findViewById(R.id.account_name_text);
+        EditText accountNameInput = (EditText) dialog.getCustomView().findViewById(R.id.input_account_name);
+
+        removeButton.setEnabled(false);
+
+        final AccountModel loginAccount = mMyAccountPresenter.getLoginAccount();
+
+        addDisposable(RxTextView.textChanges(accountNameInput)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .map(CharSequence::toString)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(accountName -> {
+                    if (loginAccount.getName().equals(accountName)) {
+                        removeButton.setBackgroundResource(R.color.colorAccent);
+                        removeButton.setEnabled(true);
+                    } else {
+                        removeButton.setBackgroundResource(R.color.copy_address_button_color);
+                        removeButton.setEnabled(false);
+                    }
+                }));
+
+        accountNameText.setText(loginAccount.getName());
+
+        removeButton.setOnClickListener(v -> {
+            if (loginAccount.getName().equals(accountNameInput.getText().toString())) {
+                mMyAccountPresenter.removeAccount(loginAccount.getId(), accountNameInput.getText().toString());
+            }
+        });
+
+        dialog.show();
     }
 
     @OnClick(R.id.btn_export_private_key)
