@@ -132,11 +132,12 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
         }
 
         String amountText = mInputAmount.getText().toString();
+        String removeCommaAmountText = amountText.replace(",", "");
 
         double amountDouble = 0;
 
         try {
-            amountDouble = Double.parseDouble(amountText);
+            amountDouble = Double.parseDouble(removeCommaAmountText);
         } catch (NumberFormatException e) {
             e.printStackTrace();
             Toast.makeText(SendTokenActivity.this, getString(R.string.invalid_amount),
