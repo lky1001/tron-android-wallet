@@ -25,6 +25,7 @@ import java.util.List;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
@@ -212,6 +213,10 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         return mTron.getLoginAccount();
     }
 
+    public int getAccountCount() {
+        return mTron.getAccountCount();
+    }
+
     @Nullable
     public boolean isFavoriteToken(@NonNull String tokenName) {
         if (mTron.getLoginAccount() != null) {
@@ -248,6 +253,13 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
     }
 
     public void removeAccount(long accountId, String accountName) {
-
+        mView.showLoadingDialog();
+        Single.fromCallable(() -> {
+            mTron.removeAccount(accountId, accountName);
+            return true;
+        })
+                .subscribeOn(mRxJavaSchedulers.getIo())
+                .observeOn(mRxJavaSchedulers.getMainThread())
+                .subscribe((result) -> mView.successDelete());
     }
 }

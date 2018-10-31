@@ -361,4 +361,12 @@ public class AccountManager {
 
         return true;
     }
+
+    public void removeAccount(long accountId, String accountName) {
+        AccountModel accountModel = mAccountRepository.loadAccount(accountId).blockingGet();
+
+        if (accountModel != null && accountName.equals(accountModel.getName())) {
+            mAccountRepository.delete(accountModel);
+        }
+    }
 }

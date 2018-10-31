@@ -327,4 +327,5 @@
     <string name="remove_account_remind_msg">This action cannot be undone. This will permanently delete the account. Please type in the name of the account to confirm.</string>
     <string name="account_name_text">Account Name</string>
     <string name="title_remove_acocunt">Are you absolutely sure?</string>
+    <string name="remove_account_error_msg">If you have only one account, you can not delete it.</string>
 </resources>

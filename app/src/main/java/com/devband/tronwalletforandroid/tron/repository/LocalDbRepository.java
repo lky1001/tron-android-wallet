@@ -44,6 +44,11 @@ public class LocalDbRepository implements AccountRepository {
     }
 
     @Override
+    public void delete(@NonNull AccountModel accountModel) {
+        mAccountDao.delete(accountModel);
+    }
+
+    @Override
     public Maybe<AccountModel> loadAccount(long index) {
         return Maybe.fromCallable(() -> mAccountDao.loadAccountById(index));
     }

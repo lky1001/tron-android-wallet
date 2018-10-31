@@ -113,36 +113,23 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
         mMyAccountPresenter.getAccountList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<List<AccountModel>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+                .subscribe(accountModelList -> {
+                    mAccountAdapter = new ArrayAdapter<>(MyAccountActivity.this, android.R.layout.simple_spinner_item,
+                            accountModelList);
 
-                    }
+                    mAccountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    mAccountSpinner.setAdapter(mAccountAdapter);
 
-                    @Override
-                    public void onSuccess(List<AccountModel> accountModelList) {
-                        mAccountAdapter = new ArrayAdapter<>(MyAccountActivity.this, android.R.layout.simple_spinner_item,
-                                accountModelList);
-
-                        mAccountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        mAccountSpinner.setAdapter(mAccountAdapter);
-
-                        for (int i = 0; i < accountModelList.size(); i++) {
-                            long id = mMyAccountPresenter.getLoginAccountIndex();
-                            if (id == accountModelList.get(i).getId()) {
-                                mAccountSpinner.setSelection(i);
-                                break;
-                            }
+                    for (int i = 0; i < accountModelList.size(); i++) {
+                        long id = mMyAccountPresenter.getLoginAccountIndex();
+                        if (id == accountModelList.get(i).getId()) {
+                            mAccountSpinner.setSelection(i);
+                            break;
                         }
-
-                        mAccountSpinner.setOnItemSelectedListener(mAccountItemSelectedListener);
                     }
 
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
+                    mAccountSpinner.setOnItemSelectedListener(mAccountItemSelectedListener);
+                }, e -> {});
     }
 
     @Override
@@ -285,8 +272,21 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
         Toast.makeText(MyAccountActivity.this, getString(R.string.invalid_password), Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void successDelete() {
+        hideDialog();
+
+        initAccountList();
+    }
+
     @OnClick(R.id.btn_remove_account)
     public void onRemoveAccountClick() {
+        if (mMyAccountPresenter.getAccountCount() < 2) {
+            Toast.makeText(MyAccountActivity.this, getString(R.string.remove_account_error_msg),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
                 .title(R.string.title_remove_acocunt)
                 .titleColorRes(R.color.colorAccent)

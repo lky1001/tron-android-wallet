@@ -317,36 +317,23 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             mMainPresenter.getAccountList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new SingleObserver<List<AccountModel>>() {
-                @Override
-                public void onSubscribe(Disposable d) {
+            .subscribe((accountModelList) -> {
+                long id = mMainPresenter.getLoginAccountIndex();
 
-                }
+                int size = accountModelList.size();
 
-                @Override
-                public void onSuccess(List<AccountModel> accountModelList) {
-                    long id = mMainPresenter.getLoginAccountIndex();
-
-                    int size = accountModelList.size();
-
-                    for (int i = 0; i < size; i++) {
-                        if (id == accountModelList.get(i).getId()) {
-                            if (mAccountSpinner.getSelectedItemPosition() != i) {
-                                mAccountSpinner.setSelection(i);
-                                return;
-                            }
-                            break;
+                for (int i = 0; i < size; i++) {
+                    if (id == accountModelList.get(i).getId()) {
+                        if (mAccountSpinner.getSelectedItemPosition() != i) {
+                            mAccountSpinner.setSelection(i);
+                            return;
                         }
-                     }
-
-                     mAccountAdapter.notifyDataSetChanged();
+                        break;
+                    }
                 }
 
-                @Override
-                public void onError(Throwable e) {
-
-                }
-            });
+                mAccountAdapter.notifyDataSetChanged();
+            }, (e) -> {});
 
             mShowOnlyFavoritesCheckBox.setChecked(mMainPresenter.getIsFavoritesTokens());
         } else {

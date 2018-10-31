@@ -286,6 +286,10 @@ public class Tron {
         return prefix + (mAccountManager.getAccountCount() + 1);
     }
 
+    public int getAccountCount() {
+        return mAccountManager.getAccountCount();
+    }
+
     public Single<GrpcAPI.WitnessList> getWitnessList() {
         return mTronManager.listWitnesses();
     }
@@ -536,5 +540,9 @@ public class Tron {
             mCustomPreference.setInitWallet(true);
             mCustomPreference.setKeyStoreVersion(Build.VERSION.SDK_INT);
         }
+    }
+
+    public void removeAccount(long accountId, String accountName) {
+        mAccountManager.removeAccount(accountId, accountName);
     }
 }

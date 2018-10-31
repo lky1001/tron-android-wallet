@@ -21,4 +21,6 @@ public interface MyAccountView extends IView {
     void unableToUnfreeze();
 
     void showInvalidPasswordMsg();
+
+    void successDelete();
 }
