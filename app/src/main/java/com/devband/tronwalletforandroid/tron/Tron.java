@@ -255,8 +255,6 @@ public class Tron {
         if (mAccountManager != null) {
             mAccountManager.logout();
         }
-
-        mAccountManager = null;
     }
 
     public Single<Boolean> hasAccount() {
