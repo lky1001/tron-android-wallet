@@ -467,7 +467,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     public void logout() {
         mMainPresenter.logout();
-        checkLoginState();
+        finishActivity();
+        startActivity(LoginActivity.class);
     }
 
     private void createAccount() {
