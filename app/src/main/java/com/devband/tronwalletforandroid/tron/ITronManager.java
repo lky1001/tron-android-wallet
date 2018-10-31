@@ -43,4 +43,18 @@ public interface ITronManager {
     Single<Boolean> broadcastTransaction(Protocol.Transaction transaction);
 
     Single<GrpcAPI.BlockExtention> getBlockHeight();
+
+    Single<GrpcAPI.ExchangeList> getExchangeList();
+
+    Single<GrpcAPI.ExchangeList> getPaginatedExchangeList(long offset, long limit);
+
+    Single<Protocol.Exchange> getExchangeById(String id);
+
+    Single<GrpcAPI.TransactionExtention> createExchangeCreateContract(Contract.ExchangeCreateContract contract);
+
+    Single<GrpcAPI.TransactionExtention> createExchangeInjectContract(Contract.ExchangeInjectContract contract);
+
+    Single<GrpcAPI.TransactionExtention> createExchangeWithdrawContract(Contract.ExchangeWithdrawContract contract);
+
+    Single<GrpcAPI.TransactionExtention> createExchangeTransactionContract(Contract.ExchangeTransactionContract contract);
 }

@@ -3,7 +3,6 @@
     package="com.devband.tronwalletforandroid">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
@@ -121,6 +120,10 @@
 
         <activity
             android:name=".ui.accountdetail.overview.AccountVoteActivity"
+            android:theme="@style/WalletTheme" />
+
+        <activity
+            android:name=".ui.exchange.ExchangeActivity"
             android:theme="@style/WalletTheme" />
 
         <activity

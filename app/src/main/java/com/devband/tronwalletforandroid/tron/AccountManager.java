@@ -25,6 +25,7 @@ import org.tron.protos.Protocol;
 import java.io.File;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.Single;
@@ -322,6 +323,50 @@ public class AccountManager {
             accountModel.setAccount(encPriKey);
 
             mAccountRepository.updateAccount(accountModel).blockingGet();
+        }
+    }
+
+    public boolean changePassword(String oldPassword, String newPassword) {
+        List<AccountModel> accountList = mAccountRepository.loadAllAccounts().blockingGet();
+        
+        for (AccountModel accountModel : accountList) {
+            String priKeyEnced = mKeyStore.decryptString(accountModel.getAccount(), Constants.ALIAS_ACCOUNT_KEY);
+
+            byte[] oldAesKey = WalletAppManager.getEncKey(oldPassword);
+
+            if (priKeyEnced == null || oldAesKey == null) {
+                return false;
+            }
+
+            byte[] privKeyPlain = getEcKeyFromEncodedPrivateKey(priKeyEnced, oldAesKey).getPrivKeyBytes();
+
+            byte[] newAesKey = WalletAppManager.getEncKey(newPassword);
+
+            if (newAesKey == null) {
+                return false;
+            }
+
+            byte[] privKeyEnced = SymmEncoder.AES128EcbEnc(privKeyPlain, newAesKey);
+
+            String privKeyStr = ByteArray.toHexString(privKeyEnced);
+            String encPrivKey = mKeyStore.encryptString(privKeyStr, Constants.ALIAS_ACCOUNT_KEY);
+
+            accountModel.setAccount(encPrivKey);
+        }
+
+        for (AccountModel accountModel : accountList) {
+            accountModel.setUpdated(Calendar.getInstance().getTime());
+            mAccountRepository.updateAccount(accountModel).blockingGet();
+        }
+
+        return true;
+    }
+
+    public void removeAccount(long accountId, String accountName) {
+        AccountModel accountModel = mAccountRepository.loadAccount(accountId).blockingGet();
+
+        if (accountModel != null && accountName.equals(accountModel.getName())) {
+            mAccountRepository.delete(accountModel);
         }
     }
 }

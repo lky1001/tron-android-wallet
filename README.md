@@ -1,6 +1,6 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/VERSION-1.3.0-green.svg">
-  <img src="https://img.shields.io/badge/ANDROID-4.1%2B-orange.svg">
+  <img src="https://img.shields.io/badge/VERSION-1.3.1-green.svg">
+  <img src="https://img.shields.io/badge/ANDROID-4.0.3%2B-orange.svg">
   <img src="https://img.shields.io/badge/LICENSE-Apache--2.0-blue.svg">
 </p>
 
@@ -19,7 +19,7 @@ A Tron wallet for android.
 - https://github.com/tronprotocol/wallet-cli
 
 ## Required.
- - android 4.1
+ - android 4.0.3 (API 15)
  
 ## build grpc and apk
 ```

@@ -198,16 +198,6 @@
                 android:background="@android:color/white"
                 android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btn_change_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:visibility="gone"
-                    android:background="@color/copy_address_button_color"
-                    android:textColor="@android:color/white"
-                    android:text="@string/change_password" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -232,6 +222,17 @@
                         android:textColor="@android:color/white"
                         android:text="@string/export_private_key_text" />
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_remove_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:visibility="gone"
+                    android:background="@color/copy_address_button_color"
+                    android:textColor="@android:color/white"
+                    android:text="@string/remove_account_text" />
+
             </LinearLayout>
 
             <LinearLayout

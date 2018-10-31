@@ -23,4 +23,8 @@ public interface MainView extends IView {
     void duplicatedAccount();
 
     void connectionError();
+
+    void changePasswordResult(boolean result);
+
+    void showChangePasswordDialog();
 }

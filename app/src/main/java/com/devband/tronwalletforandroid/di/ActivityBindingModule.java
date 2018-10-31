@@ -17,6 +17,8 @@ import com.devband.tronwalletforandroid.ui.blockdetail.fragment.BlockInfoModule;
 import com.devband.tronwalletforandroid.ui.blockexplorer.BlockExplorerActivity;
 import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivity;
 import com.devband.tronwalletforandroid.ui.createwallet.CreateWalletActivityModule;
+import com.devband.tronwalletforandroid.ui.exchange.ExchangeActivity;
+import com.devband.tronwalletforandroid.ui.exchange.ExchangeActivityModule;
 import com.devband.tronwalletforandroid.ui.importkey.ImportPrivateKeyActivity;
 import com.devband.tronwalletforandroid.ui.importkey.ImportPrivateKeyActivityModule;
 import com.devband.tronwalletforandroid.ui.intro.IntroActivity;
@@ -168,4 +170,8 @@ public abstract class ActivityBindingModule {
             com.devband.tronwalletforandroid.ui.token.transfer.TransferModule.class
     })
     abstract TokenDetailActivity bindTokenDetailActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = { ExchangeActivityModule.class })
+    abstract ExchangeActivity exchangeActivity();
 }

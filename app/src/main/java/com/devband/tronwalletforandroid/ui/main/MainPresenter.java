@@ -14,6 +14,7 @@ import com.devband.tronwalletforandroid.database.dao.FavoriteTokenDao;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
+import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
 import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
@@ -35,11 +36,13 @@ public class MainPresenter extends BasePresenter<MainView> {
     private RxJavaSchedulers mRxJavaSchedulers;
     private CustomPreference mCustomPreference;
     private FavoriteTokenDao mFavoriteTokenDao;
+    private WalletAppManager mWalletAppManager;
 
-    public MainPresenter(MainView view, Tron tron, TronNetwork tronNetwork,
+    public MainPresenter(MainView view, Tron tron, WalletAppManager walletAppManager, TronNetwork tronNetwork,
             RxJavaSchedulers rxJavaSchedulers, CustomPreference customPreference, AppDatabase appDatabase) {
         super(view);
         this.mTron = tron;
+        this.mWalletAppManager = walletAppManager;
         this.mTronNetwork = tronNetwork;
         this.mRxJavaSchedulers = rxJavaSchedulers;
         this.mCustomPreference = customPreference;
@@ -263,5 +266,33 @@ public class MainPresenter extends BasePresenter<MainView> {
         }
 
         return false;
+    }
+
+    public boolean matchPassword(@NonNull String password) {
+        return mWalletAppManager.login(password) == WalletAppManager.SUCCESS;
+    }
+
+    public void changePassword(@NonNull String oldPassword, @NonNull String newPassword) {
+        mView.showChangePasswordDialog();
+
+        Single.fromCallable(() -> mTron.changePassword(oldPassword, newPassword))
+                .subscribeOn(mRxJavaSchedulers.getIo())
+                .observeOn(mRxJavaSchedulers.getMainThread())
+                .subscribe(new SingleObserver<Boolean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        mView.changePasswordResult(result);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.changePasswordResult(false);
+                    }
+                });
     }
 }

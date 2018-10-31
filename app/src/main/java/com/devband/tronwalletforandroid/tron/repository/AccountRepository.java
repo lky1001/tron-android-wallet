@@ -15,6 +15,8 @@ public interface AccountRepository {
 
     Single<Boolean> updateAccount(@NonNull AccountModel accountModel);
 
+    void delete(@NonNull AccountModel accountModel);
+
     Maybe<AccountModel> loadAccount(long index);
 
     Single<List<AccountModel>> loadAllAccounts();

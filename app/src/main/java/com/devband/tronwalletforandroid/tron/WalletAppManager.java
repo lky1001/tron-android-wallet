@@ -106,11 +106,12 @@ public class WalletAppManager {
         return mIsLogin;
     }
 
-    public boolean changePassword(@NonNull String originPassword, @NonNull String newPassword) {
+    public boolean changePassword(@NonNull String oldPassword, @NonNull String newPassword) {
         WalletModel wallet = mWalletDao.loadWallet();
 
-        if (mPasswordEncoder.matches(originPassword, wallet.getPassword())) {
+        if (mPasswordEncoder.matches(oldPassword, wallet.getPassword())) {
             wallet.setPassword(mPasswordEncoder.encode(newPassword));
+            wallet.setUpdated(Calendar.getInstance().getTime());
             mWalletDao.update(wallet);
             return true;
         }

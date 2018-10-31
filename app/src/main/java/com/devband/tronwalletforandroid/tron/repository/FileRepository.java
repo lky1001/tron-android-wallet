@@ -22,6 +22,11 @@ public class FileRepository implements AccountRepository {
     }
 
     @Override
+    public void delete(@NonNull AccountModel accountModel) {
+
+    }
+
+    @Override
     public Maybe<AccountModel> loadAccount(long index) {
         return null;
     }

@@ -123,6 +123,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
     @OnClick(R.id.btn_send_trx)
     public void onSendTrxClick() {
         String address = mInputAddress.getText().toString();
+        address = address.trim();
 
         if (address.isEmpty()) {
             Toast.makeText(SendTokenActivity.this, getString(R.string.invalid_address),
@@ -131,11 +132,12 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
         }
 
         String amountText = mInputAmount.getText().toString();
+        String removeCommaAmountText = amountText.replace(",", "");
 
         double amountDouble = 0;
 
         try {
-            amountDouble = Double.parseDouble(amountText);
+            amountDouble = Double.parseDouble(removeCommaAmountText);
         } catch (NumberFormatException e) {
             e.printStackTrace();
             Toast.makeText(SendTokenActivity.this, getString(R.string.invalid_amount),
@@ -164,6 +166,8 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                 .append(getString(R.string.send_token_amount_text))
                 .append(amountText);
 
+        final String finalAddress = address;
+
         new MaterialDialog.Builder(SendTokenActivity.this)
                 .title(R.string.send_token_title)
                 .content(sb.toString())
@@ -177,10 +181,10 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                         long amount = (long) (finalAmountDouble * Constants.ONE_TRX);
 
                         showProgressDialog(null, getString(R.string.loading_msg));
-                        mSendTokenPresenter.sendTron(password, address, amount);
+                        mSendTokenPresenter.sendTron(password, finalAddress, amount);
                     } else {
                         showProgressDialog(null, getString(R.string.loading_msg));
-                        mSendTokenPresenter.transferAsset(password, address, mSelectedAsset.getName(), (long) finalAmountDouble);
+                        mSendTokenPresenter.transferAsset(password, finalAddress, mSelectedAsset.getName(), (long) finalAmountDouble);
                     }
                 }).show();
     }

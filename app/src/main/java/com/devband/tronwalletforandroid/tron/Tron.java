@@ -255,8 +255,6 @@ public class Tron {
         if (mAccountManager != null) {
             mAccountManager.logout();
         }
-
-        mAccountManager = null;
     }
 
     public Single<Boolean> hasAccount() {
@@ -284,6 +282,10 @@ public class Tron {
 
     private String generateDefaultAccountName(String prefix) {
         return prefix + (mAccountManager.getAccountCount() + 1);
+    }
+
+    public int getAccountCount() {
+        return mAccountManager.getAccountCount();
     }
 
     public Single<GrpcAPI.WitnessList> getWitnessList() {
@@ -509,7 +511,16 @@ public class Tron {
         });
     }
 
-    public boolean changePassword(String newPassword) {
+    public boolean changePassword(@NonNull String oldPassword, @NonNull String newPassword) {
+        if (mWalletAppManager.changePassword(oldPassword, newPassword)) {
+            if (!mAccountManager.changePassword(oldPassword, newPassword)) {
+                // rollback
+                mWalletAppManager.changePassword(newPassword, oldPassword);
+                return false;
+            }
+            return true;
+        }
+
         return false;
     }
 
@@ -527,5 +538,9 @@ public class Tron {
             mCustomPreference.setInitWallet(true);
             mCustomPreference.setKeyStoreVersion(Build.VERSION.SDK_INT);
         }
+    }
+
+    public void removeAccount(long accountId, String accountName) {
+        mAccountManager.removeAccount(accountId, accountName);
     }
 }

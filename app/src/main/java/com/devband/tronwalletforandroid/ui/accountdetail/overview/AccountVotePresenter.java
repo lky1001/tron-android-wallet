@@ -52,7 +52,7 @@ public class AccountVotePresenter extends BasePresenter<AccountVoteView> {
         mView.showLoadingDialog();
 
         mTronNetwork.getAccountVotes(address, startIndex, pageSize, "-votes")
-                .observeOn(mRxJavaSchedulers.getIo())
+                .observeOn(mRxJavaSchedulers.getMainThread())
                 .map(accountVotes -> {
                     for (AccountVote accountVote : accountVotes.getData()) {
                         accountVote.setTotalVotes(accountVotes.getTotalVotes());

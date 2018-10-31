@@ -25,6 +25,7 @@ import java.util.List;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
@@ -129,9 +130,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         });
     }
 
-    public boolean matchPassword(@NonNull String password) {
-        return mWalletAppManager.login(password) == WalletAppManager.SUCCESS;
-    }
+
 
     public String getLoginPrivateKey(@NonNull String password) {
         return mTron.getLoginPrivateKey(password);
@@ -210,36 +209,12 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         return mTron.getLoginAccount().getId();
     }
 
-    public void changePassword(@NonNull String originPassword, @NonNull String newPassword) {
-        mView.showLoadingDialog();
+    public AccountModel getLoginAccount() {
+        return mTron.getLoginAccount();
+    }
 
-        Single.fromCallable(() -> {
-            boolean result = mWalletAppManager.changePassword(originPassword, newPassword);
-
-            if (result) {
-                return mTron.changePassword(newPassword);
-            }
-
-            return false;
-        })
-        .subscribeOn(mRxJavaSchedulers.getIo())
-        .observeOn(mRxJavaSchedulers.getMainThread())
-        .subscribe(new SingleObserver<Boolean>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onSuccess(Boolean result) {
-                mView.changePasswordResult(result);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                mView.changePasswordResult(false);
-            }
-        });
+    public int getAccountCount() {
+        return mTron.getAccountCount();
     }
 
     @Nullable
@@ -271,5 +246,20 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
             FavoriteTokenModel favoriteTokenModel = mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, tokenName);
             mFavoriteTokenDao.delete(favoriteTokenModel);
         }
+    }
+
+    public boolean matchPassword(@NonNull String password) {
+        return mWalletAppManager.login(password) == WalletAppManager.SUCCESS;
+    }
+
+    public void removeAccount(long accountId, String accountName) {
+        mView.showLoadingDialog();
+        Single.fromCallable(() -> {
+            mTron.removeAccount(accountId, accountName);
+            return true;
+        })
+                .subscribeOn(mRxJavaSchedulers.getIo())
+                .observeOn(mRxJavaSchedulers.getMainThread())
+                .subscribe((result) -> mView.successDelete());
     }
 }

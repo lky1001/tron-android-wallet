@@ -20,7 +20,7 @@ public interface MyAccountView extends IView {
 
     void unableToUnfreeze();
 
-    void changePasswordResult(boolean result);
-
     void showInvalidPasswordMsg();
+
+    void successDelete();
 }

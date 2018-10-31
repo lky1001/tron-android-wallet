@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_red_dark"
+        android:text="@string/remove_account_warning_msg" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_red_dark"
+        android:text="@string/remove_account_remind_msg" />
+
+    <TextView
+        android:id="@+id/account_name_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        tools:text="Account1" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <EditText
+            android:id="@+id/input_account_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/account_name_text"
+            android:textColor="@android:color/black" />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_remove_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/white"
+        android:text="@string/remove_account_text" />
+</LinearLayout>

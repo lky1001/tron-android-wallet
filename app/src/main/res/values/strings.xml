@@ -288,6 +288,7 @@
     <string name="empty_transfer">No Transfer</string>
     <string name="empty_transactions">No Transactions</string>
     <string name="change_password">CHANGE PASSWORD</string>
+    <string name="remove_account_text">REMOVE ACCOUNT</string>
     <string name="current_password">Current Password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
@@ -316,4 +317,15 @@
     <string name="required_password">Password is required.</string>
     <string name="preparing_btn_text">PREPARING</string>
     <string name="favorites_text">Only favorites</string>
+    <string name="navigation_menu_exchange">Exchange</string>
+    <string name="title_exchange">Exchange</string>
+    <string name="empty_exchanges">No Exchange</string>
+    <string name="change_password_loading_msg">Never turn off app or phone!!</string>
+    <string name="change_password_warning_msg">* Never turn off app or phone while changing password. You lose everything.</string>
+    <string name="navigation_menu_change_password">Change Password</string>
+    <string name="remove_account_warning_msg">Unexpected bad things will happen if you don’t read this!</string>
+    <string name="remove_account_remind_msg">This action cannot be undone. This will permanently delete the account. Please type in the name of the account to confirm.</string>
+    <string name="account_name_text">Account Name</string>
+    <string name="title_remove_acocunt">Are you absolutely sure?</string>
+    <string name="remove_account_error_msg">If you have only one account, you can not delete it.</string>
 </resources>
