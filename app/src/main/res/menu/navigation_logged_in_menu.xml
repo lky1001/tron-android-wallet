@@ -32,9 +32,9 @@
         android:icon="@drawable/ic_block_search"
         android:title="@string/navigation_menu_block_explorer" />
 
-    <item android:id="@+id/drawer_item_exchange"
-        android:icon="@drawable/ic_swap"
-        android:title="@string/navigation_menu_exchange" />
+    <!--<item android:id="@+id/drawer_item_exchange"-->
+        <!--android:icon="@drawable/ic_swap"-->
+        <!--android:title="@string/navigation_menu_exchange" />-->
 
     <item android:id="@+id/drawer_item_more"
         android:icon="@drawable/ic_more"
