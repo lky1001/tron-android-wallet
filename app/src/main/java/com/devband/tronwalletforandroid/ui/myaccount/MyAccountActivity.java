@@ -33,7 +33,6 @@ import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -41,9 +40,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class MyAccountActivity extends CommonActivity implements MyAccountView {
@@ -191,7 +188,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                         }
                     });
 
-                    tokenNameText.setText(asset.getName());
+                    tokenNameText.setText(asset.getDisplayName());
                     tokenAmountText.setText(Constants.tronBalanceFormat.format(asset.getBalance()));
                     mTokensLayout.addView(v);
                 }

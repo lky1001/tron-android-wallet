@@ -87,6 +87,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
             for (Balance balance : account.getTrc10TokenBalances()) {
                 assetList.add(Asset.builder()
                         .name(balance.getName())
+                        .displayName(balance.getDisplayName() + "(" + balance.getName() + ")")
                         .balance(balance.getBalance())
                         .build());
             }

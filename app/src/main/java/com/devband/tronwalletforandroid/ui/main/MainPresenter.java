@@ -8,6 +8,7 @@ import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.tronscan.Balance;
 import com.devband.tronlib.tronscan.FrozenTrx;
+import com.devband.tronlib.tronscan.Trc20Token;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.CustomPreference;
@@ -80,6 +81,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void getMyAccountInfo() {
+        mView.showLoadingDialog();
         String loginAddress = mTron.getLoginAddress();
 
         if (!TextUtils.isEmpty(loginAddress)) {
@@ -97,17 +99,27 @@ public class MainPresenter extends BasePresenter<MainView> {
                         long accountId = mTron.getLoginAccount().getId();
                         List<Asset> assetList = new ArrayList<>();
 
+                        for (Trc20Token trc20TokenBalance : account.getTrc20TokenBalances()) {
+                            assetList.add(Asset.builder()
+                                    .name(trc20TokenBalance.getName())
+                                    .displayName("[TRC20] " + trc20TokenBalance.getName())
+                                    .balance(trc20TokenBalance.getBalance() / Math.pow(10, trc20TokenBalance.getDecimals()))
+                                    .build());
+                        }
+
                         for (Balance balance : account.getTrc10TokenBalances()) {
                             if (mCustomPreference.isFavoriteToken(accountId)) {
                                 if (mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, balance.getName()) != null) {
                                     assetList.add(Asset.builder()
                                             .name(balance.getName())
+                                            .displayName(balance.getDisplayName() + "(" + balance.getName() + ")")
                                             .balance(balance.getBalance())
                                             .build());
                                 }
                             } else {
                                 assetList.add(Asset.builder()
                                         .name(balance.getName())
+                                        .displayName(balance.getDisplayName() + "(" + balance.getName() + ")")
                                         .balance(balance.getBalance())
                                         .build());
                             }

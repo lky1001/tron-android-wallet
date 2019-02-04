@@ -28,6 +28,7 @@ import com.devband.tronwalletforandroid.di.ApplicationContext;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulersImpl;
 import com.devband.tronwalletforandroid.tron.AccountManager;
+import com.devband.tronwalletforandroid.tron.TokenManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.tron.repository.LocalDbRepository;
@@ -150,9 +151,15 @@ public abstract class AppModule {
 
     @Provides
     @Singleton
-    static Tron provideTron(@ApplicationContext Context context, TronNetwork tronNetwork,
+    static TokenManager provideTokenManager(TronNetwork tronNetwork, AppDatabase appDatabase) {
+        return new TokenManager(tronNetwork, appDatabase.tokenIdNameDao());
+    }
+
+    @Provides
+    @Singleton
+    static Tron provideTron(@ApplicationContext Context context, TronNetwork tronNetwork, TokenManager tokenManager,
             CustomPreference customPreference, AccountManager accountManager, WalletAppManager walletAppManager) {
-        return new Tron(context, tronNetwork, customPreference, accountManager, walletAppManager);
+        return new Tron(context, tronNetwork, customPreference, accountManager, walletAppManager, tokenManager);
     }
 
     @Provides
@@ -161,6 +168,7 @@ public abstract class AppModule {
         return Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, Constants.DB_NAME)
                 .allowMainThreadQueries()
                 .addMigrations(AppDatabase.MIGRATION_1_2)
+                .addMigrations(AppDatabase.MIGRATION_2_3)
                 .build();
     }
 

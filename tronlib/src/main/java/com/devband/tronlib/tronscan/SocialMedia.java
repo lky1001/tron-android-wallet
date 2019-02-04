@@ -1,7 +1,6 @@
 package com.devband.tronlib.tronscan;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,12 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Balance {
+public class SocialMedia {
 
-    private long balance;
     private String name;
-    private String displayName;
-
-    @JsonProperty("owner_address")
-    private String ownerAddress;
+    private String url;
 }

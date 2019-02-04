@@ -524,6 +524,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     @Override
     public void displayAccountInfo(@NonNull TronAccount account) {
+        hideDialog();
         mLoginTronAccount = account;
         mShowOnlyFavoritesCheckBox.setEnabled(true);
 
@@ -616,6 +617,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     @Override
     public void connectionError() {
+        hideDialog();
         mLoadingAccountInfo = false;
         mShowOnlyFavoritesCheckBox.setEnabled(true);
         Toast.makeText(MainActivity.this, getString(R.string.connection_error_msg),
@@ -748,5 +750,12 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     public void goToIntroActivity() {
         finish();
         startActivity(IntroActivity.class);
+    }
+
+    @Override
+    public void showLoadingDialog() {
+        if (!isFinishing()) {
+            showProgressDialog(null, getString(R.string.loading_msg));
+        }
     }
 }

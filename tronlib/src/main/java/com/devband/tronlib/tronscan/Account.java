@@ -8,7 +8,6 @@ import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.var;
 
 @Getter
 @Setter
@@ -42,7 +41,7 @@ public class Account {
     public List<Balance> getTrc10TokenBalances() {
         List<Balance> newBalance = new ArrayList<>();
 
-        for (var tokenBalance : trc10TokenBalances) {
+        for (Balance tokenBalance : trc10TokenBalances) {
             if ("TRX".equalsIgnoreCase(tokenBalance.getName()) || "_".equalsIgnoreCase(tokenBalance.getName())) {
                 continue;
             }

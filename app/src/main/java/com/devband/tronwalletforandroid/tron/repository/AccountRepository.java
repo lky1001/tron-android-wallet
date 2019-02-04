@@ -17,6 +17,8 @@ public interface AccountRepository {
 
     void delete(@NonNull AccountModel accountModel);
 
+    AccountModel loadAccount();
+
     Maybe<AccountModel> loadAccount(long index);
 
     Single<List<AccountModel>> loadAllAccounts();

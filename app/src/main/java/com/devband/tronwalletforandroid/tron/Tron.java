@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.tronscan.Account;
+import com.devband.tronlib.tronscan.Balance;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
@@ -56,15 +57,18 @@ public class Tron {
 
     private WalletAppManager mWalletAppManager;
 
+    private TokenManager mTokenManager;
+
     private boolean mFailConnectNode;
 
     public Tron(Context context, TronNetwork tronNetwork, CustomPreference customPreference, AccountManager accountManager,
-            WalletAppManager walletAppManager) {
+            WalletAppManager walletAppManager, TokenManager tokenManager) {
         this.mContext = context;
         this.mTronNetwork = tronNetwork;
         this.mCustomPreference = customPreference;
         this.mAccountManager = accountManager;
         this.mWalletAppManager = walletAppManager;
+        this.mTokenManager = tokenManager;
         init();
     }
 
@@ -205,7 +209,14 @@ public class Tron {
     }
 
     public Single<Account> getAccount(@NonNull String address) {
-        return mTronNetwork.getAccountInfo(address);
+        return mTronNetwork.getAccountInfo(address)
+                .map(accountInfo -> {
+                    for (Balance trc10TokenBalance : accountInfo.getTrc10TokenBalances()) {
+                        trc10TokenBalance.setDisplayName(mTokenManager.getTokenName(trc10TokenBalance.getName()).blockingGet());
+                    }
+
+                    return accountInfo;
+                });
     }
 
     public Single<Protocol.Account> queryAccount(@NonNull String address) {
@@ -542,5 +553,6 @@ public class Tron {
 
     public void removeAccount(long accountId, String accountName) {
         mAccountManager.removeAccount(accountId, accountName);
+        mCustomPreference.setLastSelectedAccountId(mAccountManager.getLoginAccount().getId());
     }
 }

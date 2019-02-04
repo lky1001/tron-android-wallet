@@ -26,6 +26,7 @@ import com.devband.tronlib.services.TronScanService;
 import com.devband.tronlib.services.VoteService;
 import com.devband.tronlib.services.WlcApiService;
 import com.devband.tronlib.tronscan.Account;
+import com.devband.tronlib.tronscan.TokenInfos;
 
 import java.util.List;
 import java.util.Map;
@@ -178,5 +179,9 @@ public class TronNetwork {
 
     public Single<TransferStats> getTransferStats() {
         return mTronScanService.getTransferStats("timestamp", "hour");
+    }
+
+    public Single<TokenInfos> getTokenInfo(String id) {
+        return mTronScanService.getTokenInfo(id, 1);
     }
 }
