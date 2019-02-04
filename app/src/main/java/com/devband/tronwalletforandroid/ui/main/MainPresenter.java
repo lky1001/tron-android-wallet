@@ -97,11 +97,7 @@ public class MainPresenter extends BasePresenter<MainView> {
                         long accountId = mTron.getLoginAccount().getId();
                         List<Asset> assetList = new ArrayList<>();
 
-                        for (Balance balance : account.getTokenBalances()) {
-                            if (Constants.TRON_SYMBOL.equalsIgnoreCase(balance.getName())) {
-                                continue;
-                            }
-
+                        for (Balance balance : account.getTrc10TokenBalances()) {
                             if (mCustomPreference.isFavoriteToken(accountId)) {
                                 if (mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, balance.getName()) != null) {
                                     assetList.add(Asset.builder()

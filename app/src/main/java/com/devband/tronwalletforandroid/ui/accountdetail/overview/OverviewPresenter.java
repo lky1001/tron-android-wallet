@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.tronscan.Balance;
 import com.devband.tronlib.tronscan.FrozenTrx;
-import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
@@ -66,11 +65,7 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
 
             List<Asset> assetList = new ArrayList<>();
 
-            for (Balance balance : account.getTokenBalances()) {
-                if (Constants.TRON_SYMBOL.equalsIgnoreCase(balance.getName())) {
-                    continue;
-                }
-
+            for (Balance balance : account.getTrc10TokenBalances()) {
                 assetList.add(Asset.builder()
                         .name(balance.getName())
                         .balance(balance.getBalance())

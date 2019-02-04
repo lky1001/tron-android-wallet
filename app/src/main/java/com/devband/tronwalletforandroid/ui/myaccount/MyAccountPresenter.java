@@ -84,11 +84,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
             List<Asset> assetList = new ArrayList<>();
 
-            for (Balance balance : account.getTokenBalances()) {
-                if (Constants.TRON_SYMBOL.equalsIgnoreCase(balance.getName())) {
-                    continue;
-                }
-
+            for (Balance balance : account.getTrc10TokenBalances()) {
                 assetList.add(Asset.builder()
                         .name(balance.getName())
                         .balance(balance.getBalance())
