@@ -2,10 +2,13 @@ package com.devband.tronwalletforandroid.ui.main;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.devband.tronlib.TronNetwork;
-import com.devband.tronlib.dto.Account;
 import com.devband.tronlib.dto.CoinMarketCap;
+import com.devband.tronlib.tronscan.Balance;
+import com.devband.tronlib.tronscan.FrozenTrx;
+import com.devband.tronlib.tronscan.Trc20Token;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.CustomPreference;
@@ -78,73 +81,86 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void getMyAccountInfo() {
-        mTron.getAccount(mTron.getLoginAddress())
-                .map((account -> {
-                    List<Frozen> frozenList = new ArrayList<>();
+        mView.showLoadingDialog();
+        String loginAddress = mTron.getLoginAddress();
 
-                    for (Account.FrozenTrx frozen : account.getFrozen().getBalances()) {
-                        frozenList.add(Frozen.builder()
-                                .frozenBalance(frozen.getAmount())
-                                .expireTime(frozen.getExpires())
-                                .build());
-                    }
+        if (!TextUtils.isEmpty(loginAddress)) {
+            mTron.getAccount(loginAddress)
+                    .map((account -> {
+                        List<Frozen> frozenList = new ArrayList<>();
 
-                    long accountId = mTron.getLoginAccount().getId();
-                    List<Asset> assetList = new ArrayList<>();
-
-                    for (Account.Balance balance : account.getTokenBalances()) {
-                        if (Constants.TRON_SYMBOL.equalsIgnoreCase(balance.getName())) {
-                            continue;
+                        for (FrozenTrx frozen : account.getFrozen().getBalances()) {
+                            frozenList.add(Frozen.builder()
+                                    .frozenBalance(frozen.getAmount())
+                                    .expireTime(frozen.getExpires())
+                                    .build());
                         }
 
-                        if (mCustomPreference.isFavoriteToken(accountId)) {
-                            if (mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, balance.getName()) != null) {
+                        long accountId = mTron.getLoginAccount().getId();
+                        List<Asset> assetList = new ArrayList<>();
+
+                        for (Trc20Token trc20TokenBalance : account.getTrc20TokenBalances()) {
+                            assetList.add(Asset.builder()
+                                    .name(trc20TokenBalance.getName())
+                                    .displayName("[TRC20] " + trc20TokenBalance.getName())
+                                    .balance(trc20TokenBalance.getBalance() / Math.pow(10, trc20TokenBalance.getDecimals()))
+                                    .build());
+                        }
+
+                        for (Balance balance : account.getTrc10TokenBalances()) {
+                            if (mCustomPreference.isFavoriteToken(accountId)) {
+                                if (mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, balance.getName()) != null) {
+                                    assetList.add(Asset.builder()
+                                            .name(balance.getName())
+                                            .displayName(balance.getDisplayName() + "(" + balance.getName() + ")")
+                                            .balance(balance.getBalance())
+                                            .build());
+                                }
+                            } else {
                                 assetList.add(Asset.builder()
                                         .name(balance.getName())
+                                        .displayName(balance.getDisplayName() + "(" + balance.getName() + ")")
                                         .balance(balance.getBalance())
                                         .build());
                             }
-                        } else {
-                            assetList.add(Asset.builder()
-                                    .name(balance.getName())
-                                    .balance(balance.getBalance())
-                                    .build());
-                        }
-                    }
-
-                    return TronAccount.builder()
-                            .balance(account.getBalance())
-                            .bandwidth(account.getBandwidth().getNetRemaining())
-                            .assetList(assetList)
-                            .frozenList(frozenList)
-                            .build();
-                }))
-                .subscribeOn(mRxJavaSchedulers.getIo())
-                .observeOn(mRxJavaSchedulers.getMainThread())
-                .subscribe(new SingleObserver<TronAccount>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(TronAccount account) {
-                        mView.displayAccountInfo(account);
-                        mAdapterDataModel.clear();
-                        mAdapterDataModel.addAll(account.getAssetList());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        // todo - error msg
-                        if (e instanceof ConnectException) {
-                            // internet error
                         }
 
-                        mView.connectionError();
-                    }
-                });
+                        return TronAccount.builder()
+                                .balance(account.getBalance())
+                                .bandwidth(account.getBandwidth().getNetRemaining())
+                                .assetList(assetList)
+                                .frozenList(frozenList)
+                                .build();
+                    }))
+                    .subscribeOn(mRxJavaSchedulers.getIo())
+                    .observeOn(mRxJavaSchedulers.getMainThread())
+                    .subscribe(new SingleObserver<TronAccount>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(TronAccount account) {
+                            mView.displayAccountInfo(account);
+                            mAdapterDataModel.clear();
+                            mAdapterDataModel.addAll(account.getAssetList());
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            e.printStackTrace();
+                            // todo - error msg
+                            if (e instanceof ConnectException) {
+                                // internet error
+                            }
+
+                            mView.connectionError();
+                        }
+                    });
+        } else {
+            mView.goToIntroActivity();
+        }
     }
 
     public void getTronMarketInfo() {

@@ -3,9 +3,10 @@ package com.devband.tronwalletforandroid.ui.accountdetail.overview;
 import android.support.annotation.NonNull;
 
 import com.devband.tronlib.TronNetwork;
-import com.devband.tronlib.dto.Account;
-import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronlib.tronscan.Balance;
+import com.devband.tronlib.tronscan.FrozenTrx;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
+import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
 import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
@@ -22,10 +23,12 @@ import io.reactivex.disposables.Disposable;
 public class OverviewPresenter extends BasePresenter<OverviewView> {
 
     private TronNetwork mTronNetwork;
+    private Tron mTron;
     private RxJavaSchedulers mRxJavaSchedulers;
 
-    public OverviewPresenter(OverviewView view, TronNetwork tronNetwork, RxJavaSchedulers rxJavaSchedulers) {
+    public OverviewPresenter(OverviewView view, Tron tron, TronNetwork tronNetwork, RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mTron = tron;
         this.mTronNetwork = tronNetwork;
         this.mRxJavaSchedulers = rxJavaSchedulers;
     }
@@ -53,10 +56,10 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
     public void getAccount(@NonNull String address) {
         mView.showLoadingDialog();
 
-        Single.zip(mTronNetwork.getAccount(address), mTronNetwork.getTransactionStats(address), ((account, transactionStats) -> {
+        Single.zip(mTron.getAccount(address), mTronNetwork.getTransactionStats(address), ((account, transactionStats) -> {
             List<Frozen> frozenList = new ArrayList<>();
 
-            for (Account.FrozenTrx frozen : account.getFrozen().getBalances()) {
+            for (FrozenTrx frozen : account.getFrozen().getBalances()) {
                 frozenList.add(Frozen.builder()
                         .frozenBalance(frozen.getAmount())
                         .expireTime(frozen.getExpires())
@@ -65,13 +68,9 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
 
             List<Asset> assetList = new ArrayList<>();
 
-            for (Account.Balance balance : account.getTokenBalances()) {
-                if (Constants.TRON_SYMBOL.equalsIgnoreCase(balance.getName())) {
-                    continue;
-                }
-
+            for (Balance balance : account.getTrc10TokenBalances()) {
                 assetList.add(Asset.builder()
-                        .name(balance.getName())
+                        .name(balance.getDisplayName() + "(" + balance.getName() + "):")
                         .balance(balance.getBalance())
                         .build());
             }

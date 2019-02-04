@@ -8,6 +8,8 @@ import com.devband.tronwalletforandroid.ui.mvp.IView;
 
 public interface MainView extends IView {
 
+    void showLoadingDialog();
+
     void displayAccountInfo(@NonNull TronAccount account);
 
     void setTronMarketInfo(CoinMarketCap coinMarketCap);
@@ -27,4 +29,6 @@ public interface MainView extends IView {
     void changePasswordResult(boolean result);
 
     void showChangePasswordDialog();
+
+    void goToIntroActivity();
 }

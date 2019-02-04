@@ -3,7 +3,9 @@ package com.devband.tronwalletforandroid.ui.mytransfer;
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Transfer;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
+import com.devband.tronwalletforandroid.tron.TokenManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 import com.devband.tronwalletforandroid.ui.mytransfer.dto.TransferInfo;
@@ -23,13 +25,15 @@ public class TransferPresenter extends BasePresenter<TransferView> {
     private AdapterDataModel<TransferInfo> mAdapterDataModel;
     private Tron mTron;
     private TronNetwork mTronNetwork;
+    private TokenManager mTokenManager;
     private RxJavaSchedulers mRxJavaSchedulers;
 
-    public TransferPresenter(TransferView view, Tron tron, TronNetwork tronNetwork,
+    public TransferPresenter(TransferView view, Tron tron, TronNetwork tronNetwork, TokenManager tokenManager,
             RxJavaSchedulers rxJavaSchedulers) {
         super(view);
         this.mTron = tron;
         this.mTronNetwork = tronNetwork;
+        this.mTokenManager = tokenManager;
         this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
@@ -72,8 +76,12 @@ public class TransferPresenter extends BasePresenter<TransferView> {
                 info.setAmount(t.getAmount());
                 info.setBlock(t.getBlock());
                 info.setTimestamp(t.getTimestamp());
-                info.setTokenName(t.getTokenName());
-                info.setSend(address.equals(t.getTransferFromAddress()));
+                if ("_".equalsIgnoreCase(t.getTokenName())) {
+                    info.setTokenName(Constants.TRON_SYMBOL);
+                } else {
+                    info.setTokenName(mTokenManager.getTokenName(t.getTokenName()).blockingGet());
+                }
+                info.setSend(t.getTransferFromAddress().equalsIgnoreCase(address));
                 info.setTransferFromAddress(t.getTransferFromAddress());
                 info.setTransferToAddress(t.getTransferToAddress());
                 info.setConfirmed(t.isConfirmed());

@@ -34,4 +34,7 @@ public interface AccountDao {
 
     @Query("SELECT * FROM account WHERE account = :accountKey LIMIT 1")
     AccountModel loadByAccountKey(String accountKey);
+
+    @Query("SELECT * FROM account LIMIT 1")
+    AccountModel loadAccount();
 }

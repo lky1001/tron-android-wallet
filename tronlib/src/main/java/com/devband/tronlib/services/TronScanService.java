@@ -8,6 +8,7 @@ import com.devband.tronlib.dto.TransactionStats;
 import com.devband.tronlib.dto.Transactions;
 import com.devband.tronlib.dto.TransferStats;
 import com.devband.tronlib.dto.Transfers;
+import com.devband.tronlib.tronscan.TokenInfos;
 
 import java.util.List;
 
@@ -81,4 +82,7 @@ public interface TronScanService {
 
     @GET("api/transfer/stats")
     Single<TransferStats> getTransferStats(@Query("groupby") String groupBy, @Query("interval") String interval);
+
+    @GET("api/token")
+    Single<TokenInfos> getTokenInfo(@Query("id") String id, @Query("showAll") int showAll);
 }

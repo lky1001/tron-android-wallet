@@ -9,8 +9,6 @@ import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
-import java.security.NoSuchAlgorithmException;
-
 import io.reactivex.Single;
 
 public class IntroPresenter extends BasePresenter<IntroView> {
@@ -46,7 +44,7 @@ public class IntroPresenter extends BasePresenter<IntroView> {
                     Log.d(IntroPresenter.class.getSimpleName(), "block height : " + height);
                     break;
                 } catch (Exception e) {
-                    if (e instanceof IllegalStateException || e instanceof NoSuchAlgorithmException) {
+                    if (e instanceof IllegalStateException) {
                         return NO_SUCH_ALGORITHM;
                     }
 

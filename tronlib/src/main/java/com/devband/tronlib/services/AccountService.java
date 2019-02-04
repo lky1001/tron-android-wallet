@@ -1,10 +1,10 @@
 package com.devband.tronlib.services;
 
-import com.devband.tronlib.dto.Account;
 import com.devband.tronlib.dto.AccountMedia;
 import com.devband.tronlib.dto.RichData;
 import com.devband.tronlib.dto.TopAddressAccounts;
 import com.devband.tronlib.dto.TronAccounts;
+import com.devband.tronlib.tronscan.Account;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;
@@ -13,8 +13,8 @@ import retrofit2.http.Query;
 
 public interface AccountService {
 
-    @GET("api/account/{address}")
-    Single<Account> getAccount(@Path("address") String address);
+    @GET("api/account")
+    Single<Account> getAccountInfo(@Query("address") String address);
 
     @GET("api/account")
     Single<TronAccounts> getAccounts(@Query("start") long start, @Query("limit") int limit,

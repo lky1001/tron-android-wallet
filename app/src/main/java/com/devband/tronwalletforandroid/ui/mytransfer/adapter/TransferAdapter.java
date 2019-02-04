@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.devband.tronlib.dto.Transfer;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
@@ -75,15 +74,12 @@ public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.Transa
             holder.sendLayout.setVisibility(View.VISIBLE);
             holder.receiveLayout.setVisibility(View.GONE);
 
-            holder.copyToAddressView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            holder.copyToAddressView.setOnClickListener(v -> {
                     copyToClipboard(info.getTransferToAddress());
                     Toast.makeText(mContext, mContext.getString(R.string.copy_to_address_msg),
                             Toast.LENGTH_SHORT)
                             .show();
-                }
-            });
+                });
         } else {
             Utils.setAccountDetailAction(mContext, holder.receiveAddressText, info.getTransferFromAddress());
             holder.receiveAmountText.setText(Constants.tronBalanceFormat.format(amount) + " " + info.getTokenName());
@@ -92,15 +88,12 @@ public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.Transa
             holder.sendLayout.setVisibility(View.GONE);
             holder.receiveLayout.setVisibility(View.VISIBLE);
 
-            holder.copyFromAddressView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            holder.copyFromAddressView.setOnClickListener(v -> {
                     copyToClipboard(info.getTransferFromAddress());
                     Toast.makeText(mContext, mContext.getString(R.string.copy_from_address_msg),
                             Toast.LENGTH_SHORT)
                             .show();
-                }
-            });
+                });
         }
     }
 

@@ -43,7 +43,7 @@ import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.blockexplorer.BlockExplorerActivity;
-import com.devband.tronwalletforandroid.ui.exchange.ExchangeActivity;
+import com.devband.tronwalletforandroid.ui.intro.IntroActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 import com.devband.tronwalletforandroid.ui.main.adapter.MyTokenListAdapter;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
@@ -409,9 +409,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             case R.id.drawer_item_block_explorer:
                 startActivity(BlockExplorerActivity.class);
                 break;
-            case R.id.drawer_item_exchange:
-                startActivity(ExchangeActivity.class);
-                break;
+//            case R.id.drawer_item_exchange:
+//                startActivity(ExchangeActivity.class);
+//                break;
             case R.id.drawer_item_more:
                  startActivity(MoreActivity.class);
                 break;
@@ -524,6 +524,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     @Override
     public void displayAccountInfo(@NonNull TronAccount account) {
+        hideDialog();
         mLoginTronAccount = account;
         mShowOnlyFavoritesCheckBox.setEnabled(true);
 
@@ -616,6 +617,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     @Override
     public void connectionError() {
+        hideDialog();
         mLoadingAccountInfo = false;
         mShowOnlyFavoritesCheckBox.setEnabled(true);
         Toast.makeText(MainActivity.this, getString(R.string.connection_error_msg),
@@ -742,5 +744,18 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     public void showChangePasswordDialog() {
         showProgressDialog(getString(R.string.change_password), getString(R.string.change_password_loading_msg));
+    }
+
+    @Override
+    public void goToIntroActivity() {
+        finish();
+        startActivity(IntroActivity.class);
+    }
+
+    @Override
+    public void showLoadingDialog() {
+        if (!isFinishing()) {
+            showProgressDialog(null, getString(R.string.loading_msg));
+        }
     }
 }

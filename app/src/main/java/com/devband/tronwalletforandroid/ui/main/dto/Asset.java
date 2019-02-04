@@ -17,6 +17,8 @@ public class Asset {
 
     private String name;
 
+    private String displayName;
+
     private double balance;
 
     @Override

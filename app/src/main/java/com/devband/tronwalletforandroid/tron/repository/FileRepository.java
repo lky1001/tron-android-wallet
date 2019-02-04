@@ -27,6 +27,11 @@ public class FileRepository implements AccountRepository {
     }
 
     @Override
+    public AccountModel loadAccount() {
+        return null;
+    }
+
+    @Override
     public Maybe<AccountModel> loadAccount(long index) {
         return null;
     }

@@ -3,7 +3,8 @@ package com.devband.tronwalletforandroid.ui.myaccount;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.devband.tronlib.dto.Account;
+import com.devband.tronlib.tronscan.Balance;
+import com.devband.tronlib.tronscan.FrozenTrx;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.database.dao.FavoriteTokenDao;
@@ -25,7 +26,6 @@ import java.util.List;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
@@ -75,7 +75,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         .map((account -> {
             List<Frozen> frozenList = new ArrayList<>();
 
-            for (Account.FrozenTrx frozen : account.getFrozen().getBalances()) {
+            for (FrozenTrx frozen : account.getFrozen().getBalances()) {
                 frozenList.add(Frozen.builder()
                         .frozenBalance(frozen.getAmount())
                         .expireTime(frozen.getExpires())
@@ -84,13 +84,10 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
             List<Asset> assetList = new ArrayList<>();
 
-            for (Account.Balance balance : account.getTokenBalances()) {
-                if (Constants.TRON_SYMBOL.equalsIgnoreCase(balance.getName())) {
-                    continue;
-                }
-
+            for (Balance balance : account.getTrc10TokenBalances()) {
                 assetList.add(Asset.builder()
                         .name(balance.getName())
+                        .displayName(balance.getDisplayName() + "(" + balance.getName() + ")")
                         .balance(balance.getBalance())
                         .build());
             }

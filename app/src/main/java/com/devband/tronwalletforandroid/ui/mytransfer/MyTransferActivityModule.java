@@ -2,6 +2,7 @@ package com.devband.tronwalletforandroid.ui.mytransfer;
 
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
+import com.devband.tronwalletforandroid.tron.TokenManager;
 import com.devband.tronwalletforandroid.tron.Tron;
 
 import dagger.Binds;
@@ -16,7 +17,7 @@ public abstract class MyTransferActivityModule {
 
     @Provides
     static TransferPresenter provideTransferPresenter(TransferView transferView, Tron tron,
-            TronNetwork tronNetwork, RxJavaSchedulers rxJavaSchedulers) {
-        return new TransferPresenter(transferView, tron, tronNetwork, rxJavaSchedulers);
+            TronNetwork tronNetwork, TokenManager tokenManager, RxJavaSchedulers rxJavaSchedulers) {
+        return new TransferPresenter(transferView, tron, tronNetwork, tokenManager, rxJavaSchedulers);
     }
 }

@@ -104,6 +104,9 @@ public class AccountManager {
             // todo - improve
             long idx = lastSelectedIndex > 0 ? lastSelectedIndex : DEFAULT_ACCOUNT_INDEX;
             accountModel = mAccountRepository.loadAccount(idx).blockingGet();
+            if (accountModel == null) {
+                accountModel = mAccountRepository.loadAccount();
+            }
         }
 
         String priKeyEnced = getDecodedAccountKey(accountModel);
@@ -368,5 +371,7 @@ public class AccountManager {
         if (accountModel != null && accountName.equals(accountModel.getName())) {
             mAccountRepository.delete(accountModel);
         }
+
+        mLoginAccountModel = mAccountRepository.loadAccount();
     }
 }
