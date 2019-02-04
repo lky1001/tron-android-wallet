@@ -54,7 +54,7 @@ public abstract class AppModule {
     @Provides
     @Singleton
     static VoteService provideVoteService() {
-        return ServiceBuilder.createService(VoteService.class, Hosts.TRONSCAN_API);
+        return ServiceBuilder.createService(VoteService.class, Hosts.TRONSCAN_API_LIST);
     }
 
     @Provides
@@ -66,19 +66,19 @@ public abstract class AppModule {
     @Provides
     @Singleton
     static TronScanService provideTronScanService() {
-        return ServiceBuilder.createService(TronScanService.class, Hosts.TRONSCAN_API);
+        return ServiceBuilder.createService(TronScanService.class, Hosts.TRONSCAN_API_LIST);
     }
 
     @Provides
     @Singleton
     static TokenService provideTokenService() {
-        return ServiceBuilder.createService(TokenService.class, Hosts.TRONSCAN_API);
+        return ServiceBuilder.createService(TokenService.class, Hosts.TRONSCAN_API_LIST);
     }
 
     @Provides
     @Singleton
     static AccountService provideAccountService() {
-        return ServiceBuilder.createService(AccountService.class, Hosts.TRONSCAN_API);
+        return ServiceBuilder.createService(AccountService.class, Hosts.TRONSCAN_API_LIST);
     }
 
     @Provides

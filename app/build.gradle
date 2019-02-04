@@ -129,7 +129,9 @@ dependencies {
     implementation "com.jakewharton:butterknife:$butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.3'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
 
@@ -168,6 +170,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.mindrot/jbcrypt
     implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
 
+    //image loader
+    implementation "com.github.bumptech.glide:glide:4.6.1"
 
     implementation "com.github.kenglxn.QRGen:android:2.2.0"
     implementation "com.github.nisrulz:qreader:2.1.2"
@@ -183,14 +187,11 @@ dependencies {
 
     // test
     testImplementation "junit:junit:4.12"
-    testImplementation "org.mockito:mockito-core:2.19.0"
+    testImplementation "org.mockito:mockito-core:2.23.4"
     testImplementation "org.hamcrest:hamcrest-all:1.3"
     testImplementation "org.powermock:powermock-api-mockito2:$powermockVersion"
     testImplementation "org.powermock:powermock-module-junit4-common:$powermockVersion"
     testImplementation "org.powermock:powermock-module-junit4:$powermockVersion"
     androidTestImplementation "com.android.support.test:runner:1.0.2"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:3.0.2"
-
-    //image loader
-    implementation "com.github.bumptech.glide:glide:4.6.1"
 }

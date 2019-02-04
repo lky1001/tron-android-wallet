@@ -3,7 +3,8 @@ package com.devband.tronwalletforandroid.ui.accountdetail.overview;
 import android.support.annotation.NonNull;
 
 import com.devband.tronlib.TronNetwork;
-import com.devband.tronlib.dto.Account;
+import com.devband.tronlib.tronscan.Balance;
+import com.devband.tronlib.tronscan.FrozenTrx;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
@@ -53,10 +54,10 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
     public void getAccount(@NonNull String address) {
         mView.showLoadingDialog();
 
-        Single.zip(mTronNetwork.getAccount(address), mTronNetwork.getTransactionStats(address), ((account, transactionStats) -> {
+        Single.zip(mTronNetwork.getAccountInfo(address), mTronNetwork.getTransactionStats(address), ((account, transactionStats) -> {
             List<Frozen> frozenList = new ArrayList<>();
 
-            for (Account.FrozenTrx frozen : account.getFrozen().getBalances()) {
+            for (FrozenTrx frozen : account.getFrozen().getBalances()) {
                 frozenList.add(Frozen.builder()
                         .frozenBalance(frozen.getAmount())
                         .expireTime(frozen.getExpires())
@@ -65,7 +66,7 @@ public class OverviewPresenter extends BasePresenter<OverviewView> {
 
             List<Asset> assetList = new ArrayList<>();
 
-            for (Account.Balance balance : account.getTokenBalances()) {
+            for (Balance balance : account.getTokenBalances()) {
                 if (Constants.TRON_SYMBOL.equalsIgnoreCase(balance.getName())) {
                     continue;
                 }

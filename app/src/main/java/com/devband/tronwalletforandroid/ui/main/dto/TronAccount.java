@@ -1,6 +1,6 @@
 package com.devband.tronwalletforandroid.ui.main.dto;
 
-import com.devband.tronlib.dto.Account;
+import com.devband.tronlib.tronscan.Account;
 
 import java.util.List;
 

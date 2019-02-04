@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.devband.tronlib.TronNetwork;
-import com.devband.tronlib.dto.Account;
+import com.devband.tronlib.tronscan.Account;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
@@ -205,7 +205,7 @@ public class Tron {
     }
 
     public Single<Account> getAccount(@NonNull String address) {
-        return mTronNetwork.getAccount(address);
+        return mTronNetwork.getAccountInfo(address);
     }
 
     public Single<Protocol.Account> queryAccount(@NonNull String address) {

@@ -27,4 +27,6 @@ public interface MainView extends IView {
     void changePasswordResult(boolean result);
 
     void showChangePasswordDialog();
+
+    void goToIntroActivity();
 }

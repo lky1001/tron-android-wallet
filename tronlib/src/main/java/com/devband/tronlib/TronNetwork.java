@@ -1,6 +1,5 @@
 package com.devband.tronlib;
 
-import com.devband.tronlib.dto.Account;
 import com.devband.tronlib.dto.AccountMedia;
 import com.devband.tronlib.dto.AccountVotes;
 import com.devband.tronlib.dto.Blocks;
@@ -26,6 +25,7 @@ import com.devband.tronlib.services.TokenService;
 import com.devband.tronlib.services.TronScanService;
 import com.devband.tronlib.services.VoteService;
 import com.devband.tronlib.services.WlcApiService;
+import com.devband.tronlib.tronscan.Account;
 
 import java.util.List;
 import java.util.Map;
@@ -132,8 +132,8 @@ public class TronNetwork {
         return mAccountService.getRichData();
     }
 
-    public Single<Account> getAccount(String address) {
-        return mAccountService.getAccount(address);
+    public Single<Account> getAccountInfo(String address) {
+        return mAccountService.getAccountInfo(address);
     }
 
     public Single<TronAccounts> getAccounts(long start, int limit, String sort) {

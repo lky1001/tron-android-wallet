@@ -43,6 +43,7 @@ import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.blockexplorer.BlockExplorerActivity;
+import com.devband.tronwalletforandroid.ui.intro.IntroActivity;
 import com.devband.tronwalletforandroid.ui.login.LoginActivity;
 import com.devband.tronwalletforandroid.ui.main.adapter.MyTokenListAdapter;
 import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
@@ -741,5 +742,11 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @Override
     public void showChangePasswordDialog() {
         showProgressDialog(getString(R.string.change_password), getString(R.string.change_password_loading_msg));
+    }
+
+    @Override
+    public void goToIntroActivity() {
+        finish();
+        startActivity(IntroActivity.class);
     }
 }
