@@ -3,8 +3,6 @@ package com.devband.tronwalletforandroid.ui.myaccount;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.devband.tronlib.tronscan.Balance;
-import com.devband.tronlib.tronscan.FrozenTrx;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.database.dao.FavoriteTokenDao;
@@ -67,39 +65,47 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
     }
 
     public void getAccountAccountInfo() {
-        final String address = mTron.getLoginAddress();
+        final String loginAddress = mTron.getLoginAddress();
 
         mView.showLoadingDialog();
 
-        mTron.getAccount(address)
-        .map((account -> {
-            List<Frozen> frozenList = new ArrayList<>();
+        mTron.queryAccount(loginAddress)
+                .map((account -> {
+                    List<Frozen> frozenList = new ArrayList<>();
 
-            for (FrozenTrx frozen : account.getFrozen().getBalances()) {
-                frozenList.add(Frozen.builder()
-                        .frozenBalance(frozen.getAmount())
-                        .expireTime(frozen.getExpires())
-                        .build());
-            }
+                    for (org.tron.protos.Protocol.Account.Frozen frozen : account.getFrozenList()) {
+                        frozenList.add(Frozen.builder()
+                                .frozenBalance(frozen.getFrozenBalance())
+                                .expireTime(frozen.getExpireTime())
+                                .build());
+                    }
 
-            List<Asset> assetList = new ArrayList<>();
+                    long accountId = mTron.getLoginAccount().getId();
+                    List<Asset> assetList = new ArrayList<>();
 
-            for (Balance balance : account.getTrc10TokenBalances()) {
-                assetList.add(Asset.builder()
-                        .name(balance.getName())
-                        .displayName(balance.getDisplayName() + "(" + balance.getName() + ")")
-                        .balance(balance.getBalance())
-                        .build());
-            }
+//                        for (Trc20Token trc20TokenBalance : account.getTrc20TokenBalances()) {
+//                            assetList.add(Asset.builder()
+//                                    .name(trc20TokenBalance.getName())
+//                                    .displayName("[TRC20] " + trc20TokenBalance.getName())
+//                                    .balance(trc20TokenBalance.getBalance() / Math.pow(10, trc20TokenBalance.getDecimals()))
+//                                    .build());
+//                        }
 
-            return TronAccount.builder()
-                    .name(account.getName())
-                    .balance(account.getBalance())
-                    .bandwidth(account.getBandwidth().getNetRemaining())
-                    .assetList(assetList)
-                    .frozenList(frozenList)
-                    .build();
-        }))
+                    for (String key : account.getAssetV2Map().keySet()) {
+                        assetList.add(Asset.builder()
+                                .name(key)
+                                .displayName("[" + key + "]" +mTron.getTokenName(key))
+                                .balance(account.getAssetV2Map().get(key))
+                                .build());
+                    }
+
+                    return TronAccount.builder()
+                            .balance(account.getBalance())
+                            .bandwidth(account.getDelegatedFrozenBalanceForBandwidth())
+                            .assetList(assetList)
+                            .frozenList(frozenList)
+                            .build();
+                }))
         .subscribeOn(mRxJavaSchedulers.getIo())
         .observeOn(mRxJavaSchedulers.getMainThread())
         .subscribe(new SingleObserver<TronAccount>() {
@@ -110,7 +116,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
 
             @Override
             public void onSuccess(TronAccount account) {
-                mView.displayAccountInfo(address, account);
+                mView.displayAccountInfo(loginAddress, account);
             }
 
             @Override
@@ -122,7 +128,7 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
                 }
 
                 mView.showServerError();
-                mView.displayAccountInfo(address, null);
+                mView.displayAccountInfo(loginAddress, null);
             }
         });
     }
@@ -214,7 +220,6 @@ public class MyAccountPresenter extends BasePresenter<MyAccountView> {
         return mTron.getAccountCount();
     }
 
-    @Nullable
     public boolean isFavoriteToken(@NonNull String tokenName) {
         if (mTron.getLoginAccount() != null) {
             long accountId = mTron.getLoginAccount().getId();
