@@ -1,14 +1,15 @@
 package com.devband.tronwalletforandroid.ui.sendtoken;
 
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.exception.InvalidAddressException;
 import com.devband.tronwalletforandroid.tron.exception.InvalidPasswordException;
+import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
-import org.tron.protos.Protocol;
-
-import java.net.ConnectException;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
@@ -36,28 +37,30 @@ public class SendTokenPresenter extends BasePresenter<SendTokenView> {
     @Override
     public void onResume() {
         mTron.queryAccount(mTron.getLoginAddress())
-        .subscribeOn(mRxJavaSchedulers.getIo())
-        .observeOn(mRxJavaSchedulers.getMainThread())
-        .subscribe(new SingleObserver<Protocol.Account>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+            .subscribeOn(mRxJavaSchedulers.getIo())
+            .map(account -> {
+                List<Asset> assets = new ArrayList<>();
 
-            }
+                assets.add(Asset.builder()
+                        .name(Constants.TRON_SYMBOL)
+                        .displayName(Constants.TRON_SYMBOL)
+                        .balance(((double) account.getBalance()) / Constants.ONE_TRX)
+                        .build());
 
-            @Override
-            public void onSuccess(Protocol.Account account) {
-                mView.displayAccountInfo(account);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                e.printStackTrace();
-                // todo - error msg
-                if (e instanceof ConnectException) {
-                    // internet error
+                for (String key : account.getAssetV2Map().keySet()) {
+                    assets.add(Asset.builder()
+                            .name(key)
+                            .displayName("[" + key + "]" +mTron.getTokenName(key))
+                            .balance(account.getAssetV2Map().get(key))
+                            .build());
                 }
-            }
-        });
+
+                return assets;
+            })
+            .observeOn(mRxJavaSchedulers.getMainThread())
+            .subscribe(assets -> {
+                mView.displayAccountInfo(assets);
+            }, e -> e.printStackTrace());
     }
 
     @Override

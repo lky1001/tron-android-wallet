@@ -1,8 +1,9 @@
 package com.devband.tronwalletforandroid.ui.sendtoken;
 
+import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.mvp.IView;
 
-import org.tron.protos.Protocol;
+import java.util.List;
 
 public interface SendTokenView extends IView {
 
@@ -10,7 +11,7 @@ public interface SendTokenView extends IView {
 
     void invalidPassword();
 
-    void displayAccountInfo(Protocol.Account account);
+    void displayAccountInfo(List<Asset> assets);
 
     void invalidAddress();
 

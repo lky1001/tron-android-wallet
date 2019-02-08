@@ -11,7 +11,6 @@ import com.devband.tronlib.dto.SystemStatus;
 import com.devband.tronlib.dto.Token;
 import com.devband.tronlib.dto.TokenHolders;
 import com.devband.tronlib.dto.Tokens;
-import com.devband.tronlib.dto.TopAddressAccounts;
 import com.devband.tronlib.dto.TransactionStats;
 import com.devband.tronlib.dto.Transactions;
 import com.devband.tronlib.dto.TransferStats;
@@ -135,10 +134,6 @@ public class TronNetwork {
 
     public Single<TronAccounts> getAccounts(long start, int limit, String sort) {
         return mAccountService.getAccounts(start, limit, sort);
-    }
-
-    public Single<TopAddressAccounts> getTopAddressAccounts(int limit) {
-        return mAccountService.getTopAddressAccounts("-balance", limit);
     }
 
     public Single<TransactionStats> getTransactionStats(String address) {

@@ -8,8 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -21,9 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devband.tronlib.dto.Stat;
-import com.devband.tronlib.dto.SystemStatus;
-import com.devband.tronlib.dto.TopAddressAccount;
-import com.devband.tronlib.dto.TopAddressAccounts;
+import com.devband.tronlib.dto.TronAccount;
+import com.devband.tronlib.dto.TronAccounts;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonFragment;
 import com.devband.tronwalletforandroid.common.Constants;
@@ -78,20 +75,6 @@ public class OverviewFragment extends CommonFragment implements OverviewView {
 
     @BindView(R.id.account_pie_chart)
     PieChart mAccountPieChart;
-
-    @BindView(R.id.trx_transferred_in_the_past_hour_chart)
-    LineChart mTrxTransferredInThePastHourChart;
-
-    @BindView(R.id.transactions_in_the_past_hour_chart)
-    LineChart mTransactionsInThePastHourChart;
-
-    @BindView(R.id.avg_block_size_line_chart)
-    LineChart mAvgBlockSizeLineChart;
-
-    @BindView(R.id.recycler_view)
-    RecyclerView mRecyclerView;
-
-    private RichListAdapter mRichListAdapter;
 
     public static Fragment newInstance() {
         OverviewFragment fragment = new OverviewFragment();
@@ -157,13 +140,9 @@ public class OverviewFragment extends CommonFragment implements OverviewView {
                 }
             }
         });
-
-        mRichListAdapter = new RichListAdapter();
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(mRichListAdapter);
     }
 
-    private void setTopAddressData(List<TopAddressAccount> data) {
+    private void setTopAddressData(List<TronAccount> data) {
         if (data == null || data.size() == 0) {
             return;
         }
@@ -171,7 +150,7 @@ public class OverviewFragment extends CommonFragment implements OverviewView {
         List<PieEntry> entries = new ArrayList<>();
 
         for (int i = 0; i < data.size(); i++) {
-            TopAddressAccount account = data.get(i);
+            TronAccount account = data.get(i);
             double balance = account.getBalance() / Constants.ONE_TRX;
             entries.add(new PieEntry((float) balance));
         }
@@ -236,40 +215,16 @@ public class OverviewFragment extends CommonFragment implements OverviewView {
     protected void refresh() {
         if (isAdded()) {
             mOverviewPresenter.chartDataLoad();
-            mOverviewPresenter.richListDataLoad();
         }
     }
 
     @Override
-    public void overviewBlockStatus(SystemStatus systemStatus) {
-        if (!isAdded()) {
-            return;
-        }
-        mBlockHeightText.setText(Constants.numberFormat.format(systemStatus.getDatabase().getBlock()));
-    }
-
-    @Override
-    public void overviewDataLoadSuccess(TopAddressAccounts topAddressAccounts) {
+    public void overviewDataLoadSuccess(TronAccounts topAddressAccounts) {
         if (!isAdded()) {
             return;
         }
         hideDialog();
         setTopAddressData(topAddressAccounts.getData());
-    }
-
-    @Override
-    public void overviewTransferPastHour(List<Stat> stats) {
-        initLineChart(mTrxTransferredInThePastHourChart, stats);
-    }
-
-    @Override
-    public void overviewTransactionPastHour(List<Stat> stats) {
-        initLineChart(mTransactionsInThePastHourChart, stats);
-    }
-
-    @Override
-    public void overviewAvgBlockSize(List<Stat> stats) {
-        initLineChart(mAvgBlockSizeLineChart, stats);
     }
 
     private void initLineChart(LineChart lineChart, List<Stat> stats) {
@@ -336,14 +291,6 @@ public class OverviewFragment extends CommonFragment implements OverviewView {
 
         lineChart.animateX(750);
         lineChart.invalidate();
-    }
-
-    @Override
-    public void richListLoadSuccess(List<RichItemViewModel> viewModels) {
-        hideDialog();
-        if (mRichListAdapter != null) {
-            mRichListAdapter.refresh(viewModels);
-        }
     }
 
     @Override
