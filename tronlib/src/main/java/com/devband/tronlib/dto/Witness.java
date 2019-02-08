@@ -11,6 +11,8 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Witness {
 
+    private int lastRanking;
+
     private int realTimeRanking;
 
     private String address;
