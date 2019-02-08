@@ -6,9 +6,6 @@ import android.text.TextUtils;
 
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.CoinMarketCap;
-import com.devband.tronlib.tronscan.Balance;
-import com.devband.tronlib.tronscan.FrozenTrx;
-import com.devband.tronlib.tronscan.Trc20Token;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.CustomPreference;
@@ -85,49 +82,43 @@ public class MainPresenter extends BasePresenter<MainView> {
         String loginAddress = mTron.getLoginAddress();
 
         if (!TextUtils.isEmpty(loginAddress)) {
-            mTron.getAccount(loginAddress)
+            mTron.queryAccount(loginAddress)
                     .map((account -> {
                         List<Frozen> frozenList = new ArrayList<>();
 
-                        for (FrozenTrx frozen : account.getFrozen().getBalances()) {
+                        for (org.tron.protos.Protocol.Account.Frozen frozen : account.getFrozenList()) {
                             frozenList.add(Frozen.builder()
-                                    .frozenBalance(frozen.getAmount())
-                                    .expireTime(frozen.getExpires())
+                                    .frozenBalance(frozen.getFrozenBalance())
+                                    .expireTime(frozen.getExpireTime())
                                     .build());
                         }
 
                         long accountId = mTron.getLoginAccount().getId();
                         List<Asset> assetList = new ArrayList<>();
 
-                        for (Trc20Token trc20TokenBalance : account.getTrc20TokenBalances()) {
-                            assetList.add(Asset.builder()
-                                    .name(trc20TokenBalance.getName())
-                                    .displayName("[TRC20] " + trc20TokenBalance.getName())
-                                    .balance(trc20TokenBalance.getBalance() / Math.pow(10, trc20TokenBalance.getDecimals()))
-                                    .build());
-                        }
+//                        for (Trc20Token trc20TokenBalance : account.getTrc20TokenBalances()) {
+//                            assetList.add(Asset.builder()
+//                                    .name(trc20TokenBalance.getName())
+//                                    .displayName("[TRC20] " + trc20TokenBalance.getName())
+//                                    .balance(trc20TokenBalance.getBalance() / Math.pow(10, trc20TokenBalance.getDecimals()))
+//                                    .build());
+//                        }
 
-                        for (Balance balance : account.getTrc10TokenBalances()) {
-                            if (mCustomPreference.isFavoriteToken(accountId)) {
-                                if (mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, balance.getName()) != null) {
+                        for (String key : account.getAssetV2Map().keySet()) {
+                            boolean isFavorite = mCustomPreference.isFavoriteToken(accountId);
+
+                            if (!isFavorite || (isFavorite && mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, key) != null)) {
                                     assetList.add(Asset.builder()
-                                            .name(balance.getName())
-                                            .displayName(balance.getDisplayName() + "(" + balance.getName() + ")")
-                                            .balance(balance.getBalance())
+                                            .name(key)
+                                            .displayName("[" + key + "]" +mTron.getTokenName(key))
+                                            .balance(account.getAssetV2Map().get(key))
                                             .build());
-                                }
-                            } else {
-                                assetList.add(Asset.builder()
-                                        .name(balance.getName())
-                                        .displayName(balance.getDisplayName() + "(" + balance.getName() + ")")
-                                        .balance(balance.getBalance())
-                                        .build());
                             }
                         }
 
                         return TronAccount.builder()
                                 .balance(account.getBalance())
-                                .bandwidth(account.getBandwidth().getNetRemaining())
+                                .bandwidth(account.getDelegatedFrozenBalanceForBandwidth())
                                 .assetList(assetList)
                                 .frozenList(frozenList)
                                 .build();
