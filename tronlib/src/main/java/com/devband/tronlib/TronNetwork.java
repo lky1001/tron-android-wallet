@@ -11,7 +11,6 @@ import com.devband.tronlib.dto.SystemStatus;
 import com.devband.tronlib.dto.Token;
 import com.devband.tronlib.dto.TokenHolders;
 import com.devband.tronlib.dto.Tokens;
-import com.devband.tronlib.dto.TopAddressAccounts;
 import com.devband.tronlib.dto.TransactionStats;
 import com.devband.tronlib.dto.Transactions;
 import com.devband.tronlib.dto.TransferStats;
@@ -24,7 +23,6 @@ import com.devband.tronlib.services.CoinMarketCapService;
 import com.devband.tronlib.services.TokenService;
 import com.devband.tronlib.services.TronScanService;
 import com.devband.tronlib.services.VoteService;
-import com.devband.tronlib.services.WlcApiService;
 import com.devband.tronlib.tronscan.Account;
 import com.devband.tronlib.tronscan.TokenInfos;
 
@@ -42,21 +40,18 @@ public class TronNetwork {
     private TronScanService mTronScanService;
     private TokenService mTokenService;
     private AccountService mAccountService;
-    private WlcApiService mWlcApiService;
 
     public TronNetwork(VoteService voteService, CoinMarketCapService coinMarketCapService,
-            TronScanService tronScanService, TokenService tokenService, AccountService accountService,
-            WlcApiService wlcApiService) {
+            TronScanService tronScanService, TokenService tokenService, AccountService accountService) {
         this.mVoteService = voteService;
         this.mCoinMarketCapService = coinMarketCapService;
         this.mTronScanService = tronScanService;
         this.mTokenService = tokenService;
         this.mAccountService = accountService;
-        this.mWlcApiService = wlcApiService;
     }
 
     public Single<Witnesses> getVoteWitnesses() {
-        return mWlcApiService.getVoteWitnesses();
+        return mVoteService.getVoteWitnesses();
     }
 
     public Single<Votes> getVoteCurrentCycle() {
@@ -139,10 +134,6 @@ public class TronNetwork {
 
     public Single<TronAccounts> getAccounts(long start, int limit, String sort) {
         return mAccountService.getAccounts(start, limit, sort);
-    }
-
-    public Single<TopAddressAccounts> getTopAddressAccounts(int limit) {
-        return mAccountService.getTopAddressAccounts("-balance", limit);
     }
 
     public Single<TransactionStats> getTransactionStats(String address) {

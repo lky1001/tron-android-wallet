@@ -219,6 +219,10 @@ public class Tron {
                 });
     }
 
+    public String getTokenName(String tokenId) {
+        return mTokenManager.getTokenName(tokenId).blockingGet();
+    }
+
     public Single<Protocol.Account> queryAccount(@NonNull String address) {
         if (!TextUtils.isEmpty(address)) {
             byte[] addressBytes = AccountManager.decodeFromBase58Check(address);

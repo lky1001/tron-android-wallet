@@ -21,4 +21,7 @@ public interface VoteService {
     @GET("api/vote")
     Single<AccountVotes> getAccountVotes(@Query("voter") String voterAddress, @Query("start") long start,
             @Query("limit") int limit, @Query("sort") String sort);
+
+    @GET("api/vote/witness")
+    Single<Witnesses> getVoteWitnesses();
 }

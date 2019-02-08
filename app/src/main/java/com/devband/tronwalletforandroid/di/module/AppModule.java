@@ -13,7 +13,6 @@ import com.devband.tronlib.services.CoinMarketCapService;
 import com.devband.tronlib.services.TokenService;
 import com.devband.tronlib.services.TronScanService;
 import com.devband.tronlib.services.VoteService;
-import com.devband.tronlib.services.WlcApiService;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.common.security.PasswordEncoder;
@@ -84,17 +83,10 @@ public abstract class AppModule {
 
     @Provides
     @Singleton
-    static WlcApiService provideWlcApiService() {
-        return ServiceBuilder.createService(WlcApiService.class, Hosts.TRONSCAN_WLC_API);
-    }
-
-    @Provides
-    @Singleton
     static TronNetwork provideTronNetwork(VoteService voteService, CoinMarketCapService coinMarketCapService,
-            TronScanService tronScanService, TokenService tokenService, AccountService accountService,
-            WlcApiService wlcApiService) {
+            TronScanService tronScanService, TokenService tokenService, AccountService accountService) {
         return new TronNetwork(voteService, coinMarketCapService, tronScanService,
-                tokenService, accountService, wlcApiService);
+                tokenService, accountService);
     }
 
     @Provides

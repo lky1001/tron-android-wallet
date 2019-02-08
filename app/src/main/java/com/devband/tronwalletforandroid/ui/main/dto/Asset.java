@@ -23,6 +23,6 @@ public class Asset {
 
     @Override
     public String toString() {
-        return name + " (" + Constants.tronBalanceFormat.format(balance) + ")";
+        return displayName + " (" + Constants.tronBalanceFormat.format(balance) + ")";
     }
 }

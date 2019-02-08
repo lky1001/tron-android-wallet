@@ -8,6 +8,7 @@ import io.reactivex.schedulers.Schedulers;
 
 @Singleton
 public class RxJavaSchedulersImpl implements RxJavaSchedulers {
+
     @Override
     public Scheduler getNewThread() {
         return Schedulers.newThread();

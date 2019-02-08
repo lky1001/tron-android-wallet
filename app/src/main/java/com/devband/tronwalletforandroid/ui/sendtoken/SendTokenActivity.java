@@ -18,16 +18,13 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
-import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.Utils;
 import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 
-import org.tron.protos.Protocol;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -161,7 +158,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                 .append(address)
                 .append("\n")
                 .append(getString(R.string.send_token_token_text))
-                .append(mSelectedAsset.getName())
+                .append(mSelectedAsset.getDisplayName())
                 .append("\n")
                 .append(getString(R.string.send_token_amount_text))
                 .append(amountText);
@@ -230,23 +227,9 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
     }
 
     @Override
-    public void displayAccountInfo(Protocol.Account account) {
-        List<Asset> assetModelList = new ArrayList<>();
-
-        assetModelList.add(Asset.builder()
-                .name(Constants.TRON_SYMBOL)
-                .balance(((double) account.getBalance()) / Constants.ONE_TRX)
-                .build());
-
-        for (String key : account.getAssetMap().keySet()) {
-            assetModelList.add(Asset.builder()
-                    .name(key)
-                    .balance(account.getAssetMap().get(key))
-                    .build());
-        }
-
+    public void displayAccountInfo(List<Asset> assets) {
         mTokenAdapter = new ArrayAdapter<>(SendTokenActivity.this, android.R.layout.simple_spinner_item,
-                assetModelList);
+                assets);
 
         mTokenAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mTokenSpinner.setAdapter(mTokenAdapter);

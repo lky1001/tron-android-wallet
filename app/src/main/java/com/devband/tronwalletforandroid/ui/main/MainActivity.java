@@ -550,7 +550,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
         mLoginAccountBalanceText.setText(Constants.tronBalanceFormat.format(balance) + " " + getString(R.string.currency_text));
         mLoginFrozenBalanceText.setText(Constants.numberFormat.format(fz));
-        mLoginBandwidthText.setText(Constants.numberFormat.format(bandwidth));
+        mLoginBandwidthText.setText(bandwidth == 0 ? "-" : Constants.numberFormat.format(bandwidth));
 
         mLoadingAccountInfo = false;
 

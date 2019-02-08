@@ -153,7 +153,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
             }
 
             mBalanceText.setText(Constants.tronBalanceFormat.format(mAccountBalance) + " " + Constants.TRON_SYMBOL);
-            mBandwidthText.setText(Constants.tronBalanceFormat.format(account.getBandwidth()));
+            mBandwidthText.setText(account.getBandwidth() == 0 ? "-" : Constants.tronBalanceFormat.format(account.getBandwidth()));
             mTokensLayout.removeAllViews();
 
             if (!account.getAssetList().isEmpty()) {
