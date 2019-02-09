@@ -1,6 +1,9 @@
 package com.devband.tronwalletforandroid.tron;
 
+import android.text.TextUtils;
+
 import com.devband.tronwalletforandroid.tron.grpc.GrpcClient;
+import com.google.protobuf.ByteString;
 
 import org.tron.api.GrpcAPI;
 import org.tron.protos.Contract;
@@ -133,5 +136,33 @@ class TronManager implements ITronManager {
     @Override
     public Single<GrpcAPI.TransactionExtention> createExchangeTransactionContract(Contract.ExchangeTransactionContract contract) {
         return Single.fromCallable(() -> grpcClient.createExchangeTransactionContract(contract));
+    }
+
+    @Override
+    public Single<Protocol.SmartContract> getSmartContract(byte[] address) {
+        return Single.fromCallable(() -> grpcClient.getSmartContract(address));
+    }
+
+    @Override
+    public Single<GrpcAPI.TransactionExtention> triggerContract(byte[] addressBytes, byte[] contractAddress, long callValue, byte[] input, long feeLimit, long tokenCallValue, String tokenId) {
+        return Single.fromCallable(() -> {
+            Contract.TriggerSmartContract triggerContract = triggerCallContract(addressBytes, contractAddress, callValue, input, tokenCallValue, tokenId);
+            return grpcClient.triggerContract(triggerContract);
+        });
+    }
+
+    private Contract.TriggerSmartContract triggerCallContract(byte[] address, byte[] contractAddress,
+            long callValue, byte[] data, long tokenValue, String tokenId) {
+        Contract.TriggerSmartContract.Builder builder = Contract.TriggerSmartContract.newBuilder();
+        builder.setOwnerAddress(ByteString.copyFrom(address));
+        builder.setContractAddress(ByteString.copyFrom(contractAddress));
+        builder.setData(ByteString.copyFrom(data));
+        builder.setCallValue(callValue);
+
+        if (!TextUtils.isEmpty(tokenId)) {
+            builder.setCallTokenValue(tokenValue);
+            builder.setTokenId(Long.parseLong(tokenId));
+        }
+        return builder.build();
     }
 }

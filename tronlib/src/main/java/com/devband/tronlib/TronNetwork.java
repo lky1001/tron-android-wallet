@@ -6,14 +6,12 @@ import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.dto.Market;
 import com.devband.tronlib.dto.RichData;
-import com.devband.tronlib.dto.Stat;
 import com.devband.tronlib.dto.SystemStatus;
 import com.devband.tronlib.dto.Token;
 import com.devband.tronlib.dto.TokenHolders;
 import com.devband.tronlib.dto.Tokens;
 import com.devband.tronlib.dto.TransactionStats;
 import com.devband.tronlib.dto.Transactions;
-import com.devband.tronlib.dto.TransferStats;
 import com.devband.tronlib.dto.Transfers;
 import com.devband.tronlib.dto.TronAccounts;
 import com.devband.tronlib.dto.Votes;
@@ -162,14 +160,6 @@ public class TronNetwork {
 
     public Single<SystemStatus> getSystemStatus() {
         return mTronScanService.getStatus();
-    }
-
-    public Single<List<Stat>> getAvgBlockSize() {
-        return mTronScanService.getBlockStats("avg-block-size");
-    }
-
-    public Single<TransferStats> getTransferStats() {
-        return mTronScanService.getTransferStats("timestamp", "hour");
     }
 
     public Single<TokenInfos> getTokenInfo(String id) {

@@ -11,6 +11,7 @@ import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.services.AccountService;
 import com.devband.tronlib.services.CoinMarketCapService;
 import com.devband.tronlib.services.TokenService;
+import com.devband.tronlib.services.TronGridService;
 import com.devband.tronlib.services.TronScanService;
 import com.devband.tronlib.services.VoteService;
 import com.devband.tronwalletforandroid.common.Constants;
@@ -79,6 +80,12 @@ public abstract class AppModule {
     @Singleton
     static AccountService provideAccountService() {
         return ServiceBuilder.createService(AccountService.class, Hosts.TRONSCAN_API_LIST);
+    }
+
+    @Provides
+    @Singleton
+    static TronGridService provideTronGridService() {
+        return ServiceBuilder.createService(TronGridService.class, Hosts.TRONGRID_API);
     }
 
     @Provides

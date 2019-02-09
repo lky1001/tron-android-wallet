@@ -144,6 +144,8 @@ public class MainPresenter extends BasePresenter<MainView> {
                             // todo - error msg
                             if (e instanceof ConnectException) {
                                 // internet error
+                            } else if (e instanceof IllegalArgumentException) {
+                                mView.goToIntroActivity();
                             }
 
                             mView.connectionError();

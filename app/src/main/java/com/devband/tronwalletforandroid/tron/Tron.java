@@ -16,6 +16,7 @@ import com.devband.tronwalletforandroid.tron.exception.InvalidAddressException;
 import com.devband.tronwalletforandroid.tron.exception.InvalidPasswordException;
 import com.google.protobuf.ByteString;
 
+import org.spongycastle.util.encoders.Hex;
 import org.tron.api.GrpcAPI;
 import org.tron.common.utils.ByteArray;
 import org.tron.protos.Contract;
@@ -27,6 +28,7 @@ import java.util.Map;
 import java.util.Random;
 
 import io.reactivex.Single;
+import timber.log.Timber;
 
 public class Tron {
 
@@ -224,16 +226,19 @@ public class Tron {
     }
 
     public Single<Protocol.Account> queryAccount(@NonNull String address) {
-        if (!TextUtils.isEmpty(address)) {
-            byte[] addressBytes = AccountManager.decodeFromBase58Check(address);
-            if (addressBytes == null) {
-                throw new IllegalArgumentException("Invalid address.");
-            }
+        return Single.fromCallable(() -> {
+            if (!TextUtils.isEmpty(address)) {
+                byte[] addressBytes = AccountManager.decodeFromBase58Check(address);
 
-            return mTronManager.queryAccount(addressBytes);
-        } else {
-            throw new IllegalArgumentException("address is required.");
-        }
+                if (addressBytes == null) {
+                    throw new IllegalArgumentException("Invalid address.");
+                }
+
+                return addressBytes;
+            } else {
+                throw new IllegalArgumentException("address is required.");
+            }
+        }).flatMap(addressBytes -> mTronManager.queryAccount(addressBytes));
     }
 
     public Single<GrpcAPI.WitnessList> listWitnesses() {
@@ -558,5 +563,82 @@ public class Tron {
     public void removeAccount(long accountId, String accountName) {
         mAccountManager.removeAccount(accountId, accountName);
         mCustomPreference.setLastSelectedAccountId(mAccountManager.getLoginAccount().getId());
+    }
+
+    public Single<Protocol.SmartContract> getSmartContract(@NonNull String address) {
+        return Single.fromCallable(() -> AccountManager.decodeFromBase58Check(address))
+                .flatMap(addressBytes -> mTronManager.getSmartContract(addressBytes));
+    }
+
+    /**
+     * call start contract
+     * @param contractAddress
+     * @param callValue transfer trx value
+     * @param input
+     * @param feeLimit
+     * @param tokenCallValue transfer token value
+     * @param tokenId transfer token id, optional
+     * @return
+     */
+    public Single<Boolean> callContract(@NonNull String ownerAddress, byte[] contractAddress, long callValue,
+            byte[] input, long feeLimit, long tokenCallValue, @Nullable String tokenId) {
+        return Single.fromCallable(() -> AccountManager.decodeFromBase58Check(ownerAddress))
+                .flatMap(addressBytes -> mTronManager.triggerContract(addressBytes, contractAddress, callValue, input, feeLimit, tokenCallValue, tokenId))
+                .map(transactionExtention -> {
+                    if (transactionExtention == null || !transactionExtention.getResult().getResult()) {
+                        Timber.d("RPC create call trx failed!");
+                        Timber.d("Code = " + transactionExtention != null ? String.valueOf(transactionExtention.getResult().getCode()) : "null");
+                        Timber.d("Message = " + transactionExtention != null ? transactionExtention.getResult().getMessage().toStringUtf8() : "null");
+                        return false;
+                    }
+
+                    Protocol.Transaction resultTransaction = transactionExtention.getTransaction();
+
+                    if (resultTransaction.getRetCount() != 0 && transactionExtention.getConstantResult(0) != null && transactionExtention.getResult() != null) {
+                        byte[] result = transactionExtention.getConstantResult(0).toByteArray();
+                        Timber.d("message:" + resultTransaction.getRet(0).getRet());
+                        Timber.d(":" + ByteArray.toStr(transactionExtention.getResult().getMessage().toByteArray()));
+                        Timber.d("Result:" + Hex.toHexString(result));
+
+                        GrpcAPI.TransactionExtention.Builder texBuilder = GrpcAPI.TransactionExtention.newBuilder();
+                        Protocol.Transaction.Builder transBuilder = Protocol.Transaction.newBuilder();
+                        Protocol.Transaction.raw.Builder rawBuilder = transactionExtention.getTransaction().getRawData()
+                                .toBuilder();
+                        rawBuilder.setFeeLimit(feeLimit);
+                        transBuilder.setRawData(rawBuilder);
+                        for (int i = 0; i < transactionExtention.getTransaction().getSignatureCount(); i++) {
+                            ByteString s = transactionExtention.getTransaction().getSignature(i);
+                            transBuilder.setSignature(i, s);
+                        }
+                        for (int i = 0; i < transactionExtention.getTransaction().getRetCount(); i++) {
+                            Protocol.Transaction.Result r = transactionExtention.getTransaction().getRet(i);
+                            transBuilder.setRet(i, r);
+                        }
+                        texBuilder.setTransaction(transBuilder);
+                        texBuilder.setResult(transactionExtention.getResult());
+                        texBuilder.setTxid(transactionExtention.getTxid());
+                        transactionExtention = texBuilder.build();
+
+                        GrpcAPI.Return ret = transactionExtention.getResult();
+
+                        if (!ret.getResult()) {
+                            System.out.println("Code = " + ret.getCode());
+                            System.out.println("Message = " + ret.getMessage().toStringUtf8());
+                            return false;
+                        }
+
+                        Protocol.Transaction transaction = transactionExtention.getTransaction();
+                        if (transaction == null || transaction.getRawData().getContractCount() == 0) {
+                            System.out.println("Transaction is empty");
+                            return false;
+                        }
+                        System.out.println(
+                                "Receive txid = " + ByteArray.toHexString(transactionExtention.getTxid().toByteArray()));
+                        transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey("12345678"), transaction);
+                        return mTronManager.broadcastTransaction(transaction).blockingGet();
+                    }
+
+                    return false;
+                });
     }
 }

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contract : "/>
+            <EditText
+                android:id="@+id/contract_address_edit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TVQ6jYV5yTtRsKcD8aRc1a4Kei4V45ixLn"/>
+            <Button
+                android:id="@+id/get_abi_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get Abi"/>
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+            <TextView
+                android:id="@+id/abi_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Method : "/>
+            <EditText
+                android:id="@+id/method_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="balanceOf(address)"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Parms : "/>
+            <EditText
+                android:id="@+id/params_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="a"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fee Limit : "/>
+            <EditText
+                android:id="@+id/fee_limit_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1000000000"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Call Value : "/>
+            <EditText
+                android:id="@+id/call_value_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/send_transaction_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Send Transaction"/>
+    </LinearLayout>
+</ScrollView>
