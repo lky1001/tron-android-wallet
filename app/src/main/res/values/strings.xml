@@ -328,4 +328,6 @@
     <string name="account_name_text">Account Name</string>
     <string name="title_remove_acocunt">Are you absolutely sure?</string>
     <string name="remove_account_error_msg">If you have only one account, you can not delete it.</string>
+    <string name="trc10_button_text">TRC-10</string>
+    <string name="trc20_button_text">TRC-20</string>
 </resources>

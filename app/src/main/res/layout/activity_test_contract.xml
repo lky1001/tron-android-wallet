@@ -65,7 +65,7 @@
                 android:id="@+id/params_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="a"/>
+                android:text="TNkDRbSnvQF4fFGd69DVjrEeXsXEjRYVGm"/>
         </LinearLayout>
 
         <LinearLayout

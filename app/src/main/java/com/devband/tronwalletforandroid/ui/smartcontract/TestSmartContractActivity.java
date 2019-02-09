@@ -69,7 +69,9 @@ public class TestSmartContractActivity extends CommonActivity {
     public void onSendTransactionClick() {
         Single.fromCallable(() -> {
             String transferMethod = contractMethod.getText().toString();
-            String transferParams = contractParams.getText().toString();
+            //String transferParams = contractParams.getText().toString();
+
+            String transferParams = "\"TSMbPm5mUsaTDSEjHCd55ZJaib3Ysvjyc5\"";
 
             String contractTrigger = "";
 
@@ -92,7 +94,7 @@ public class TestSmartContractActivity extends CommonActivity {
                     .build();
 
             //TriggerResult result = mTronGridService.triggerSmartContract(triggerRequest).blockingGet();
-            return mTron.callContract(mTron.getLoginAddress(), contractAddress, Long.parseLong(callValue.getText().toString()), input, Long.parseLong(feeLimit.getText().toString()), 0L, null);
+            return mTron.callQueryContract(mTron.getLoginAddress(), contractAddress, Long.parseLong(callValue.getText().toString()), input, Long.parseLong(feeLimit.getText().toString()), 0L, null);
         })
         .flatMap(result -> result)
         .subscribe(result -> {

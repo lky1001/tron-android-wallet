@@ -122,6 +122,12 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @BindView(R.id.check_favorite_tokens)
     CheckBox mShowOnlyFavoritesCheckBox;
 
+    @BindView(R.id.trc10_button)
+    Button mTrc10Button;
+
+    @BindView(R.id.trc20_button)
+    Button mTrc20Button;
+
     Spinner mAccountSpinner;
 
     TextView mNavHeaderText;
@@ -141,6 +147,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     private boolean mLoadingAccountInfo;
 
     private boolean mDoubleBackToExitPressedOnce;
+
+    private int mSelectedToken = Constants.TOKEN_TRC_10;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -280,6 +288,26 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         checkLoginState();
     }
 
+    @OnClick(R.id.trc10_button)
+    public void onTrc10Click() {
+        mSelectedToken = Constants.TOKEN_TRC_10;
+        mTrc10Button.setBackgroundResource(R.drawable.ic_trc10_selected);
+        mTrc10Button.setTextColor(getResources().getColor(android.R.color.white));
+        mTrc20Button.setBackgroundResource(R.drawable.ic_trc20_unselected);
+        mTrc20Button.setTextColor(getResources().getColor(R.color.trc20_color));
+        checkLoginState();
+    }
+
+    @OnClick(R.id.trc20_button)
+    public void onTrc20Click() {
+        mSelectedToken = Constants.TOKEN_TRC_20;
+        mTrc10Button.setBackgroundResource(R.drawable.ic_trc10_unselected);
+        mTrc10Button.setTextColor(getResources().getColor(R.color.trc10_color));
+        mTrc20Button.setBackgroundResource(R.drawable.ic_trc20_selected);
+        mTrc20Button.setTextColor(getResources().getColor(android.R.color.white));
+        checkLoginState();
+    }
+
     private void checkLoginState() {
         if (mLoadingAccountInfo) {
             return;
@@ -288,7 +316,11 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         if (mMainPresenter.isLogin()) {
             mLoadingAccountInfo = true;
             // get account info
-            mMainPresenter.getMyAccountInfo();
+            if (mSelectedToken == Constants.TOKEN_TRC_10) {
+                mMainPresenter.getMyAccountTrc10Info();
+            } else if (mSelectedToken == Constants.TOKEN_TRC_20) {
+                mMainPresenter.getMyAccountTrc20Info();
+            }
 
             Single.fromCallable(() -> mMainPresenter.getLoginAccount())
             .subscribeOn(Schedulers.io())

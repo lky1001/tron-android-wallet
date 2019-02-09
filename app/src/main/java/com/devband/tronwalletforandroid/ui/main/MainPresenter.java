@@ -77,7 +77,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         return mTron.isLogin();
     }
 
-    public void getMyAccountInfo() {
+    public void getMyAccountTrc10Info() {
         mView.showLoadingDialog();
         String loginAddress = mTron.getLoginAddress();
 
@@ -154,6 +154,11 @@ public class MainPresenter extends BasePresenter<MainView> {
         } else {
             mView.goToIntroActivity();
         }
+    }
+
+
+    public void getMyAccountTrc20Info() {
+
     }
 
     public void getTronMarketInfo() {
