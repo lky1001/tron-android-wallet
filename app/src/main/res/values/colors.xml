@@ -36,5 +36,6 @@
     <color name="vote_down_color">#cf312e</color>
     <color name="vote_up_color">#029f2a</color>
     <color name="default_text_color">#808080</color>
-
+    <color name="trc10_color">#FF5036</color>
+    <color name="trc20_color">#0FA80A</color>
 </resources>

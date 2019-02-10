@@ -193,15 +193,38 @@
                     android:paddingLeft="15dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/my_token_text"
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/main_my_token_color"
-                        android:text="@string/my_tokens" />
+                        android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/trc10_button"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="15dp"
+                            android:text="@string/trc10_button_text"
+                            android:textColor="@android:color/white"
+                            android:background="@drawable/ic_trc10_selected"/>
+                        <Button
+                            android:id="@+id/trc20_button"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/trc20_button_text"
+                            android:textColor="@color/trc20_color"
+                            android:background="@drawable/ic_trc20_unselected"/>
+                    </LinearLayout>
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/my_token_text"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:textColor="@color/main_my_token_color"-->
+                        <!--android:text="@string/my_tokens" />-->
 
                     <TextView
+                        android:id="@+id/favorites_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/main_my_token_color"
@@ -256,12 +279,35 @@
         </android.support.v4.widget.NestedScrollView>
 
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_add_trc20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="90dp"
+            android:layout_marginRight="16dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_add" />
+
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             app:srcCompat="@drawable/ic_refresh"
             android:layout_margin="16dp" />
+
+        <TextView
+            android:id="@+id/trc20_sync_msg_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:layout_gravity="bottom"
+            android:textColor="@android:color/white"
+            android:padding="5dp"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:text="@string/sync_trc20_msg"/>
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView

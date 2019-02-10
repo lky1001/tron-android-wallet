@@ -32,4 +32,8 @@
         <item>UpdateAssetContract</item>
         <item>CustomContract</item>
     </array>
+
+    <array name="trc20_contract_address">
+        <item>THvZvKPLHKLJhEFYKiyqj6j8G8nGgfg7ur</item>
+    </array>
 </resources>

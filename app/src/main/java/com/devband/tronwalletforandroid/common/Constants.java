@@ -35,4 +35,7 @@ public class Constants {
     public static final String ALIAS_PASSWORD_KEY = "alias_password_key";
     public static final String ALIAS_ADDRESS_KEY = "alias_address_key";
     public static final int MIGRATION_TARGET_VERSION = 11;
+
+    public static final int TOKEN_TRC_10 = 10;
+    public static final int TOKEN_TRC_20 = 20;
 }

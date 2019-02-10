@@ -2,11 +2,9 @@ package com.devband.tronlib.services;
 
 import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.Market;
-import com.devband.tronlib.dto.Stat;
 import com.devband.tronlib.dto.SystemStatus;
 import com.devband.tronlib.dto.TransactionStats;
 import com.devband.tronlib.dto.Transactions;
-import com.devband.tronlib.dto.TransferStats;
 import com.devband.tronlib.dto.Transfers;
 import com.devband.tronlib.tronscan.TokenInfos;
 
@@ -73,15 +71,9 @@ public interface TronScanService {
     @GET("api/system/status")
     Single<SystemStatus> getStatus();
 
-    @GET("api/block/stats")
-    Single<List<Stat>> getBlockStats(@Query("info") String info);
-
     @GET("api/transaction")
     Single<Transactions> getTransactions(@Query("sort") String sort, @Query("count") boolean count,
             @Query("limit") int limit, @Query("start") long start, @Query("block") long block);
-
-    @GET("api/transfer/stats")
-    Single<TransferStats> getTransferStats(@Query("groupby") String groupBy, @Query("interval") String interval);
 
     @GET("api/token")
     Single<TokenInfos> getTokenInfo(@Query("id") String id, @Query("showAll") int showAll);

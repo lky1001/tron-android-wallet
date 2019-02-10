@@ -57,4 +57,8 @@ public interface ITronManager {
     Single<GrpcAPI.TransactionExtention> createExchangeWithdrawContract(Contract.ExchangeWithdrawContract contract);
 
     Single<GrpcAPI.TransactionExtention> createExchangeTransactionContract(Contract.ExchangeTransactionContract contract);
+
+    Single<Protocol.SmartContract> getSmartContract(byte[] address);
+
+    Single<GrpcAPI.TransactionExtention> triggerContract(byte[] addressBytes, byte[] contractAddress, long callValue, byte[] input, long feeLimit, long tokenCallValue, String tokenId);
 }

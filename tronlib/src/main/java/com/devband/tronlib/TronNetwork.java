@@ -6,14 +6,12 @@ import com.devband.tronlib.dto.Blocks;
 import com.devband.tronlib.dto.CoinMarketCap;
 import com.devband.tronlib.dto.Market;
 import com.devband.tronlib.dto.RichData;
-import com.devband.tronlib.dto.Stat;
 import com.devband.tronlib.dto.SystemStatus;
 import com.devband.tronlib.dto.Token;
 import com.devband.tronlib.dto.TokenHolders;
 import com.devband.tronlib.dto.Tokens;
 import com.devband.tronlib.dto.TransactionStats;
 import com.devband.tronlib.dto.Transactions;
-import com.devband.tronlib.dto.TransferStats;
 import com.devband.tronlib.dto.Transfers;
 import com.devband.tronlib.dto.TronAccounts;
 import com.devband.tronlib.dto.Votes;
@@ -25,11 +23,13 @@ import com.devband.tronlib.services.TronScanService;
 import com.devband.tronlib.services.VoteService;
 import com.devband.tronlib.tronscan.Account;
 import com.devband.tronlib.tronscan.TokenInfos;
+import com.devband.tronlib.tronscan.Trc20Tokens;
 
 import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Single;
+import lombok.NonNull;
 
 public class TronNetwork {
 
@@ -164,15 +164,15 @@ public class TronNetwork {
         return mTronScanService.getStatus();
     }
 
-    public Single<List<Stat>> getAvgBlockSize() {
-        return mTronScanService.getBlockStats("avg-block-size");
-    }
-
-    public Single<TransferStats> getTransferStats() {
-        return mTronScanService.getTransferStats("timestamp", "hour");
-    }
-
     public Single<TokenInfos> getTokenInfo(String id) {
         return mTronScanService.getTokenInfo(id, 1);
+    }
+
+    public Single<Trc20Tokens> getTrc20TokenList() {
+        return mTokenService.getTrc20Tokens("", 0, "issue_time");
+    }
+
+    public Single<Trc20Tokens> getTrc20Token(@NonNull String contractAddress) {
+        return mTokenService.getTrc20Tokens(contractAddress, 0, "issue_time");
     }
 }

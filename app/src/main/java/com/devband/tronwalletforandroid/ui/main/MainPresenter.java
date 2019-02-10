@@ -4,14 +4,19 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.crashlytics.android.Crashlytics;
 import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.CoinMarketCap;
+import com.devband.tronlib.tronscan.Trc20Token;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.CustomPreference;
+import com.devband.tronwalletforandroid.common.Hex2Decimal;
 import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.database.dao.FavoriteTokenDao;
+import com.devband.tronwalletforandroid.database.dao.Trc20ContractDao;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
+import com.devband.tronwalletforandroid.database.model.Trc20ContractModel;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
@@ -20,6 +25,10 @@ import com.devband.tronwalletforandroid.ui.main.dto.Frozen;
 import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
+import org.spongycastle.util.encoders.Hex;
+import org.tron.api.GrpcAPI;
+import org.tron.protos.Protocol;
+
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +36,7 @@ import java.util.List;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
+import timber.log.Timber;
 
 public class MainPresenter extends BasePresenter<MainView> {
 
@@ -36,6 +46,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     private RxJavaSchedulers mRxJavaSchedulers;
     private CustomPreference mCustomPreference;
     private FavoriteTokenDao mFavoriteTokenDao;
+    private Trc20ContractDao mTrc20ContractDao;
     private WalletAppManager mWalletAppManager;
 
     public MainPresenter(MainView view, Tron tron, WalletAppManager walletAppManager, TronNetwork tronNetwork,
@@ -47,6 +58,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         this.mRxJavaSchedulers = rxJavaSchedulers;
         this.mCustomPreference = customPreference;
         this.mFavoriteTokenDao = appDatabase.favoriteTokenDao();
+        this.mTrc20ContractDao = appDatabase.trc20ContractDao();
     }
 
     public void setAdapterDataModel(AdapterDataModel<Asset> adapterDataModel) {
@@ -55,7 +67,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     @Override
     public void onCreate() {
-
+        syncTrc20TokenContracts();
     }
 
     @Override
@@ -77,7 +89,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         return mTron.isLogin();
     }
 
-    public void getMyAccountInfo() {
+    public void getMyAccountTrc10Info() {
         mView.showLoadingDialog();
         String loginAddress = mTron.getLoginAddress();
 
@@ -144,6 +156,109 @@ public class MainPresenter extends BasePresenter<MainView> {
                             // todo - error msg
                             if (e instanceof ConnectException) {
                                 // internet error
+                            } else if (e instanceof IllegalArgumentException) {
+                                mView.goToIntroActivity();
+                            }
+
+                            mView.connectionError();
+                        }
+                    });
+        } else {
+            mView.goToIntroActivity();
+        }
+    }
+
+
+    public void getMyAccountTrc20Info(boolean isHideNoBalance) {
+        mAdapterDataModel.clear();
+
+        mView.showLoadingDialog();
+        String loginAddress = mTron.getLoginAddress();
+
+        if (!TextUtils.isEmpty(loginAddress)) {
+            Single<List<Asset>> trc20List = Single.fromCallable(() -> {
+                List<Trc20ContractModel> list = mTrc20ContractDao.getAll();
+
+                List<Asset> assetList = new ArrayList<>();
+
+                for (Trc20ContractModel trc20ContractModel : list) {
+                    GrpcAPI.TransactionExtention transactionExtention = mTron.getTrc20Balance(loginAddress, trc20ContractModel.getAddress()).blockingGet();
+
+                    if (transactionExtention == null || !transactionExtention.getResult().getResult()) {
+                        Timber.d("RPC create call trx failed!");
+                        Timber.d("Code = " + transactionExtention != null ? String.valueOf(transactionExtention.getResult().getCode()) : "null");
+                        Timber.d("Message = " + transactionExtention != null ? transactionExtention.getResult().getMessage().toStringUtf8() : "null");
+                        continue;
+                    }
+
+                    Protocol.Transaction resultTransaction = transactionExtention.getTransaction();
+
+                    if (resultTransaction.getRetCount() != 0 &&
+                            transactionExtention.getConstantResult(0) != null &&
+                            transactionExtention.getResult() != null) {
+                        byte[] result = transactionExtention.getConstantResult(0).toByteArray();
+//                        System.out.println("message:" + resultTransaction.getRet(0).getRet());
+//                        System.out.println(":" + ByteArray
+//                                .toStr(transactionExtention.getResult().getMessage().toByteArray()));
+//                        System.out.println("Result:" + Hex2Decimal.hex2Decimal(Hex.toHexString(result)));
+
+                        long balance = Hex2Decimal.hex2Decimal(Hex.toHexString(result));
+
+                        if (isHideNoBalance && balance == 0) {
+                            continue;
+                        }
+
+                        assetList.add(Asset.builder()
+                                .name(trc20ContractModel.getName())
+                                .displayName(trc20ContractModel.getName() + "(" + trc20ContractModel.getSymbol() + ")")
+                                .balance(balance / Math.pow(10, trc20ContractModel.getPrecision()))
+                                .build());
+                    }
+                }
+
+                return assetList;
+            });
+
+            Single.zip(mTron.queryAccount(loginAddress), trc20List, (account, trc20) -> {
+                List<Frozen> frozenList = new ArrayList<>();
+
+                for (org.tron.protos.Protocol.Account.Frozen frozen : account.getFrozenList()) {
+                    frozenList.add(Frozen.builder()
+                            .frozenBalance(frozen.getFrozenBalance())
+                            .expireTime(frozen.getExpireTime())
+                            .build());
+                }
+
+                return TronAccount.builder()
+                        .balance(account.getBalance())
+                        .bandwidth(account.getDelegatedFrozenBalanceForBandwidth())
+                        .assetList(trc20)
+                        .frozenList(frozenList)
+                        .build();
+            })
+                    .subscribeOn(mRxJavaSchedulers.getIo())
+                    .observeOn(mRxJavaSchedulers.getMainThread())
+                    .subscribe(new SingleObserver<TronAccount>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(TronAccount account) {
+                            mView.displayAccountInfo(account);
+                            mAdapterDataModel.clear();
+                            mAdapterDataModel.addAll(account.getAssetList());
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            e.printStackTrace();
+                            // todo - error msg
+                            if (e instanceof ConnectException) {
+                                // internet error
+                            } else if (e instanceof IllegalArgumentException) {
+                                mView.goToIntroActivity();
                             }
 
                             mView.connectionError();
@@ -300,6 +415,92 @@ public class MainPresenter extends BasePresenter<MainView> {
                     public void onError(Throwable e) {
                         mView.changePasswordResult(false);
                     }
+                });
+    }
+
+    public void addTrc20Contract(String name, String symbol, String contractAddress, int precision) {
+        mView.showLoadingDialog();
+
+        mTron.checkTrc20Contract(contractAddress)
+                .subscribeOn(mRxJavaSchedulers.getIo())
+                .map(result -> {
+                    if (result == Tron.SUCCESS) {
+                        Trc20ContractModel trc20Contract = mTrc20ContractDao.findByContractAddress(contractAddress);
+
+                        if (trc20Contract == null) {
+                            trc20Contract = Trc20ContractModel.builder()
+                                    .name(name)
+                                    .symbol(symbol)
+                                    .address(contractAddress)
+                                    .precision(precision)
+                                    .isFavorite(false)
+                                    .build();
+
+                            mTrc20ContractDao.insert(trc20Contract);
+                        }
+                    }
+
+                    return result;
+                })
+                .observeOn(mRxJavaSchedulers.getMainThread())
+                .subscribe(result -> mView.resultAddTrc20(result), e -> {
+                    e.printStackTrace();
+                    Crashlytics.logException(e);
+                    mView.connectionError();
+                });
+    }
+
+    public void syncTrc20TokenContracts() {
+        mView.showSyncTrc20Loading();
+
+        mTronNetwork.getTrc20TokenList()
+                .subscribeOn(mRxJavaSchedulers.getIo())
+                .map(trc20Tokens -> {
+                    List<Trc20ContractModel> savedTokens = mTrc20ContractDao.getAll();
+
+                    List<Trc20Token> newTokens = trc20Tokens.getTrc20TokenList();
+
+                    List<Trc20Token> addTokens = new ArrayList<>();
+
+                    for (Trc20Token newToken : newTokens) {
+                        boolean isAdd = true;
+
+                        for (Trc20ContractModel savedToken : savedTokens) {
+                            if (newToken.getContractAddress().equalsIgnoreCase(savedToken.getAddress())) {
+                                isAdd = false;
+                                break;
+                            }
+                        }
+
+                        if (isAdd) {
+                            addTokens.add(newToken);
+                        }
+                    }
+
+                    List<Trc20ContractModel> addModels = new ArrayList<>();
+
+                    for (Trc20Token addToken : addTokens) {
+                        addModels.add(Trc20ContractModel.builder()
+                                .name(addToken.getName())
+                                .symbol(addToken.getSymbol())
+                                .address(addToken.getContractAddress())
+                                .precision(addToken.getPrecision())
+                                .isFavorite(false)
+                                .build());
+                    }
+
+                    if (!addModels.isEmpty()) {
+                        mTrc20ContractDao.insertAll(addModels);
+                    }
+
+                    return true;
+                })
+                .observeOn(mRxJavaSchedulers.getMainThread())
+                .subscribe(result -> {
+                    mView.finishSyncTrc20();
+                }, e -> {
+                    e.printStackTrace();
+                    mView.finishSyncTrc20();
                 });
     }
 }

@@ -132,6 +132,9 @@
             android:screenOrientation="sensor"
             android:theme="@style/FinestWebViewTheme.Light" />
 
+        <!-- test -->
+        <activity android:name=".ui.smartcontract.TestSmartContractActivity" />
+
     </application>
 
 </manifest>

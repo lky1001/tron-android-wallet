@@ -179,4 +179,14 @@ public class GrpcClient {
     public GrpcAPI.TransactionExtention createExchangeTransactionContract(Contract.ExchangeTransactionContract contract) {
         return blockingStubFullNode.exchangeTransaction(contract);
     }
+
+    public Protocol.SmartContract getSmartContract(byte[] address) {
+        ByteString byteString = ByteString.copyFrom(address);
+        BytesMessage bytesMessage = BytesMessage.newBuilder().setValue(byteString).build();
+        return blockingStubFullNode.getContract(bytesMessage);
+    }
+
+    public GrpcAPI.TransactionExtention triggerContract(Contract.TriggerSmartContract triggerContract) {
+        return blockingStubFullNode.triggerContract(triggerContract);
+    }
 }
