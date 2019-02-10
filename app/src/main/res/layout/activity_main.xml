@@ -224,6 +224,7 @@
                         <!--android:text="@string/my_tokens" />-->
 
                     <TextView
+                        android:id="@+id/favorites_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/main_my_token_color"
@@ -294,6 +295,19 @@
             android:layout_gravity="end|bottom"
             app:srcCompat="@drawable/ic_refresh"
             android:layout_margin="16dp" />
+
+        <TextView
+            android:id="@+id/trc20_sync_msg_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:layout_gravity="bottom"
+            android:textColor="@android:color/white"
+            android:padding="5dp"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:text="@string/sync_trc20_msg"/>
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView

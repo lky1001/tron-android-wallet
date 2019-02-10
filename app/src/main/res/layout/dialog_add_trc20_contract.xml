@@ -11,6 +11,32 @@
         android:layout_height="wrap_content">
 
         <EditText
+            android:id="@+id/input_trc_20_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/trc_20_name"
+            android:textColor="@android:color/black"
+            android:inputType="text" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/input_trc_20_symbol"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/trc_20_symbol"
+            android:textColor="@android:color/black"
+            android:inputType="text" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
             android:id="@+id/input_trc_20_contract_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,7 +55,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/trc_20_contract_precision"
             android:textColor="@android:color/black"
-            android:inputType="numberDecimal" />
+            android:inputType="numberSigned" />
     </android.support.design.widget.TextInputLayout>
 
     <Button

@@ -14,9 +14,6 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Account {
 
-    @JsonProperty("trc20token_balances")
-    private List<Trc20Token> trc20TokenBalances;
-
     private List<Object> allowExchange;
     private String address;
 

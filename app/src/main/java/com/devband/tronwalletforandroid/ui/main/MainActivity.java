@@ -42,6 +42,7 @@ import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.common.DividerItemDecoration;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
+import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.WalletAppManager;
 import com.devband.tronwalletforandroid.ui.address.AddressActivity;
 import com.devband.tronwalletforandroid.ui.blockexplorer.BlockExplorerActivity;
@@ -132,6 +133,12 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @BindView(R.id.fab_add_trc20)
     FloatingActionButton fabAdd;
 
+    @BindView(R.id.trc20_sync_msg_text)
+    TextView trc20SyncMsgText;
+
+    @BindView(R.id.favorites_text)
+    TextView mFavoritesText;
+
     Spinner mAccountSpinner;
 
     TextView mNavHeaderText;
@@ -217,7 +224,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         });
 
         mShowOnlyFavoritesCheckBox.setOnCheckedChangeListener((view, isChecked) -> {
-            mMainPresenter.setOnlyFavorites(isChecked);
+            if (mSelectedToken == Constants.TOKEN_TRC_10) {
+                mMainPresenter.setOnlyFavorites(isChecked);
+            }
 
             mShowOnlyFavoritesCheckBox.setEnabled(false);
             checkLoginState();
@@ -296,6 +305,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @OnClick(R.id.trc10_button)
     public void onTrc10Click() {
         mSelectedToken = Constants.TOKEN_TRC_10;
+        mFavoritesText.setText(R.string.favorites_text);
+        mShowOnlyFavoritesCheckBox.setChecked(mMainPresenter.getIsFavoritesTokens());
         mTrc10Button.setBackgroundResource(R.drawable.ic_trc10_selected);
         mTrc10Button.setTextColor(getResources().getColor(android.R.color.white));
         mTrc20Button.setBackgroundResource(R.drawable.ic_trc20_unselected);
@@ -308,6 +319,8 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     @OnClick(R.id.trc20_button)
     public void onTrc20Click() {
         mSelectedToken = Constants.TOKEN_TRC_20;
+        mFavoritesText.setText(R.string.hide_no_balance_text);
+        mShowOnlyFavoritesCheckBox.setChecked(true);
         mTrc10Button.setBackgroundResource(R.drawable.ic_trc10_unselected);
         mTrc10Button.setTextColor(getResources().getColor(R.color.trc10_color));
         mTrc20Button.setBackgroundResource(R.drawable.ic_trc20_selected);
@@ -327,7 +340,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             if (mSelectedToken == Constants.TOKEN_TRC_10) {
                 mMainPresenter.getMyAccountTrc10Info();
             } else if (mSelectedToken == Constants.TOKEN_TRC_20) {
-                mMainPresenter.getMyAccountTrc20Info();
+                mMainPresenter.getMyAccountTrc20Info(mShowOnlyFavoritesCheckBox.isChecked());
             }
 
             Single.fromCallable(() -> mMainPresenter.getLoginAccount())
@@ -377,7 +390,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 mAccountAdapter.notifyDataSetChanged();
             }, (e) -> {});
 
-            mShowOnlyFavoritesCheckBox.setChecked(mMainPresenter.getIsFavoritesTokens());
+            if (mSelectedToken == Constants.TOKEN_TRC_10) {
+                mShowOnlyFavoritesCheckBox.setChecked(mMainPresenter.getIsFavoritesTokens());
+            }
         } else {
             finishActivity();
             startActivity(LoginActivity.class);
@@ -554,9 +569,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 return;
             }
 
-            if (!TextUtils.isEmpty(privateKey) && !TextUtils.isEmpty(password)) {
-                mMainPresenter.importAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey, password);
-            }
+            mMainPresenter.importAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey, password);
 
             dialog.dismiss();
         });
@@ -677,27 +690,39 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
         MaterialDialog dialog = builder.build();
 
+        EditText inputName = (EditText) dialog.getCustomView().findViewById(R.id.input_trc_20_name);
+        EditText inputSymbol = (EditText) dialog.getCustomView().findViewById(R.id.input_trc_20_symbol);
         EditText inputContractAddress = (EditText) dialog.getCustomView().findViewById(R.id.input_trc_20_contract_address);
         EditText inputPrecision = (EditText) dialog.getCustomView().findViewById(R.id.input_trc_20_contract_precision);
         Button importButton = (Button) dialog.getCustomView().findViewById(R.id.btn_add_trc_20_contract);
 
         importButton.setOnClickListener(view -> {
+            String name = inputName.getText().toString();
+            String symbol = inputSymbol.getText().toString();
             String contractAddress = inputContractAddress.getText().toString();
             String precision = inputPrecision.getText().toString();
 
-//            if (TextUtils.isEmpty(privateKey)) {
-//                Toast.makeText(this, R.string.required_private_key, Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//
-//            if (TextUtils.isEmpty(password)) {
-//                Toast.makeText(this, R.string.required_password, Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//
-//            if (!TextUtils.isEmpty(privateKey) && !TextUtils.isEmpty(password)) {
-//                mMainPresenter.importAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey, password);
-//            }
+            if (TextUtils.isEmpty(name)) {
+                Toast.makeText(this, R.string.required_trc20_name, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(symbol)) {
+                Toast.makeText(this, R.string.required_trc20_symbol, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(contractAddress)) {
+                Toast.makeText(this, R.string.required_contract_address, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(precision)) {
+                Toast.makeText(this, R.string.requried_precision, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            mMainPresenter.addTrc20Contract(name, symbol, contractAddress, Integer.parseInt(precision));
 
             dialog.dismiss();
         });
@@ -835,6 +860,27 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
     public void goToIntroActivity() {
         finish();
         startActivity(IntroActivity.class);
+    }
+
+    @Override
+    public void resultAddTrc20(int result) {
+        if (result == Tron.SUCCESS) {
+            checkLoginState();
+        } else if (result ==  Tron.ERROR_INVALID_ADDRESS) {
+
+        } else if (result == Tron.ERROR_INVALID_TRC20_CONTRACT) {
+
+        }
+    }
+
+    @Override
+    public void finishSyncTrc20() {
+        trc20SyncMsgText.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showSyncTrc20Loading() {
+        trc20SyncMsgText.setVisibility(View.VISIBLE);
     }
 
     @Override

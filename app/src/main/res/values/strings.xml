@@ -317,6 +317,7 @@
     <string name="required_password">Password is required.</string>
     <string name="preparing_btn_text">PREPARING</string>
     <string name="favorites_text">Only favorites</string>
+    <string name="hide_no_balance_text">Hide no balance</string>
     <string name="navigation_menu_exchange">Exchange</string>
     <string name="title_exchange">Exchange</string>
     <string name="empty_exchanges">No Exchange</string>
@@ -334,4 +335,11 @@
     <string name="trc_20_contract_precision">Precision</string>
     <string name="add_trc_20_contract">Add Token</string>
     <string name="title_add_trc_20_contract">Add TRC-20 Token</string>
+    <string name="required_trc20_name">Token name is required.</string>
+    <string name="required_trc20_symbol">Token symbol is required.</string>
+    <string name="required_contract_address">Contract Address is required.</string>
+    <string name="requried_precision">Precision is required.</string>
+    <string name="trc_20_name">name</string>
+    <string name="trc_20_symbol">symbol</string>
+    <string name="sync_trc20_msg">Sync TRC-20 token contract list...</string>
 </resources>

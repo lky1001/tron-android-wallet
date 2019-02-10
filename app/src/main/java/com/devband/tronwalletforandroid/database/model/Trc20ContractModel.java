@@ -22,10 +22,16 @@ public class Trc20ContractModel {
     private int id;
 
     @NonNull
+    private String name;
+
+    @NonNull
+    private String symbol;
+
+    @NonNull
     private String address;
 
     @NonNull
-    private int decimal;
+    private int precision;
 
     @NonNull
     private boolean isFavorite;

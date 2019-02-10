@@ -31,4 +31,10 @@ public interface MainView extends IView {
     void showChangePasswordDialog();
 
     void goToIntroActivity();
+
+    void resultAddTrc20(int result);
+
+    void finishSyncTrc20();
+
+    void showSyncTrc20Loading();
 }

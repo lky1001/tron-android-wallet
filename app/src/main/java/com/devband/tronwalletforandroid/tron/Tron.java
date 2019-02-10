@@ -19,7 +19,9 @@ import com.google.protobuf.ByteString;
 
 import org.spongycastle.util.encoders.Hex;
 import org.tron.api.GrpcAPI;
+import org.tron.common.utils.AbiUtil;
 import org.tron.common.utils.ByteArray;
+import org.tron.core.exception.EncodingException;
 import org.tron.protos.Contract;
 import org.tron.protos.Protocol;
 
@@ -41,6 +43,8 @@ public class Tron {
     public static final int ERROR_NEED_LOGIN = -5;
     public static final int ERROR_LOGIN = -6;
     public static final int ERROR_EXIST_ACCOUNT = -7;
+    public static final int ERROR_INVALID_ADDRESS = -8;
+    public static final int ERROR_INVALID_TRC20_CONTRACT = -9;
     public static final int ERROR = -9999;
 
     public static final int MIN_PASSWORD_LENGTH = 8;
@@ -571,6 +575,25 @@ public class Tron {
                 .flatMap(addressBytes -> mTronManager.getSmartContract(addressBytes));
     }
 
+    public Single<GrpcAPI.TransactionExtention> getTrc20Balance(@NonNull String ownerAddress, String contractAddress) {
+        return Single.fromCallable(() -> AccountManager.decodeFromBase58Check(ownerAddress))
+                .flatMap(addressBytes -> {
+                    String transferMethod = "balanceOf(address)";
+                    String transferParams = "\""+ ownerAddress + "\"";
+
+                    String contractTrigger = "";
+
+                    try {
+                        contractTrigger = AbiUtil.parseMethod(transferMethod, transferParams);
+                    } catch (EncodingException e ) {
+                        e.printStackTrace();
+                    }
+
+                    byte[] input = Hex.decode(contractTrigger);
+                    return mTronManager.triggerContract(addressBytes, AccountManager.decodeFromBase58Check(contractAddress), 0L, input, 1_000_000_000L, 0, null);
+                });
+    }
+
     /**
      * call start contract
      * @param contractAddress
@@ -643,5 +666,38 @@ public class Tron {
                     transaction = mAccountManager.signTransaction(WalletAppManager.getEncKey("12345678"), transaction);
                     return mTronManager.broadcastTransaction(transaction).blockingGet();
                 });
+    }
+
+    public Single<Integer> checkTrc20Contract(String contractAddress) {
+        return Single.fromCallable(() -> {
+            byte[] addressByte = AccountManager.decodeFromBase58Check(contractAddress);
+
+            if (addressByte == null) {
+                return ERROR_INVALID_ADDRESS;
+            }
+
+            Protocol.SmartContract smartContract = getSmartContract(contractAddress).blockingGet();
+
+            if (smartContract == null || smartContract.getAbi() == null) {
+                return ERROR_INVALID_TRC20_CONTRACT;
+            }
+
+            List<org.tron.protos.Protocol.SmartContract.ABI.Entry> entryList = smartContract.getAbi().getEntrysList();
+
+            boolean hasBalanceFunction = false;
+
+            for (Protocol.SmartContract.ABI.Entry entry : entryList) {
+                if ("balanceOf".equalsIgnoreCase(entry.getName())) {
+                    hasBalanceFunction = true;
+                    break;
+                }
+            }
+
+            if (!hasBalanceFunction) {
+                return ERROR_INVALID_TRC20_CONTRACT;
+            }
+
+            return SUCCESS;
+        });
     }
 }

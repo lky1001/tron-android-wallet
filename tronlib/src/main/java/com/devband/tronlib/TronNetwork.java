@@ -23,11 +23,13 @@ import com.devband.tronlib.services.TronScanService;
 import com.devband.tronlib.services.VoteService;
 import com.devband.tronlib.tronscan.Account;
 import com.devband.tronlib.tronscan.TokenInfos;
+import com.devband.tronlib.tronscan.Trc20Tokens;
 
 import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Single;
+import lombok.NonNull;
 
 public class TronNetwork {
 
@@ -164,5 +166,13 @@ public class TronNetwork {
 
     public Single<TokenInfos> getTokenInfo(String id) {
         return mTronScanService.getTokenInfo(id, 1);
+    }
+
+    public Single<Trc20Tokens> getTrc20TokenList() {
+        return mTokenService.getTrc20Tokens("", 0, "issue_time");
+    }
+
+    public Single<Trc20Tokens> getTrc20Token(@NonNull String contractAddress) {
+        return mTokenService.getTrc20Tokens(contractAddress, 0, "issue_time");
     }
 }

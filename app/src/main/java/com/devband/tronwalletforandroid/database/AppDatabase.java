@@ -74,7 +74,7 @@ public abstract class AppDatabase extends RoomDatabase {
         public void migrate(SupportSQLiteDatabase database) {
             try {
                 database.execSQL("CREATE TABLE IF NOT EXISTS trc_20_contract "
-                        + "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, address TEXT NOT NULL, decimal INTEGER NOT NULL, isFavorite INTEGER NOT NULL)");
+                        + "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, symbol TEXT NOT NULL, address TEXT NOT NULL, precision INTEGER NOT NULL, isFavorite INTEGER NOT NULL)");
             } catch (Exception e) {
                 e.printStackTrace();
             }
