@@ -38,6 +38,7 @@ android {
         textReport true
         textOutput "stdout"
         abortOnError false
+        disable 'RestrictedApi'
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

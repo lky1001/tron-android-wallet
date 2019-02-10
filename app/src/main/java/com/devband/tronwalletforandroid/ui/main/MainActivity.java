@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -127,6 +128,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     @BindView(R.id.trc20_button)
     Button mTrc20Button;
+
+    @BindView(R.id.fab_add_trc20)
+    FloatingActionButton fabAdd;
 
     Spinner mAccountSpinner;
 
@@ -288,6 +292,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         checkLoginState();
     }
 
+    @SuppressLint("RestrictedApi")
     @OnClick(R.id.trc10_button)
     public void onTrc10Click() {
         mSelectedToken = Constants.TOKEN_TRC_10;
@@ -295,9 +300,11 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         mTrc10Button.setTextColor(getResources().getColor(android.R.color.white));
         mTrc20Button.setBackgroundResource(R.drawable.ic_trc20_unselected);
         mTrc20Button.setTextColor(getResources().getColor(R.color.trc20_color));
+        fabAdd.setVisibility(View.GONE);
         checkLoginState();
     }
 
+    @SuppressLint("RestrictedApi")
     @OnClick(R.id.trc20_button)
     public void onTrc20Click() {
         mSelectedToken = Constants.TOKEN_TRC_20;
@@ -305,6 +312,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         mTrc10Button.setTextColor(getResources().getColor(R.color.trc10_color));
         mTrc20Button.setBackgroundResource(R.drawable.ic_trc20_selected);
         mTrc20Button.setTextColor(getResources().getColor(android.R.color.white));
+        fabAdd.setVisibility(View.VISIBLE);
         checkLoginState();
     }
 
@@ -656,6 +664,45 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         mShowOnlyFavoritesCheckBox.setEnabled(true);
         Toast.makeText(MainActivity.this, getString(R.string.connection_error_msg),
                 Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.fab_add_trc20)
+    public void onTrc20AddClick() {
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                .title(R.string.title_add_trc_20_contract)
+                .titleColorRes(R.color.colorAccent)
+                .contentColorRes(R.color.colorAccent)
+                .backgroundColorRes(android.R.color.white)
+                .customView(R.layout.dialog_add_trc20_contract, false);
+
+        MaterialDialog dialog = builder.build();
+
+        EditText inputContractAddress = (EditText) dialog.getCustomView().findViewById(R.id.input_trc_20_contract_address);
+        EditText inputPrecision = (EditText) dialog.getCustomView().findViewById(R.id.input_trc_20_contract_precision);
+        Button importButton = (Button) dialog.getCustomView().findViewById(R.id.btn_add_trc_20_contract);
+
+        importButton.setOnClickListener(view -> {
+            String contractAddress = inputContractAddress.getText().toString();
+            String precision = inputPrecision.getText().toString();
+
+//            if (TextUtils.isEmpty(privateKey)) {
+//                Toast.makeText(this, R.string.required_private_key, Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            if (TextUtils.isEmpty(password)) {
+//                Toast.makeText(this, R.string.required_password, Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            if (!TextUtils.isEmpty(privateKey) && !TextUtils.isEmpty(password)) {
+//                mMainPresenter.importAccount(Constants.PREFIX_ACCOUNT_NAME, privateKey, password);
+//            }
+
+            dialog.dismiss();
+        });
+
+        dialog.show();
     }
 
     @OnClick(R.id.fab_refresh)

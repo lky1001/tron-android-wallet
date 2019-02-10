@@ -158,7 +158,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
 
     public void getMyAccountTrc20Info() {
-
+        mAdapterDataModel.clear();
     }
 
     public void getTronMarketInfo() {

@@ -328,4 +328,10 @@
     <string name="account_name_text">계정명</string>
     <string name="title_remove_acocunt">정말로 삭제하시겠습니까?</string>
     <string name="remove_account_error_msg">계정이 한개일 경우 삭제할 수 없습니다.</string>
+    <string name="trc10_button_text">TRC-10</string>
+    <string name="trc20_button_text">TRC-20</string>
+    <string name="trc_20_contract_address">TRC-20 컨트랙 주소</string>
+    <string name="trc_20_contract_precision">소수점 자리수</string>
+    <string name="add_trc_20_contract">토큰 추가</string>
+    <string name="title_add_trc_20_contract">TRC-20 토큰 추가</string>
 </resources>
