@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/VERSION-1.4.1-green.svg">
+  <img src="https://img.shields.io/badge/VERSION-1.5.0-green.svg">
   <img src="https://img.shields.io/badge/ANDROID-4.0.3%2B-orange.svg">
   <img src="https://img.shields.io/badge/LICENSE-Apache--2.0-blue.svg">
 </p>
@@ -33,7 +33,8 @@ A Tron wallet for android.
 - Send tron & token
 - Receive tron & token
 - My address QR code
-- My tron balance
+- TRC-10 Token balance
+- TRC-20 Token balance
 - My tokens
 - My transfer history
 - Vote representative
