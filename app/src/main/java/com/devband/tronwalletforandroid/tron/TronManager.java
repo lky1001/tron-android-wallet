@@ -151,6 +151,11 @@ class TronManager implements ITronManager {
         });
     }
 
+    @Override
+    public Single<Contract.AssetIssueContract> getAssetIssueById(String id) {
+        return Single.fromCallable(() -> grpcClient.getAssetIssueById(id));
+    }
+
     private Contract.TriggerSmartContract triggerCallContract(byte[] address, byte[] contractAddress,
             long callValue, byte[] data, long tokenValue, String tokenId) {
         Contract.TriggerSmartContract.Builder builder = Contract.TriggerSmartContract.newBuilder();

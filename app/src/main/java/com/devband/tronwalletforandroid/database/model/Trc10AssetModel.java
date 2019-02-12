@@ -4,7 +4,6 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,11 +16,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(tableName = "token_id_name_map")
-public class TokenIdNameModel {
+@Entity(tableName = "trc_10_asset")
+public class Trc10AssetModel {
 
     @PrimaryKey(autoGenerate = true)
-    private long id;
+    private int id;
 
     @NonNull
     @ColumnInfo(name = "token_id")
@@ -31,9 +30,13 @@ public class TokenIdNameModel {
     @ColumnInfo(name = "token_name")
     private String name;
 
-    private int precision;
+    @NonNull
+    @ColumnInfo(name = "owner_address")
+    private String ownerAddress;
 
-    @Nullable
-    @ColumnInfo(name = "detail_json")
-    private String detailJson;
+    @NonNull
+    @ColumnInfo(name = "total_supply")
+    private long totalSupply;
+
+    private int precision;
 }

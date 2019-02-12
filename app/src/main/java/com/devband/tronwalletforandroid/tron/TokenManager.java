@@ -1,66 +1,53 @@
 package com.devband.tronwalletforandroid.tron;
 
-import com.devband.tronlib.TronNetwork;
-import com.devband.tronlib.tronscan.TokenInfo;
-import com.devband.tronlib.tronscan.TokenInfos;
-import com.devband.tronwalletforandroid.database.dao.TokenIdNameDao;
-import com.devband.tronwalletforandroid.database.model.TokenIdNameModel;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.devband.tronwalletforandroid.database.dao.Trc10AssetDao;
+import com.devband.tronwalletforandroid.database.model.Trc10AssetModel;
 
-import java.util.Collections;
+import org.tron.protos.Contract;
 
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public class TokenManager {
 
-    private TronNetwork mTronNetwork;
-    private TokenIdNameDao mTokenIdNameDao;
+    private Tron mTron;
+    private Trc10AssetDao mTrc10AssetDao;
 
-    public TokenManager(TronNetwork tronNetwork, TokenIdNameDao tokenIdNameDao) {
-        this.mTronNetwork = tronNetwork;
-        this.mTokenIdNameDao = tokenIdNameDao;
+    public TokenManager(Trc10AssetDao trc10AssetDao) {
+        this.mTrc10AssetDao = trc10AssetDao;
     }
 
-    public Single<String> getTokenName(String id) {
-        return Maybe.fromCallable(() -> mTokenIdNameDao.findByTokenId(id))
-                .switchIfEmpty(Maybe.just(TokenIdNameModel.builder().tokenId("").name("").build()))
+    public void setTron(Tron tron) {
+        this.mTron = tron;
+    }
+
+    public Single<Trc10AssetModel> getTokenInfo(String id) {
+        return Maybe.fromCallable(() -> mTrc10AssetDao.findByTokenId(id))
+                .switchIfEmpty(Maybe.just(Trc10AssetModel.builder()
+                        .tokenId("").ownerAddress("").name("").build()))
                 .toSingle()
-                .map(tokenIdNameModel -> {
-                    if (tokenIdNameModel.getId() > 0) {
-                        return tokenIdNameModel.getName();
-                    } else {
-                        return "";
-                    }
-                })
-                .flatMap(name -> {
-                    if ("".equalsIgnoreCase(name)) {
-                        return mTronNetwork.getTokenInfo(id);
-                    } else {
-                        return Single.just(TokenInfos.builder()
-                                .total(0)
-                                .data(Collections.singletonList(TokenInfo.builder().name(name).build()))
-                                .build());
-                    }
-                })
-                .map(tokenInfo -> {
-                    String name = id;
+                .map(trc10AssetModel -> {
+                    if (trc10AssetModel.getId() == 0) {
+                        Contract.AssetIssueContract assetIssueContract = mTron.getAssetIssueById(id).blockingGet();
 
-                    for (TokenInfo data : tokenInfo.getData()) {
-                        name = data.getName();
+                        if (assetIssueContract != null) {
+                            Trc10AssetModel trc10Asset = Trc10AssetModel.builder()
+                                    .tokenId(assetIssueContract.getId())
+                                    .name(assetIssueContract.getName().toStringUtf8())
+                                    .ownerAddress(assetIssueContract.getOwnerAddress().toStringUtf8())
+                                    .precision(assetIssueContract.getPrecision())
+                                    .totalSupply(assetIssueContract.getTotalSupply())
+                                    .build();
+
+                            mTrc10AssetDao.insert(trc10Asset);
+
+                            return trc10Asset;
+                        }
+
+                        return null;
                     }
 
-                    if (tokenInfo.getTotal() > 0) {
-                        TokenIdNameModel tokenIdNameModel = TokenIdNameModel.builder()
-                                .tokenId(id)
-                                .name(name)
-                                .detailJson(new ObjectMapper().writeValueAsString(tokenInfo))
-                                .build();
-
-                        mTokenIdNameDao.insert(tokenIdNameModel);
-                    }
-
-                    return name;
+                    return trc10AssetModel;
                 });
     }
 }

@@ -9,12 +9,14 @@ import android.arch.persistence.room.migration.Migration;
 import com.devband.tronwalletforandroid.database.dao.AccountDao;
 import com.devband.tronwalletforandroid.database.dao.FavoriteTokenDao;
 import com.devband.tronwalletforandroid.database.dao.TokenIdNameDao;
+import com.devband.tronwalletforandroid.database.dao.Trc10AssetDao;
 import com.devband.tronwalletforandroid.database.dao.Trc20ContractDao;
 import com.devband.tronwalletforandroid.database.dao.WalletDao;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.database.model.FavoriteTokenModel;
 import com.devband.tronwalletforandroid.database.model.TokenIdNameModel;
 import com.devband.tronwalletforandroid.database.model.TransferHistoryModel;
+import com.devband.tronwalletforandroid.database.model.Trc10AssetModel;
 import com.devband.tronwalletforandroid.database.model.Trc20ContractModel;
 import com.devband.tronwalletforandroid.database.model.WalletModel;
 
@@ -24,18 +26,20 @@ import com.devband.tronwalletforandroid.database.model.WalletModel;
         FavoriteTokenModel.class,
         TokenIdNameModel.class,
         TransferHistoryModel.class,
-        Trc20ContractModel.class
+        Trc20ContractModel.class,
+        Trc10AssetModel.class
 }, version = AppDatabase.VERSION, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
-    static final int VERSION = 4;
+    static final int VERSION = 5;
 
     public abstract AccountDao accountDao();
     public abstract WalletDao walletDao();
     public abstract FavoriteTokenDao favoriteTokenDao();
     public abstract TokenIdNameDao tokenIdNameDao();
     public abstract Trc20ContractDao trc20ContractDao();
+    public abstract Trc10AssetDao trc10AssetDao();
 
     public static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
@@ -75,6 +79,18 @@ public abstract class AppDatabase extends RoomDatabase {
             try {
                 database.execSQL("CREATE TABLE IF NOT EXISTS trc_20_contract "
                         + "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, symbol TEXT NOT NULL, address TEXT NOT NULL, precision INTEGER NOT NULL, isFavorite INTEGER NOT NULL)");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    public static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            try {
+                database.execSQL("CREATE TABLE IF NOT EXISTS trc_20_contract "
+                        + "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, token_id TEXT NOT NULL, name TEXT NOT NULL, owner_address TEXT NOT NULL, address TEXT NOT NULL, total_supply INTEGER NOT NULL, precision INTEGER NOT NULL)");
             } catch (Exception e) {
                 e.printStackTrace();
             }

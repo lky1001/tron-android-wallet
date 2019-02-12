@@ -152,8 +152,8 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                 mNameText.setText(account.getName());
             }
 
-            mBalanceText.setText(Constants.tronBalanceFormat.format(mAccountBalance) + " " + Constants.TRON_SYMBOL);
-            mBandwidthText.setText(account.getBandwidth() == 0 ? "-" : Constants.tronBalanceFormat.format(account.getBandwidth()));
+            mBalanceText.setText(Constants.tokenBalanceFormat.format(mAccountBalance) + " " + Constants.TRON_SYMBOL);
+            mBandwidthText.setText(account.getBandwidth() == 0 ? "-" : Constants.tokenBalanceFormat.format(account.getBandwidth()));
             mTokensLayout.removeAllViews();
 
             if (!account.getAssetList().isEmpty()) {
@@ -189,7 +189,7 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                     });
 
                     tokenNameText.setText(asset.getDisplayName());
-                    tokenAmountText.setText(Constants.tronBalanceFormat.format(asset.getBalance()));
+                    tokenAmountText.setText(Constants.tokenBalanceFormat.format(asset.getBalance()));
                     mTokensLayout.addView(v);
                 }
             } else {
@@ -224,8 +224,8 @@ public class MyAccountActivity extends CommonActivity implements MyAccountView {
                 mUnFreezeButton.setVisibility(View.GONE);
             }
 
-            mTronPowerText.setText(Constants.tronBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
-            mFrozenTrxBalanceText.setText(Constants.tronBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
+            mTronPowerText.setText(Constants.tokenBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
+            mFrozenTrxBalanceText.setText(Constants.tokenBalanceFormat.format(frozenBalance / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
             if (expiredTime > 0) {
                 mFrozenTrxExpiredText.setText(Constants.sdf.format(new Date(expiredTime)));
             } else {

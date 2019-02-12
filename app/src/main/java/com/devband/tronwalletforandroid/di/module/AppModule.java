@@ -150,8 +150,8 @@ public abstract class AppModule {
 
     @Provides
     @Singleton
-    static TokenManager provideTokenManager(TronNetwork tronNetwork, AppDatabase appDatabase) {
-        return new TokenManager(tronNetwork, appDatabase.tokenIdNameDao());
+    static TokenManager provideTokenManager(AppDatabase appDatabase) {
+        return new TokenManager(appDatabase.trc10AssetDao());
     }
 
     @Provides
@@ -169,6 +169,7 @@ public abstract class AppModule {
                 .addMigrations(AppDatabase.MIGRATION_1_2)
                 .addMigrations(AppDatabase.MIGRATION_2_3)
                 .addMigrations(AppDatabase.MIGRATION_3_4)
+                .addMigrations(AppDatabase.MIGRATION_4_5)
                 .build();
     }
 

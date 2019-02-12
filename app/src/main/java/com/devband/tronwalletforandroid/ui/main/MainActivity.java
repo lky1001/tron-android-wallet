@@ -601,7 +601,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
         double fz = frozenBalance / Constants.ONE_TRX;
         double bandwidth = account.getBandwidth();
 
-        mLoginAccountBalanceText.setText(Constants.tronBalanceFormat.format(balance) + " " + getString(R.string.currency_text));
+        mLoginAccountBalanceText.setText(Constants.tokenBalanceFormat.format(balance) + " " + getString(R.string.currency_text));
         mLoginFrozenBalanceText.setText(Constants.numberFormat.format(fz));
         mLoginBandwidthText.setText(bandwidth == 0 ? "-" : Constants.numberFormat.format(bandwidth));
 

@@ -41,7 +41,7 @@ public class MyTokenListAdapter extends RecyclerView.Adapter<MyTokenListAdapter.
         Asset item = mList.get(position);
 
         holder.tokenNameText.setText(item.getDisplayName());
-        holder.tokenAmountText.setText(Constants.tronBalanceFormat.format(item.getBalance()));
+        holder.tokenAmountText.setText(Constants.tokenBalanceFormat.format(item.getBalance()));
     }
 
     @Override

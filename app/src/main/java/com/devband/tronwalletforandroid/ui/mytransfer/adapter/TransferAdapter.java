@@ -60,15 +60,15 @@ public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.Transa
 
         Date date = new Date(info.getTimestamp());
 
-        long amount = info.getAmount();
+        double amount = (double) info.getAmount();
 
-        if (info.getTokenName().equalsIgnoreCase(Constants.TRON_SYMBOL)) {
-            amount = (long) (amount / Constants.ONE_TRX);
+        if (info.getPrecision() > 0) {
+            amount = (amount / Math.pow(10, info.getPrecision()));
         }
 
         if (info.isSend()) {
             Utils.setAccountDetailAction(mContext, holder.sendAddressText, info.getTransferToAddress());
-            holder.sendAmountText.setText(Constants.tronBalanceFormat.format(amount) + " " + info.getTokenName());
+            holder.sendAmountText.setText(Constants.tokenBalanceFormat.format(amount) + " " + info.getTokenName());
             holder.sendDateText.setText(Constants.sdf.format(date));
 
             holder.sendLayout.setVisibility(View.VISIBLE);
@@ -82,7 +82,7 @@ public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.Transa
                 });
         } else {
             Utils.setAccountDetailAction(mContext, holder.receiveAddressText, info.getTransferFromAddress());
-            holder.receiveAmountText.setText(Constants.tronBalanceFormat.format(amount) + " " + info.getTokenName());
+            holder.receiveAmountText.setText(Constants.tokenBalanceFormat.format(amount) + " " + info.getTokenName());
             holder.receiveDateText.setText(Constants.sdf.format(date));
 
             holder.sendLayout.setVisibility(View.GONE);

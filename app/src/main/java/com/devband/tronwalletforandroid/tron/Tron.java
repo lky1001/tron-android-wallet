@@ -13,6 +13,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CustomPreference;
 import com.devband.tronwalletforandroid.common.Hex2Decimal;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
+import com.devband.tronwalletforandroid.database.model.Trc10AssetModel;
 import com.devband.tronwalletforandroid.tron.exception.InvalidAddressException;
 import com.devband.tronwalletforandroid.tron.exception.InvalidPasswordException;
 import com.google.protobuf.ByteString;
@@ -77,6 +78,8 @@ public class Tron {
         this.mWalletAppManager = walletAppManager;
         this.mTokenManager = tokenManager;
         init();
+
+        this.mTokenManager.setTron(this);
     }
 
     public void setFailConnectNode(boolean failCustomNode) {
@@ -219,15 +222,15 @@ public class Tron {
         return mTronNetwork.getAccountInfo(address)
                 .map(accountInfo -> {
                     for (Balance trc10TokenBalance : accountInfo.getTrc10TokenBalances()) {
-                        trc10TokenBalance.setDisplayName(mTokenManager.getTokenName(trc10TokenBalance.getName()).blockingGet());
+                        trc10TokenBalance.setDisplayName(mTokenManager.getTokenInfo(trc10TokenBalance.getName()).blockingGet().getName());
                     }
 
                     return accountInfo;
                 });
     }
 
-    public String getTokenName(String tokenId) {
-        return mTokenManager.getTokenName(tokenId).blockingGet();
+    public Trc10AssetModel getTrc10Asset(String tokenId) {
+        return mTokenManager.getTokenInfo(tokenId).blockingGet();
     }
 
     public Single<Protocol.Account> queryAccount(@NonNull String address) {
@@ -699,5 +702,9 @@ public class Tron {
 
             return SUCCESS;
         });
+    }
+
+    public Single<Contract.AssetIssueContract> getAssetIssueById(String id) {
+        return mTronManager.getAssetIssueById(id);
     }
 }

@@ -189,4 +189,14 @@ public class GrpcClient {
     public GrpcAPI.TransactionExtention triggerContract(Contract.TriggerSmartContract triggerContract) {
         return blockingStubFullNode.triggerContract(triggerContract);
     }
+
+    public AssetIssueContract getAssetIssueById(String id) {
+        ByteString assetIdBs = ByteString.copyFrom(id.getBytes());
+        BytesMessage request = BytesMessage.newBuilder().setValue(assetIdBs).build();
+        if (blockingStubSolidityNode != null) {
+            return blockingStubSolidityNode.getAssetIssueById(request);
+        } else {
+            return blockingStubFullNode.getAssetIssueById(request);
+        }
+    }
 }

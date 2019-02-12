@@ -180,8 +180,9 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                         showProgressDialog(null, getString(R.string.loading_msg));
                         mSendTokenPresenter.sendTron(password, finalAddress, amount);
                     } else {
+                        long amount = (long) (finalAmountDouble * mSelectedAsset.getPrecision());
                         showProgressDialog(null, getString(R.string.loading_msg));
-                        mSendTokenPresenter.transferAsset(password, finalAddress, mSelectedAsset.getName(), (long) finalAmountDouble);
+                        mSendTokenPresenter.transferAsset(password, finalAddress, mSelectedAsset.getName(), amount);
                     }
                 }).show();
     }

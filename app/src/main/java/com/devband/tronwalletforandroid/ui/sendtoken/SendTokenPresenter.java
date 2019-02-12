@@ -1,6 +1,7 @@
 package com.devband.tronwalletforandroid.ui.sendtoken;
 
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.database.model.Trc10AssetModel;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.tron.exception.InvalidAddressException;
@@ -48,10 +49,15 @@ public class SendTokenPresenter extends BasePresenter<SendTokenView> {
                         .build());
 
                 for (String key : account.getAssetV2Map().keySet()) {
+                    Trc10AssetModel trc10Asset = mTron.getTrc10Asset(key);
+
                     assets.add(Asset.builder()
                             .name(key)
-                            .displayName("[" + key + "]" +mTron.getTokenName(key))
-                            .balance(account.getAssetV2Map().get(key))
+                            .displayName("[" + key + "]" + trc10Asset.getName())
+                            .balance(trc10Asset.getPrecision() > 0 ?
+                                    account.getAssetV2Map().get(key) / Math.pow(10, trc10Asset.getPrecision())
+                                    : account.getAssetV2Map().get(key))
+                            .precision(trc10Asset.getPrecision())
                             .build());
                 }
 

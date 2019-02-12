@@ -163,7 +163,7 @@ public class TransferFragment extends CommonFragment implements TransferView {
             sendText.setText(item.getTransferFromAddress());
             toText.setText(item.getTransferToAddress());
             statusText.setText(item.isConfirmed() ? getString(R.string.confirmed_text) : getString(R.string.unconfirmed_text));
-            amountText.setText(Constants.tronBalanceFormat.format(amount) + " " + item.getTokenName());
+            amountText.setText(Constants.tokenBalanceFormat.format(amount) + " " + item.getTokenName());
             dateText.setText(Constants.sdf.format(new Date(item.getTimestamp())));
 
             dialog.show();

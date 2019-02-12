@@ -51,11 +51,11 @@ public class Utils {
     }
 
     public static String getTrxFormat(double number) {
-        return Constants.tronBalanceFormat.format(number);
+        return Constants.tokenBalanceFormat.format(number);
     }
 
     public static String getRealTrxFormat(long number) {
-        return Constants.tronBalanceFormat.format((double) number / Constants.ONE_TRX);
+        return Constants.tokenBalanceFormat.format((double) number / Constants.ONE_TRX);
     }
 
     public static String getPercentFormat(float number) {
