@@ -16,6 +16,7 @@ import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.database.dao.FavoriteTokenDao;
 import com.devband.tronwalletforandroid.database.dao.Trc20ContractDao;
 import com.devband.tronwalletforandroid.database.model.AccountModel;
+import com.devband.tronwalletforandroid.database.model.Trc10AssetModel;
 import com.devband.tronwalletforandroid.database.model.Trc20ContractModel;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
@@ -120,11 +121,16 @@ public class MainPresenter extends BasePresenter<MainView> {
                             boolean isFavorite = mCustomPreference.isFavoriteToken(accountId);
 
                             if (!isFavorite || (isFavorite && mFavoriteTokenDao.findByAccountIdAndTokenName(accountId, key) != null)) {
-                                    assetList.add(Asset.builder()
-                                            .name(key)
-                                            .displayName("[" + key + "]" +mTron.getTokenName(key))
-                                            .balance(account.getAssetV2Map().get(key))
-                                            .build());
+                                Trc10AssetModel trc10Asset = mTron.getTrc10Asset(key);
+
+                                assetList.add(Asset.builder()
+                                        .name(key)
+                                        .displayName("[" + key + "]" + trc10Asset.getName())
+                                        .balance(trc10Asset.getPrecision() > 0 ?
+                                                account.getAssetV2Map().get(key) / Math.pow(10, trc10Asset.getPrecision())
+                                                : account.getAssetV2Map().get(key))
+                                        .build());
+
                             }
                         }
 

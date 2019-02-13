@@ -21,8 +21,10 @@ public class Asset {
 
     private double balance;
 
+    private int precision;
+
     @Override
     public String toString() {
-        return displayName + " (" + Constants.tronBalanceFormat.format(balance) + ")";
+        return displayName + " (" + Constants.tokenBalanceFormat.format(balance) + ")";
     }
 }

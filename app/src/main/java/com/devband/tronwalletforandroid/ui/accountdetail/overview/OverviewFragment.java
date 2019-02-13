@@ -122,7 +122,7 @@ public class OverviewFragment extends CommonFragment implements OverviewView {
         } else {
             mAccountNameText.setText("-");
         }
-        mBalanceText.setText(Constants.tronBalanceFormat.format(account.getBalance() / Constants.ONE_TRX)
+        mBalanceText.setText(Constants.tokenBalanceFormat.format(account.getBalance() / Constants.ONE_TRX)
                 + " " + Constants.TRON_SYMBOL);
         mTronPowerText.setText(Constants.numberFormat.format(account.getBandwidth()));
         mTransactionInText.setText(Constants.numberFormat.format(account.getTransactionIn()));
@@ -147,7 +147,7 @@ public class OverviewFragment extends CommonFragment implements OverviewView {
                 TextView tokenAmountText = v.findViewById(R.id.token_amount_text);
 
                 tokenNameText.setText(asset.getName());
-                tokenAmountText.setText(Constants.tronBalanceFormat.format(asset.getBalance()));
+                tokenAmountText.setText(Constants.tokenBalanceFormat.format(asset.getBalance()));
                 mTokensLayout.addView(v);
             }
         } else {

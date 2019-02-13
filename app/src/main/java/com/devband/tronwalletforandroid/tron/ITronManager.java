@@ -61,4 +61,6 @@ public interface ITronManager {
     Single<Protocol.SmartContract> getSmartContract(byte[] address);
 
     Single<GrpcAPI.TransactionExtention> triggerContract(byte[] addressBytes, byte[] contractAddress, long callValue, byte[] input, long feeLimit, long tokenCallValue, String tokenId);
+
+    Single<Contract.AssetIssueContract> getAssetIssueById(String id);
 }

@@ -4,6 +4,7 @@ import com.devband.tronlib.TronNetwork;
 import com.devband.tronlib.dto.Transfer;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.database.model.Trc10AssetModel;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.TokenManager;
 import com.devband.tronwalletforandroid.tron.Tron;
@@ -78,8 +79,11 @@ public class TransferPresenter extends BasePresenter<TransferView> {
                 info.setTimestamp(t.getTimestamp());
                 if ("_".equalsIgnoreCase(t.getTokenName())) {
                     info.setTokenName(Constants.TRON_SYMBOL);
+                    info.setPrecision(Constants.TRX_PRECISION);
                 } else {
-                    info.setTokenName(mTokenManager.getTokenName(t.getTokenName()).blockingGet());
+                    Trc10AssetModel trc10AssetModel = mTokenManager.getTokenInfo(t.getTokenName()).blockingGet();
+                    info.setTokenName(trc10AssetModel.getName());
+                    info.setPrecision(trc10AssetModel.getPrecision());
                 }
                 info.setSend(t.getTransferFromAddress().equalsIgnoreCase(address));
                 info.setTransferFromAddress(t.getTransferFromAddress());

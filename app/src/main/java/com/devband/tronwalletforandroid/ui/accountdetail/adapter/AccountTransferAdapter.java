@@ -64,7 +64,7 @@ public class AccountTransferAdapter extends RecyclerView.Adapter<AccountTransfer
 
         if (info.isSend()) {
             Utils.setAccountDetailAction(mContext, holder.sendAddressText, info.getTransferToAddress());
-            holder.sendAmountText.setText(Constants.tronBalanceFormat.format(amount) + " " + info.getTokenName());
+            holder.sendAmountText.setText(Constants.tokenBalanceFormat.format(amount) + " " + info.getTokenName());
             holder.sendDateText.setText(Constants.sdf.format(date));
 
             holder.sendLayout.setVisibility(View.VISIBLE);
@@ -81,7 +81,7 @@ public class AccountTransferAdapter extends RecyclerView.Adapter<AccountTransfer
             });
         } else {
             Utils.setAccountDetailAction(mContext, holder.receiveAddressText, info.getTransferFromAddress());
-            holder.receiveAmountText.setText(Constants.tronBalanceFormat.format(amount) + " " + info.getTokenName());
+            holder.receiveAmountText.setText(Constants.tokenBalanceFormat.format(amount) + " " + info.getTokenName());
             holder.receiveDateText.setText(Constants.sdf.format(date));
 
             holder.sendLayout.setVisibility(View.GONE);

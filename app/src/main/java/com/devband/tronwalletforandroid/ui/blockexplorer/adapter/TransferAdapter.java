@@ -92,7 +92,7 @@ public class TransferAdapter extends RecyclerView.Adapter<TransferAdapter.Transf
             amount /= Constants.ONE_TRX;
         }
 
-        holder.valueText.setText(Constants.tronBalanceFormat.format(amount) + " " + item.getTokenName());
+        holder.valueText.setText(Constants.tokenBalanceFormat.format(amount) + " " + item.getTokenName());
         holder.createdText.setText(Constants.sdf.format(new Date(item.getTimestamp())));
     }
 
