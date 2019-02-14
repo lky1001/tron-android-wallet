@@ -23,17 +23,17 @@ public class TokenIdNameModel {
     @PrimaryKey(autoGenerate = true)
     private long id;
 
-    @NonNull
     @ColumnInfo(name = "token_id")
+    @NonNull
     private String tokenId;
 
-    @NonNull
     @ColumnInfo(name = "token_name")
+    @NonNull
     private String name;
 
     private int precision;
 
-    @Nullable
     @ColumnInfo(name = "detail_json")
+    @Nullable
     private String detailJson;
 }

@@ -89,7 +89,7 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             try {
-                database.execSQL("CREATE TABLE IF NOT EXISTS trc_20_contract "
+                database.execSQL("CREATE TABLE IF NOT EXISTS trc_10_asset "
                         + "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, token_id TEXT NOT NULL, name TEXT NOT NULL, owner_address TEXT NOT NULL, address TEXT NOT NULL, total_supply INTEGER NOT NULL, precision INTEGER NOT NULL)");
             } catch (Exception e) {
                 e.printStackTrace();
