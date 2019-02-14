@@ -170,6 +170,7 @@ public abstract class AppModule {
                 .addMigrations(AppDatabase.MIGRATION_2_3)
                 .addMigrations(AppDatabase.MIGRATION_3_4)
                 .addMigrations(AppDatabase.MIGRATION_4_5)
+                .addMigrations(AppDatabase.MIGRATION_5_6)
                 .build();
     }
 
