@@ -60,7 +60,11 @@
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".ui.sendtoken.SendTokenActivity"
+            android:name=".ui.sendtrc10.SendTrc10Activity"
+            android:theme="@style/WalletTheme" />
+
+        <activity
+            android:name=".ui.sendtrc20.SendTrc20Activity"
             android:theme="@style/WalletTheme" />
 
         <activity

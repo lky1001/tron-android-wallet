@@ -9,7 +9,7 @@ import android.view.SurfaceView;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
-import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
+import com.devband.tronwalletforandroid.ui.sendtrc10.SendTrc10Activity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -61,7 +61,7 @@ public class QrScanActivity extends CommonActivity {
                         payInfo = new RequestCoinActivity.PayInfo();
                     }
 
-                    intent = new Intent(QrScanActivity.this, SendTokenActivity.class);
+                    intent = new Intent(QrScanActivity.this, SendTrc10Activity.class);
                     intent.putExtra(EXTRA_QR_CODE_ADDRESS, payInfo.address);
                     intent.putExtra(EXTRA_QR_CODE_AMOUNT, payInfo.amount);
                     intent.putExtra(EXTRA_FROM_TRON_PAY_MENU, mFromTronPayMenu);

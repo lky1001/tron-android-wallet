@@ -24,7 +24,7 @@ import com.devband.tronwalletforandroid.ui.market.MarketActivity;
 import com.devband.tronwalletforandroid.ui.node.NodeActivity;
 import com.devband.tronwalletforandroid.ui.opensource.OpenSourceActivity;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity;
-import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
+import com.devband.tronwalletforandroid.ui.sendtrc10.SendTrc10Activity;
 import com.marcoscg.fingerauth.FingerAuth;
 
 import javax.inject.Inject;
@@ -167,7 +167,7 @@ public class MoreActivity extends CommonActivity implements MoreView {
 
     @OnClick(R.id.more_donations_button)
     public void onDonationsClick() {
-        Intent intent = new Intent(MoreActivity.this, SendTokenActivity.class);
+        Intent intent = new Intent(MoreActivity.this, SendTrc10Activity.class);
         intent.putExtra(EXTRA_FROM_DONATIONS, true);
         startActivity(intent);
     }

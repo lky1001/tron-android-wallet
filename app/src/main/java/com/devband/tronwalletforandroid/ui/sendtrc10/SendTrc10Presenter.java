@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.sendtoken;
+package com.devband.tronwalletforandroid.ui.sendtrc10;
 
 import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.Trc10AssetModel;
@@ -15,12 +15,12 @@ import java.util.List;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 
-public class SendTokenPresenter extends BasePresenter<SendTokenView> {
+public class SendTrc10Presenter extends BasePresenter<SendTrc10View> {
 
     private Tron mTron;
     private RxJavaSchedulers mRxJavaSchedulers;
 
-    public SendTokenPresenter(SendTokenView view, Tron tron, RxJavaSchedulers rxJavaSchedulers) {
+    public SendTrc10Presenter(SendTrc10View view, Tron tron, RxJavaSchedulers rxJavaSchedulers) {
         super(view);
         this.mTron = tron;
         this.mRxJavaSchedulers = rxJavaSchedulers;

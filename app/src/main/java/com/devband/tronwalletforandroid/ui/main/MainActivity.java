@@ -53,7 +53,7 @@ import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.myaccount.MyAccountActivity;
 import com.devband.tronwalletforandroid.ui.mytransfer.TransferActivity;
-import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
+import com.devband.tronwalletforandroid.ui.sendtrc10.SendTrc10Activity;
 import com.devband.tronwalletforandroid.ui.token.TokenActivity;
 import com.devband.tronwalletforandroid.ui.vote.VoteActivity;
 
@@ -453,7 +453,7 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 changePassword();
                 break;
             case R.id.drawer_item_send_tron:
-                startActivity(SendTokenActivity.class);
+                startActivity(SendTrc10Activity.class);
                 break;
             case R.id.drawer_item_vote:
                 startActivity(VoteActivity.class);

@@ -1,4 +1,4 @@
-package com.devband.tronwalletforandroid.ui.sendtoken;
+package com.devband.tronwalletforandroid.ui.sendtrc10;
 
 import android.Manifest;
 import android.content.Intent;
@@ -33,10 +33,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SendTokenActivity extends CommonActivity implements SendTokenView {
+public class SendTrc10Activity extends CommonActivity implements SendTrc10View {
 
     @Inject
-    SendTokenPresenter mSendTokenPresenter;
+    SendTrc10Presenter mSendTrc10Presenter;
 
     private static final int CAMERA_PERMISSION_REQ = 9929;
     public static final int QR_SCAN_ADDRESS = 3321;
@@ -102,14 +102,14 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
             mQrCodeScanBtn.setVisibility(View.GONE);
         }
 
-        mSendTokenPresenter.onCreate();
+        mSendTrc10Presenter.onCreate();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         showProgressDialog(null, getString(R.string.loading_msg));
-        mSendTokenPresenter.onResume();
+        mSendTrc10Presenter.onResume();
     }
 
     @OnClick(R.id.max_button)
@@ -123,7 +123,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
         address = address.trim();
 
         if (address.isEmpty()) {
-            Toast.makeText(SendTokenActivity.this, getString(R.string.invalid_address),
+            Toast.makeText(SendTrc10Activity.this, getString(R.string.invalid_address),
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -137,13 +137,13 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
             amountDouble = Double.parseDouble(removeCommaAmountText);
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            Toast.makeText(SendTokenActivity.this, getString(R.string.invalid_amount),
+            Toast.makeText(SendTrc10Activity.this, getString(R.string.invalid_amount),
                     Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (amountDouble <= 0 || amountDouble > mSelectedAsset.getBalance()) {
-            Toast.makeText(SendTokenActivity.this, getString(R.string.invalid_amount),
+            Toast.makeText(SendTrc10Activity.this, getString(R.string.invalid_amount),
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -165,7 +165,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
 
         final String finalAddress = address;
 
-        new MaterialDialog.Builder(SendTokenActivity.this)
+        new MaterialDialog.Builder(SendTrc10Activity.this)
                 .title(R.string.send_token_title)
                 .content(sb.toString())
                 .positiveText(R.string.confirm_text)
@@ -178,7 +178,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                         long amount = (long) (finalAmountDouble * Constants.ONE_TRX);
 
                         showProgressDialog(null, getString(R.string.loading_msg));
-                        mSendTokenPresenter.sendTron(password, finalAddress, amount);
+                        mSendTrc10Presenter.sendTron(password, finalAddress, amount);
                     } else {
                         long amount = (long) finalAmountDouble;
 
@@ -186,7 +186,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                             amount = (long) (finalAmountDouble * Math.pow(10, mSelectedAsset.getPrecision()));
                         }
                         showProgressDialog(null, getString(R.string.loading_msg));
-                        mSendTokenPresenter.transferAsset(password, finalAddress, mSelectedAsset.getName(), amount);
+                        mSendTrc10Presenter.transferAsset(password, finalAddress, mSelectedAsset.getName(), amount);
                     }
                 }).show();
     }
@@ -197,7 +197,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
 
         if (result) {
             if (mFromDonations) {
-                new MaterialDialog.Builder(SendTokenActivity.this)
+                new MaterialDialog.Builder(SendTrc10Activity.this)
                         .title(R.string.donation_title_text)
                         .titleColorRes(R.color.colorPrimary)
                         .content(getString(R.string.thanks_msg))
@@ -207,12 +207,12 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                             finishActivity();
                         }).show();
             } else {
-                Toast.makeText(SendTokenActivity.this, getString(R.string.sending_token_success),
+                Toast.makeText(SendTrc10Activity.this, getString(R.string.sending_token_success),
                         Toast.LENGTH_SHORT).show();
                 finishActivity();
             }
         } else {
-            new MaterialDialog.Builder(SendTokenActivity.this)
+            new MaterialDialog.Builder(SendTrc10Activity.this)
                     .title(R.string.send_token_failed_title_text)
                     .titleColorRes(R.color.colorPrimary)
                     .content(getString(R.string.sending_token_failed))
@@ -227,13 +227,13 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
     public void invalidPassword() {
         hideDialog();
 
-        Toast.makeText(SendTokenActivity.this, getString(R.string.invalid_password),
+        Toast.makeText(SendTrc10Activity.this, getString(R.string.invalid_password),
                 Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void displayAccountInfo(List<Asset> assets) {
-        mTokenAdapter = new ArrayAdapter<>(SendTokenActivity.this, android.R.layout.simple_spinner_item,
+        mTokenAdapter = new ArrayAdapter<>(SendTrc10Activity.this, android.R.layout.simple_spinner_item,
                 assets);
 
         mTokenAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -247,7 +247,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
     public void invalidAddress() {
         hideDialog();
 
-        Toast.makeText(SendTokenActivity.this, getString(R.string.invalid_address),
+        Toast.makeText(SendTrc10Activity.this, getString(R.string.invalid_address),
                 Toast.LENGTH_SHORT).show();
     }
 
@@ -255,12 +255,12 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
     public void connectionError() {
         hideDialog();
 
-        Toast.makeText(SendTokenActivity.this, getString(R.string.connection_error_msg),
+        Toast.makeText(SendTrc10Activity.this, getString(R.string.connection_error_msg),
                 Toast.LENGTH_SHORT).show();
     }
 
     private void startQrScan() {
-        Intent qrScanIntent = new Intent(SendTokenActivity.this, QrScanActivity.class);
+        Intent qrScanIntent = new Intent(SendTrc10Activity.this, QrScanActivity.class);
         startActivityForResult(qrScanIntent, QR_SCAN_ADDRESS);
     }
 
@@ -273,7 +273,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-                    Toast.makeText(SendTokenActivity.this, getString(R.string.camera_error_msg),
+                    Toast.makeText(SendTrc10Activity.this, getString(R.string.camera_error_msg),
                             Toast.LENGTH_SHORT).show();
                 } else {
                     requestPermissions(new String[] { Manifest.permission.CAMERA },
@@ -294,7 +294,7 @@ public class SendTokenActivity extends CommonActivity implements SendTokenView {
                 startQrScan();
             }
         } else {
-            Toast.makeText(SendTokenActivity.this, getString(R.string.camera_error_msg),
+            Toast.makeText(SendTrc10Activity.this, getString(R.string.camera_error_msg),
                     Toast.LENGTH_SHORT).show();
         }
     }
