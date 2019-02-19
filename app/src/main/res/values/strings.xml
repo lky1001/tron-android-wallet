@@ -342,4 +342,5 @@
     <string name="trc_20_name">name</string>
     <string name="trc_20_symbol">symbol</string>
     <string name="sync_trc20_msg">Sync TRC-20 token contract list...</string>
+    <string name="available">Available</string>
 </resources>

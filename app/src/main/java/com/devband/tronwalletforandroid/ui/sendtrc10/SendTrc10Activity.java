@@ -71,7 +71,7 @@ public class SendTrc10Activity extends CommonActivity implements SendTrc10View {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_send_token);
+        setContentView(R.layout.activity_send_trc10_token);
 
         ButterKnife.bind(this);
 

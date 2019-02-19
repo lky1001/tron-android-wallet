@@ -15,7 +15,7 @@ public abstract class SendTrc10ActivityModule {
 
     @Provides
     static SendTrc10Presenter provideRepresentativePresenter(SendTrc10View view, Tron tron,
-                                                             RxJavaSchedulers rxJavaSchedulers) {
+            RxJavaSchedulers rxJavaSchedulers) {
         return new SendTrc10Presenter(view, tron, rxJavaSchedulers);
     }
 }
