@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronlib.dto.CoinMarketCap;
+import com.devband.tronwalletforandroid.BuildConfig;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
@@ -54,6 +55,7 @@ import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.myaccount.MyAccountActivity;
 import com.devband.tronwalletforandroid.ui.mytransfer.TransferActivity;
 import com.devband.tronwalletforandroid.ui.sendtrc10.SendTrc10Activity;
+import com.devband.tronwalletforandroid.ui.smartcontract.TestSmartContractActivity;
 import com.devband.tronwalletforandroid.ui.token.TokenActivity;
 import com.devband.tronwalletforandroid.ui.vote.VoteActivity;
 
@@ -730,9 +732,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     @OnClick(R.id.fab_refresh)
     public void onHistoryClick() {
-//        if (BuildConfig.DEBUG) {
-//            startActivity(TestSmartContractActivity.class);
-//        }
+        if (BuildConfig.DEBUG) {
+            startActivity(TestSmartContractActivity.class);
+        }
 
         checkLoginState();
     }

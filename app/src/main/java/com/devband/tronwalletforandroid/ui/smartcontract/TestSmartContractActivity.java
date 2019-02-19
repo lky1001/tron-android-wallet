@@ -71,7 +71,7 @@ public class TestSmartContractActivity extends CommonActivity {
             String transferMethod = contractMethod.getText().toString();
             //String transferParams = contractParams.getText().toString();
 
-            String transferParams = "\"TSMbPm5mUsaTDSEjHCd55ZJaib3Ysvjyc5\"";
+            String transferParams = "\"address\",1000000";
 
             String contractTrigger = "";
 
