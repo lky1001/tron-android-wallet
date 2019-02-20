@@ -16,9 +16,13 @@
         android:iconTint="@color/colorPrimary"
         android:title="@string/navigation_menu_my_address" />
 
-    <item android:id="@+id/drawer_item_send_tron"
+    <item android:id="@+id/drawer_item_send_trx10_token"
         android:icon="@drawable/ic_send"
-        android:title="@string/navigation_menu_send" />
+        android:title="@string/navigation_menu_send_trc10_token" />
+
+    <item android:id="@+id/drawer_item_send_trx20_token"
+        android:icon="@drawable/ic_send"
+        android:title="@string/navigation_menu_send_trc20_token" />
 
     <item android:id="@+id/drawer_item_vote"
         android:icon="@drawable/ic_thumb"

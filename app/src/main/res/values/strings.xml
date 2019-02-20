@@ -13,7 +13,8 @@
     <string name="navigation_drawer_open">open</string>
     <string name="navigation_drawer_close">close</string>
     <string name="navigation_header_title">Tron Wallet</string>
-    <string name="navigation_menu_send">Send Token</string>
+    <string name="navigation_menu_send_trc10_token">Send TRC-10 Token</string>
+    <string name="navigation_menu_send_trc20_token">Send TRC-20 Token</string>
     <string name="address_text">Address</string>
     <string name="password_text">Password (must be at least 8)</string>
     <string name="private_key_text">Private Key</string>
