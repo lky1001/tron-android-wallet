@@ -6,7 +6,8 @@
     <string name="title_backup_account">Backup Account</string>
     <string name="title_login">Login</string>
     <string name="title_my_address">My Address</string>
-    <string name="title_send_token">Send Token</string>
+    <string name="title_send_trc10_token">Send TRC-10 Token</string>
+    <string name="title_send_trc20_token">Send TRC-20 Token</string>
     <string name="title_import_account">Import Account</string>
     <string name="title_vote_representative">Vote Representative</string>
     <string name="title_more">More</string>

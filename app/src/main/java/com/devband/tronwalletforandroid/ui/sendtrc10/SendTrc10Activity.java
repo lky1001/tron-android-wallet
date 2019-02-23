@@ -81,7 +81,7 @@ public class SendTrc10Activity extends CommonActivity implements SendTrc10View {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.title_send_token);
+            getSupportActionBar().setTitle(R.string.title_send_trc10_token);
         }
 
         mFromDonations = intent.getBooleanExtra(MoreActivity.EXTRA_FROM_DONATIONS, false);
@@ -107,9 +107,9 @@ public class SendTrc10Activity extends CommonActivity implements SendTrc10View {
 
     @Override
     protected void onResume() {
-        super.onResume();
         showProgressDialog(null, getString(R.string.loading_msg));
         mSendTrc10Presenter.onResume();
+        super.onResume();
     }
 
     @OnClick(R.id.max_button)
