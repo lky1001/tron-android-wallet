@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +18,6 @@ import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
-import com.devband.tronwalletforandroid.ui.main.dto.Asset;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 
 import javax.inject.Inject;
@@ -58,9 +58,9 @@ public class SendTrc20Activity extends CommonActivity implements SendTrc20View {
     @BindView(R.id.btn_qrcode_scan)
     public ImageButton mQrCodeScanBtn;
 
-    private ArrayAdapter<Asset> mTokenAdapter;
+    private ArrayAdapter<TokenContract> mTokenAdapter;
 
-    private Asset mSelectedAsset;
+    private TokenContract mSelectedAsset;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -142,4 +142,25 @@ public class SendTrc20Activity extends CommonActivity implements SendTrc20View {
             }
         }
     }
+
+    @Override
+    public void showLoadingDialog() {
+        if (!isFinishing()) {
+            showProgressDialog(null, getString(R.string.loading_msg));
+        }
+    }
+
+    private android.widget.AdapterView.OnItemSelectedListener mTokenItemSelectedListener = new android.widget.AdapterView.OnItemSelectedListener() {
+
+        @Override
+        public void onItemSelected(android.widget.AdapterView<?> adapterView, View view, int pos, long id) {
+            mSelectedAsset = mTokenAdapter.getItem(pos);
+            mInputAmount.setText("");
+        }
+
+        @Override
+        public void onNothingSelected(android.widget.AdapterView<?> adapterView) {
+
+        }
+    };
 }

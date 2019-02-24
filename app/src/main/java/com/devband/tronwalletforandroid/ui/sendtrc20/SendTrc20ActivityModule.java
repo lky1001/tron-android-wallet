@@ -1,5 +1,6 @@
 package com.devband.tronwalletforandroid.ui.sendtrc20;
 
+import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 
@@ -15,7 +16,7 @@ public abstract class SendTrc20ActivityModule {
 
     @Provides
     static SendTrc20Presenter provideRepresentativePresenter(SendTrc20View view, Tron tron,
-            RxJavaSchedulers rxJavaSchedulers) {
-        return new SendTrc20Presenter(view, tron, rxJavaSchedulers);
+            AppDatabase appDatabase, RxJavaSchedulers rxJavaSchedulers) {
+        return new SendTrc20Presenter(view, tron, appDatabase, rxJavaSchedulers);
     }
 }
