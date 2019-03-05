@@ -37,6 +37,8 @@ import com.devband.tronwalletforandroid.ui.mytransfer.MyTransferActivityModule;
 import com.devband.tronwalletforandroid.ui.mytransfer.TransferActivity;
 import com.devband.tronwalletforandroid.ui.node.NodeActivity;
 import com.devband.tronwalletforandroid.ui.node.NodeActivityModule;
+import com.devband.tronwalletforandroid.ui.previewwallet.PreviewWalletActivity;
+import com.devband.tronwalletforandroid.ui.previewwallet.PreviewWalletActivityModule;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivityModule;
@@ -179,4 +181,8 @@ public abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = { ExchangeActivityModule.class })
     abstract ExchangeActivity exchangeActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = { PreviewWalletActivityModule.class })
+    abstract PreviewWalletActivity bindPreviewWalletActivity();
 }
