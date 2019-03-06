@@ -2,12 +2,10 @@ package com.devband.tronwalletforandroid.ui.previewwallet;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.widget.Toolbar;
-
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.widget.Toolbar;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
@@ -27,6 +25,8 @@ public class PreviewWalletActivity extends CommonActivity implements PreviewWall
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     private LinearLayoutManager mLayoutManager;
+
+    private AccountAdapter mAccountAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
