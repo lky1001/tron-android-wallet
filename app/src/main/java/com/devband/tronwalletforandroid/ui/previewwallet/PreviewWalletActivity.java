@@ -5,15 +5,22 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toolbar;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.devband.tronwalletforandroid.R;
+import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PreviewWalletActivity extends CommonActivity implements PreviewWalletView {
+
+    @Inject
+    private PreviewWalletPresenter mPreviewWalletPresenter;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -25,8 +32,11 @@ public class PreviewWalletActivity extends CommonActivity implements PreviewWall
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     private LinearLayoutManager mLayoutManager;
+    private AdapterView mAdapterView;
 
-    private AccountAdapter mAccountAdapter;
+    private boolean mIsLoading;
+
+    private AccountAdapter mAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,5 +44,45 @@ public class PreviewWalletActivity extends CommonActivity implements PreviewWall
         setContentView(R.layout.activity_preview_wallet);
 
         ButterKnife.bind(this);
+
+
+        setSupportActionBar(mToolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.title_transfer_text);
+        }
+
+        mAdapter = new AccountAdapter(PreviewWalletActivity.this, mOnItemClickListener);
+        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapterView = mAdapter;
+
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+
+        mPreviewWalletPresenter.onCreate();
     }
+
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+
+        @Override
+        public void onRefresh() {
+            mIsLoading = true;
+            mAdapterView.refresh();
+            mSwipeRefreshLayout.setRefreshing(true);
+        }
+    };
+
+    private View.OnClickListener mOnItemClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            int pos = mRecyclerView.getChildLayoutPosition(v);
+            TronWallet item = mAdapter.getItem(pos);
+        }
+    };
 }

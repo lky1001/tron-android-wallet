@@ -87,6 +87,10 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         notifyDataSetChanged();
     }
 
+    public TronWallet getItem(int pos) {
+        return mList.get(pos);
+    }
+
     class AccountViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.wallet_name_text)
