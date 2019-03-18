@@ -42,8 +42,13 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AccountViewHolder accountViewHolder, int i) {
+    public void onBindViewHolder(@NonNull AccountViewHolder holder, int position) {
+        TronWallet wallet = mList.get(position);
 
+        holder.walletNameText.setText(wallet.getAccountName());
+
+        // todo - get balance
+        holder.balanceText.setText("TRX");
     }
 
     @Override
