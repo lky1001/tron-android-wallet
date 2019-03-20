@@ -18,7 +18,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountViewHolder> implements AdapterDataModel<TronWallet>, AdapterView {
+public class PreviewWalletAdapter extends RecyclerView.Adapter<PreviewWalletAdapter.AccountViewHolder> implements AdapterDataModel<TronWallet>, AdapterView {
 
     private List<TronWallet> mList = new ArrayList<>();
 
@@ -26,7 +26,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
 
     private View.OnClickListener mOnItemClickListener;
 
-    public AccountAdapter(Context context, View.OnClickListener onClickListener) {
+    public PreviewWalletAdapter(Context context, View.OnClickListener onClickListener) {
         this.mContext = context;
         this.mOnItemClickListener = onClickListener;
     }
@@ -38,7 +38,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                 RecyclerView.LayoutParams.WRAP_CONTENT));
         v.setOnClickListener(mOnItemClickListener);
-        return new AccountAdapter.AccountViewHolder(v);
+        return new PreviewWalletAdapter.AccountViewHolder(v);
     }
 
     @Override

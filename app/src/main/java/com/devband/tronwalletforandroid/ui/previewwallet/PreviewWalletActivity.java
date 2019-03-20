@@ -36,7 +36,7 @@ public class PreviewWalletActivity extends CommonActivity implements PreviewWall
 
     private boolean mIsLoading;
 
-    private AccountAdapter mAdapter;
+    private PreviewWalletAdapter mAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class PreviewWalletActivity extends CommonActivity implements PreviewWall
             getSupportActionBar().setTitle(R.string.title_transfer_text);
         }
 
-        mAdapter = new AccountAdapter(PreviewWalletActivity.this, mOnItemClickListener);
+        mAdapter = new PreviewWalletAdapter(PreviewWalletActivity.this, mOnItemClickListener);
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
