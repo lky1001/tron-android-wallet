@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.tron.Tron;
 
 import java.util.ArrayList;
@@ -53,14 +54,13 @@ public class PreviewWalletAdapter extends RecyclerView.Adapter<PreviewWalletAdap
 
         holder.walletNameText.setText(wallet.getAccountName());
 
-        // todo - get balance
+        // get balance
         mTron.getAccount(wallet.getAddress())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(account -> {
-                    
-                })
-        holder.balanceText.setText("TRX");
+                    holder.balanceText.setText(Constants.tokenBalanceFormat.format(account.getBalance() / Constants.ONE_TRX) + " " + Constants.TRON_SYMBOL);
+                }, e -> e.printStackTrace());
     }
 
     @Override

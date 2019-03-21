@@ -11,6 +11,8 @@ import android.view.View;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.tron.Tron;
+import com.devband.tronwalletforandroid.ui.main.MainActivity;
 
 import javax.inject.Inject;
 
@@ -21,6 +23,9 @@ public class PreviewWalletActivity extends CommonActivity implements PreviewWall
 
     @Inject
     private PreviewWalletPresenter mPreviewWalletPresenter;
+
+    @Inject
+    private Tron mTron;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -83,6 +88,9 @@ public class PreviewWalletActivity extends CommonActivity implements PreviewWall
         public void onClick(View v) {
             int pos = mRecyclerView.getChildLayoutPosition(v);
             TronWallet item = mAdapter.getItem(pos);
+
+            startActivity(MainActivity.class);
+            finishActivity();
         }
     };
 }
