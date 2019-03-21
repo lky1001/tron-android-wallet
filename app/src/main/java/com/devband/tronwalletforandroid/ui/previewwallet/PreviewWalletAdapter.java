@@ -11,22 +11,28 @@ import android.widget.TextView;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
+import com.devband.tronwalletforandroid.tron.Tron;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class PreviewWalletAdapter extends RecyclerView.Adapter<PreviewWalletAdapter.AccountViewHolder> implements AdapterDataModel<TronWallet>, AdapterView {
 
     private List<TronWallet> mList = new ArrayList<>();
 
+    private Tron mTron;
+
     private Context mContext;
 
     private View.OnClickListener mOnItemClickListener;
 
-    public PreviewWalletAdapter(Context context, View.OnClickListener onClickListener) {
+    public PreviewWalletAdapter(Tron tron, Context context, View.OnClickListener onClickListener) {
+        this.mTron = tron;
         this.mContext = context;
         this.mOnItemClickListener = onClickListener;
     }
@@ -48,6 +54,12 @@ public class PreviewWalletAdapter extends RecyclerView.Adapter<PreviewWalletAdap
         holder.walletNameText.setText(wallet.getAccountName());
 
         // todo - get balance
+        mTron.getAccount(wallet.getAddress())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(account -> {
+                    
+                })
         holder.balanceText.setText("TRX");
     }
 

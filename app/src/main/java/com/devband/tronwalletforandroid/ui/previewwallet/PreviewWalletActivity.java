@@ -53,7 +53,7 @@ public class PreviewWalletActivity extends CommonActivity implements PreviewWall
             getSupportActionBar().setTitle(R.string.title_transfer_text);
         }
 
-        mAdapter = new PreviewWalletAdapter(PreviewWalletActivity.this, mOnItemClickListener);
+        mAdapter = new PreviewWalletAdapter(mTron, PreviewWalletActivity.this, mOnItemClickListener);
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
