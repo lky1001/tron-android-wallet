@@ -36,4 +36,11 @@
         android:title="@string/menu_transfer_history"
         android:icon="@drawable/ic_history"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_preview_wallet"
+        android:orderInCategory="100"
+        android:title="@string/menu_preview_wallet"
+        android:icon="@drawable/ic_preview_wallet"
+        app:showAsAction="always" />
 </menu>

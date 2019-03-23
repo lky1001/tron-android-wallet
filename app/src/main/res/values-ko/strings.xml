@@ -10,6 +10,7 @@
     <string name="title_send_trc20_token">TRC-20 토큰 전송</string>
     <string name="title_import_account">지갑 가져오기</string>
     <string name="title_vote_representative">대표자 투표</string>
+    <string name="title_preview_wallet">계정 한눈에 보기</string>
     <string name="title_more">더보기</string>
     <string name="navigation_drawer_open">open</string>
     <string name="navigation_drawer_close">close</string>
@@ -344,4 +345,6 @@
     <string name="trc_20_name">토큰 이름</string>
     <string name="trc_20_symbol">심볼</string>
     <string name="sync_trc20_msg">TRC-20 토큰 목록을 동기화 중입니다.</string>
+    <string name="available">이용가능</string>
+    <string name="menu_preview_wallet">지갑보기</string>
 </resources>

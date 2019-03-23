@@ -41,7 +41,7 @@ public class PreviewWalletAdapter extends RecyclerView.Adapter<PreviewWalletAdap
     @NonNull
     @Override
     public AccountViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_my_transfer, null);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_preview_wallet, null);
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                 RecyclerView.LayoutParams.WRAP_CONTENT));
         v.setOnClickListener(mOnItemClickListener);

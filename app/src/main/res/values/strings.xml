@@ -10,6 +10,7 @@
     <string name="title_send_trc20_token">Send TRC-20 Token</string>
     <string name="title_import_account">Import Account</string>
     <string name="title_vote_representative">Vote Representative</string>
+    <string name="title_preview_wallet">Preview Wallet</string>
     <string name="title_more">More</string>
     <string name="navigation_drawer_open">open</string>
     <string name="navigation_drawer_close">close</string>
@@ -345,4 +346,5 @@
     <string name="trc_20_symbol">symbol</string>
     <string name="sync_trc20_msg">Sync TRC-20 token contract list...</string>
     <string name="available">Available</string>
+    <string name="menu_preview_wallet">PreviewWallet</string>
 </resources>

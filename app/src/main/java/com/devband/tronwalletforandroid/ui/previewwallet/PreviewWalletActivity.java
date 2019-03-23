@@ -22,10 +22,10 @@ import butterknife.ButterKnife;
 public class PreviewWalletActivity extends CommonActivity implements PreviewWalletView {
 
     @Inject
-    private PreviewWalletPresenter mPreviewWalletPresenter;
+    PreviewWalletPresenter mPreviewWalletPresenter;
 
     @Inject
-    private Tron mTron;
+    Tron mTron;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -55,7 +55,7 @@ public class PreviewWalletActivity extends CommonActivity implements PreviewWall
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.title_transfer_text);
+            getSupportActionBar().setTitle(R.string.title_preview_wallet);
         }
 
         mAdapter = new PreviewWalletAdapter(mTron, PreviewWalletActivity.this, mOnItemClickListener);
@@ -66,6 +66,8 @@ public class PreviewWalletActivity extends CommonActivity implements PreviewWall
 
         mRecyclerView.setAdapter(mAdapter);
         mAdapterView = mAdapter;
+
+        mPreviewWalletPresenter.setAdapterDataModel(mAdapter);
 
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
 

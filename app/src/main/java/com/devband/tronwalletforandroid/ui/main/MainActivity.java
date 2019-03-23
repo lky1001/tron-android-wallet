@@ -54,6 +54,7 @@ import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.myaccount.MyAccountActivity;
 import com.devband.tronwalletforandroid.ui.mytransfer.TransferActivity;
+import com.devband.tronwalletforandroid.ui.previewwallet.PreviewWalletActivity;
 import com.devband.tronwalletforandroid.ui.sendtrc10.SendTrc10Activity;
 import com.devband.tronwalletforandroid.ui.sendtrc20.SendTrc20Activity;
 import com.devband.tronwalletforandroid.ui.smartcontract.TestSmartContractActivity;
@@ -419,8 +420,10 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 checkLoginState();
                 break;
             case R.id.action_transaction_history:
-                startActivity(new Intent(this, TransferActivity.class));
+                startActivity(TransferActivity.class);
                 break;
+            case R.id.action_preview_wallet:
+                startActivity(PreviewWalletActivity.class);
         }
 
         return super.onOptionsItemSelected(item);
