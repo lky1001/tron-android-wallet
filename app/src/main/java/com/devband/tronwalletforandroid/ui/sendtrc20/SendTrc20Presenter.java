@@ -24,7 +24,7 @@ public class SendTrc20Presenter extends BasePresenter<SendTrc20View> {
 
     @Override
     public void onCreate() {
-
+        loadTrc20Tokens();
     }
 
     @Override
