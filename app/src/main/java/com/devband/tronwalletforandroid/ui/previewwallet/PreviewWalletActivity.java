@@ -11,6 +11,7 @@ import android.view.View;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.main.MainActivity;
 
@@ -79,8 +80,8 @@ public class PreviewWalletActivity extends CommonActivity implements PreviewWall
         @Override
         public void onRefresh() {
             mIsLoading = true;
-            mAdapterView.refresh();
             mSwipeRefreshLayout.setRefreshing(true);
+            mPreviewWalletPresenter.refreshAccount();
         }
     };
 
@@ -89,10 +90,16 @@ public class PreviewWalletActivity extends CommonActivity implements PreviewWall
         @Override
         public void onClick(View v) {
             int pos = mRecyclerView.getChildLayoutPosition(v);
-            TronWallet item = mAdapter.getItem(pos);
+            AccountModel item = mAdapter.getItem(pos);
 
+            mTron.changeLoginAccount(item);
             startActivity(MainActivity.class);
             finishActivity();
         }
     };
+
+    @Override
+    public void finishRefresh() {
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
 }

@@ -12,6 +12,7 @@ import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterDataModel;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.Constants;
+import com.devband.tronwalletforandroid.database.model.AccountModel;
 import com.devband.tronwalletforandroid.tron.Tron;
 
 import java.util.ArrayList;
@@ -22,9 +23,9 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class PreviewWalletAdapter extends RecyclerView.Adapter<PreviewWalletAdapter.AccountViewHolder> implements AdapterDataModel<TronWallet>, AdapterView {
+public class PreviewWalletAdapter extends RecyclerView.Adapter<PreviewWalletAdapter.AccountViewHolder> implements AdapterDataModel<AccountModel>, AdapterView {
 
-    private List<TronWallet> mList = new ArrayList<>();
+    private List<AccountModel> mList = new ArrayList<>();
 
     private Tron mTron;
 
@@ -50,12 +51,12 @@ public class PreviewWalletAdapter extends RecyclerView.Adapter<PreviewWalletAdap
 
     @Override
     public void onBindViewHolder(@NonNull AccountViewHolder holder, int position) {
-        TronWallet wallet = mList.get(position);
+        AccountModel wallet = mList.get(position);
 
-        holder.walletNameText.setText(wallet.getAccountName());
+        holder.walletNameText.setText(wallet.getName());
 
         // get balance
-        mTron.getAccount(wallet.getAddress())
+        mTron.getEncryptAccount(wallet.getAddress())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(account -> {
@@ -69,12 +70,12 @@ public class PreviewWalletAdapter extends RecyclerView.Adapter<PreviewWalletAdap
     }
 
     @Override
-    public void add(TronWallet model) {
+    public void add(AccountModel model) {
         mList.add(model);
     }
 
     @Override
-    public void addAll(List<TronWallet> list) {
+    public void addAll(List<AccountModel> list) {
         mList.addAll(list);
     }
 
@@ -84,7 +85,7 @@ public class PreviewWalletAdapter extends RecyclerView.Adapter<PreviewWalletAdap
     }
 
     @Override
-    public TronWallet getModel(int position) {
+    public AccountModel getModel(int position) {
         return mList.get(position);
     }
 
@@ -104,7 +105,7 @@ public class PreviewWalletAdapter extends RecyclerView.Adapter<PreviewWalletAdap
         notifyDataSetChanged();
     }
 
-    public TronWallet getItem(int pos) {
+    public AccountModel getItem(int pos) {
         return mList.get(pos);
     }
 

@@ -7,15 +7,12 @@ import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.tron.Tron;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PreviewWalletPresenter extends BasePresenter<PreviewWalletView> {
 
     private Tron mTron;
     private TronNetwork mTronNetwork;
     private RxJavaSchedulers mRxJavaSchedulers;
-    private AdapterDataModel<TronWallet> mAdapterDataModel;
+    private AdapterDataModel<AccountModel> mAdapterDataModel;
 
     public PreviewWalletPresenter(PreviewWalletView view, Tron tron, TronNetwork tronNetwork,
             RxJavaSchedulers rxJavaSchedulers) {
@@ -25,30 +22,24 @@ public class PreviewWalletPresenter extends BasePresenter<PreviewWalletView> {
         this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
-    public void setAdapterDataModel(AdapterDataModel<TronWallet> adapterDataModel) {
+    public void setAdapterDataModel(AdapterDataModel<AccountModel> adapterDataModel) {
         this.mAdapterDataModel = adapterDataModel;
     }
 
     @Override
     public void onCreate() {
+        refreshAccount();
+    }
+
+    public void refreshAccount() {
         mTron.getAccountList()
                 .subscribeOn(mRxJavaSchedulers.getIo())
                 .observeOn(mRxJavaSchedulers.getMainThread())
-                .map(accountList -> {
-                    List<TronWallet> walletList = new ArrayList<>();
-                    for (AccountModel accountModel : accountList) {
-                        walletList.add(TronWallet.builder()
-                                .accountName(accountModel.getName())
-                                .address(accountModel.getAddress())
-                                .build());
-                    }
-
-                    return walletList;
-                })
                 .subscribe(accountList -> {
                     mAdapterDataModel.clear();
                     mAdapterDataModel.addAll(accountList);
-                }, e -> e.printStackTrace());
+                    mView.finishRefresh();
+                }, e -> mView.finishRefresh());
     }
 
     @Override
