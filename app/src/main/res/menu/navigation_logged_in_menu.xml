@@ -22,7 +22,8 @@
 
     <item android:id="@+id/drawer_item_send_trx20_token"
         android:icon="@drawable/ic_send"
-        android:title="@string/navigation_menu_send_trc20_token" />
+        android:title="@string/navigation_menu_send_trc20_token"
+        android:visible="false"/>
 
     <item android:id="@+id/drawer_item_vote"
         android:icon="@drawable/ic_thumb"
