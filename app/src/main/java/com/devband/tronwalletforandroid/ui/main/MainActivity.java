@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronlib.dto.CoinMarketCap;
+import com.devband.tronwalletforandroid.BuildConfig;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.AdapterView;
 import com.devband.tronwalletforandroid.common.CommonActivity;
@@ -53,7 +54,10 @@ import com.devband.tronwalletforandroid.ui.main.dto.TronAccount;
 import com.devband.tronwalletforandroid.ui.more.MoreActivity;
 import com.devband.tronwalletforandroid.ui.myaccount.MyAccountActivity;
 import com.devband.tronwalletforandroid.ui.mytransfer.TransferActivity;
-import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
+import com.devband.tronwalletforandroid.ui.previewwallet.PreviewWalletActivity;
+import com.devband.tronwalletforandroid.ui.sendtrc10.SendTrc10Activity;
+import com.devband.tronwalletforandroid.ui.sendtrc20.SendTrc20Activity;
+import com.devband.tronwalletforandroid.ui.smartcontract.TestSmartContractActivity;
 import com.devband.tronwalletforandroid.ui.token.TokenActivity;
 import com.devband.tronwalletforandroid.ui.vote.VoteActivity;
 
@@ -416,8 +420,10 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
                 checkLoginState();
                 break;
             case R.id.action_transaction_history:
-                startActivity(new Intent(this, TransferActivity.class));
+                startActivity(TransferActivity.class);
                 break;
+            case R.id.action_preview_wallet:
+                startActivity(PreviewWalletActivity.class);
         }
 
         return super.onOptionsItemSelected(item);
@@ -452,8 +458,11 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
             case R.id.drawer_item_change_password:
                 changePassword();
                 break;
-            case R.id.drawer_item_send_tron:
-                startActivity(SendTokenActivity.class);
+            case R.id.drawer_item_send_trx10_token:
+                startActivity(SendTrc10Activity.class);
+                break;
+            case R.id.drawer_item_send_trx20_token:
+                startActivity(SendTrc20Activity.class);
                 break;
             case R.id.drawer_item_vote:
                 startActivity(VoteActivity.class);
@@ -730,9 +739,9 @@ public class MainActivity extends CommonActivity implements MainView, Navigation
 
     @OnClick(R.id.fab_refresh)
     public void onHistoryClick() {
-//        if (BuildConfig.DEBUG) {
-//            startActivity(TestSmartContractActivity.class);
-//        }
+        if (BuildConfig.DEBUG) {
+            startActivity(TestSmartContractActivity.class);
+        }
 
         checkLoginState();
     }

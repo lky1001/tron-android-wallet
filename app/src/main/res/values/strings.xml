@@ -6,14 +6,17 @@
     <string name="title_backup_account">Backup Account</string>
     <string name="title_login">Login</string>
     <string name="title_my_address">My Address</string>
-    <string name="title_send_token">Send Token</string>
+    <string name="title_send_trc10_token">Send TRC-10 Token</string>
+    <string name="title_send_trc20_token">Send TRC-20 Token</string>
     <string name="title_import_account">Import Account</string>
     <string name="title_vote_representative">Vote Representative</string>
+    <string name="title_preview_wallet">Preview Wallet</string>
     <string name="title_more">More</string>
     <string name="navigation_drawer_open">open</string>
     <string name="navigation_drawer_close">close</string>
     <string name="navigation_header_title">Tron Wallet</string>
-    <string name="navigation_menu_send">Send Token</string>
+    <string name="navigation_menu_send_trc10_token">Send TRC-10 Token</string>
+    <string name="navigation_menu_send_trc20_token">Send TRC-20 Token</string>
     <string name="address_text">Address</string>
     <string name="password_text">Password (must be at least 8)</string>
     <string name="private_key_text">Private Key</string>
@@ -342,4 +345,6 @@
     <string name="trc_20_name">name</string>
     <string name="trc_20_symbol">symbol</string>
     <string name="sync_trc20_msg">Sync TRC-20 token contract list...</string>
+    <string name="available">Available</string>
+    <string name="menu_preview_wallet">PreviewWallet</string>
 </resources>

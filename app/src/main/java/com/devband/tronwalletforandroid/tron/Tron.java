@@ -218,6 +218,10 @@ public class Tron {
         return mAccountManager.getLoginPrivateKey(aesKey);
     }
 
+    public Single<Account> getEncryptAccount(@NonNull String address) {
+        return getAccount(mAccountManager.decryptAddress(address));
+    }
+
     public Single<Account> getAccount(@NonNull String address) {
         return mTronNetwork.getAccountInfo(address)
                 .map(accountInfo -> {

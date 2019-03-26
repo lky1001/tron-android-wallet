@@ -374,4 +374,8 @@ public class AccountManager {
 
         mLoginAccountModel = mAccountRepository.loadAccount();
     }
+
+    public String decryptAddress(String address) {
+        return mKeyStore.decryptString(address, Constants.ALIAS_ADDRESS_KEY);
+    }
 }

@@ -37,12 +37,16 @@ import com.devband.tronwalletforandroid.ui.mytransfer.MyTransferActivityModule;
 import com.devband.tronwalletforandroid.ui.mytransfer.TransferActivity;
 import com.devband.tronwalletforandroid.ui.node.NodeActivity;
 import com.devband.tronwalletforandroid.ui.node.NodeActivityModule;
+import com.devband.tronwalletforandroid.ui.previewwallet.PreviewWalletActivity;
+import com.devband.tronwalletforandroid.ui.previewwallet.PreviewWalletActivityModule;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivity;
 import com.devband.tronwalletforandroid.ui.representative.RepresentativeActivityModule;
 import com.devband.tronwalletforandroid.ui.requestcoin.RequestCoinActivity;
-import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivity;
-import com.devband.tronwalletforandroid.ui.sendtoken.SendTokenActivityModule;
+import com.devband.tronwalletforandroid.ui.sendtrc10.SendTrc10Activity;
+import com.devband.tronwalletforandroid.ui.sendtrc10.SendTrc10ActivityModule;
+import com.devband.tronwalletforandroid.ui.sendtrc20.SendTrc20Activity;
+import com.devband.tronwalletforandroid.ui.sendtrc20.SendTrc20ActivityModule;
 import com.devband.tronwalletforandroid.ui.smartcontract.TestSmartContractActivity;
 import com.devband.tronwalletforandroid.ui.token.TokenActivity;
 import com.devband.tronwalletforandroid.ui.token.TokenActivityModule;
@@ -118,8 +122,12 @@ public abstract class ActivityBindingModule {
     abstract RepresentativeActivity bindRepresentativeActivity();
 
     @ActivityScoped
-    @ContributesAndroidInjector(modules = { SendTokenActivityModule.class })
-    abstract SendTokenActivity bindSendTokenActivity();
+    @ContributesAndroidInjector(modules = { SendTrc10ActivityModule.class })
+    abstract SendTrc10Activity bindSendTokenActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = { SendTrc20ActivityModule.class })
+    abstract SendTrc20Activity bindSendTrc20Activity();
 
     @ActivityScoped
     @ContributesAndroidInjector(modules = { TokenActivityModule.class })
@@ -179,4 +187,8 @@ public abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = { ExchangeActivityModule.class })
     abstract ExchangeActivity exchangeActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = { PreviewWalletActivityModule.class })
+    abstract PreviewWalletActivity bindPreviewWalletActivity();
 }

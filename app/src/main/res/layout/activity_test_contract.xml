@@ -21,7 +21,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TVQ6jYV5yTtRsKcD8aRc1a4Kei4V45ixLn"/>
+                android:text="TCN77KWWyUyi2A4Cu7vrh5dnmRyvUuME1E"/>
             <Button
                 android:id="@+id/get_abi_button"
                 android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
                 android:id="@+id/method_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="balanceOf(address)"/>
+                android:text="transfer(address,uint256)"/>
         </LinearLayout>
 
         <LinearLayout
@@ -65,7 +65,7 @@
                 android:id="@+id/params_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TNkDRbSnvQF4fFGd69DVjrEeXsXEjRYVGm"/>
+                android:text="address"/>
         </LinearLayout>
 
         <LinearLayout
