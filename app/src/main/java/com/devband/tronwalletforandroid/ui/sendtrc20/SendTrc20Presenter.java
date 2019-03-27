@@ -49,7 +49,7 @@ public class SendTrc20Presenter extends BasePresenter<SendTrc20View> {
                 .subscribeOn(mRxJavaSchedulers.getIo())
                 .observeOn(mRxJavaSchedulers.getMainThread())
                 .subscribe(trc20ContractModels -> {
-
+                    mView.setTrc20List(trc20ContractModels);
                 });
     }
 }

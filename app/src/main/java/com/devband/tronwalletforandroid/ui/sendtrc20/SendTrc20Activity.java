@@ -18,7 +18,12 @@ import android.widget.Toast;
 
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.database.model.Trc20ContractModel;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
+import com.devband.tronwalletforandroid.ui.sendtrc10.SendTrc10Activity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -148,6 +153,29 @@ public class SendTrc20Activity extends CommonActivity implements SendTrc20View {
         if (!isFinishing()) {
             showProgressDialog(null, getString(R.string.loading_msg));
         }
+    }
+
+    @Override
+    public void setTrc20List(List<Trc20ContractModel> trc20ContractModels) {
+        List<TokenContract> tokenContracts = new ArrayList<>();
+
+        for (Trc20ContractModel trc20ContractModel : trc20ContractModels) {
+            tokenContracts.add(TokenContract.builder()
+                    .name(trc20ContractModel.getName())
+                    .contractAddress(trc20ContractModel.getAddress())
+                    .precision(trc20ContractModel.getPrecision())
+                    .displayName(trc20ContractModel.getName())
+                    .build());
+        }
+
+        mTokenAdapter = new ArrayAdapter<>(SendTrc20Activity.this, android.R.layout.simple_spinner_item,
+                tokenContracts);
+
+        mTokenAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mTokenSpinner.setAdapter(mTokenAdapter);
+        mTokenSpinner.setOnItemSelectedListener(mTokenItemSelectedListener);
+
+        hideDialog();
     }
 
     private android.widget.AdapterView.OnItemSelectedListener mTokenItemSelectedListener = new android.widget.AdapterView.OnItemSelectedListener() {
