@@ -16,11 +16,12 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
+import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.Trc20ContractModel;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
-import com.devband.tronwalletforandroid.ui.sendtrc10.SendTrc10Activity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -191,4 +192,78 @@ public class SendTrc20Activity extends CommonActivity implements SendTrc20View {
 
         }
     };
+
+    @OnClick(R.id.btn_send_trx)
+    public void onSendTrxClick() {
+        String address = mInputAddress.getText().toString();
+        address = address.trim();
+
+        if (address.isEmpty()) {
+            Toast.makeText(SendTrc20Activity.this, getString(R.string.invalid_address),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String amountText = mInputAmount.getText().toString();
+        String removeCommaAmountText = amountText.replace(",", "");
+
+        double amountDouble = 0;
+
+        try {
+            amountDouble = Double.parseDouble(removeCommaAmountText);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            Toast.makeText(SendTrc20Activity.this, getString(R.string.invalid_amount),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (amountDouble <= 0 || amountDouble > mSelectedAsset.getBalance()) {
+            Toast.makeText(SendTrc20Activity.this, getString(R.string.invalid_amount),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        double finalAmountDouble = amountDouble;
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(getString(R.string.send_token_warning_msg))
+                .append("\n\n")
+                .append(getString(R.string.send_token_address_text))
+                .append(address)
+                .append("\n")
+                .append(getString(R.string.send_token_token_text))
+                .append(mSelectedAsset.getDisplayName())
+                .append("\n")
+                .append(getString(R.string.send_token_amount_text))
+                .append(amountText);
+
+        final String finalAddress = address;
+
+        new MaterialDialog.Builder(SendTrc20Activity.this)
+                .title(R.string.send_token_title)
+                .content(sb.toString())
+                .positiveText(R.string.confirm_text)
+                .negativeText(R.string.cancel_text)
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+                    String password = mInputPassword.getText().toString();
+
+                    if (Constants.TRON_SYMBOL.equals(mSelectedAsset.getName())) {
+                        long amount = (long) (finalAmountDouble * Constants.ONE_TRX);
+
+                        showProgressDialog(null, getString(R.string.loading_msg));
+                        //mSendTrc20Presenter.sendTron(password, finalAddress, amount);
+                    } else {
+                        long amount = (long) finalAmountDouble;
+
+                        if (mSelectedAsset.getPrecision() > 0) {
+                            amount = (long) (finalAmountDouble * Math.pow(10, mSelectedAsset.getPrecision()));
+                        }
+                        showProgressDialog(null, getString(R.string.loading_msg));
+                        //mSendTrc20Presenter.transferAsset(password, finalAddress, mSelectedAsset.getName(), amount);
+                    }
+                }).show();
+    }
 }
