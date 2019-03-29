@@ -250,20 +250,14 @@ public class SendTrc20Activity extends CommonActivity implements SendTrc20View {
                     dialog.dismiss();
                     String password = mInputPassword.getText().toString();
 
-                    if (Constants.TRON_SYMBOL.equals(mSelectedAsset.getName())) {
-                        long amount = (long) (finalAmountDouble * Constants.ONE_TRX);
-
-                        showProgressDialog(null, getString(R.string.loading_msg));
-                        //mSendTrc20Presenter.sendTron(password, finalAddress, amount);
-                    } else {
+                        //mSendTrc20Presenter.sendTron(password, finalA
                         long amount = (long) finalAmountDouble;
 
                         if (mSelectedAsset.getPrecision() > 0) {
                             amount = (long) (finalAmountDouble * Math.pow(10, mSelectedAsset.getPrecision()));
                         }
                         showProgressDialog(null, getString(R.string.loading_msg));
-                        //mSendTrc20Presenter.transferAsset(password, finalAddress, mSelectedAsset.getName(), amount);
-                    }
+                        //mSendTrc20Presenter.transferAsset(password, finalAddress, mSelectedAsset.getName(), amount)
                 }).show();
     }
 }
