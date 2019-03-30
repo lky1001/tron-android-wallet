@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
-import com.devband.tronwalletforandroid.common.Constants;
 import com.devband.tronwalletforandroid.database.model.Trc20ContractModel;
 import com.devband.tronwalletforandroid.ui.qrscan.QrScanActivity;
 
@@ -250,14 +249,14 @@ public class SendTrc20Activity extends CommonActivity implements SendTrc20View {
                     dialog.dismiss();
                     String password = mInputPassword.getText().toString();
 
-                        //mSendTrc20Presenter.sendTron(password, finalA
-                        long amount = (long) finalAmountDouble;
+                    long amount = (long) finalAmountDouble;
 
-                        if (mSelectedAsset.getPrecision() > 0) {
-                            amount = (long) (finalAmountDouble * Math.pow(10, mSelectedAsset.getPrecision()));
-                        }
-                        showProgressDialog(null, getString(R.string.loading_msg));
-                        //mSendTrc20Presenter.transferAsset(password, finalAddress, mSelectedAsset.getName(), amount)
+                    if (mSelectedAsset.getPrecision() > 0) {
+                        amount = (long) (finalAmountDouble * Math.pow(10, mSelectedAsset.getPrecision()));
+                    }
+
+                    showProgressDialog(null, getString(R.string.loading_msg));
+                    mSendTrc20Presenter.transferAsset(password, finalAddress, mSelectedAsset.getName(), amount);
                 }).show();
     }
 }
