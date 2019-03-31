@@ -1,6 +1,7 @@
 package com.devband.tronwalletforandroid.ui.sendtrc20;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.database.dao.Trc20ContractDao;
@@ -14,7 +15,6 @@ import org.tron.common.utils.AbiUtil;
 import org.tron.core.exception.EncodingException;
 
 import io.reactivex.Single;
-import timber.log.Timber;
 
 public class SendTrc20Presenter extends BasePresenter<SendTrc20View> {
 
@@ -100,7 +100,7 @@ public class SendTrc20Presenter extends BasePresenter<SendTrc20View> {
                 .flatMap(result -> result)
                 .subscribe(result -> {
                     mView.success();
-                    Timber.d("result : " + result);
+                    Log.d(SendTrc20Activity.class.getSimpleName(), "send trc20 result : " + result);
                 }, e -> {
                     e.printStackTrace();
                     mView.failed();
