@@ -1,6 +1,7 @@
 package com.devband.tronwalletforandroid.ui.sendtrc20;
 
-import com.devband.tronlib.dto.TriggerRequest;
+import android.text.TextUtils;
+
 import com.devband.tronwalletforandroid.database.AppDatabase;
 import com.devband.tronwalletforandroid.database.dao.Trc20ContractDao;
 import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
@@ -10,7 +11,6 @@ import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 import org.spongycastle.util.encoders.Hex;
 import org.tron.common.utils.AbiUtil;
-import org.tron.common.utils.ByteArray;
 import org.tron.core.exception.EncodingException;
 
 import io.reactivex.Single;
@@ -64,6 +64,23 @@ public class SendTrc20Presenter extends BasePresenter<SendTrc20View> {
     }
 
     public void transferAsset(String password, String toAddress, String name, long amount) {
+        if (!mTron.isLogin()) {
+            mView.invalidPassword();
+            return;
+        }
+
+        if (!mTron.checkPassword(password)) {
+            mView.invalidPassword();
+            return;
+        }
+
+        String loginAddress = mTron.getLoginAddress();
+
+        if (TextUtils.isEmpty(loginAddress)) {
+            mView.failed();
+            return;
+        }
+
         Single.fromCallable(() -> {
             String transferParams = "\"address\"," + amount;
 
@@ -78,21 +95,16 @@ public class SendTrc20Presenter extends BasePresenter<SendTrc20View> {
             byte[] input = Hex.decode(contractTrigger);
             byte[] contractAddress = AccountManager.decodeFromBase58Check(toAddress);
 
-            TriggerRequest triggerRequest = TriggerRequest.builder()
-                    .contractAddress(ByteArray.toHexString(contractAddress))
-                    .ownerAddress(ByteArray.toHexString(AccountManager.decodeFromBase58Check(mTron.getLoginAddress())))
-                    .functionSelector(TRANSFER_METHOD)
-                    .parameter(contractTrigger)
-                    .callValue(0L)
-                    .feeLimit(100_000L)
-                    .build();
-            
-            return mTron.callQueryContract(mTron.getLoginAddress(), contractAddress, 0L, input, 100_000L, 0L, null);
+            return mTron.callQueryContract(loginAddress, contractAddress, 0L, input, 1_000_000_000L, 0L, null);
         })
                 .flatMap(result -> result)
                 .subscribe(result -> {
+                    mView.success();
                     Timber.d("result : " + result);
-                }, e -> e.printStackTrace());
+                }, e -> {
+                    e.printStackTrace();
+                    mView.failed();
+                });
 
     }
 }

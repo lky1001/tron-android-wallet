@@ -711,4 +711,8 @@ public class Tron {
     public Single<Contract.AssetIssueContract> getAssetIssueById(String id) {
         return mTronManager.getAssetIssueById(id);
     }
+
+    public boolean checkPassword(String password) {
+        return mWalletAppManager.checkPassword(password);
+    }
 }

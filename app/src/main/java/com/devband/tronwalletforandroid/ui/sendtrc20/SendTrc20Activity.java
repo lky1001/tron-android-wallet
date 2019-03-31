@@ -178,6 +178,21 @@ public class SendTrc20Activity extends CommonActivity implements SendTrc20View {
         hideDialog();
     }
 
+    @Override
+    public void success() {
+
+    }
+
+    @Override
+    public void failed() {
+
+    }
+
+    @Override
+    public void invalidPassword() {
+
+    }
+
     private android.widget.AdapterView.OnItemSelectedListener mTokenItemSelectedListener = new android.widget.AdapterView.OnItemSelectedListener() {
 
         @Override

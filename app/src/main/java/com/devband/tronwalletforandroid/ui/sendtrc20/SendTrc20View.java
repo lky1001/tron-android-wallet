@@ -9,4 +9,8 @@ public interface SendTrc20View extends IView {
 
     void showLoadingDialog();
     void setTrc20List(List<Trc20ContractModel> trc20ContractModels);
+
+    void success();
+    void failed();
+    void invalidPassword();
 }
