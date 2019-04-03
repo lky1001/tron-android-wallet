@@ -11,8 +11,6 @@ import android.support.annotation.Nullable;
 
 public class BalanceCheckService extends Service {
 
-    private static final String CHANNEL_ID = "balance_check_service_channel";
-
     @MainThread
     public static void startService(@NonNull Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
