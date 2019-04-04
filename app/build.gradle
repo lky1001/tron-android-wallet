@@ -112,6 +112,7 @@ dependencies {
     implementation "com.android.support:support-annotations:$appcompatVersion"
     implementation "com.android.support:cardview-v7:$appcompatVersion"
     implementation "com.android.support:support-v4:$appcompatVersion"
+    implementation "com.android.support:support-compat:$appcompatVersion"
     implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
 
     // ui
