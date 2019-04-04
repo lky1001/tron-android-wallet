@@ -143,6 +143,8 @@
         <!-- test -->
         <activity android:name=".ui.smartcontract.TestSmartContractActivity" />
 
+        <service android:name=".service.BalanceCheckService" android:exported="false" />
+
     </application>
 
 </manifest>
