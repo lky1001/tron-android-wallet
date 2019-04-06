@@ -148,6 +148,10 @@ public class CustomPreference {
         saveSettings();
     }
 
+    public boolean getMigrationDb() {
+        return this.mSettings.migrationDb;
+    }
+
     public void setLastSelectedAccountId(long accountId) {
         mSettings.lastSelectedAccountId = accountId;
         saveSettings();
@@ -157,8 +161,13 @@ public class CustomPreference {
         return mSettings.lastSelectedAccountId;
     }
 
-    public boolean getMigrationDb() {
-        return this.mSettings.migrationDb;
+    public void setBalanceCheckIntervalInMs(long intervalInMs) {
+        mSettings.balanceCheckIntervalInMs = intervalInMs;
+        saveSettings();
+    }
+
+    public long getBalanceCheckIntervalInMs() {
+        return mSettings. balanceCheckIntervalInMs;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -171,5 +180,7 @@ public class CustomPreference {
         public int keyStoreVersion;
         public boolean migrationDb;
         public long lastSelectedAccountId;
+        public boolean isStartCheckingBalanceService;
+        public long balanceCheckIntervalInMs;
     }
 }
