@@ -1,11 +1,15 @@
 package com.devband.tronwalletforandroid.ui.balancecheck;
 
+import com.devband.tronwalletforandroid.rxjava.RxJavaSchedulers;
 import com.devband.tronwalletforandroid.ui.mvp.BasePresenter;
 
 public class BalanceCheckingPresenter extends BasePresenter<BalanceCheckingView> {
 
-    public BalanceCheckingPresenter(BalanceCheckingView view) {
+    private RxJavaSchedulers mRxJavaSchedulers;
+
+    public BalanceCheckingPresenter(BalanceCheckingView view, RxJavaSchedulers rxJavaSchedulers) {
         super(view);
+        this.mRxJavaSchedulers = rxJavaSchedulers;
     }
 
     @Override

@@ -8,10 +8,15 @@ import android.support.v7.widget.RecyclerView;
 import com.devband.tronwalletforandroid.R;
 import com.devband.tronwalletforandroid.common.CommonActivity;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BalanceCheckingActivity extends CommonActivity {
+public class BalanceCheckingActivity extends CommonActivity implements BalanceCheckingView {
+
+    @Inject
+    BalanceCheckingPresenter balanceCheckingPresenter;
 
     @BindView(R.id.check_listview)
     public RecyclerView recyclerView;
